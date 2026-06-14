@@ -1,0 +1,10 @@
+---
+title: "Mapa de rendimiento"
+subtitle: "Limpieza y análisis espacial con R"
+date: 2026-01
+categories: [R, Agricultura de precisión]
+---
+
+## En construcción
+
+Este reporte estará disponible próximamente.

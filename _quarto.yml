@@ -1,0 +1,69 @@
+project:
+  type: website
+  output-dir: docs
+
+website:
+  title: "Juan Pablo Heiland"
+  description: "Ingeniero Agrónomo"
+  favicon: img/favicon.png
+
+  navbar:
+    background: "#1B2632"
+    foreground: "#ffb162"
+    left:
+      - href: index.qmd
+        text: Inicio
+      - text: Proyectos
+        menu:
+          - href: proyectos/mapa-rendimiento.qmd
+            text: "Limpieza de Mapa de rendimiento"
+          - href: proyectos/teledeteccion-python.qmd
+            text: "Teledetección con Python"
+          - href: proyectos/teledeteccion-GEE.qmd
+            text: "Teledetección con GEE"
+          - href: proyectos/zonificacion.qmd
+            text: "Zonificación"
+          - href: proyectos/optimizacion.qmd
+            text: "Analisis de Regresion Espacial"
+          - href: proyectos/machine-learning.qmd
+            text: "Machine Learning"
+    right:
+      - icon: github
+        href: https://github.com/pabloheiland1-droid
+        aria-label: GitHub
+      - icon: linkedin
+        href: https://linkedin.com/in/juan-pablo-heiland 
+        aria-label: LinkedIn
+
+  sidebar: false
+
+  page-footer:
+    background: "#1B2632"
+    foreground: "#8faf9a"
+    center: |
+      © 2025 Juan Pablo Heiland · Río Cuarto, Córdoba
+
+format:
+  html:
+    theme: flatly
+    css: styles.css
+    lang: es
+    toc: true
+    toc-depth: 3
+    toc-location: right
+    toc-title: "Índice de Contenidos"
+    number-sections: true
+    page-layout: article
+    smooth-scroll: true
+    code-fold: false
+    code-tools: true
+    code-link: true
+    code-copy: true
+    lightbox: true
+    highlight-style: github
+    embed-resources: false
+
+execute:
+  warning: false
+  message: false
+  freeze: true

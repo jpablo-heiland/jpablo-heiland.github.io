@@ -1,0 +1,10 @@
+---
+title: "Proceso de Zonificacion con R"
+subtitle: "Flujo de trabajo de Zonificacion"
+date: 2026-01
+categories: [R, Agricultura de precisión]
+---
+
+## En construcción
+
+Este reporte estará disponible próximamente.
