@@ -253,7 +253,6 @@ window.Quarto = {
 <!-- main -->
 <main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><div class="quarto-title">
 <div class="quarto-title-block"><div><h1 class="title">Teledetección con Python</h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Código</button></div></div>
-<p class="subtitle lead">Procesamiento de Imagenes Satelitales con Python</p>
   <div class="quarto-categories">
     <div class="quarto-category">Python</div>
     <div class="quarto-category">Agricultura de precisión</div>
@@ -835,7 +834,7 @@ Tabla&nbsp;1
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb43"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>fig.colorbar(im1, ax<span class="op">=</span>axs[<span class="dv">0</span>, <span class="dv">0</span>], shrink<span class="op">=</span><span class="fl">0.7</span>, label<span class="op">=</span><span class="st">'Valor del Índice'</span>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>&lt;matplotlib.colorbar.Colorbar object at 0x000001B556856260&gt;</code></pre>
+<pre><code>&lt;matplotlib.colorbar.Colorbar object at 0x000001950CC5A260&gt;</code></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb45"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="co"># NDWI </span></span>
 <span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>im4 <span class="op">=</span> axs[<span class="dv">1</span>, <span class="dv">0</span>].imshow(NDWI, cmap<span class="op">=</span><span class="st">'YlGnBu'</span>) </span>
@@ -846,7 +845,7 @@ Tabla&nbsp;1
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb47"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>fig.colorbar(im4, ax<span class="op">=</span>axs[<span class="dv">1</span>, <span class="dv">0</span>], shrink<span class="op">=</span><span class="fl">0.7</span>, label<span class="op">=</span><span class="st">'Valor del Índice'</span>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>&lt;matplotlib.colorbar.Colorbar object at 0x000001B556877A30&gt;</code></pre>
+<pre><code>&lt;matplotlib.colorbar.Colorbar object at 0x000001950CC87A30&gt;</code></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb49"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="co"># SAVI</span></span>
 <span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a>im2 <span class="op">=</span> axs[<span class="dv">0</span>, <span class="dv">1</span>].imshow(SAVI, cmap<span class="op">=</span><span class="st">'RdYlGn'</span>, vmin<span class="op">=</span><span class="dv">0</span>, vmax<span class="op">=</span><span class="dv">1</span>)</span>
@@ -857,7 +856,7 @@ Tabla&nbsp;1
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb51"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a>fig.colorbar(im2, ax<span class="op">=</span>axs[<span class="dv">0</span>, <span class="dv">1</span>], shrink<span class="op">=</span><span class="fl">0.7</span>, label<span class="op">=</span><span class="st">'Valor del Índice'</span>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>&lt;matplotlib.colorbar.Colorbar object at 0x000001B5568DAAA0&gt;</code></pre>
+<pre><code>&lt;matplotlib.colorbar.Colorbar object at 0x000001950CCDAAA0&gt;</code></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb53"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="co"># EVI </span></span>
 <span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a>im3 <span class="op">=</span> axs[<span class="dv">0</span>, <span class="dv">2</span>].imshow(EVI, cmap<span class="op">=</span><span class="st">'RdYlGn'</span>)</span>
@@ -868,7 +867,7 @@ Tabla&nbsp;1
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb55"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a>fig.colorbar(im3, ax<span class="op">=</span>axs[<span class="dv">0</span>, <span class="dv">2</span>], shrink<span class="op">=</span><span class="fl">0.7</span>, label<span class="op">=</span><span class="st">'Valor del Índice'</span>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>&lt;matplotlib.colorbar.Colorbar object at 0x000001B55692C610&gt;</code></pre>
+<pre><code>&lt;matplotlib.colorbar.Colorbar object at 0x000001950CD2C610&gt;</code></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb57"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a><span class="co"># NDTI </span></span>
 <span id="cb57-2"><a href="#cb57-2" aria-hidden="true" tabindex="-1"></a>im5 <span class="op">=</span> axs[<span class="dv">1</span>, <span class="dv">1</span>].imshow(NDTI, cmap<span class="op">=</span><span class="st">'copper'</span>)</span>
@@ -879,7 +878,7 @@ Tabla&nbsp;1
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb59"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a>fig.colorbar(im5, ax<span class="op">=</span>axs[<span class="dv">1</span>, <span class="dv">1</span>], shrink<span class="op">=</span><span class="fl">0.7</span>, label<span class="op">=</span><span class="st">'Valor del Índice'</span>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>&lt;matplotlib.colorbar.Colorbar object at 0x000001B55696C0D0&gt;</code></pre>
+<pre><code>&lt;matplotlib.colorbar.Colorbar object at 0x000001950CD6C0D0&gt;</code></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb61"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">1</span>, <span class="dv">2</span>].axis(<span class="st">'off'</span>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
@@ -1351,600 +1350,599 @@ Tabla&nbsp;1
   </script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Ejecutar el código</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb64" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
 <span id="cb64-2"><a href="#cb64-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "Teledetección con Python"</span></span>
-<span id="cb64-3"><a href="#cb64-3" aria-hidden="true" tabindex="-1"></a><span class="an">subtitle:</span><span class="co"> "Procesamiento de Imagenes Satelitales con Python"</span></span>
-<span id="cb64-4"><a href="#cb64-4" aria-hidden="true" tabindex="-1"></a><span class="an">date:</span><span class="co"> 2026-06</span></span>
-<span id="cb64-5"><a href="#cb64-5" aria-hidden="true" tabindex="-1"></a><span class="an">categories:</span><span class="co"> [Python, Agricultura de precisión, Teledetección]</span></span>
-<span id="cb64-6"><a href="#cb64-6" aria-hidden="true" tabindex="-1"></a><span class="an">css:</span><span class="co"> styles3.css</span></span>
-<span id="cb64-7"><a href="#cb64-7" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb64-8"><a href="#cb64-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-9"><a href="#cb64-9" aria-hidden="true" tabindex="-1"></a><span class="fu"># Introducción</span></span>
-<span id="cb64-10"><a href="#cb64-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-11"><a href="#cb64-11" aria-hidden="true" tabindex="-1"></a><span class="in">```{r include=FALSE}</span></span>
-<span id="cb64-12"><a href="#cb64-12" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(reticulate)</span>
-<span id="cb64-13"><a href="#cb64-13" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb64-14"><a href="#cb64-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-15"><a href="#cb64-15" aria-hidden="true" tabindex="-1"></a>El presente documento tiene como objetivo procesar y analizar una imagen satelital proveniente del satélite Landsat 9 a través de Python.</span>
-<span id="cb64-16"><a href="#cb64-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-17"><a href="#cb64-17" aria-hidden="true" tabindex="-1"></a>Características de Landsat 9:</span>
-<span id="cb64-18"><a href="#cb64-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-19"><a href="#cb64-19" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Resolución Temporal: Individualmente, es de 16 días. No obstante, al operar en órbita combinada con Landsat 8, la frecuencia baja a solo 8 días.</span>
-<span id="cb64-20"><a href="#cb64-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-21"><a href="#cb64-21" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Resolución Espacial: 30 metros para las bandas ópticas (Azul, Verde, Rojo), el Infrarrojo Cercano (NIR) y el Infrarrojo de Onda Corta (SWIR).</span>
-<span id="cb64-22"><a href="#cb64-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-23"><a href="#cb64-23" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Resolución Radiométrica: Cuenta con una cuantización de 14 bits. Significa que cada píxel puede almacenar hasta 16.384 niveles de gris diferentes.</span>
-<span id="cb64-24"><a href="#cb64-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-25"><a href="#cb64-25" aria-hidden="true" tabindex="-1"></a>El satélite **Landsat 9** cuenta con un total de 11 bandas espectrales. Se muestra información de estas bandas a través de una tabla creada con el paquete <span class="co">[</span><span class="ot">kableExtra</span><span class="co">]</span>{.func-tecnica}:</span>
-<span id="cb64-26"><a href="#cb64-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-29"><a href="#cb64-29" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb64-30"><a href="#cb64-30" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: tbl-landsat9</span></span>
-<span id="cb64-31"><a href="#cb64-31" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
-<span id="cb64-32"><a href="#cb64-32" aria-hidden="true" tabindex="-1"></a><span class="co">#| message: false</span></span>
-<span id="cb64-33"><a href="#cb64-33" aria-hidden="true" tabindex="-1"></a><span class="co">#| warning: false</span></span>
-<span id="cb64-34"><a href="#cb64-34" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-35"><a href="#cb64-35" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(knitr)</span>
-<span id="cb64-36"><a href="#cb64-36" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(kableExtra)</span>
-<span id="cb64-37"><a href="#cb64-37" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-38"><a href="#cb64-38" aria-hidden="true" tabindex="-1"></a><span class="co"># Crear el dataframe con las 11 bandas</span></span>
-<span id="cb64-39"><a href="#cb64-39" aria-hidden="true" tabindex="-1"></a>datos_landsat <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
-<span id="cb64-40"><a href="#cb64-40" aria-hidden="true" tabindex="-1"></a>  <span class="at">Item =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">11</span>,</span>
-<span id="cb64-41"><a href="#cb64-41" aria-hidden="true" tabindex="-1"></a>  <span class="at">Banda =</span> <span class="fu">c</span>(</span>
-<span id="cb64-42"><a href="#cb64-42" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Coastal / Aerosol"</span>, </span>
-<span id="cb64-43"><a href="#cb64-43" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Azul"</span>, </span>
-<span id="cb64-44"><a href="#cb64-44" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Verde"</span>, </span>
-<span id="cb64-45"><a href="#cb64-45" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Rojo"</span>, </span>
-<span id="cb64-46"><a href="#cb64-46" aria-hidden="true" tabindex="-1"></a>    <span class="st">"NIR (Infrarrojo cercano)"</span>, </span>
-<span id="cb64-47"><a href="#cb64-47" aria-hidden="true" tabindex="-1"></a>    <span class="st">"SWIR 1 (Infrarrojo de onda corta)"</span>, </span>
-<span id="cb64-48"><a href="#cb64-48" aria-hidden="true" tabindex="-1"></a>    <span class="st">"SWIR 2"</span>,</span>
-<span id="cb64-49"><a href="#cb64-49" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Pancromática"</span>,</span>
-<span id="cb64-50"><a href="#cb64-50" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Cirrus"</span>,</span>
-<span id="cb64-51"><a href="#cb64-51" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Infrarrojo Termal 1"</span>,</span>
-<span id="cb64-52"><a href="#cb64-52" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Infrarrojo Termal 2"</span></span>
-<span id="cb64-53"><a href="#cb64-53" aria-hidden="true" tabindex="-1"></a>  ),</span>
-<span id="cb64-54"><a href="#cb64-54" aria-hidden="true" tabindex="-1"></a>  <span class="at">Rango =</span> <span class="fu">c</span>(</span>
-<span id="cb64-55"><a href="#cb64-55" aria-hidden="true" tabindex="-1"></a>    <span class="st">"430 – 450"</span>, </span>
-<span id="cb64-56"><a href="#cb64-56" aria-hidden="true" tabindex="-1"></a>    <span class="st">"450 – 510"</span>, </span>
-<span id="cb64-57"><a href="#cb64-57" aria-hidden="true" tabindex="-1"></a>    <span class="st">"530 – 590"</span>, </span>
-<span id="cb64-58"><a href="#cb64-58" aria-hidden="true" tabindex="-1"></a>    <span class="st">"640 – 670"</span>, </span>
-<span id="cb64-59"><a href="#cb64-59" aria-hidden="true" tabindex="-1"></a>    <span class="st">"850 – 880"</span>, </span>
-<span id="cb64-60"><a href="#cb64-60" aria-hidden="true" tabindex="-1"></a>    <span class="st">"1570 – 1650"</span>, </span>
-<span id="cb64-61"><a href="#cb64-61" aria-hidden="true" tabindex="-1"></a>    <span class="st">"2110 – 2290"</span>,</span>
-<span id="cb64-62"><a href="#cb64-62" aria-hidden="true" tabindex="-1"></a>    <span class="st">"520 – 900"</span>,</span>
-<span id="cb64-63"><a href="#cb64-63" aria-hidden="true" tabindex="-1"></a>    <span class="st">"1360 – 1380"</span>,</span>
-<span id="cb64-64"><a href="#cb64-64" aria-hidden="true" tabindex="-1"></a>    <span class="st">"10600 – 11190"</span>,</span>
-<span id="cb64-65"><a href="#cb64-65" aria-hidden="true" tabindex="-1"></a>    <span class="st">"11500 – 12510"</span></span>
-<span id="cb64-66"><a href="#cb64-66" aria-hidden="true" tabindex="-1"></a>  ),</span>
-<span id="cb64-67"><a href="#cb64-67" aria-hidden="true" tabindex="-1"></a>  <span class="at">Resolucion =</span> <span class="fu">c</span>(<span class="dv">30</span>, <span class="dv">30</span>, <span class="dv">30</span>, <span class="dv">30</span>, <span class="dv">30</span>, <span class="dv">30</span>, <span class="dv">30</span>, <span class="dv">15</span>, <span class="dv">30</span>, <span class="dv">30</span>, <span class="dv">30</span>),</span>
-<span id="cb64-68"><a href="#cb64-68" aria-hidden="true" tabindex="-1"></a>  <span class="at">Aplicaciones =</span> <span class="fu">c</span>(</span>
-<span id="cb64-69"><a href="#cb64-69" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Estudio de zonas costeras, calidad de agua, aerosoles atmosféricos."</span>,</span>
-<span id="cb64-70"><a href="#cb64-70" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Agua, vegetación, suelos, análisis de la atmósfera."</span>,</span>
-<span id="cb64-71"><a href="#cb64-71" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Vegetación (pigmentos), monitoreo clorofila, visibilidad de zonas urbanas."</span>,</span>
-<span id="cb64-72"><a href="#cb64-72" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Vegetación (clorofila), delimitación de suelos y cultivos."</span>,</span>
-<span id="cb64-73"><a href="#cb64-73" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Biomasa, vigor vegetal, índices vegetales, agua terrestre."</span>,</span>
-<span id="cb64-74"><a href="#cb64-74" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Humedad en vegetación y suelos, incendios, áreas agrícolas."</span>,</span>
-<span id="cb64-75"><a href="#cb64-75" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Incendios, cenizas, minerales, nieve y hielo."</span>,</span>
-<span id="cb64-76"><a href="#cb64-76" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Imágenes en alta resolución, fusiones pancromáticas."</span>,</span>
-<span id="cb64-77"><a href="#cb64-77" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Detección de nubes cirros, corrección atmosférica."</span>,</span>
-<span id="cb64-78"><a href="#cb64-78" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Temperatura de superficie terrestre, humedad del suelo, estrés hídrico."</span>,</span>
-<span id="cb64-79"><a href="#cb64-79" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Complemento de B10 para T° y balance energético."</span></span>
-<span id="cb64-80"><a href="#cb64-80" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb64-81"><a href="#cb64-81" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb64-82"><a href="#cb64-82" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-83"><a href="#cb64-83" aria-hidden="true" tabindex="-1"></a><span class="co"># Renombrar columnas </span></span>
-<span id="cb64-84"><a href="#cb64-84" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(datos_landsat) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"#"</span>, <span class="st">"Banda"</span>, <span class="st">"Rango espectral (nm)"</span>, <span class="st">"Resolución Espacial (m)"</span>, <span class="st">"Aplicaciones"</span>)</span>
-<span id="cb64-85"><a href="#cb64-85" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-86"><a href="#cb64-86" aria-hidden="true" tabindex="-1"></a><span class="co"># Crear tabla con kableExtra</span></span>
-<span id="cb64-87"><a href="#cb64-87" aria-hidden="true" tabindex="-1"></a><span class="fu">kbl</span>(datos_landsat, <span class="at">booktabs =</span> <span class="cn">TRUE</span>, <span class="at">align =</span> <span class="fu">c</span>(<span class="st">"c"</span>, <span class="st">"l"</span>, <span class="st">"c"</span>, <span class="st">"c"</span>, <span class="st">"l"</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb64-88"><a href="#cb64-88" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling</span>(</span>
-<span id="cb64-89"><a href="#cb64-89" aria-hidden="true" tabindex="-1"></a>    <span class="at">bootstrap_options =</span> <span class="fu">c</span>(<span class="st">"striped"</span>, <span class="st">"hover"</span>, <span class="st">"condensed"</span>, <span class="st">"responsive"</span>),</span>
-<span id="cb64-90"><a href="#cb64-90" aria-hidden="true" tabindex="-1"></a>    <span class="at">full_width =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb64-91"><a href="#cb64-91" aria-hidden="true" tabindex="-1"></a>    <span class="at">position =</span> <span class="st">"center"</span></span>
-<span id="cb64-92"><a href="#cb64-92" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
-<span id="cb64-93"><a href="#cb64-93" aria-hidden="true" tabindex="-1"></a>  <span class="fu">row_spec</span>(<span class="dv">0</span>, <span class="at">bold =</span> <span class="cn">TRUE</span>, <span class="at">color =</span> <span class="st">"white"</span>, <span class="at">background =</span> <span class="st">"#1A365D"</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb64-94"><a href="#cb64-94" aria-hidden="true" tabindex="-1"></a>  <span class="fu">column_spec</span>(<span class="dv">1</span>, <span class="at">bold =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span>                                     </span>
-<span id="cb64-95"><a href="#cb64-95" aria-hidden="true" tabindex="-1"></a>  <span class="fu">column_spec</span>(<span class="dv">2</span>, <span class="at">bold =</span> <span class="cn">TRUE</span>, <span class="at">width =</span> <span class="st">"14em"</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb64-96"><a href="#cb64-96" aria-hidden="true" tabindex="-1"></a>  <span class="fu">column_spec</span>(<span class="dv">3</span>, <span class="at">width =</span> <span class="st">"12em"</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb64-97"><a href="#cb64-97" aria-hidden="true" tabindex="-1"></a>  <span class="fu">column_spec</span>(<span class="dv">4</span>, <span class="at">width =</span> <span class="st">"10em"</span>) <span class="sc">%&gt;%</span>                                  </span>
-<span id="cb64-98"><a href="#cb64-98" aria-hidden="true" tabindex="-1"></a>  <span class="fu">column_spec</span>(<span class="dv">5</span>, <span class="at">width =</span> <span class="st">"32em"</span>)   </span>
-<span id="cb64-99"><a href="#cb64-99" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb64-100"><a href="#cb64-100" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-101"><a href="#cb64-101" aria-hidden="true" tabindex="-1"></a><span class="fu"># Librerías Necesarias</span></span>
-<span id="cb64-102"><a href="#cb64-102" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-105"><a href="#cb64-105" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb64-106"><a href="#cb64-106" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> rasterio </span>
-<span id="cb64-107"><a href="#cb64-107" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> rasterio.plot <span class="im">import</span> show </span>
-<span id="cb64-108"><a href="#cb64-108" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np </span>
-<span id="cb64-109"><a href="#cb64-109" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt </span>
-<span id="cb64-110"><a href="#cb64-110" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb64-111"><a href="#cb64-111" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-112"><a href="#cb64-112" aria-hidden="true" tabindex="-1"></a><span class="fu"># Cargamos la Imagen Satelital</span></span>
-<span id="cb64-113"><a href="#cb64-113" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-114"><a href="#cb64-114" aria-hidden="true" tabindex="-1"></a>Se usa la función <span class="co">[</span><span class="ot">open()</span><span class="co">]</span>{.func-tecnica} de <span class="co">[</span><span class="ot">Rasterio</span><span class="co">]</span>{.func-tecnica}. Es el equivalente al <span class="co">[</span><span class="ot">open()</span><span class="co">]</span>{.func-tecnica} nativo de Python, pero diseñado específicamente para archivos geoespaciales.</span>
-<span id="cb64-115"><a href="#cb64-115" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-118"><a href="#cb64-118" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb64-119"><a href="#cb64-119" aria-hidden="true" tabindex="-1"></a>imagen_satelital <span class="op">=</span> rasterio.<span class="bu">open</span>(<span class="vs">r"data</span><span class="er">\</span><span class="vs">img_l9</span><span class="dv">.</span><span class="vs">tif"</span>) </span>
-<span id="cb64-120"><a href="#cb64-120" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb64-121"><a href="#cb64-121" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-122"><a href="#cb64-122" aria-hidden="true" tabindex="-1"></a><span class="fu"># Exploración de la imagen satelital</span></span>
-<span id="cb64-123"><a href="#cb64-123" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-124"><a href="#cb64-124" aria-hidden="true" tabindex="-1"></a><span class="fu">## Bandas Espectrales</span></span>
-<span id="cb64-125"><a href="#cb64-125" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-126"><a href="#cb64-126" aria-hidden="true" tabindex="-1"></a>Con la función <span class="co">[</span><span class="ot">count</span><span class="co">]</span>{.func-tecnica} de <span class="co">[</span><span class="ot">Rasterio</span><span class="co">]</span>{.func-tecnica} se observan la cantidad de bandas de la imagen satelital:</span>
-<span id="cb64-127"><a href="#cb64-127" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-130"><a href="#cb64-130" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb64-131"><a href="#cb64-131" aria-hidden="true" tabindex="-1"></a>imagen_satelital.count</span>
-<span id="cb64-132"><a href="#cb64-132" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb64-133"><a href="#cb64-133" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-134"><a href="#cb64-134" aria-hidden="true" tabindex="-1"></a>Es una imagen que se obtuvo con **Google Earth Engine**, estas bandas corresponden a:</span>
-<span id="cb64-135"><a href="#cb64-135" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-136"><a href="#cb64-136" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Banda Azul (B2)</span>
-<span id="cb64-137"><a href="#cb64-137" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Banda Verde (B3)</span>
-<span id="cb64-138"><a href="#cb64-138" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Banda Rojo (B4)</span>
-<span id="cb64-139"><a href="#cb64-139" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Infarrojo cercano "NIR" (B5)</span>
-<span id="cb64-140"><a href="#cb64-140" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>SWIR (Infrarrojo de onda corta) 1 Y 2 (B6 Y B7)</span>
-<span id="cb64-141"><a href="#cb64-141" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-142"><a href="#cb64-142" aria-hidden="true" tabindex="-1"></a><span class="fu">## Dimensión</span></span>
-<span id="cb64-143"><a href="#cb64-143" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-144"><a href="#cb64-144" aria-hidden="true" tabindex="-1"></a>Se obtiene la cantidad de columnas de píxeles que tiene la imagen con <span class="co">[</span><span class="ot">width</span><span class="co">]</span>{.func-tecnica} y la cantidad de filas de píxeles con <span class="co">[</span><span class="ot">height</span><span class="co">]</span>{.func-tecnica}.</span>
-<span id="cb64-145"><a href="#cb64-145" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-148"><a href="#cb64-148" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb64-149"><a href="#cb64-149" aria-hidden="true" tabindex="-1"></a>imagen_satelital.width</span>
-<span id="cb64-150"><a href="#cb64-150" aria-hidden="true" tabindex="-1"></a>imagen_satelital.height</span>
-<span id="cb64-151"><a href="#cb64-151" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb64-152"><a href="#cb64-152" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-153"><a href="#cb64-153" aria-hidden="true" tabindex="-1"></a>A partir de esto y sabiendo que la resolución espacial es de 30 m, se puede determinar que:</span>
-<span id="cb64-154"><a href="#cb64-154" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-157"><a href="#cb64-157" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb64-158"><a href="#cb64-158" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
-<span id="cb64-159"><a href="#cb64-159" aria-hidden="true" tabindex="-1"></a><span class="co">#| message: false</span></span>
-<span id="cb64-160"><a href="#cb64-160" aria-hidden="true" tabindex="-1"></a><span class="co">#| warning: false</span></span>
+<span id="cb64-3"><a href="#cb64-3" aria-hidden="true" tabindex="-1"></a><span class="an">date:</span><span class="co"> 2026-06</span></span>
+<span id="cb64-4"><a href="#cb64-4" aria-hidden="true" tabindex="-1"></a><span class="an">categories:</span><span class="co"> [Python, Agricultura de precisión, Teledetección]</span></span>
+<span id="cb64-5"><a href="#cb64-5" aria-hidden="true" tabindex="-1"></a><span class="an">css:</span><span class="co"> styles3.css</span></span>
+<span id="cb64-6"><a href="#cb64-6" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb64-7"><a href="#cb64-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-8"><a href="#cb64-8" aria-hidden="true" tabindex="-1"></a><span class="fu"># Introducción</span></span>
+<span id="cb64-9"><a href="#cb64-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-10"><a href="#cb64-10" aria-hidden="true" tabindex="-1"></a><span class="in">```{r include=FALSE}</span></span>
+<span id="cb64-11"><a href="#cb64-11" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(reticulate)</span>
+<span id="cb64-12"><a href="#cb64-12" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb64-13"><a href="#cb64-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-14"><a href="#cb64-14" aria-hidden="true" tabindex="-1"></a>El presente documento tiene como objetivo procesar y analizar una imagen satelital proveniente del satélite Landsat 9 a través de Python.</span>
+<span id="cb64-15"><a href="#cb64-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-16"><a href="#cb64-16" aria-hidden="true" tabindex="-1"></a>Características de Landsat 9:</span>
+<span id="cb64-17"><a href="#cb64-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-18"><a href="#cb64-18" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Resolución Temporal: Individualmente, es de 16 días. No obstante, al operar en órbita combinada con Landsat 8, la frecuencia baja a solo 8 días.</span>
+<span id="cb64-19"><a href="#cb64-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-20"><a href="#cb64-20" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Resolución Espacial: 30 metros para las bandas ópticas (Azul, Verde, Rojo), el Infrarrojo Cercano (NIR) y el Infrarrojo de Onda Corta (SWIR).</span>
+<span id="cb64-21"><a href="#cb64-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-22"><a href="#cb64-22" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Resolución Radiométrica: Cuenta con una cuantización de 14 bits. Significa que cada píxel puede almacenar hasta 16.384 niveles de gris diferentes.</span>
+<span id="cb64-23"><a href="#cb64-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-24"><a href="#cb64-24" aria-hidden="true" tabindex="-1"></a>El satélite **Landsat 9** cuenta con un total de 11 bandas espectrales. Se muestra información de estas bandas a través de una tabla creada con el paquete <span class="co">[</span><span class="ot">kableExtra</span><span class="co">]</span>{.func-tecnica}:</span>
+<span id="cb64-25"><a href="#cb64-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-28"><a href="#cb64-28" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb64-29"><a href="#cb64-29" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: tbl-landsat9</span></span>
+<span id="cb64-30"><a href="#cb64-30" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
+<span id="cb64-31"><a href="#cb64-31" aria-hidden="true" tabindex="-1"></a><span class="co">#| message: false</span></span>
+<span id="cb64-32"><a href="#cb64-32" aria-hidden="true" tabindex="-1"></a><span class="co">#| warning: false</span></span>
+<span id="cb64-33"><a href="#cb64-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-34"><a href="#cb64-34" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(knitr)</span>
+<span id="cb64-35"><a href="#cb64-35" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(kableExtra)</span>
+<span id="cb64-36"><a href="#cb64-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-37"><a href="#cb64-37" aria-hidden="true" tabindex="-1"></a><span class="co"># Crear el dataframe con las 11 bandas</span></span>
+<span id="cb64-38"><a href="#cb64-38" aria-hidden="true" tabindex="-1"></a>datos_landsat <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb64-39"><a href="#cb64-39" aria-hidden="true" tabindex="-1"></a>  <span class="at">Item =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">11</span>,</span>
+<span id="cb64-40"><a href="#cb64-40" aria-hidden="true" tabindex="-1"></a>  <span class="at">Banda =</span> <span class="fu">c</span>(</span>
+<span id="cb64-41"><a href="#cb64-41" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Coastal / Aerosol"</span>, </span>
+<span id="cb64-42"><a href="#cb64-42" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Azul"</span>, </span>
+<span id="cb64-43"><a href="#cb64-43" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Verde"</span>, </span>
+<span id="cb64-44"><a href="#cb64-44" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Rojo"</span>, </span>
+<span id="cb64-45"><a href="#cb64-45" aria-hidden="true" tabindex="-1"></a>    <span class="st">"NIR (Infrarrojo cercano)"</span>, </span>
+<span id="cb64-46"><a href="#cb64-46" aria-hidden="true" tabindex="-1"></a>    <span class="st">"SWIR 1 (Infrarrojo de onda corta)"</span>, </span>
+<span id="cb64-47"><a href="#cb64-47" aria-hidden="true" tabindex="-1"></a>    <span class="st">"SWIR 2"</span>,</span>
+<span id="cb64-48"><a href="#cb64-48" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Pancromática"</span>,</span>
+<span id="cb64-49"><a href="#cb64-49" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Cirrus"</span>,</span>
+<span id="cb64-50"><a href="#cb64-50" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Infrarrojo Termal 1"</span>,</span>
+<span id="cb64-51"><a href="#cb64-51" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Infrarrojo Termal 2"</span></span>
+<span id="cb64-52"><a href="#cb64-52" aria-hidden="true" tabindex="-1"></a>  ),</span>
+<span id="cb64-53"><a href="#cb64-53" aria-hidden="true" tabindex="-1"></a>  <span class="at">Rango =</span> <span class="fu">c</span>(</span>
+<span id="cb64-54"><a href="#cb64-54" aria-hidden="true" tabindex="-1"></a>    <span class="st">"430 – 450"</span>, </span>
+<span id="cb64-55"><a href="#cb64-55" aria-hidden="true" tabindex="-1"></a>    <span class="st">"450 – 510"</span>, </span>
+<span id="cb64-56"><a href="#cb64-56" aria-hidden="true" tabindex="-1"></a>    <span class="st">"530 – 590"</span>, </span>
+<span id="cb64-57"><a href="#cb64-57" aria-hidden="true" tabindex="-1"></a>    <span class="st">"640 – 670"</span>, </span>
+<span id="cb64-58"><a href="#cb64-58" aria-hidden="true" tabindex="-1"></a>    <span class="st">"850 – 880"</span>, </span>
+<span id="cb64-59"><a href="#cb64-59" aria-hidden="true" tabindex="-1"></a>    <span class="st">"1570 – 1650"</span>, </span>
+<span id="cb64-60"><a href="#cb64-60" aria-hidden="true" tabindex="-1"></a>    <span class="st">"2110 – 2290"</span>,</span>
+<span id="cb64-61"><a href="#cb64-61" aria-hidden="true" tabindex="-1"></a>    <span class="st">"520 – 900"</span>,</span>
+<span id="cb64-62"><a href="#cb64-62" aria-hidden="true" tabindex="-1"></a>    <span class="st">"1360 – 1380"</span>,</span>
+<span id="cb64-63"><a href="#cb64-63" aria-hidden="true" tabindex="-1"></a>    <span class="st">"10600 – 11190"</span>,</span>
+<span id="cb64-64"><a href="#cb64-64" aria-hidden="true" tabindex="-1"></a>    <span class="st">"11500 – 12510"</span></span>
+<span id="cb64-65"><a href="#cb64-65" aria-hidden="true" tabindex="-1"></a>  ),</span>
+<span id="cb64-66"><a href="#cb64-66" aria-hidden="true" tabindex="-1"></a>  <span class="at">Resolucion =</span> <span class="fu">c</span>(<span class="dv">30</span>, <span class="dv">30</span>, <span class="dv">30</span>, <span class="dv">30</span>, <span class="dv">30</span>, <span class="dv">30</span>, <span class="dv">30</span>, <span class="dv">15</span>, <span class="dv">30</span>, <span class="dv">30</span>, <span class="dv">30</span>),</span>
+<span id="cb64-67"><a href="#cb64-67" aria-hidden="true" tabindex="-1"></a>  <span class="at">Aplicaciones =</span> <span class="fu">c</span>(</span>
+<span id="cb64-68"><a href="#cb64-68" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Estudio de zonas costeras, calidad de agua, aerosoles atmosféricos."</span>,</span>
+<span id="cb64-69"><a href="#cb64-69" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Agua, vegetación, suelos, análisis de la atmósfera."</span>,</span>
+<span id="cb64-70"><a href="#cb64-70" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Vegetación (pigmentos), monitoreo clorofila, visibilidad de zonas urbanas."</span>,</span>
+<span id="cb64-71"><a href="#cb64-71" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Vegetación (clorofila), delimitación de suelos y cultivos."</span>,</span>
+<span id="cb64-72"><a href="#cb64-72" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Biomasa, vigor vegetal, índices vegetales, agua terrestre."</span>,</span>
+<span id="cb64-73"><a href="#cb64-73" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Humedad en vegetación y suelos, incendios, áreas agrícolas."</span>,</span>
+<span id="cb64-74"><a href="#cb64-74" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Incendios, cenizas, minerales, nieve y hielo."</span>,</span>
+<span id="cb64-75"><a href="#cb64-75" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Imágenes en alta resolución, fusiones pancromáticas."</span>,</span>
+<span id="cb64-76"><a href="#cb64-76" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Detección de nubes cirros, corrección atmosférica."</span>,</span>
+<span id="cb64-77"><a href="#cb64-77" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Temperatura de superficie terrestre, humedad del suelo, estrés hídrico."</span>,</span>
+<span id="cb64-78"><a href="#cb64-78" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Complemento de B10 para T° y balance energético."</span></span>
+<span id="cb64-79"><a href="#cb64-79" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb64-80"><a href="#cb64-80" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb64-81"><a href="#cb64-81" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-82"><a href="#cb64-82" aria-hidden="true" tabindex="-1"></a><span class="co"># Renombrar columnas </span></span>
+<span id="cb64-83"><a href="#cb64-83" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(datos_landsat) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"#"</span>, <span class="st">"Banda"</span>, <span class="st">"Rango espectral (nm)"</span>, <span class="st">"Resolución Espacial (m)"</span>, <span class="st">"Aplicaciones"</span>)</span>
+<span id="cb64-84"><a href="#cb64-84" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-85"><a href="#cb64-85" aria-hidden="true" tabindex="-1"></a><span class="co"># Crear tabla con kableExtra</span></span>
+<span id="cb64-86"><a href="#cb64-86" aria-hidden="true" tabindex="-1"></a><span class="fu">kbl</span>(datos_landsat, <span class="at">booktabs =</span> <span class="cn">TRUE</span>, <span class="at">align =</span> <span class="fu">c</span>(<span class="st">"c"</span>, <span class="st">"l"</span>, <span class="st">"c"</span>, <span class="st">"c"</span>, <span class="st">"l"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb64-87"><a href="#cb64-87" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling</span>(</span>
+<span id="cb64-88"><a href="#cb64-88" aria-hidden="true" tabindex="-1"></a>    <span class="at">bootstrap_options =</span> <span class="fu">c</span>(<span class="st">"striped"</span>, <span class="st">"hover"</span>, <span class="st">"condensed"</span>, <span class="st">"responsive"</span>),</span>
+<span id="cb64-89"><a href="#cb64-89" aria-hidden="true" tabindex="-1"></a>    <span class="at">full_width =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb64-90"><a href="#cb64-90" aria-hidden="true" tabindex="-1"></a>    <span class="at">position =</span> <span class="st">"center"</span></span>
+<span id="cb64-91"><a href="#cb64-91" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb64-92"><a href="#cb64-92" aria-hidden="true" tabindex="-1"></a>  <span class="fu">row_spec</span>(<span class="dv">0</span>, <span class="at">bold =</span> <span class="cn">TRUE</span>, <span class="at">color =</span> <span class="st">"white"</span>, <span class="at">background =</span> <span class="st">"#1A365D"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb64-93"><a href="#cb64-93" aria-hidden="true" tabindex="-1"></a>  <span class="fu">column_spec</span>(<span class="dv">1</span>, <span class="at">bold =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span>                                     </span>
+<span id="cb64-94"><a href="#cb64-94" aria-hidden="true" tabindex="-1"></a>  <span class="fu">column_spec</span>(<span class="dv">2</span>, <span class="at">bold =</span> <span class="cn">TRUE</span>, <span class="at">width =</span> <span class="st">"14em"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb64-95"><a href="#cb64-95" aria-hidden="true" tabindex="-1"></a>  <span class="fu">column_spec</span>(<span class="dv">3</span>, <span class="at">width =</span> <span class="st">"12em"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb64-96"><a href="#cb64-96" aria-hidden="true" tabindex="-1"></a>  <span class="fu">column_spec</span>(<span class="dv">4</span>, <span class="at">width =</span> <span class="st">"10em"</span>) <span class="sc">%&gt;%</span>                                  </span>
+<span id="cb64-97"><a href="#cb64-97" aria-hidden="true" tabindex="-1"></a>  <span class="fu">column_spec</span>(<span class="dv">5</span>, <span class="at">width =</span> <span class="st">"32em"</span>)   </span>
+<span id="cb64-98"><a href="#cb64-98" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb64-99"><a href="#cb64-99" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-100"><a href="#cb64-100" aria-hidden="true" tabindex="-1"></a><span class="fu"># Librerías Necesarias</span></span>
+<span id="cb64-101"><a href="#cb64-101" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-104"><a href="#cb64-104" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb64-105"><a href="#cb64-105" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> rasterio </span>
+<span id="cb64-106"><a href="#cb64-106" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> rasterio.plot <span class="im">import</span> show </span>
+<span id="cb64-107"><a href="#cb64-107" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np </span>
+<span id="cb64-108"><a href="#cb64-108" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt </span>
+<span id="cb64-109"><a href="#cb64-109" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb64-110"><a href="#cb64-110" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-111"><a href="#cb64-111" aria-hidden="true" tabindex="-1"></a><span class="fu"># Cargamos la Imagen Satelital</span></span>
+<span id="cb64-112"><a href="#cb64-112" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-113"><a href="#cb64-113" aria-hidden="true" tabindex="-1"></a>Se usa la función <span class="co">[</span><span class="ot">open()</span><span class="co">]</span>{.func-tecnica} de <span class="co">[</span><span class="ot">Rasterio</span><span class="co">]</span>{.func-tecnica}. Es el equivalente al <span class="co">[</span><span class="ot">open()</span><span class="co">]</span>{.func-tecnica} nativo de Python, pero diseñado específicamente para archivos geoespaciales.</span>
+<span id="cb64-114"><a href="#cb64-114" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-117"><a href="#cb64-117" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb64-118"><a href="#cb64-118" aria-hidden="true" tabindex="-1"></a>imagen_satelital <span class="op">=</span> rasterio.<span class="bu">open</span>(<span class="vs">r"data</span><span class="er">\</span><span class="vs">img_l9</span><span class="dv">.</span><span class="vs">tif"</span>) </span>
+<span id="cb64-119"><a href="#cb64-119" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb64-120"><a href="#cb64-120" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-121"><a href="#cb64-121" aria-hidden="true" tabindex="-1"></a><span class="fu"># Exploración de la imagen satelital</span></span>
+<span id="cb64-122"><a href="#cb64-122" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-123"><a href="#cb64-123" aria-hidden="true" tabindex="-1"></a><span class="fu">## Bandas Espectrales</span></span>
+<span id="cb64-124"><a href="#cb64-124" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-125"><a href="#cb64-125" aria-hidden="true" tabindex="-1"></a>Con la función <span class="co">[</span><span class="ot">count</span><span class="co">]</span>{.func-tecnica} de <span class="co">[</span><span class="ot">Rasterio</span><span class="co">]</span>{.func-tecnica} se observan la cantidad de bandas de la imagen satelital:</span>
+<span id="cb64-126"><a href="#cb64-126" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-129"><a href="#cb64-129" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb64-130"><a href="#cb64-130" aria-hidden="true" tabindex="-1"></a>imagen_satelital.count</span>
+<span id="cb64-131"><a href="#cb64-131" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb64-132"><a href="#cb64-132" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-133"><a href="#cb64-133" aria-hidden="true" tabindex="-1"></a>Es una imagen que se obtuvo con **Google Earth Engine**, estas bandas corresponden a:</span>
+<span id="cb64-134"><a href="#cb64-134" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-135"><a href="#cb64-135" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Banda Azul (B2)</span>
+<span id="cb64-136"><a href="#cb64-136" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Banda Verde (B3)</span>
+<span id="cb64-137"><a href="#cb64-137" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Banda Rojo (B4)</span>
+<span id="cb64-138"><a href="#cb64-138" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Infarrojo cercano "NIR" (B5)</span>
+<span id="cb64-139"><a href="#cb64-139" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>SWIR (Infrarrojo de onda corta) 1 Y 2 (B6 Y B7)</span>
+<span id="cb64-140"><a href="#cb64-140" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-141"><a href="#cb64-141" aria-hidden="true" tabindex="-1"></a><span class="fu">## Dimensión</span></span>
+<span id="cb64-142"><a href="#cb64-142" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-143"><a href="#cb64-143" aria-hidden="true" tabindex="-1"></a>Se obtiene la cantidad de columnas de píxeles que tiene la imagen con <span class="co">[</span><span class="ot">width</span><span class="co">]</span>{.func-tecnica} y la cantidad de filas de píxeles con <span class="co">[</span><span class="ot">height</span><span class="co">]</span>{.func-tecnica}.</span>
+<span id="cb64-144"><a href="#cb64-144" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-147"><a href="#cb64-147" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb64-148"><a href="#cb64-148" aria-hidden="true" tabindex="-1"></a>imagen_satelital.width</span>
+<span id="cb64-149"><a href="#cb64-149" aria-hidden="true" tabindex="-1"></a>imagen_satelital.height</span>
+<span id="cb64-150"><a href="#cb64-150" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb64-151"><a href="#cb64-151" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-152"><a href="#cb64-152" aria-hidden="true" tabindex="-1"></a>A partir de esto y sabiendo que la resolución espacial es de 30 m, se puede determinar que:</span>
+<span id="cb64-153"><a href="#cb64-153" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-156"><a href="#cb64-156" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb64-157"><a href="#cb64-157" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
+<span id="cb64-158"><a href="#cb64-158" aria-hidden="true" tabindex="-1"></a><span class="co">#| message: false</span></span>
+<span id="cb64-159"><a href="#cb64-159" aria-hidden="true" tabindex="-1"></a><span class="co">#| warning: false</span></span>
+<span id="cb64-160"><a href="#cb64-160" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb64-161"><a href="#cb64-161" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-162"><a href="#cb64-162" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-163"><a href="#cb64-163" aria-hidden="true" tabindex="-1"></a>columnas <span class="op">=</span> imagen_satelital.width</span>
-<span id="cb64-164"><a href="#cb64-164" aria-hidden="true" tabindex="-1"></a>filas <span class="op">=</span> imagen_satelital.height</span>
+<span id="cb64-162"><a href="#cb64-162" aria-hidden="true" tabindex="-1"></a>columnas <span class="op">=</span> imagen_satelital.width</span>
+<span id="cb64-163"><a href="#cb64-163" aria-hidden="true" tabindex="-1"></a>filas <span class="op">=</span> imagen_satelital.height</span>
+<span id="cb64-164"><a href="#cb64-164" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb64-165"><a href="#cb64-165" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-166"><a href="#cb64-166" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-167"><a href="#cb64-167" aria-hidden="true" tabindex="-1"></a>ancho_metros <span class="op">=</span> columnas <span class="op">*</span> <span class="dv">30</span></span>
-<span id="cb64-168"><a href="#cb64-168" aria-hidden="true" tabindex="-1"></a>alto_metros <span class="op">=</span> filas <span class="op">*</span> <span class="dv">30</span></span>
+<span id="cb64-166"><a href="#cb64-166" aria-hidden="true" tabindex="-1"></a>ancho_metros <span class="op">=</span> columnas <span class="op">*</span> <span class="dv">30</span></span>
+<span id="cb64-167"><a href="#cb64-167" aria-hidden="true" tabindex="-1"></a>alto_metros <span class="op">=</span> filas <span class="op">*</span> <span class="dv">30</span></span>
+<span id="cb64-168"><a href="#cb64-168" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb64-169"><a href="#cb64-169" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-170"><a href="#cb64-170" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-171"><a href="#cb64-171" aria-hidden="true" tabindex="-1"></a>total_pixeles <span class="op">=</span> columnas <span class="op">*</span> filas</span>
-<span id="cb64-172"><a href="#cb64-172" aria-hidden="true" tabindex="-1"></a>area_hectareas <span class="op">=</span> (total_pixeles <span class="op">*</span> <span class="dv">900</span>) <span class="op">/</span> <span class="dv">10000</span></span>
-<span id="cb64-173"><a href="#cb64-173" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-174"><a href="#cb64-174" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"La imagen cubre un área aproximada de </span><span class="sc">{</span>ancho_metros<span class="op">/</span><span class="dv">1000</span><span class="sc">:.2f}</span><span class="ss"> km de ancho por </span><span class="sc">{</span>alto_metros<span class="op">/</span><span class="dv">1000</span><span class="sc">:.2f}</span><span class="ss"> km de alto."</span>)</span>
-<span id="cb64-175"><a href="#cb64-175" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Superficie total analizada: </span><span class="sc">{</span>area_hectareas<span class="sc">:.2f}</span><span class="ss"> Hectáreas."</span>)</span>
-<span id="cb64-176"><a href="#cb64-176" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb64-177"><a href="#cb64-177" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-178"><a href="#cb64-178" aria-hidden="true" tabindex="-1"></a><span class="fu">## Sistema de Referencia de Coordenadas</span></span>
-<span id="cb64-179"><a href="#cb64-179" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-180"><a href="#cb64-180" aria-hidden="true" tabindex="-1"></a>Con la función <span class="co">[</span><span class="ot">crs</span><span class="co">]</span>{.func-tecnica} de <span class="co">[</span><span class="ot">Rasterio</span><span class="co">]</span>{.func-tecnica} se comprueba el CRS de la imagen. Que en este caso es **WGS 84 (EPSG: 4326)**</span>
-<span id="cb64-181"><a href="#cb64-181" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-184"><a href="#cb64-184" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb64-185"><a href="#cb64-185" aria-hidden="true" tabindex="-1"></a>imagen_satelital.crs</span>
-<span id="cb64-186"><a href="#cb64-186" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb64-187"><a href="#cb64-187" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-188"><a href="#cb64-188" aria-hidden="true" tabindex="-1"></a><span class="fu"># Seleccionar las bandas a usar</span></span>
-<span id="cb64-189"><a href="#cb64-189" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-190"><a href="#cb64-190" aria-hidden="true" tabindex="-1"></a>Se seleccionan las bandas indicadas en el punto 5:</span>
-<span id="cb64-191"><a href="#cb64-191" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-192"><a href="#cb64-192" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Banda Azul</span>
-<span id="cb64-193"><a href="#cb64-193" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Banda Verde</span>
-<span id="cb64-194"><a href="#cb64-194" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Banda Rojo</span>
-<span id="cb64-195"><a href="#cb64-195" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Banda Infrarrojo Cercano (NIR)</span>
-<span id="cb64-196"><a href="#cb64-196" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Banda SWIR (Infrarrojo de onda corta) 1 y 2</span>
-<span id="cb64-197"><a href="#cb64-197" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-198"><a href="#cb64-198" aria-hidden="true" tabindex="-1"></a>La información de cada banda se observa en @tbl-landsat9.</span>
-<span id="cb64-199"><a href="#cb64-199" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-200"><a href="#cb64-200" aria-hidden="true" tabindex="-1"></a>Adicionalmente se produce la normalización de cada banda. Debido a que matplotlib visualiza la información en un rango especifico de valores, y ese rango nos dice que es de 0 a 255 en enteros. Debemos normalizar la imagen para que no tengamos de 0 a 10 mil valores si no valores reducidos entre 0-1:</span>
-<span id="cb64-201"><a href="#cb64-201" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-204"><a href="#cb64-204" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb64-205"><a href="#cb64-205" aria-hidden="true" tabindex="-1"></a>banda_azul <span class="op">=</span> imagen_satelital.read(<span class="dv">1</span>) </span>
-<span id="cb64-206"><a href="#cb64-206" aria-hidden="true" tabindex="-1"></a>banda_azul_norm <span class="op">=</span> banda_azul <span class="op">/</span> banda_azul.<span class="bu">max</span>() </span>
-<span id="cb64-207"><a href="#cb64-207" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-208"><a href="#cb64-208" aria-hidden="true" tabindex="-1"></a>banda_verde <span class="op">=</span> imagen_satelital.read(<span class="dv">2</span>) </span>
-<span id="cb64-209"><a href="#cb64-209" aria-hidden="true" tabindex="-1"></a>banda_verde_norm <span class="op">=</span> banda_verde <span class="op">/</span> banda_verde.<span class="bu">max</span>() </span>
-<span id="cb64-210"><a href="#cb64-210" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-211"><a href="#cb64-211" aria-hidden="true" tabindex="-1"></a>banda_rojo <span class="op">=</span> imagen_satelital.read(<span class="dv">3</span>) </span>
-<span id="cb64-212"><a href="#cb64-212" aria-hidden="true" tabindex="-1"></a>banda_rojo_norm <span class="op">=</span> banda_rojo <span class="op">/</span> banda_rojo.<span class="bu">max</span>() </span>
-<span id="cb64-213"><a href="#cb64-213" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-214"><a href="#cb64-214" aria-hidden="true" tabindex="-1"></a>banda_infrarrojo <span class="op">=</span> imagen_satelital.read(<span class="dv">4</span>) </span>
-<span id="cb64-215"><a href="#cb64-215" aria-hidden="true" tabindex="-1"></a>banda_infrarrojo_norm <span class="op">=</span> banda_infrarrojo <span class="op">/</span> banda_infrarrojo.<span class="bu">max</span>() </span>
-<span id="cb64-216"><a href="#cb64-216" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-217"><a href="#cb64-217" aria-hidden="true" tabindex="-1"></a>banda_swir1 <span class="op">=</span> imagen_satelital.read(<span class="dv">5</span>) </span>
-<span id="cb64-218"><a href="#cb64-218" aria-hidden="true" tabindex="-1"></a>banda_swir1_norm <span class="op">=</span> banda_swir1 <span class="op">/</span> banda_swir1.<span class="bu">max</span>() </span>
-<span id="cb64-219"><a href="#cb64-219" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-220"><a href="#cb64-220" aria-hidden="true" tabindex="-1"></a>banda_swir2 <span class="op">=</span> imagen_satelital.read(<span class="dv">6</span>) </span>
-<span id="cb64-221"><a href="#cb64-221" aria-hidden="true" tabindex="-1"></a>banda_swir2_norm <span class="op">=</span> banda_swir2 <span class="op">/</span> banda_swir2.<span class="bu">max</span>() </span>
-<span id="cb64-222"><a href="#cb64-222" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb64-223"><a href="#cb64-223" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-224"><a href="#cb64-224" aria-hidden="true" tabindex="-1"></a><span class="fu"># Histogramas</span></span>
-<span id="cb64-225"><a href="#cb64-225" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-226"><a href="#cb64-226" aria-hidden="true" tabindex="-1"></a>A continuación, se generan los histogramas de frecuencias para cada una de las seis bandas espectrales utilizando la función <span class="co">[</span><span class="ot">hist()</span><span class="co">]</span>{.func-tecnica} de la librería <span class="co">[</span><span class="ot">matplotlib.pyplot</span><span class="co">]</span>{.func-tecnica} (aplicada sobre el arreglo unidimensional obtenido con <span class="co">[</span><span class="ot">flatten()</span><span class="co">]</span>{.func-tecnica}). Esto sirve para:</span>
-<span id="cb64-227"><a href="#cb64-227" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-228"><a href="#cb64-228" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Comprobar la ausencia de anomalías radiométricas, ruidos atmosféricos extremos o errores de lectura que puedan distorsionar los datos.</span>
-<span id="cb64-229"><a href="#cb64-229" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-230"><a href="#cb64-230" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Permite interpretar el comportamiento físico de las coberturas del lote, identificando visualmente las zonas de absorción (como el canal Rojo) y de alta reflexión (como el Infrarrojo Cercano).</span>
-<span id="cb64-231"><a href="#cb64-231" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-234"><a href="#cb64-234" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb64-235"><a href="#cb64-235" aria-hidden="true" tabindex="-1"></a>fig, axs <span class="op">=</span> plt.subplots(<span class="dv">2</span>, <span class="dv">3</span>, figsize<span class="op">=</span>(<span class="dv">18</span>, <span class="dv">10</span>))</span>
+<span id="cb64-170"><a href="#cb64-170" aria-hidden="true" tabindex="-1"></a>total_pixeles <span class="op">=</span> columnas <span class="op">*</span> filas</span>
+<span id="cb64-171"><a href="#cb64-171" aria-hidden="true" tabindex="-1"></a>area_hectareas <span class="op">=</span> (total_pixeles <span class="op">*</span> <span class="dv">900</span>) <span class="op">/</span> <span class="dv">10000</span></span>
+<span id="cb64-172"><a href="#cb64-172" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-173"><a href="#cb64-173" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"La imagen cubre un área aproximada de </span><span class="sc">{</span>ancho_metros<span class="op">/</span><span class="dv">1000</span><span class="sc">:.2f}</span><span class="ss"> km de ancho por </span><span class="sc">{</span>alto_metros<span class="op">/</span><span class="dv">1000</span><span class="sc">:.2f}</span><span class="ss"> km de alto."</span>)</span>
+<span id="cb64-174"><a href="#cb64-174" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Superficie total analizada: </span><span class="sc">{</span>area_hectareas<span class="sc">:.2f}</span><span class="ss"> Hectáreas."</span>)</span>
+<span id="cb64-175"><a href="#cb64-175" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb64-176"><a href="#cb64-176" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-177"><a href="#cb64-177" aria-hidden="true" tabindex="-1"></a><span class="fu">## Sistema de Referencia de Coordenadas</span></span>
+<span id="cb64-178"><a href="#cb64-178" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-179"><a href="#cb64-179" aria-hidden="true" tabindex="-1"></a>Con la función <span class="co">[</span><span class="ot">crs</span><span class="co">]</span>{.func-tecnica} de <span class="co">[</span><span class="ot">Rasterio</span><span class="co">]</span>{.func-tecnica} se comprueba el CRS de la imagen. Que en este caso es **WGS 84 (EPSG: 4326)**</span>
+<span id="cb64-180"><a href="#cb64-180" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-183"><a href="#cb64-183" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb64-184"><a href="#cb64-184" aria-hidden="true" tabindex="-1"></a>imagen_satelital.crs</span>
+<span id="cb64-185"><a href="#cb64-185" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb64-186"><a href="#cb64-186" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-187"><a href="#cb64-187" aria-hidden="true" tabindex="-1"></a><span class="fu"># Seleccionar las bandas a usar</span></span>
+<span id="cb64-188"><a href="#cb64-188" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-189"><a href="#cb64-189" aria-hidden="true" tabindex="-1"></a>Se seleccionan las bandas indicadas en el punto 5:</span>
+<span id="cb64-190"><a href="#cb64-190" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-191"><a href="#cb64-191" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Banda Azul</span>
+<span id="cb64-192"><a href="#cb64-192" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Banda Verde</span>
+<span id="cb64-193"><a href="#cb64-193" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Banda Rojo</span>
+<span id="cb64-194"><a href="#cb64-194" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Banda Infrarrojo Cercano (NIR)</span>
+<span id="cb64-195"><a href="#cb64-195" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Banda SWIR (Infrarrojo de onda corta) 1 y 2</span>
+<span id="cb64-196"><a href="#cb64-196" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-197"><a href="#cb64-197" aria-hidden="true" tabindex="-1"></a>La información de cada banda se observa en @tbl-landsat9.</span>
+<span id="cb64-198"><a href="#cb64-198" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-199"><a href="#cb64-199" aria-hidden="true" tabindex="-1"></a>Adicionalmente se produce la normalización de cada banda. Debido a que matplotlib visualiza la información en un rango especifico de valores, y ese rango nos dice que es de 0 a 255 en enteros. Debemos normalizar la imagen para que no tengamos de 0 a 10 mil valores si no valores reducidos entre 0-1:</span>
+<span id="cb64-200"><a href="#cb64-200" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-203"><a href="#cb64-203" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb64-204"><a href="#cb64-204" aria-hidden="true" tabindex="-1"></a>banda_azul <span class="op">=</span> imagen_satelital.read(<span class="dv">1</span>) </span>
+<span id="cb64-205"><a href="#cb64-205" aria-hidden="true" tabindex="-1"></a>banda_azul_norm <span class="op">=</span> banda_azul <span class="op">/</span> banda_azul.<span class="bu">max</span>() </span>
+<span id="cb64-206"><a href="#cb64-206" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-207"><a href="#cb64-207" aria-hidden="true" tabindex="-1"></a>banda_verde <span class="op">=</span> imagen_satelital.read(<span class="dv">2</span>) </span>
+<span id="cb64-208"><a href="#cb64-208" aria-hidden="true" tabindex="-1"></a>banda_verde_norm <span class="op">=</span> banda_verde <span class="op">/</span> banda_verde.<span class="bu">max</span>() </span>
+<span id="cb64-209"><a href="#cb64-209" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-210"><a href="#cb64-210" aria-hidden="true" tabindex="-1"></a>banda_rojo <span class="op">=</span> imagen_satelital.read(<span class="dv">3</span>) </span>
+<span id="cb64-211"><a href="#cb64-211" aria-hidden="true" tabindex="-1"></a>banda_rojo_norm <span class="op">=</span> banda_rojo <span class="op">/</span> banda_rojo.<span class="bu">max</span>() </span>
+<span id="cb64-212"><a href="#cb64-212" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-213"><a href="#cb64-213" aria-hidden="true" tabindex="-1"></a>banda_infrarrojo <span class="op">=</span> imagen_satelital.read(<span class="dv">4</span>) </span>
+<span id="cb64-214"><a href="#cb64-214" aria-hidden="true" tabindex="-1"></a>banda_infrarrojo_norm <span class="op">=</span> banda_infrarrojo <span class="op">/</span> banda_infrarrojo.<span class="bu">max</span>() </span>
+<span id="cb64-215"><a href="#cb64-215" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-216"><a href="#cb64-216" aria-hidden="true" tabindex="-1"></a>banda_swir1 <span class="op">=</span> imagen_satelital.read(<span class="dv">5</span>) </span>
+<span id="cb64-217"><a href="#cb64-217" aria-hidden="true" tabindex="-1"></a>banda_swir1_norm <span class="op">=</span> banda_swir1 <span class="op">/</span> banda_swir1.<span class="bu">max</span>() </span>
+<span id="cb64-218"><a href="#cb64-218" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-219"><a href="#cb64-219" aria-hidden="true" tabindex="-1"></a>banda_swir2 <span class="op">=</span> imagen_satelital.read(<span class="dv">6</span>) </span>
+<span id="cb64-220"><a href="#cb64-220" aria-hidden="true" tabindex="-1"></a>banda_swir2_norm <span class="op">=</span> banda_swir2 <span class="op">/</span> banda_swir2.<span class="bu">max</span>() </span>
+<span id="cb64-221"><a href="#cb64-221" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb64-222"><a href="#cb64-222" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-223"><a href="#cb64-223" aria-hidden="true" tabindex="-1"></a><span class="fu"># Histogramas</span></span>
+<span id="cb64-224"><a href="#cb64-224" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-225"><a href="#cb64-225" aria-hidden="true" tabindex="-1"></a>A continuación, se generan los histogramas de frecuencias para cada una de las seis bandas espectrales utilizando la función <span class="co">[</span><span class="ot">hist()</span><span class="co">]</span>{.func-tecnica} de la librería <span class="co">[</span><span class="ot">matplotlib.pyplot</span><span class="co">]</span>{.func-tecnica} (aplicada sobre el arreglo unidimensional obtenido con <span class="co">[</span><span class="ot">flatten()</span><span class="co">]</span>{.func-tecnica}). Esto sirve para:</span>
+<span id="cb64-226"><a href="#cb64-226" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-227"><a href="#cb64-227" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Comprobar la ausencia de anomalías radiométricas, ruidos atmosféricos extremos o errores de lectura que puedan distorsionar los datos.</span>
+<span id="cb64-228"><a href="#cb64-228" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-229"><a href="#cb64-229" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Permite interpretar el comportamiento físico de las coberturas del lote, identificando visualmente las zonas de absorción (como el canal Rojo) y de alta reflexión (como el Infrarrojo Cercano).</span>
+<span id="cb64-230"><a href="#cb64-230" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-233"><a href="#cb64-233" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb64-234"><a href="#cb64-234" aria-hidden="true" tabindex="-1"></a>fig, axs <span class="op">=</span> plt.subplots(<span class="dv">2</span>, <span class="dv">3</span>, figsize<span class="op">=</span>(<span class="dv">18</span>, <span class="dv">10</span>))</span>
+<span id="cb64-235"><a href="#cb64-235" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb64-236"><a href="#cb64-236" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-237"><a href="#cb64-237" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-238"><a href="#cb64-238" aria-hidden="true" tabindex="-1"></a>axs <span class="op">=</span> axs.flatten()</span>
-<span id="cb64-239"><a href="#cb64-239" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-240"><a href="#cb64-240" aria-hidden="true" tabindex="-1"></a><span class="co"># Azul </span></span>
-<span id="cb64-241"><a href="#cb64-241" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">0</span>].hist(banda_azul.flatten(), bins<span class="op">=</span><span class="dv">50</span>, color<span class="op">=</span><span class="st">'blue'</span>, alpha<span class="op">=</span><span class="fl">0.7</span>)</span>
-<span id="cb64-242"><a href="#cb64-242" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">0</span>].set_title(<span class="st">'Distribución - Banda Azul (B2)'</span>)</span>
-<span id="cb64-243"><a href="#cb64-243" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">0</span>].set_xlabel(<span class="st">'Valor de Reflectancia'</span>)</span>
-<span id="cb64-244"><a href="#cb64-244" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-245"><a href="#cb64-245" aria-hidden="true" tabindex="-1"></a><span class="co"># Verde </span></span>
-<span id="cb64-246"><a href="#cb64-246" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">1</span>].hist(banda_verde.flatten(), bins<span class="op">=</span><span class="dv">50</span>, color<span class="op">=</span><span class="st">'green'</span>, alpha<span class="op">=</span><span class="fl">0.7</span>)</span>
-<span id="cb64-247"><a href="#cb64-247" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">1</span>].set_title(<span class="st">'Distribución - Banda Verde (B3)'</span>)</span>
-<span id="cb64-248"><a href="#cb64-248" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">1</span>].set_xlabel(<span class="st">'Valor de Reflectancia'</span>)</span>
-<span id="cb64-249"><a href="#cb64-249" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-250"><a href="#cb64-250" aria-hidden="true" tabindex="-1"></a><span class="co"># Rojo </span></span>
-<span id="cb64-251"><a href="#cb64-251" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">2</span>].hist(banda_rojo.flatten(), bins<span class="op">=</span><span class="dv">50</span>, color<span class="op">=</span><span class="st">'red'</span>, alpha<span class="op">=</span><span class="fl">0.7</span>)</span>
-<span id="cb64-252"><a href="#cb64-252" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">2</span>].set_title(<span class="st">'Distribución - Banda Rojo (B4)'</span>)</span>
-<span id="cb64-253"><a href="#cb64-253" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">2</span>].set_xlabel(<span class="st">'Valor de Reflectancia'</span>)</span>
-<span id="cb64-254"><a href="#cb64-254" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-255"><a href="#cb64-255" aria-hidden="true" tabindex="-1"></a><span class="co"># NIR </span></span>
-<span id="cb64-256"><a href="#cb64-256" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">3</span>].hist(banda_infrarrojo.flatten(), bins<span class="op">=</span><span class="dv">50</span>, color<span class="op">=</span><span class="st">'orange'</span>, alpha<span class="op">=</span><span class="fl">0.7</span>) </span>
-<span id="cb64-257"><a href="#cb64-257" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">3</span>].set_title(<span class="st">'Distribución - Banda NIR (B5)'</span>)</span>
-<span id="cb64-258"><a href="#cb64-258" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">3</span>].set_xlabel(<span class="st">'Valor de Reflectancia'</span>)</span>
-<span id="cb64-259"><a href="#cb64-259" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-260"><a href="#cb64-260" aria-hidden="true" tabindex="-1"></a><span class="co"># SWIR 1 </span></span>
-<span id="cb64-261"><a href="#cb64-261" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">4</span>].hist(banda_swir1.flatten(), bins<span class="op">=</span><span class="dv">50</span>, color<span class="op">=</span><span class="st">'brown'</span>, alpha<span class="op">=</span><span class="fl">0.7</span>)</span>
-<span id="cb64-262"><a href="#cb64-262" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">4</span>].set_title(<span class="st">'Distribución - Banda SWIR 1 (B6)'</span>)</span>
-<span id="cb64-263"><a href="#cb64-263" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">4</span>].set_xlabel(<span class="st">'Valor de Reflectancia'</span>)</span>
-<span id="cb64-264"><a href="#cb64-264" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-265"><a href="#cb64-265" aria-hidden="true" tabindex="-1"></a><span class="co"># SWIR 2</span></span>
-<span id="cb64-266"><a href="#cb64-266" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">5</span>].hist(banda_swir2.flatten(), bins<span class="op">=</span><span class="dv">50</span>, color<span class="op">=</span><span class="st">'gray'</span>, alpha<span class="op">=</span><span class="fl">0.7</span>)</span>
-<span id="cb64-267"><a href="#cb64-267" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">5</span>].set_title(<span class="st">'Distribución - Banda SWIR 2 (B7)'</span>)</span>
-<span id="cb64-268"><a href="#cb64-268" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">5</span>].set_xlabel(<span class="st">'Valor de Reflectancia'</span>)</span>
-<span id="cb64-269"><a href="#cb64-269" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-270"><a href="#cb64-270" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
-<span id="cb64-271"><a href="#cb64-271" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
-<span id="cb64-272"><a href="#cb64-272" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb64-273"><a href="#cb64-273" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-274"><a href="#cb64-274" aria-hidden="true" tabindex="-1"></a><span class="fu"># Composición de bandas</span></span>
-<span id="cb64-275"><a href="#cb64-275" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-276"><a href="#cb64-276" aria-hidden="true" tabindex="-1"></a>La función usada es <span class="co">[</span><span class="ot">dstack()</span><span class="co">]</span>{.func-tecnica} de la librería <span class="co">[</span><span class="ot">NumPy</span><span class="co">]</span>{.func-tecnica}.</span>
-<span id="cb64-277"><a href="#cb64-277" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-278"><a href="#cb64-278" aria-hidden="true" tabindex="-1"></a>Las imágenes de reflectancia provenientes de plataformas satelitales como Landsat 9 capturan datos en un rango dinámico lineal muy amplio. Sin embargo, los componentes principales de un entorno agrícola (suelo, rastrojo y cultivos) suelen concentrar sus valores en una porción muy estrecha de ese espectro. Si se visualizan estas combinaciones de bandas de forma directa, las imágenes tienden a verse oscuras, opacas o con muy poco contraste, dificultando la identificación visual de la variabilidad interna de los lotes.</span>
-<span id="cb64-279"><a href="#cb64-279" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-280"><a href="#cb64-280" aria-hidden="true" tabindex="-1"></a>Para resolver esta limitación radiométrica, se implementó una función de Estiramiento de Contraste Lineal basado en Percentiles (*Percentile Linear Contrast Stretch*). Esta técnica remueve los valores extremos de ruido y redistribuye de manera óptima los datos en el rango visible (0 a 1). La función es:</span>
-<span id="cb64-281"><a href="#cb64-281" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-284"><a href="#cb64-284" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb64-285"><a href="#cb64-285" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> estirar_contraste(imagen, p_min<span class="op">=</span><span class="dv">2</span>, p_max<span class="op">=</span><span class="dv">98</span>):</span>
-<span id="cb64-286"><a href="#cb64-286" aria-hidden="true" tabindex="-1"></a>    p_bajo, p_alto <span class="op">=</span> np.percentile(imagen, (p_min, p_max))</span>
-<span id="cb64-287"><a href="#cb64-287" aria-hidden="true" tabindex="-1"></a>    imagen_estirada <span class="op">=</span> np.clip((imagen <span class="op">-</span> p_bajo) <span class="op">/</span> (p_alto <span class="op">-</span> p_bajo), <span class="dv">0</span>, <span class="dv">1</span>)</span>
-<span id="cb64-288"><a href="#cb64-288" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> imagen_estirada</span>
-<span id="cb64-289"><a href="#cb64-289" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb64-290"><a href="#cb64-290" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-291"><a href="#cb64-291" aria-hidden="true" tabindex="-1"></a><span class="fu">## Color Verdadero</span></span>
-<span id="cb64-292"><a href="#cb64-292" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-293"><a href="#cb64-293" aria-hidden="true" tabindex="-1"></a>Esta combinación involucra a las tres bandas visibles y se asigna cada una de ellas a la región del espectro visible que el ojo humano puede percibir. El resultado es una combinación que se aproxima a los colores naturales de la escena:</span>
-<span id="cb64-294"><a href="#cb64-294" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-295"><a href="#cb64-295" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Canal Rojo (R): Se asigna a la Banda 4 (Rojo).\</span>
-<span id="cb64-296"><a href="#cb64-296" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Canal Verde (G): Se asigna a la Banda 3 (Verde).\</span>
-<span id="cb64-297"><a href="#cb64-297" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Canal Azul (B): Se asigna a la Banda 2 (Azul).</span>
-<span id="cb64-298"><a href="#cb64-298" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-301"><a href="#cb64-301" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb64-302"><a href="#cb64-302" aria-hidden="true" tabindex="-1"></a>color_verdadero <span class="op">=</span> np.dstack((banda_rojo_norm, banda_verde_norm, banda_azul_norm))</span>
-<span id="cb64-303"><a href="#cb64-303" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb64-304"><a href="#cb64-304" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-305"><a href="#cb64-305" aria-hidden="true" tabindex="-1"></a>Visualizar:</span>
-<span id="cb64-306"><a href="#cb64-306" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-309"><a href="#cb64-309" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb64-310"><a href="#cb64-310" aria-hidden="true" tabindex="-1"></a><span class="co"># Aplicar función</span></span>
-<span id="cb64-311"><a href="#cb64-311" aria-hidden="true" tabindex="-1"></a>color_verdadero_p <span class="op">=</span> estirar_contraste(color_verdadero)</span>
-<span id="cb64-312"><a href="#cb64-312" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-313"><a href="#cb64-313" aria-hidden="true" tabindex="-1"></a><span class="co"># Graficar</span></span>
-<span id="cb64-314"><a href="#cb64-314" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">12</span>, <span class="dv">7</span>), facecolor<span class="op">=</span><span class="st">'white'</span>)</span>
-<span id="cb64-315"><a href="#cb64-315" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-316"><a href="#cb64-316" aria-hidden="true" tabindex="-1"></a>ax.imshow(color_verdadero_p)</span>
-<span id="cb64-317"><a href="#cb64-317" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-318"><a href="#cb64-318" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">"Color Verdadero (B4-B3-B2) - Landsat 9"</span>, </span>
-<span id="cb64-319"><a href="#cb64-319" aria-hidden="true" tabindex="-1"></a>             fontsize<span class="op">=</span><span class="dv">14</span>, pad<span class="op">=</span><span class="dv">15</span>, fontweight<span class="op">=</span><span class="st">'bold'</span>, color<span class="op">=</span><span class="st">'#1A365D'</span>)</span>
-<span id="cb64-320"><a href="#cb64-320" aria-hidden="true" tabindex="-1"></a>ax.axis(<span class="st">'off'</span>)  </span>
-<span id="cb64-321"><a href="#cb64-321" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-322"><a href="#cb64-322" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
-<span id="cb64-323"><a href="#cb64-323" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
-<span id="cb64-324"><a href="#cb64-324" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb64-325"><a href="#cb64-325" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-326"><a href="#cb64-326" aria-hidden="true" tabindex="-1"></a>Es la combinación que se conoce como color natural, su principal utilidad radica en la identificación inicial y el reconocimiento general del área de estudio, permitiendo discriminar de forma intuitiva coberturas básicas.</span>
-<span id="cb64-327"><a href="#cb64-327" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-328"><a href="#cb64-328" aria-hidden="true" tabindex="-1"></a><span class="fu">## Falso Color Estándar</span></span>
-<span id="cb64-329"><a href="#cb64-329" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-330"><a href="#cb64-330" aria-hidden="true" tabindex="-1"></a>Se genera sustituyendo el canal del azul (que aporta mucha dispersión atmosférica y poca información sobre el vigor vegetal) e incorporando la banda del infrarrojo cercano (NIR). Se realiza de la siguiente manera:</span>
-<span id="cb64-331"><a href="#cb64-331" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-332"><a href="#cb64-332" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Canal Rojo (R): Se asigna a la Banda 5 (Infrarrojo Cercano - NIR).</span>
-<span id="cb64-333"><a href="#cb64-333" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Canal Verde (G): Se asigna a la Banda 4 (Rojo).</span>
-<span id="cb64-334"><a href="#cb64-334" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Canal Azul (B): Se asigna a la Banda 3 (Verde).</span>
-<span id="cb64-335"><a href="#cb64-335" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-338"><a href="#cb64-338" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb64-339"><a href="#cb64-339" aria-hidden="true" tabindex="-1"></a>falso_color <span class="op">=</span> np.dstack((banda_infrarrojo_norm, banda_rojo_norm, banda_verde_norm)) </span>
-<span id="cb64-340"><a href="#cb64-340" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb64-341"><a href="#cb64-341" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-342"><a href="#cb64-342" aria-hidden="true" tabindex="-1"></a>Visualizar:</span>
-<span id="cb64-343"><a href="#cb64-343" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-346"><a href="#cb64-346" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb64-347"><a href="#cb64-347" aria-hidden="true" tabindex="-1"></a><span class="co"># Aplicar función</span></span>
-<span id="cb64-348"><a href="#cb64-348" aria-hidden="true" tabindex="-1"></a>falso_color_p <span class="op">=</span> estirar_contraste(falso_color)</span>
-<span id="cb64-349"><a href="#cb64-349" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-350"><a href="#cb64-350" aria-hidden="true" tabindex="-1"></a><span class="co"># Graficar</span></span>
-<span id="cb64-351"><a href="#cb64-351" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">12</span>, <span class="dv">7</span>), facecolor<span class="op">=</span><span class="st">'white'</span>)</span>
-<span id="cb64-352"><a href="#cb64-352" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-353"><a href="#cb64-353" aria-hidden="true" tabindex="-1"></a>ax.imshow(falso_color_p)</span>
-<span id="cb64-354"><a href="#cb64-354" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-355"><a href="#cb64-355" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">"Falso Color Estandar (B5-B4-B3) - Landsat 9"</span>, </span>
-<span id="cb64-356"><a href="#cb64-356" aria-hidden="true" tabindex="-1"></a>             fontsize<span class="op">=</span><span class="dv">14</span>, pad<span class="op">=</span><span class="dv">15</span>, fontweight<span class="op">=</span><span class="st">'bold'</span>, color<span class="op">=</span><span class="st">'#1A365D'</span>)</span>
-<span id="cb64-357"><a href="#cb64-357" aria-hidden="true" tabindex="-1"></a>ax.axis(<span class="st">'off'</span>)  </span>
-<span id="cb64-358"><a href="#cb64-358" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-359"><a href="#cb64-359" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
-<span id="cb64-360"><a href="#cb64-360" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
-<span id="cb64-361"><a href="#cb64-361" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb64-362"><a href="#cb64-362" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-363"><a href="#cb64-363" aria-hidden="true" tabindex="-1"></a>La vegetación refleja mucho en el NIR, por lo que, al ponerlo en el canal rojo, la vegetación sana aparece en tonos rojos brillantes, lo que la hace muy fácil de disinguir de otros elementos.</span>
-<span id="cb64-364"><a href="#cb64-364" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-365"><a href="#cb64-365" aria-hidden="true" tabindex="-1"></a><span class="fu">## Agricultura</span></span>
-<span id="cb64-366"><a href="#cb64-366" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-367"><a href="#cb64-367" aria-hidden="true" tabindex="-1"></a>Una combinación, muy utilizada en agricultura es:</span>
-<span id="cb64-368"><a href="#cb64-368" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-369"><a href="#cb64-369" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Canal Rojo (R): Se asigna a la Banda 6 (SWIR 1 - Infrarrojo de onda corta).\</span>
-<span id="cb64-370"><a href="#cb64-370" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Canal Verde (G): Se asigna a la Banda 5 (NIR - Infrarrojo cercano).\</span>
-<span id="cb64-371"><a href="#cb64-371" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Canal Azul (B): Se asigna a la Banda 2 (Azul).</span>
-<span id="cb64-372"><a href="#cb64-372" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-373"><a href="#cb64-373" aria-hidden="true" tabindex="-1"></a>Para entender esta imagen es importante la interacción de la Banda 5 (NIR) y la Banda 6 (SWIR 1) con el cultivo:</span>
-<span id="cb64-374"><a href="#cb64-374" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-375"><a href="#cb64-375" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>La Banda 5 (NIR) está en el canal Verde: El tejido celular de las plantas sanas refleja mucho en el infrarrojo cercano. Al colocar esta información en el canal verde de la pantalla, todo lo que tenga alta biomasa va a tender a un color verde muy llamativo.</span>
-<span id="cb64-376"><a href="#cb64-376" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-377"><a href="#cb64-377" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>La Banda 6 (SWIR 1) está en el canal Rojo: Esta banda es extremadamente sensible a la humedad. El agua absorbe la radiación SWIR; por lo tanto, una planta bien hidratada absorberá esa energía y reflejará muy poco hacia el satélite. Si la planta sufre estrés hídrico o el suelo está seco, reflejará más SWIR (más color rojo en la pantalla).</span>
-<span id="cb64-378"><a href="#cb64-378" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-381"><a href="#cb64-381" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb64-382"><a href="#cb64-382" aria-hidden="true" tabindex="-1"></a>agricultura <span class="op">=</span> np.dstack((banda_swir1_norm, banda_infrarrojo_norm, banda_azul_norm)) </span>
-<span id="cb64-383"><a href="#cb64-383" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb64-384"><a href="#cb64-384" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-385"><a href="#cb64-385" aria-hidden="true" tabindex="-1"></a>Visualizar:</span>
-<span id="cb64-386"><a href="#cb64-386" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-389"><a href="#cb64-389" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb64-390"><a href="#cb64-390" aria-hidden="true" tabindex="-1"></a><span class="co"># Aplicar función</span></span>
-<span id="cb64-391"><a href="#cb64-391" aria-hidden="true" tabindex="-1"></a>agricultura_p <span class="op">=</span> estirar_contraste(agricultura)</span>
-<span id="cb64-392"><a href="#cb64-392" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-393"><a href="#cb64-393" aria-hidden="true" tabindex="-1"></a><span class="co"># Graficar</span></span>
-<span id="cb64-394"><a href="#cb64-394" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">12</span>, <span class="dv">7</span>), facecolor<span class="op">=</span><span class="st">'white'</span>)</span>
-<span id="cb64-395"><a href="#cb64-395" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-396"><a href="#cb64-396" aria-hidden="true" tabindex="-1"></a>ax.imshow(agricultura_p)</span>
-<span id="cb64-397"><a href="#cb64-397" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-398"><a href="#cb64-398" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">"Agricultura (B6-B5-B2) - Landsat 9"</span>, </span>
-<span id="cb64-399"><a href="#cb64-399" aria-hidden="true" tabindex="-1"></a>             fontsize<span class="op">=</span><span class="dv">14</span>, pad<span class="op">=</span><span class="dv">15</span>, fontweight<span class="op">=</span><span class="st">'bold'</span>, color<span class="op">=</span><span class="st">'#1A365D'</span>)</span>
-<span id="cb64-400"><a href="#cb64-400" aria-hidden="true" tabindex="-1"></a>ax.axis(<span class="st">'off'</span>)  </span>
-<span id="cb64-401"><a href="#cb64-401" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-402"><a href="#cb64-402" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
-<span id="cb64-403"><a href="#cb64-403" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
-<span id="cb64-404"><a href="#cb64-404" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb64-405"><a href="#cb64-405" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-406"><a href="#cb64-406" aria-hidden="true" tabindex="-1"></a>Gracias a este cruce espectral, las coberturas del suelo adoptan una firma cromática muy clara:</span>
-<span id="cb64-407"><a href="#cb64-407" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-408"><a href="#cb64-408" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Vegetación vigorosa y densa: Se visualiza en tonalidades de verde brillante o fosforescente.</span>
-<span id="cb64-409"><a href="#cb64-409" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-410"><a href="#cb64-410" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Vegetación sana pero perenne o más madura: Tiende a verse en verdes más oscuros e intensos (como los montes o bosques).</span>
-<span id="cb64-411"><a href="#cb64-411" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-412"><a href="#cb64-412" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Vegetación estresada, rala o en senescencia: Al perder humedad y biomasa, disminuye el verde (NIR) y aumenta el rojo (SWIR), lo que da como resultado tonalidades de verde opaco, amarillento o de tonalidades pardas.</span>
-<span id="cb64-413"><a href="#cb64-413" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-414"><a href="#cb64-414" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Suelo desnudo y áreas urbanas: Dependiendo de su composición y textura, aparecen en una gama que va desde los tonos marrón, magenta hasta el ocre. Los suelos labrados o secos brillan más en el SWIR, tirando a colores rojizos o marrones claros.</span>
-<span id="cb64-415"><a href="#cb64-415" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-416"><a href="#cb64-416" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Cuerpos de agua: Al absorber la radiación en el NIR y absorber de forma casi absoluta en el SWIR, se ven en tonos oscuros o negros profundos, lo que permite contrastarlos perfectamente con el suelo desnudo.</span>
-<span id="cb64-417"><a href="#cb64-417" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-418"><a href="#cb64-418" aria-hidden="true" tabindex="-1"></a><span class="fu">## Delimitar Agua</span></span>
-<span id="cb64-419"><a href="#cb64-419" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-420"><a href="#cb64-420" aria-hidden="true" tabindex="-1"></a>La combinación que nos permite delimitar un poco mejor el agua con tierra es:</span>
-<span id="cb64-421"><a href="#cb64-421" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-422"><a href="#cb64-422" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Canal Rojo (R): Se asigna a la Banda 5 (Infrarrojo Cercano - NIR).</span>
-<span id="cb64-423"><a href="#cb64-423" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Canal Verde (G): Se asigna a la Banda 6 (SWIR 1 - Infrarrojo de onda corta).\</span>
-<span id="cb64-424"><a href="#cb64-424" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Canal Azul (B): Se asigna a la Banda 4 (Rojo).</span>
-<span id="cb64-425"><a href="#cb64-425" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-426"><a href="#cb64-426" aria-hidden="true" tabindex="-1"></a>El agua absorbe de forma casi total las longitudes de onda del infrarrojo cercano (NIR) y del infrarrojo de onda corta (SWIR 1). Por lo que, en un cuerpo de agua el valor de reflectancia para las bandas 5 y 6 son cercanos a cero.</span>
-<span id="cb64-427"><a href="#cb64-427" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-430"><a href="#cb64-430" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb64-431"><a href="#cb64-431" aria-hidden="true" tabindex="-1"></a>delimitar_agua <span class="op">=</span> np.dstack((banda_infrarrojo_norm, banda_swir1_norm, banda_rojo_norm)) </span>
-<span id="cb64-432"><a href="#cb64-432" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb64-433"><a href="#cb64-433" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-434"><a href="#cb64-434" aria-hidden="true" tabindex="-1"></a>Visualizar:</span>
-<span id="cb64-435"><a href="#cb64-435" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-438"><a href="#cb64-438" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb64-439"><a href="#cb64-439" aria-hidden="true" tabindex="-1"></a><span class="co"># Aplicar función</span></span>
-<span id="cb64-440"><a href="#cb64-440" aria-hidden="true" tabindex="-1"></a>delimitar_agua_p <span class="op">=</span> estirar_contraste(delimitar_agua)</span>
-<span id="cb64-441"><a href="#cb64-441" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-442"><a href="#cb64-442" aria-hidden="true" tabindex="-1"></a><span class="co"># Graficar</span></span>
-<span id="cb64-443"><a href="#cb64-443" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">12</span>, <span class="dv">7</span>), facecolor<span class="op">=</span><span class="st">'white'</span>)</span>
-<span id="cb64-444"><a href="#cb64-444" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-445"><a href="#cb64-445" aria-hidden="true" tabindex="-1"></a>ax.imshow(delimitar_agua)</span>
-<span id="cb64-446"><a href="#cb64-446" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-447"><a href="#cb64-447" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">"Delimitar Agua (B5-B6-B4) - Landsat 9"</span>, </span>
-<span id="cb64-448"><a href="#cb64-448" aria-hidden="true" tabindex="-1"></a>             fontsize<span class="op">=</span><span class="dv">14</span>, pad<span class="op">=</span><span class="dv">15</span>, fontweight<span class="op">=</span><span class="st">'bold'</span>, color<span class="op">=</span><span class="st">'#1A365D'</span>)</span>
-<span id="cb64-449"><a href="#cb64-449" aria-hidden="true" tabindex="-1"></a>ax.axis(<span class="st">'off'</span>)  </span>
-<span id="cb64-450"><a href="#cb64-450" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-451"><a href="#cb64-451" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
-<span id="cb64-452"><a href="#cb64-452" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
-<span id="cb64-453"><a href="#cb64-453" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb64-454"><a href="#cb64-454" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-455"><a href="#cb64-455" aria-hidden="true" tabindex="-1"></a>Interpretación Visual:</span>
-<span id="cb64-456"><a href="#cb64-456" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-457"><a href="#cb64-457" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Cuerpos de Agua: Se visualizan en tonos negros profundos o azules muy oscuros.</span>
-<span id="cb64-458"><a href="#cb64-458" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-459"><a href="#cb64-459" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Suelo Desnudo: Aparece en una gama que va desde el magenta, rosa viejo, hasta el ocre o marrón. Esto se debe a que el suelo refleja fuertemente tanto el NIR como el SWIR, activando los canales rojo y verde de la pantalla.</span>
-<span id="cb64-460"><a href="#cb64-460" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-461"><a href="#cb64-461" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Vegetación Activa: Se observa en tonalidades que van del naranja al marrón rojizo o pardo, dependiendo de la densidad del follaje.</span>
-<span id="cb64-462"><a href="#cb64-462" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-463"><a href="#cb64-463" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Zonas con Humedad en el Suelo: Los suelos saturados o con napas muy altas absorben más energía espectral que los suelos secos, manifestándose en tonalidades azules grisáceas o púrpuras oscuras, lo que te permite identificar zonas anegadas o bajos hidromórficos.</span>
-<span id="cb64-464"><a href="#cb64-464" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-465"><a href="#cb64-465" aria-hidden="true" tabindex="-1"></a><span class="fu">## Analisis de vegetación</span></span>
-<span id="cb64-466"><a href="#cb64-466" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-467"><a href="#cb64-467" aria-hidden="true" tabindex="-1"></a>Se realiza de la siguiente manera:</span>
-<span id="cb64-468"><a href="#cb64-468" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-469"><a href="#cb64-469" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Canal Rojo (R): Se asigna a la Banda 6 (SWIR 1 - Infrarrojo de onda corta).</span>
-<span id="cb64-470"><a href="#cb64-470" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Canal Verde (G): Se asigna a la Banda 5 (NIR - Infrarrojo cercano).</span>
-<span id="cb64-471"><a href="#cb64-471" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Canal Azul (B): Se asigna a la Banda 4 (Rojo).</span>
-<span id="cb64-472"><a href="#cb64-472" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-473"><a href="#cb64-473" aria-hidden="true" tabindex="-1"></a>Esta combinación es una evolución de la combinación clásica de "Agricultura" (6, 5, 2). Al reemplazar la banda azul por la Banda del Rojo (B4) en el canal azul de la pantalla, se logran dos ventajas:</span>
-<span id="cb64-474"><a href="#cb64-474" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-475"><a href="#cb64-475" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Las ondas cortas (SWIR) y medias (NIR) no se ven afectadas por las partículas de polvo o humedad de la atmósfera. Al quitar el azul (que es la banda más ruidosa), la imagen adquiere mayor nitidez.</span>
-<span id="cb64-476"><a href="#cb64-476" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-477"><a href="#cb64-477" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Se usa la banda donde la clorofila absorbe más energía (Rojo) , la banda donde la estructura celular refleja más (NIR) , y la banda sensible a la humedad del tejido (SWIR 1).</span>
-<span id="cb64-478"><a href="#cb64-478" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-481"><a href="#cb64-481" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb64-482"><a href="#cb64-482" aria-hidden="true" tabindex="-1"></a>vegetacion <span class="op">=</span> np.dstack((banda_swir1_norm, banda_infrarrojo_norm, banda_rojo_norm)) </span>
-<span id="cb64-483"><a href="#cb64-483" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb64-484"><a href="#cb64-484" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-485"><a href="#cb64-485" aria-hidden="true" tabindex="-1"></a>Visualizar:</span>
-<span id="cb64-486"><a href="#cb64-486" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-489"><a href="#cb64-489" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb64-490"><a href="#cb64-490" aria-hidden="true" tabindex="-1"></a><span class="co"># Aplicar función</span></span>
-<span id="cb64-491"><a href="#cb64-491" aria-hidden="true" tabindex="-1"></a>vegetacion_p <span class="op">=</span> estirar_contraste(vegetacion)</span>
-<span id="cb64-492"><a href="#cb64-492" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-493"><a href="#cb64-493" aria-hidden="true" tabindex="-1"></a><span class="co"># Graficar</span></span>
-<span id="cb64-494"><a href="#cb64-494" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">12</span>, <span class="dv">7</span>), facecolor<span class="op">=</span><span class="st">'white'</span>)</span>
-<span id="cb64-495"><a href="#cb64-495" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-496"><a href="#cb64-496" aria-hidden="true" tabindex="-1"></a>ax.imshow(vegetacion_p)</span>
-<span id="cb64-497"><a href="#cb64-497" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-498"><a href="#cb64-498" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">"Análisis de Vegetación (B6-B5-B4) - Landsat 9"</span>, </span>
-<span id="cb64-499"><a href="#cb64-499" aria-hidden="true" tabindex="-1"></a>             fontsize<span class="op">=</span><span class="dv">14</span>, pad<span class="op">=</span><span class="dv">15</span>, fontweight<span class="op">=</span><span class="st">'bold'</span>, color<span class="op">=</span><span class="st">'#1A365D'</span>)</span>
-<span id="cb64-500"><a href="#cb64-500" aria-hidden="true" tabindex="-1"></a>ax.axis(<span class="st">'off'</span>)  </span>
-<span id="cb64-501"><a href="#cb64-501" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-502"><a href="#cb64-502" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
-<span id="cb64-503"><a href="#cb64-503" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
-<span id="cb64-504"><a href="#cb64-504" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb64-505"><a href="#cb64-505" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-506"><a href="#cb64-506" aria-hidden="true" tabindex="-1"></a>Interpretación Visual:</span>
-<span id="cb64-507"><a href="#cb64-507" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-508"><a href="#cb64-508" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Vegetación densa, activa y bien hidratada: Se manifiesta en tonos verdes intensos y brillantes (debido a la altísima reflectancia en el NIR que satura el canal verde).</span>
-<span id="cb64-509"><a href="#cb64-509" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-510"><a href="#cb64-510" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Vegetación en transición, madura o con menor densidad foliar: Adquiere tonalidades verdes oliva, pardas o ligeramente amarillentas.</span>
-<span id="cb64-511"><a href="#cb64-511" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-512"><a href="#cb64-512" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Suelo desnudo: Dependiendo de su composición orgánica y humedad, tonos marrón rojizo, ocre (provocado por la fuerte respuesta del suelo en la banda SWIR 1, que activa el canal rojo).</span>
-<span id="cb64-513"><a href="#cb64-513" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-514"><a href="#cb64-514" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Rastrojo: El rastrojo suele reflejar de manera distinta el SWIR y el Rojo, apareciendo en tonos amarillos claros o dorados, lo que ayuda a evaluar los niveles de cobertura muerta sobre el lote.</span>
-<span id="cb64-515"><a href="#cb64-515" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-516"><a href="#cb64-516" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Cuerpos de agua: Se mantienen en un negro profundo y limpio, ya que absorben de forma absoluta las tres longitudes de onda utilizadas.</span>
-<span id="cb64-517"><a href="#cb64-517" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-518"><a href="#cb64-518" aria-hidden="true" tabindex="-1"></a><span class="fu"># Indices de Vegetación</span></span>
-<span id="cb64-519"><a href="#cb64-519" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-520"><a href="#cb64-520" aria-hidden="true" tabindex="-1"></a>En primer lugar, se realiza el cálculo y una breve explicación de los siguientes Indices:</span>
-<span id="cb64-521"><a href="#cb64-521" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-522"><a href="#cb64-522" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>NDVI</span>
-<span id="cb64-523"><a href="#cb64-523" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>NDWI</span>
-<span id="cb64-524"><a href="#cb64-524" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>SAVI</span>
-<span id="cb64-525"><a href="#cb64-525" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>EVI</span>
-<span id="cb64-526"><a href="#cb64-526" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>NDTI</span>
-<span id="cb64-527"><a href="#cb64-527" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-528"><a href="#cb64-528" aria-hidden="true" tabindex="-1"></a>Y luego, se visualizan de manera conjunta.</span>
-<span id="cb64-529"><a href="#cb64-529" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-530"><a href="#cb64-530" aria-hidden="true" tabindex="-1"></a><span class="fu">## NDVI</span></span>
-<span id="cb64-531"><a href="#cb64-531" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-532"><a href="#cb64-532" aria-hidden="true" tabindex="-1"></a>Es un índice usado para medir la diferencia normalizada entre las reflectancias del rojo y del infrarrojo cercano, proporcionando una medida sobre la cantidad, calidad y desarrollo de la cobertura vegetal y vigorosidad en áreas extensas. Su cálculo es:</span>
-<span id="cb64-533"><a href="#cb64-533" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-534"><a href="#cb64-534" aria-hidden="true" tabindex="-1"></a>$$NDVI = \frac{NIR - Rojo}{NIR + Rojo}$$</span>
-<span id="cb64-535"><a href="#cb64-535" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-538"><a href="#cb64-538" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb64-539"><a href="#cb64-539" aria-hidden="true" tabindex="-1"></a>NDVI <span class="op">=</span> (banda_infrarrojo_norm <span class="op">-</span> banda_rojo_norm) <span class="op">/</span> (banda_infrarrojo_norm <span class="op">+</span> banda_rojo_norm) </span>
-<span id="cb64-540"><a href="#cb64-540" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb64-541"><a href="#cb64-541" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-542"><a href="#cb64-542" aria-hidden="true" tabindex="-1"></a><span class="fu">## NDWI</span></span>
-<span id="cb64-543"><a href="#cb64-543" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-544"><a href="#cb64-544" aria-hidden="true" tabindex="-1"></a>El Índice de Agua de Diferencia Normalizada (NDWI) es un indicador espectral diseñado para estimar el contenido de agua líquido en los tejidos de la vegetación y monitorear el estado de estrés hídrico en los cultivos. El NDWI se fundamenta en la combinación de dos regiones del infrarrojo: la banda del Infrarrojo Cercano (NIR), donde la estructura celular de las hojas sanas refleja la luz de manera máxima, y la banda del Infrarrojo de Onda Corta (SWIR), una región donde el agua líquida presente en las células vegetales absorbe fuertemente la energía solar. Su cálculo es:</span>
-<span id="cb64-545"><a href="#cb64-545" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-546"><a href="#cb64-546" aria-hidden="true" tabindex="-1"></a>$$NDWI = \frac{NIR - SWIR}{NIR + SWIR}$$</span>
-<span id="cb64-547"><a href="#cb64-547" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-548"><a href="#cb64-548" aria-hidden="true" tabindex="-1"></a>Interpretación, oscila de -1 a 1:</span>
-<span id="cb64-549"><a href="#cb64-549" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-550"><a href="#cb64-550" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Valores altos y positivos (0.3 a 0.8): Indican un dosel vegetal con un óptimo contenido de humedad, tejidos completamente turgentes y nula presencia de estrés hídrico.</span>
-<span id="cb64-551"><a href="#cb64-551" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-552"><a href="#cb64-552" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Valores cercanos a cero o ligeramente negativos (-0.1 a 0.2): Se asocian a vegetación con bajo contenido de agua, cultivos bajo estrés por sequía o áreas con presencia de rastrojo y suelo desnudo.</span>
-<span id="cb64-553"><a href="#cb64-553" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-554"><a href="#cb64-554" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Valores muy bajos o negativos cercanos a -1: Corresponden a superficies inertes o estructuras donde la absorción en el SWIR es drásticamente superior a la reflexión en el NIR.</span>
-<span id="cb64-555"><a href="#cb64-555" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-558"><a href="#cb64-558" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb64-559"><a href="#cb64-559" aria-hidden="true" tabindex="-1"></a>NDWI <span class="op">=</span> (banda_infrarrojo_norm <span class="op">-</span> banda_swir1_norm) <span class="op">/</span> (banda_infrarrojo_norm <span class="op">+</span> banda_swir1_norm)</span>
-<span id="cb64-560"><a href="#cb64-560" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb64-561"><a href="#cb64-561" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-562"><a href="#cb64-562" aria-hidden="true" tabindex="-1"></a><span class="fu">## SAVI</span></span>
-<span id="cb64-563"><a href="#cb64-563" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-564"><a href="#cb64-564" aria-hidden="true" tabindex="-1"></a>El Índice de Vegetación Ajustado al Suelo (SAVI) es un indice que atenua y corrige los efectos del brillo del suelo de fondo en zonas donde la cobertura vegetal es escasa o fragmentaria. En áreas con baja densidad de cultivo o durante las primeras etapas fenológicas, la reflectancia del suelo desnudo se mezcla con la de las plantas, induciendo a errores y subestimaciones en el NDVI tradicional. El SAVI resuelve esta limitación introduciendo un factor de ajuste constante ($L$) que equilibra las firmas espectrales de ambas superficies.</span>
-<span id="cb64-565"><a href="#cb64-565" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-566"><a href="#cb64-566" aria-hidden="true" tabindex="-1"></a>Es un índice muy adecuado para trabajos en zonas semiáridas, donde la contribución del suelo es muy importante.</span>
-<span id="cb64-567"><a href="#cb64-567" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-568"><a href="#cb64-568" aria-hidden="true" tabindex="-1"></a>Su cálculo es:</span>
-<span id="cb64-569"><a href="#cb64-569" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-570"><a href="#cb64-570" aria-hidden="true" tabindex="-1"></a>$$SAVI = \frac{NIR - Rojo}{NIR + Rojo + L} \times (1 + L)$$</span>
-<span id="cb64-571"><a href="#cb64-571" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-574"><a href="#cb64-574" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb64-575"><a href="#cb64-575" aria-hidden="true" tabindex="-1"></a>L <span class="op">=</span> <span class="fl">0.5</span> </span>
-<span id="cb64-576"><a href="#cb64-576" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-577"><a href="#cb64-577" aria-hidden="true" tabindex="-1"></a>SAVI <span class="op">=</span> ((banda_infrarrojo <span class="op">-</span> banda_rojo) <span class="op">/</span> (banda_infrarrojo <span class="op">+</span> banda_rojo <span class="op">+</span> L)) <span class="op">*</span> (<span class="dv">1</span> <span class="op">+</span> L)</span>
-<span id="cb64-578"><a href="#cb64-578" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb64-579"><a href="#cb64-579" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-580"><a href="#cb64-580" aria-hidden="true" tabindex="-1"></a><span class="fu">## EVI</span></span>
-<span id="cb64-581"><a href="#cb64-581" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-582"><a href="#cb64-582" aria-hidden="true" tabindex="-1"></a>El Indice de Vegetación Mejorada (EVI) se optimizó a partir del NDVI aumentando la sensibilidad en las regiones de alta biomasa y mejoró el monitoreo de la vegetación mediante la disociación de la señal del fondo del dosel y una reducción de la influencia atmosférica. La ecuación utilizada para su obtención se indica a continuación:</span>
-<span id="cb64-583"><a href="#cb64-583" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-584"><a href="#cb64-584" aria-hidden="true" tabindex="-1"></a>$$EVI = G \times \frac{NIR - Rojo}{NIR + C_1 \times Rojo - C_2 \times Azul + L}$$</span>
-<span id="cb64-585"><a href="#cb64-585" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-588"><a href="#cb64-588" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb64-589"><a href="#cb64-589" aria-hidden="true" tabindex="-1"></a>EVI <span class="op">=</span> <span class="fl">2.5</span> <span class="op">*</span> ((banda_infrarrojo_norm <span class="op">-</span> banda_rojo_norm) <span class="op">/</span> (banda_infrarrojo_norm <span class="op">+</span> <span class="dv">6</span> <span class="op">*</span> banda_rojo_norm <span class="op">-</span> <span class="fl">7.5</span> <span class="op">*</span> banda_azul_norm <span class="op">+</span> <span class="dv">1</span>))</span>
-<span id="cb64-590"><a href="#cb64-590" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb64-591"><a href="#cb64-591" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-592"><a href="#cb64-592" aria-hidden="true" tabindex="-1"></a><span class="fu">## NDTI</span></span>
-<span id="cb64-593"><a href="#cb64-593" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-594"><a href="#cb64-594" aria-hidden="true" tabindex="-1"></a>El Índice de Tolerancia a la Sequía Normalizado (NDTI), es un indicador espectral utilizado para dos objetivos: la estimación de la cobertura de rastrojo en el suelo y el monitoreo del estrés por sequía severa en la vegetación.</span>
-<span id="cb64-595"><a href="#cb64-595" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-596"><a href="#cb64-596" aria-hidden="true" tabindex="-1"></a>A diferencia de los índices basados en la clorofila (NDVI) o en la humedad del dosel vivo (NDWI), el NDTI aprovecha de forma pura la firma espectral del suelo y de la materia orgánica muerta. Se fundamenta en el contraste entre las dos bandas del infrarrojo de onda corta (SWIR): mientras que los rastrojos secos y los suelos bajo un severo déficit hídrico incrementan su reflectancia en la banda SWIR 1, muestran variaciones analíticas muy claras al cruzar los datos con la banda SWIR 2, permitiendo separar el suelo labrado del suelo con cobertura protectora. Su cálculo es:</span>
-<span id="cb64-597"><a href="#cb64-597" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-598"><a href="#cb64-598" aria-hidden="true" tabindex="-1"></a>$$NDTI = \frac{SWIR 1 - SWIR 2}{SWIR 1 + SWIR 2}$$</span>
-<span id="cb64-599"><a href="#cb64-599" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-602"><a href="#cb64-602" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb64-603"><a href="#cb64-603" aria-hidden="true" tabindex="-1"></a>NDTI <span class="op">=</span> (banda_swir1_norm <span class="op">-</span> banda_swir2_norm) <span class="op">/</span> (banda_swir1_norm <span class="op">+</span> banda_swir2_norm)</span>
-<span id="cb64-604"><a href="#cb64-604" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb64-605"><a href="#cb64-605" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-606"><a href="#cb64-606" aria-hidden="true" tabindex="-1"></a><span class="fu">## Visualizar Indices</span></span>
-<span id="cb64-607"><a href="#cb64-607" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-610"><a href="#cb64-610" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb64-611"><a href="#cb64-611" aria-hidden="true" tabindex="-1"></a>fig, axs <span class="op">=</span> plt.subplots(<span class="dv">2</span>, <span class="dv">3</span>, figsize<span class="op">=</span>(<span class="dv">18</span>, <span class="dv">12</span>), facecolor<span class="op">=</span><span class="st">'white'</span>)</span>
-<span id="cb64-612"><a href="#cb64-612" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-613"><a href="#cb64-613" aria-hidden="true" tabindex="-1"></a><span class="co"># NDVI </span></span>
-<span id="cb64-614"><a href="#cb64-614" aria-hidden="true" tabindex="-1"></a>im1 <span class="op">=</span> axs[<span class="dv">0</span>, <span class="dv">0</span>].imshow(NDVI, cmap<span class="op">=</span><span class="st">'RdYlGn'</span>)</span>
-<span id="cb64-615"><a href="#cb64-615" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">0</span>, <span class="dv">0</span>].set_title(<span class="st">'NDVI'</span>, fontsize<span class="op">=</span><span class="dv">12</span>, fontweight<span class="op">=</span><span class="st">'bold'</span>)</span>
-<span id="cb64-616"><a href="#cb64-616" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">0</span>, <span class="dv">0</span>].axis(<span class="st">'off'</span>)</span>
-<span id="cb64-617"><a href="#cb64-617" aria-hidden="true" tabindex="-1"></a>fig.colorbar(im1, ax<span class="op">=</span>axs[<span class="dv">0</span>, <span class="dv">0</span>], shrink<span class="op">=</span><span class="fl">0.7</span>, label<span class="op">=</span><span class="st">'Valor del Índice'</span>)</span>
-<span id="cb64-618"><a href="#cb64-618" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-619"><a href="#cb64-619" aria-hidden="true" tabindex="-1"></a><span class="co"># NDWI </span></span>
-<span id="cb64-620"><a href="#cb64-620" aria-hidden="true" tabindex="-1"></a>im4 <span class="op">=</span> axs[<span class="dv">1</span>, <span class="dv">0</span>].imshow(NDWI, cmap<span class="op">=</span><span class="st">'YlGnBu'</span>) </span>
-<span id="cb64-621"><a href="#cb64-621" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">0</span>, <span class="dv">1</span>].set_title(<span class="st">'NDWI'</span>, fontsize<span class="op">=</span><span class="dv">12</span>, fontweight<span class="op">=</span><span class="st">'bold'</span>)</span>
-<span id="cb64-622"><a href="#cb64-622" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">0</span>, <span class="dv">1</span>].axis(<span class="st">'off'</span>)</span>
-<span id="cb64-623"><a href="#cb64-623" aria-hidden="true" tabindex="-1"></a>fig.colorbar(im4, ax<span class="op">=</span>axs[<span class="dv">1</span>, <span class="dv">0</span>], shrink<span class="op">=</span><span class="fl">0.7</span>, label<span class="op">=</span><span class="st">'Valor del Índice'</span>)</span>
-<span id="cb64-624"><a href="#cb64-624" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-625"><a href="#cb64-625" aria-hidden="true" tabindex="-1"></a><span class="co"># SAVI</span></span>
-<span id="cb64-626"><a href="#cb64-626" aria-hidden="true" tabindex="-1"></a>im2 <span class="op">=</span> axs[<span class="dv">0</span>, <span class="dv">1</span>].imshow(SAVI, cmap<span class="op">=</span><span class="st">'RdYlGn'</span>, vmin<span class="op">=</span><span class="dv">0</span>, vmax<span class="op">=</span><span class="dv">1</span>)</span>
-<span id="cb64-627"><a href="#cb64-627" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">0</span>, <span class="dv">2</span>].set_title(<span class="st">'SAVI'</span>, fontsize<span class="op">=</span><span class="dv">12</span>, fontweight<span class="op">=</span><span class="st">'bold'</span>)</span>
-<span id="cb64-628"><a href="#cb64-628" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">0</span>, <span class="dv">2</span>].axis(<span class="st">'off'</span>)</span>
-<span id="cb64-629"><a href="#cb64-629" aria-hidden="true" tabindex="-1"></a>fig.colorbar(im2, ax<span class="op">=</span>axs[<span class="dv">0</span>, <span class="dv">1</span>], shrink<span class="op">=</span><span class="fl">0.7</span>, label<span class="op">=</span><span class="st">'Valor del Índice'</span>)</span>
-<span id="cb64-630"><a href="#cb64-630" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-631"><a href="#cb64-631" aria-hidden="true" tabindex="-1"></a><span class="co"># EVI </span></span>
-<span id="cb64-632"><a href="#cb64-632" aria-hidden="true" tabindex="-1"></a>im3 <span class="op">=</span> axs[<span class="dv">0</span>, <span class="dv">2</span>].imshow(EVI, cmap<span class="op">=</span><span class="st">'RdYlGn'</span>)</span>
-<span id="cb64-633"><a href="#cb64-633" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">1</span>, <span class="dv">0</span>].set_title(<span class="st">'EVI'</span>, fontsize<span class="op">=</span><span class="dv">12</span>, fontweight<span class="op">=</span><span class="st">'bold'</span>)</span>
-<span id="cb64-634"><a href="#cb64-634" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">1</span>, <span class="dv">0</span>].axis(<span class="st">'off'</span>)</span>
-<span id="cb64-635"><a href="#cb64-635" aria-hidden="true" tabindex="-1"></a>fig.colorbar(im3, ax<span class="op">=</span>axs[<span class="dv">0</span>, <span class="dv">2</span>], shrink<span class="op">=</span><span class="fl">0.7</span>, label<span class="op">=</span><span class="st">'Valor del Índice'</span>)</span>
-<span id="cb64-636"><a href="#cb64-636" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-637"><a href="#cb64-637" aria-hidden="true" tabindex="-1"></a><span class="co"># NDTI </span></span>
-<span id="cb64-638"><a href="#cb64-638" aria-hidden="true" tabindex="-1"></a>im5 <span class="op">=</span> axs[<span class="dv">1</span>, <span class="dv">1</span>].imshow(NDTI, cmap<span class="op">=</span><span class="st">'copper'</span>)</span>
-<span id="cb64-639"><a href="#cb64-639" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">1</span>, <span class="dv">1</span>].set_title(<span class="st">'NDTI'</span>, fontsize<span class="op">=</span><span class="dv">12</span>, fontweight<span class="op">=</span><span class="st">'bold'</span>)</span>
-<span id="cb64-640"><a href="#cb64-640" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">1</span>, <span class="dv">1</span>].axis(<span class="st">'off'</span>)</span>
-<span id="cb64-641"><a href="#cb64-641" aria-hidden="true" tabindex="-1"></a>fig.colorbar(im5, ax<span class="op">=</span>axs[<span class="dv">1</span>, <span class="dv">1</span>], shrink<span class="op">=</span><span class="fl">0.7</span>, label<span class="op">=</span><span class="st">'Valor del Índice'</span>)</span>
+<span id="cb64-237"><a href="#cb64-237" aria-hidden="true" tabindex="-1"></a>axs <span class="op">=</span> axs.flatten()</span>
+<span id="cb64-238"><a href="#cb64-238" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-239"><a href="#cb64-239" aria-hidden="true" tabindex="-1"></a><span class="co"># Azul </span></span>
+<span id="cb64-240"><a href="#cb64-240" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">0</span>].hist(banda_azul.flatten(), bins<span class="op">=</span><span class="dv">50</span>, color<span class="op">=</span><span class="st">'blue'</span>, alpha<span class="op">=</span><span class="fl">0.7</span>)</span>
+<span id="cb64-241"><a href="#cb64-241" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">0</span>].set_title(<span class="st">'Distribución - Banda Azul (B2)'</span>)</span>
+<span id="cb64-242"><a href="#cb64-242" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">0</span>].set_xlabel(<span class="st">'Valor de Reflectancia'</span>)</span>
+<span id="cb64-243"><a href="#cb64-243" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-244"><a href="#cb64-244" aria-hidden="true" tabindex="-1"></a><span class="co"># Verde </span></span>
+<span id="cb64-245"><a href="#cb64-245" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">1</span>].hist(banda_verde.flatten(), bins<span class="op">=</span><span class="dv">50</span>, color<span class="op">=</span><span class="st">'green'</span>, alpha<span class="op">=</span><span class="fl">0.7</span>)</span>
+<span id="cb64-246"><a href="#cb64-246" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">1</span>].set_title(<span class="st">'Distribución - Banda Verde (B3)'</span>)</span>
+<span id="cb64-247"><a href="#cb64-247" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">1</span>].set_xlabel(<span class="st">'Valor de Reflectancia'</span>)</span>
+<span id="cb64-248"><a href="#cb64-248" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-249"><a href="#cb64-249" aria-hidden="true" tabindex="-1"></a><span class="co"># Rojo </span></span>
+<span id="cb64-250"><a href="#cb64-250" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">2</span>].hist(banda_rojo.flatten(), bins<span class="op">=</span><span class="dv">50</span>, color<span class="op">=</span><span class="st">'red'</span>, alpha<span class="op">=</span><span class="fl">0.7</span>)</span>
+<span id="cb64-251"><a href="#cb64-251" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">2</span>].set_title(<span class="st">'Distribución - Banda Rojo (B4)'</span>)</span>
+<span id="cb64-252"><a href="#cb64-252" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">2</span>].set_xlabel(<span class="st">'Valor de Reflectancia'</span>)</span>
+<span id="cb64-253"><a href="#cb64-253" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-254"><a href="#cb64-254" aria-hidden="true" tabindex="-1"></a><span class="co"># NIR </span></span>
+<span id="cb64-255"><a href="#cb64-255" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">3</span>].hist(banda_infrarrojo.flatten(), bins<span class="op">=</span><span class="dv">50</span>, color<span class="op">=</span><span class="st">'orange'</span>, alpha<span class="op">=</span><span class="fl">0.7</span>) </span>
+<span id="cb64-256"><a href="#cb64-256" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">3</span>].set_title(<span class="st">'Distribución - Banda NIR (B5)'</span>)</span>
+<span id="cb64-257"><a href="#cb64-257" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">3</span>].set_xlabel(<span class="st">'Valor de Reflectancia'</span>)</span>
+<span id="cb64-258"><a href="#cb64-258" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-259"><a href="#cb64-259" aria-hidden="true" tabindex="-1"></a><span class="co"># SWIR 1 </span></span>
+<span id="cb64-260"><a href="#cb64-260" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">4</span>].hist(banda_swir1.flatten(), bins<span class="op">=</span><span class="dv">50</span>, color<span class="op">=</span><span class="st">'brown'</span>, alpha<span class="op">=</span><span class="fl">0.7</span>)</span>
+<span id="cb64-261"><a href="#cb64-261" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">4</span>].set_title(<span class="st">'Distribución - Banda SWIR 1 (B6)'</span>)</span>
+<span id="cb64-262"><a href="#cb64-262" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">4</span>].set_xlabel(<span class="st">'Valor de Reflectancia'</span>)</span>
+<span id="cb64-263"><a href="#cb64-263" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-264"><a href="#cb64-264" aria-hidden="true" tabindex="-1"></a><span class="co"># SWIR 2</span></span>
+<span id="cb64-265"><a href="#cb64-265" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">5</span>].hist(banda_swir2.flatten(), bins<span class="op">=</span><span class="dv">50</span>, color<span class="op">=</span><span class="st">'gray'</span>, alpha<span class="op">=</span><span class="fl">0.7</span>)</span>
+<span id="cb64-266"><a href="#cb64-266" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">5</span>].set_title(<span class="st">'Distribución - Banda SWIR 2 (B7)'</span>)</span>
+<span id="cb64-267"><a href="#cb64-267" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">5</span>].set_xlabel(<span class="st">'Valor de Reflectancia'</span>)</span>
+<span id="cb64-268"><a href="#cb64-268" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-269"><a href="#cb64-269" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb64-270"><a href="#cb64-270" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
+<span id="cb64-271"><a href="#cb64-271" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb64-272"><a href="#cb64-272" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-273"><a href="#cb64-273" aria-hidden="true" tabindex="-1"></a><span class="fu"># Composición de bandas</span></span>
+<span id="cb64-274"><a href="#cb64-274" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-275"><a href="#cb64-275" aria-hidden="true" tabindex="-1"></a>La función usada es <span class="co">[</span><span class="ot">dstack()</span><span class="co">]</span>{.func-tecnica} de la librería <span class="co">[</span><span class="ot">NumPy</span><span class="co">]</span>{.func-tecnica}.</span>
+<span id="cb64-276"><a href="#cb64-276" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-277"><a href="#cb64-277" aria-hidden="true" tabindex="-1"></a>Las imágenes de reflectancia provenientes de plataformas satelitales como Landsat 9 capturan datos en un rango dinámico lineal muy amplio. Sin embargo, los componentes principales de un entorno agrícola (suelo, rastrojo y cultivos) suelen concentrar sus valores en una porción muy estrecha de ese espectro. Si se visualizan estas combinaciones de bandas de forma directa, las imágenes tienden a verse oscuras, opacas o con muy poco contraste, dificultando la identificación visual de la variabilidad interna de los lotes.</span>
+<span id="cb64-278"><a href="#cb64-278" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-279"><a href="#cb64-279" aria-hidden="true" tabindex="-1"></a>Para resolver esta limitación radiométrica, se implementó una función de Estiramiento de Contraste Lineal basado en Percentiles (*Percentile Linear Contrast Stretch*). Esta técnica remueve los valores extremos de ruido y redistribuye de manera óptima los datos en el rango visible (0 a 1). La función es:</span>
+<span id="cb64-280"><a href="#cb64-280" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-283"><a href="#cb64-283" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb64-284"><a href="#cb64-284" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> estirar_contraste(imagen, p_min<span class="op">=</span><span class="dv">2</span>, p_max<span class="op">=</span><span class="dv">98</span>):</span>
+<span id="cb64-285"><a href="#cb64-285" aria-hidden="true" tabindex="-1"></a>    p_bajo, p_alto <span class="op">=</span> np.percentile(imagen, (p_min, p_max))</span>
+<span id="cb64-286"><a href="#cb64-286" aria-hidden="true" tabindex="-1"></a>    imagen_estirada <span class="op">=</span> np.clip((imagen <span class="op">-</span> p_bajo) <span class="op">/</span> (p_alto <span class="op">-</span> p_bajo), <span class="dv">0</span>, <span class="dv">1</span>)</span>
+<span id="cb64-287"><a href="#cb64-287" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> imagen_estirada</span>
+<span id="cb64-288"><a href="#cb64-288" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb64-289"><a href="#cb64-289" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-290"><a href="#cb64-290" aria-hidden="true" tabindex="-1"></a><span class="fu">## Color Verdadero</span></span>
+<span id="cb64-291"><a href="#cb64-291" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-292"><a href="#cb64-292" aria-hidden="true" tabindex="-1"></a>Esta combinación involucra a las tres bandas visibles y se asigna cada una de ellas a la región del espectro visible que el ojo humano puede percibir. El resultado es una combinación que se aproxima a los colores naturales de la escena:</span>
+<span id="cb64-293"><a href="#cb64-293" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-294"><a href="#cb64-294" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Canal Rojo (R): Se asigna a la Banda 4 (Rojo).\</span>
+<span id="cb64-295"><a href="#cb64-295" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Canal Verde (G): Se asigna a la Banda 3 (Verde).\</span>
+<span id="cb64-296"><a href="#cb64-296" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Canal Azul (B): Se asigna a la Banda 2 (Azul).</span>
+<span id="cb64-297"><a href="#cb64-297" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-300"><a href="#cb64-300" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb64-301"><a href="#cb64-301" aria-hidden="true" tabindex="-1"></a>color_verdadero <span class="op">=</span> np.dstack((banda_rojo_norm, banda_verde_norm, banda_azul_norm))</span>
+<span id="cb64-302"><a href="#cb64-302" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb64-303"><a href="#cb64-303" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-304"><a href="#cb64-304" aria-hidden="true" tabindex="-1"></a>Visualizar:</span>
+<span id="cb64-305"><a href="#cb64-305" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-308"><a href="#cb64-308" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb64-309"><a href="#cb64-309" aria-hidden="true" tabindex="-1"></a><span class="co"># Aplicar función</span></span>
+<span id="cb64-310"><a href="#cb64-310" aria-hidden="true" tabindex="-1"></a>color_verdadero_p <span class="op">=</span> estirar_contraste(color_verdadero)</span>
+<span id="cb64-311"><a href="#cb64-311" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-312"><a href="#cb64-312" aria-hidden="true" tabindex="-1"></a><span class="co"># Graficar</span></span>
+<span id="cb64-313"><a href="#cb64-313" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">12</span>, <span class="dv">7</span>), facecolor<span class="op">=</span><span class="st">'white'</span>)</span>
+<span id="cb64-314"><a href="#cb64-314" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-315"><a href="#cb64-315" aria-hidden="true" tabindex="-1"></a>ax.imshow(color_verdadero_p)</span>
+<span id="cb64-316"><a href="#cb64-316" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-317"><a href="#cb64-317" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">"Color Verdadero (B4-B3-B2) - Landsat 9"</span>, </span>
+<span id="cb64-318"><a href="#cb64-318" aria-hidden="true" tabindex="-1"></a>             fontsize<span class="op">=</span><span class="dv">14</span>, pad<span class="op">=</span><span class="dv">15</span>, fontweight<span class="op">=</span><span class="st">'bold'</span>, color<span class="op">=</span><span class="st">'#1A365D'</span>)</span>
+<span id="cb64-319"><a href="#cb64-319" aria-hidden="true" tabindex="-1"></a>ax.axis(<span class="st">'off'</span>)  </span>
+<span id="cb64-320"><a href="#cb64-320" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-321"><a href="#cb64-321" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb64-322"><a href="#cb64-322" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
+<span id="cb64-323"><a href="#cb64-323" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb64-324"><a href="#cb64-324" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-325"><a href="#cb64-325" aria-hidden="true" tabindex="-1"></a>Es la combinación que se conoce como color natural, su principal utilidad radica en la identificación inicial y el reconocimiento general del área de estudio, permitiendo discriminar de forma intuitiva coberturas básicas.</span>
+<span id="cb64-326"><a href="#cb64-326" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-327"><a href="#cb64-327" aria-hidden="true" tabindex="-1"></a><span class="fu">## Falso Color Estándar</span></span>
+<span id="cb64-328"><a href="#cb64-328" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-329"><a href="#cb64-329" aria-hidden="true" tabindex="-1"></a>Se genera sustituyendo el canal del azul (que aporta mucha dispersión atmosférica y poca información sobre el vigor vegetal) e incorporando la banda del infrarrojo cercano (NIR). Se realiza de la siguiente manera:</span>
+<span id="cb64-330"><a href="#cb64-330" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-331"><a href="#cb64-331" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Canal Rojo (R): Se asigna a la Banda 5 (Infrarrojo Cercano - NIR).</span>
+<span id="cb64-332"><a href="#cb64-332" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Canal Verde (G): Se asigna a la Banda 4 (Rojo).</span>
+<span id="cb64-333"><a href="#cb64-333" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Canal Azul (B): Se asigna a la Banda 3 (Verde).</span>
+<span id="cb64-334"><a href="#cb64-334" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-337"><a href="#cb64-337" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb64-338"><a href="#cb64-338" aria-hidden="true" tabindex="-1"></a>falso_color <span class="op">=</span> np.dstack((banda_infrarrojo_norm, banda_rojo_norm, banda_verde_norm)) </span>
+<span id="cb64-339"><a href="#cb64-339" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb64-340"><a href="#cb64-340" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-341"><a href="#cb64-341" aria-hidden="true" tabindex="-1"></a>Visualizar:</span>
+<span id="cb64-342"><a href="#cb64-342" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-345"><a href="#cb64-345" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb64-346"><a href="#cb64-346" aria-hidden="true" tabindex="-1"></a><span class="co"># Aplicar función</span></span>
+<span id="cb64-347"><a href="#cb64-347" aria-hidden="true" tabindex="-1"></a>falso_color_p <span class="op">=</span> estirar_contraste(falso_color)</span>
+<span id="cb64-348"><a href="#cb64-348" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-349"><a href="#cb64-349" aria-hidden="true" tabindex="-1"></a><span class="co"># Graficar</span></span>
+<span id="cb64-350"><a href="#cb64-350" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">12</span>, <span class="dv">7</span>), facecolor<span class="op">=</span><span class="st">'white'</span>)</span>
+<span id="cb64-351"><a href="#cb64-351" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-352"><a href="#cb64-352" aria-hidden="true" tabindex="-1"></a>ax.imshow(falso_color_p)</span>
+<span id="cb64-353"><a href="#cb64-353" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-354"><a href="#cb64-354" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">"Falso Color Estandar (B5-B4-B3) - Landsat 9"</span>, </span>
+<span id="cb64-355"><a href="#cb64-355" aria-hidden="true" tabindex="-1"></a>             fontsize<span class="op">=</span><span class="dv">14</span>, pad<span class="op">=</span><span class="dv">15</span>, fontweight<span class="op">=</span><span class="st">'bold'</span>, color<span class="op">=</span><span class="st">'#1A365D'</span>)</span>
+<span id="cb64-356"><a href="#cb64-356" aria-hidden="true" tabindex="-1"></a>ax.axis(<span class="st">'off'</span>)  </span>
+<span id="cb64-357"><a href="#cb64-357" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-358"><a href="#cb64-358" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb64-359"><a href="#cb64-359" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
+<span id="cb64-360"><a href="#cb64-360" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb64-361"><a href="#cb64-361" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-362"><a href="#cb64-362" aria-hidden="true" tabindex="-1"></a>La vegetación refleja mucho en el NIR, por lo que, al ponerlo en el canal rojo, la vegetación sana aparece en tonos rojos brillantes, lo que la hace muy fácil de disinguir de otros elementos.</span>
+<span id="cb64-363"><a href="#cb64-363" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-364"><a href="#cb64-364" aria-hidden="true" tabindex="-1"></a><span class="fu">## Agricultura</span></span>
+<span id="cb64-365"><a href="#cb64-365" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-366"><a href="#cb64-366" aria-hidden="true" tabindex="-1"></a>Una combinación, muy utilizada en agricultura es:</span>
+<span id="cb64-367"><a href="#cb64-367" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-368"><a href="#cb64-368" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Canal Rojo (R): Se asigna a la Banda 6 (SWIR 1 - Infrarrojo de onda corta).\</span>
+<span id="cb64-369"><a href="#cb64-369" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Canal Verde (G): Se asigna a la Banda 5 (NIR - Infrarrojo cercano).\</span>
+<span id="cb64-370"><a href="#cb64-370" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Canal Azul (B): Se asigna a la Banda 2 (Azul).</span>
+<span id="cb64-371"><a href="#cb64-371" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-372"><a href="#cb64-372" aria-hidden="true" tabindex="-1"></a>Para entender esta imagen es importante la interacción de la Banda 5 (NIR) y la Banda 6 (SWIR 1) con el cultivo:</span>
+<span id="cb64-373"><a href="#cb64-373" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-374"><a href="#cb64-374" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>La Banda 5 (NIR) está en el canal Verde: El tejido celular de las plantas sanas refleja mucho en el infrarrojo cercano. Al colocar esta información en el canal verde de la pantalla, todo lo que tenga alta biomasa va a tender a un color verde muy llamativo.</span>
+<span id="cb64-375"><a href="#cb64-375" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-376"><a href="#cb64-376" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>La Banda 6 (SWIR 1) está en el canal Rojo: Esta banda es extremadamente sensible a la humedad. El agua absorbe la radiación SWIR; por lo tanto, una planta bien hidratada absorberá esa energía y reflejará muy poco hacia el satélite. Si la planta sufre estrés hídrico o el suelo está seco, reflejará más SWIR (más color rojo en la pantalla).</span>
+<span id="cb64-377"><a href="#cb64-377" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-380"><a href="#cb64-380" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb64-381"><a href="#cb64-381" aria-hidden="true" tabindex="-1"></a>agricultura <span class="op">=</span> np.dstack((banda_swir1_norm, banda_infrarrojo_norm, banda_azul_norm)) </span>
+<span id="cb64-382"><a href="#cb64-382" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb64-383"><a href="#cb64-383" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-384"><a href="#cb64-384" aria-hidden="true" tabindex="-1"></a>Visualizar:</span>
+<span id="cb64-385"><a href="#cb64-385" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-388"><a href="#cb64-388" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb64-389"><a href="#cb64-389" aria-hidden="true" tabindex="-1"></a><span class="co"># Aplicar función</span></span>
+<span id="cb64-390"><a href="#cb64-390" aria-hidden="true" tabindex="-1"></a>agricultura_p <span class="op">=</span> estirar_contraste(agricultura)</span>
+<span id="cb64-391"><a href="#cb64-391" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-392"><a href="#cb64-392" aria-hidden="true" tabindex="-1"></a><span class="co"># Graficar</span></span>
+<span id="cb64-393"><a href="#cb64-393" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">12</span>, <span class="dv">7</span>), facecolor<span class="op">=</span><span class="st">'white'</span>)</span>
+<span id="cb64-394"><a href="#cb64-394" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-395"><a href="#cb64-395" aria-hidden="true" tabindex="-1"></a>ax.imshow(agricultura_p)</span>
+<span id="cb64-396"><a href="#cb64-396" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-397"><a href="#cb64-397" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">"Agricultura (B6-B5-B2) - Landsat 9"</span>, </span>
+<span id="cb64-398"><a href="#cb64-398" aria-hidden="true" tabindex="-1"></a>             fontsize<span class="op">=</span><span class="dv">14</span>, pad<span class="op">=</span><span class="dv">15</span>, fontweight<span class="op">=</span><span class="st">'bold'</span>, color<span class="op">=</span><span class="st">'#1A365D'</span>)</span>
+<span id="cb64-399"><a href="#cb64-399" aria-hidden="true" tabindex="-1"></a>ax.axis(<span class="st">'off'</span>)  </span>
+<span id="cb64-400"><a href="#cb64-400" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-401"><a href="#cb64-401" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb64-402"><a href="#cb64-402" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
+<span id="cb64-403"><a href="#cb64-403" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb64-404"><a href="#cb64-404" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-405"><a href="#cb64-405" aria-hidden="true" tabindex="-1"></a>Gracias a este cruce espectral, las coberturas del suelo adoptan una firma cromática muy clara:</span>
+<span id="cb64-406"><a href="#cb64-406" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-407"><a href="#cb64-407" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Vegetación vigorosa y densa: Se visualiza en tonalidades de verde brillante o fosforescente.</span>
+<span id="cb64-408"><a href="#cb64-408" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-409"><a href="#cb64-409" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Vegetación sana pero perenne o más madura: Tiende a verse en verdes más oscuros e intensos (como los montes o bosques).</span>
+<span id="cb64-410"><a href="#cb64-410" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-411"><a href="#cb64-411" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Vegetación estresada, rala o en senescencia: Al perder humedad y biomasa, disminuye el verde (NIR) y aumenta el rojo (SWIR), lo que da como resultado tonalidades de verde opaco, amarillento o de tonalidades pardas.</span>
+<span id="cb64-412"><a href="#cb64-412" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-413"><a href="#cb64-413" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Suelo desnudo y áreas urbanas: Dependiendo de su composición y textura, aparecen en una gama que va desde los tonos marrón, magenta hasta el ocre. Los suelos labrados o secos brillan más en el SWIR, tirando a colores rojizos o marrones claros.</span>
+<span id="cb64-414"><a href="#cb64-414" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-415"><a href="#cb64-415" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Cuerpos de agua: Al absorber la radiación en el NIR y absorber de forma casi absoluta en el SWIR, se ven en tonos oscuros o negros profundos, lo que permite contrastarlos perfectamente con el suelo desnudo.</span>
+<span id="cb64-416"><a href="#cb64-416" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-417"><a href="#cb64-417" aria-hidden="true" tabindex="-1"></a><span class="fu">## Delimitar Agua</span></span>
+<span id="cb64-418"><a href="#cb64-418" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-419"><a href="#cb64-419" aria-hidden="true" tabindex="-1"></a>La combinación que nos permite delimitar un poco mejor el agua con tierra es:</span>
+<span id="cb64-420"><a href="#cb64-420" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-421"><a href="#cb64-421" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Canal Rojo (R): Se asigna a la Banda 5 (Infrarrojo Cercano - NIR).</span>
+<span id="cb64-422"><a href="#cb64-422" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Canal Verde (G): Se asigna a la Banda 6 (SWIR 1 - Infrarrojo de onda corta).\</span>
+<span id="cb64-423"><a href="#cb64-423" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Canal Azul (B): Se asigna a la Banda 4 (Rojo).</span>
+<span id="cb64-424"><a href="#cb64-424" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-425"><a href="#cb64-425" aria-hidden="true" tabindex="-1"></a>El agua absorbe de forma casi total las longitudes de onda del infrarrojo cercano (NIR) y del infrarrojo de onda corta (SWIR 1). Por lo que, en un cuerpo de agua el valor de reflectancia para las bandas 5 y 6 son cercanos a cero.</span>
+<span id="cb64-426"><a href="#cb64-426" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-429"><a href="#cb64-429" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb64-430"><a href="#cb64-430" aria-hidden="true" tabindex="-1"></a>delimitar_agua <span class="op">=</span> np.dstack((banda_infrarrojo_norm, banda_swir1_norm, banda_rojo_norm)) </span>
+<span id="cb64-431"><a href="#cb64-431" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb64-432"><a href="#cb64-432" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-433"><a href="#cb64-433" aria-hidden="true" tabindex="-1"></a>Visualizar:</span>
+<span id="cb64-434"><a href="#cb64-434" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-437"><a href="#cb64-437" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb64-438"><a href="#cb64-438" aria-hidden="true" tabindex="-1"></a><span class="co"># Aplicar función</span></span>
+<span id="cb64-439"><a href="#cb64-439" aria-hidden="true" tabindex="-1"></a>delimitar_agua_p <span class="op">=</span> estirar_contraste(delimitar_agua)</span>
+<span id="cb64-440"><a href="#cb64-440" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-441"><a href="#cb64-441" aria-hidden="true" tabindex="-1"></a><span class="co"># Graficar</span></span>
+<span id="cb64-442"><a href="#cb64-442" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">12</span>, <span class="dv">7</span>), facecolor<span class="op">=</span><span class="st">'white'</span>)</span>
+<span id="cb64-443"><a href="#cb64-443" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-444"><a href="#cb64-444" aria-hidden="true" tabindex="-1"></a>ax.imshow(delimitar_agua)</span>
+<span id="cb64-445"><a href="#cb64-445" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-446"><a href="#cb64-446" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">"Delimitar Agua (B5-B6-B4) - Landsat 9"</span>, </span>
+<span id="cb64-447"><a href="#cb64-447" aria-hidden="true" tabindex="-1"></a>             fontsize<span class="op">=</span><span class="dv">14</span>, pad<span class="op">=</span><span class="dv">15</span>, fontweight<span class="op">=</span><span class="st">'bold'</span>, color<span class="op">=</span><span class="st">'#1A365D'</span>)</span>
+<span id="cb64-448"><a href="#cb64-448" aria-hidden="true" tabindex="-1"></a>ax.axis(<span class="st">'off'</span>)  </span>
+<span id="cb64-449"><a href="#cb64-449" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-450"><a href="#cb64-450" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb64-451"><a href="#cb64-451" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
+<span id="cb64-452"><a href="#cb64-452" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb64-453"><a href="#cb64-453" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-454"><a href="#cb64-454" aria-hidden="true" tabindex="-1"></a>Interpretación Visual:</span>
+<span id="cb64-455"><a href="#cb64-455" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-456"><a href="#cb64-456" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Cuerpos de Agua: Se visualizan en tonos negros profundos o azules muy oscuros.</span>
+<span id="cb64-457"><a href="#cb64-457" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-458"><a href="#cb64-458" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Suelo Desnudo: Aparece en una gama que va desde el magenta, rosa viejo, hasta el ocre o marrón. Esto se debe a que el suelo refleja fuertemente tanto el NIR como el SWIR, activando los canales rojo y verde de la pantalla.</span>
+<span id="cb64-459"><a href="#cb64-459" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-460"><a href="#cb64-460" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Vegetación Activa: Se observa en tonalidades que van del naranja al marrón rojizo o pardo, dependiendo de la densidad del follaje.</span>
+<span id="cb64-461"><a href="#cb64-461" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-462"><a href="#cb64-462" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Zonas con Humedad en el Suelo: Los suelos saturados o con napas muy altas absorben más energía espectral que los suelos secos, manifestándose en tonalidades azules grisáceas o púrpuras oscuras, lo que te permite identificar zonas anegadas o bajos hidromórficos.</span>
+<span id="cb64-463"><a href="#cb64-463" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-464"><a href="#cb64-464" aria-hidden="true" tabindex="-1"></a><span class="fu">## Analisis de vegetación</span></span>
+<span id="cb64-465"><a href="#cb64-465" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-466"><a href="#cb64-466" aria-hidden="true" tabindex="-1"></a>Se realiza de la siguiente manera:</span>
+<span id="cb64-467"><a href="#cb64-467" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-468"><a href="#cb64-468" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Canal Rojo (R): Se asigna a la Banda 6 (SWIR 1 - Infrarrojo de onda corta).</span>
+<span id="cb64-469"><a href="#cb64-469" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Canal Verde (G): Se asigna a la Banda 5 (NIR - Infrarrojo cercano).</span>
+<span id="cb64-470"><a href="#cb64-470" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Canal Azul (B): Se asigna a la Banda 4 (Rojo).</span>
+<span id="cb64-471"><a href="#cb64-471" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-472"><a href="#cb64-472" aria-hidden="true" tabindex="-1"></a>Esta combinación es una evolución de la combinación clásica de "Agricultura" (6, 5, 2). Al reemplazar la banda azul por la Banda del Rojo (B4) en el canal azul de la pantalla, se logran dos ventajas:</span>
+<span id="cb64-473"><a href="#cb64-473" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-474"><a href="#cb64-474" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Las ondas cortas (SWIR) y medias (NIR) no se ven afectadas por las partículas de polvo o humedad de la atmósfera. Al quitar el azul (que es la banda más ruidosa), la imagen adquiere mayor nitidez.</span>
+<span id="cb64-475"><a href="#cb64-475" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-476"><a href="#cb64-476" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Se usa la banda donde la clorofila absorbe más energía (Rojo) , la banda donde la estructura celular refleja más (NIR) , y la banda sensible a la humedad del tejido (SWIR 1).</span>
+<span id="cb64-477"><a href="#cb64-477" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-480"><a href="#cb64-480" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb64-481"><a href="#cb64-481" aria-hidden="true" tabindex="-1"></a>vegetacion <span class="op">=</span> np.dstack((banda_swir1_norm, banda_infrarrojo_norm, banda_rojo_norm)) </span>
+<span id="cb64-482"><a href="#cb64-482" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb64-483"><a href="#cb64-483" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-484"><a href="#cb64-484" aria-hidden="true" tabindex="-1"></a>Visualizar:</span>
+<span id="cb64-485"><a href="#cb64-485" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-488"><a href="#cb64-488" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb64-489"><a href="#cb64-489" aria-hidden="true" tabindex="-1"></a><span class="co"># Aplicar función</span></span>
+<span id="cb64-490"><a href="#cb64-490" aria-hidden="true" tabindex="-1"></a>vegetacion_p <span class="op">=</span> estirar_contraste(vegetacion)</span>
+<span id="cb64-491"><a href="#cb64-491" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-492"><a href="#cb64-492" aria-hidden="true" tabindex="-1"></a><span class="co"># Graficar</span></span>
+<span id="cb64-493"><a href="#cb64-493" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">12</span>, <span class="dv">7</span>), facecolor<span class="op">=</span><span class="st">'white'</span>)</span>
+<span id="cb64-494"><a href="#cb64-494" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-495"><a href="#cb64-495" aria-hidden="true" tabindex="-1"></a>ax.imshow(vegetacion_p)</span>
+<span id="cb64-496"><a href="#cb64-496" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-497"><a href="#cb64-497" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">"Análisis de Vegetación (B6-B5-B4) - Landsat 9"</span>, </span>
+<span id="cb64-498"><a href="#cb64-498" aria-hidden="true" tabindex="-1"></a>             fontsize<span class="op">=</span><span class="dv">14</span>, pad<span class="op">=</span><span class="dv">15</span>, fontweight<span class="op">=</span><span class="st">'bold'</span>, color<span class="op">=</span><span class="st">'#1A365D'</span>)</span>
+<span id="cb64-499"><a href="#cb64-499" aria-hidden="true" tabindex="-1"></a>ax.axis(<span class="st">'off'</span>)  </span>
+<span id="cb64-500"><a href="#cb64-500" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-501"><a href="#cb64-501" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb64-502"><a href="#cb64-502" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
+<span id="cb64-503"><a href="#cb64-503" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb64-504"><a href="#cb64-504" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-505"><a href="#cb64-505" aria-hidden="true" tabindex="-1"></a>Interpretación Visual:</span>
+<span id="cb64-506"><a href="#cb64-506" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-507"><a href="#cb64-507" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Vegetación densa, activa y bien hidratada: Se manifiesta en tonos verdes intensos y brillantes (debido a la altísima reflectancia en el NIR que satura el canal verde).</span>
+<span id="cb64-508"><a href="#cb64-508" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-509"><a href="#cb64-509" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Vegetación en transición, madura o con menor densidad foliar: Adquiere tonalidades verdes oliva, pardas o ligeramente amarillentas.</span>
+<span id="cb64-510"><a href="#cb64-510" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-511"><a href="#cb64-511" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Suelo desnudo: Dependiendo de su composición orgánica y humedad, tonos marrón rojizo, ocre (provocado por la fuerte respuesta del suelo en la banda SWIR 1, que activa el canal rojo).</span>
+<span id="cb64-512"><a href="#cb64-512" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-513"><a href="#cb64-513" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Rastrojo: El rastrojo suele reflejar de manera distinta el SWIR y el Rojo, apareciendo en tonos amarillos claros o dorados, lo que ayuda a evaluar los niveles de cobertura muerta sobre el lote.</span>
+<span id="cb64-514"><a href="#cb64-514" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-515"><a href="#cb64-515" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Cuerpos de agua: Se mantienen en un negro profundo y limpio, ya que absorben de forma absoluta las tres longitudes de onda utilizadas.</span>
+<span id="cb64-516"><a href="#cb64-516" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-517"><a href="#cb64-517" aria-hidden="true" tabindex="-1"></a><span class="fu"># Indices de Vegetación</span></span>
+<span id="cb64-518"><a href="#cb64-518" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-519"><a href="#cb64-519" aria-hidden="true" tabindex="-1"></a>En primer lugar, se realiza el cálculo y una breve explicación de los siguientes Indices:</span>
+<span id="cb64-520"><a href="#cb64-520" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-521"><a href="#cb64-521" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>NDVI</span>
+<span id="cb64-522"><a href="#cb64-522" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>NDWI</span>
+<span id="cb64-523"><a href="#cb64-523" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>SAVI</span>
+<span id="cb64-524"><a href="#cb64-524" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>EVI</span>
+<span id="cb64-525"><a href="#cb64-525" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>NDTI</span>
+<span id="cb64-526"><a href="#cb64-526" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-527"><a href="#cb64-527" aria-hidden="true" tabindex="-1"></a>Y luego, se visualizan de manera conjunta.</span>
+<span id="cb64-528"><a href="#cb64-528" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-529"><a href="#cb64-529" aria-hidden="true" tabindex="-1"></a><span class="fu">## NDVI</span></span>
+<span id="cb64-530"><a href="#cb64-530" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-531"><a href="#cb64-531" aria-hidden="true" tabindex="-1"></a>Es un índice usado para medir la diferencia normalizada entre las reflectancias del rojo y del infrarrojo cercano, proporcionando una medida sobre la cantidad, calidad y desarrollo de la cobertura vegetal y vigorosidad en áreas extensas. Su cálculo es:</span>
+<span id="cb64-532"><a href="#cb64-532" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-533"><a href="#cb64-533" aria-hidden="true" tabindex="-1"></a>$$NDVI = \frac{NIR - Rojo}{NIR + Rojo}$$</span>
+<span id="cb64-534"><a href="#cb64-534" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-537"><a href="#cb64-537" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb64-538"><a href="#cb64-538" aria-hidden="true" tabindex="-1"></a>NDVI <span class="op">=</span> (banda_infrarrojo_norm <span class="op">-</span> banda_rojo_norm) <span class="op">/</span> (banda_infrarrojo_norm <span class="op">+</span> banda_rojo_norm) </span>
+<span id="cb64-539"><a href="#cb64-539" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb64-540"><a href="#cb64-540" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-541"><a href="#cb64-541" aria-hidden="true" tabindex="-1"></a><span class="fu">## NDWI</span></span>
+<span id="cb64-542"><a href="#cb64-542" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-543"><a href="#cb64-543" aria-hidden="true" tabindex="-1"></a>El Índice de Agua de Diferencia Normalizada (NDWI) es un indicador espectral diseñado para estimar el contenido de agua líquido en los tejidos de la vegetación y monitorear el estado de estrés hídrico en los cultivos. El NDWI se fundamenta en la combinación de dos regiones del infrarrojo: la banda del Infrarrojo Cercano (NIR), donde la estructura celular de las hojas sanas refleja la luz de manera máxima, y la banda del Infrarrojo de Onda Corta (SWIR), una región donde el agua líquida presente en las células vegetales absorbe fuertemente la energía solar. Su cálculo es:</span>
+<span id="cb64-544"><a href="#cb64-544" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-545"><a href="#cb64-545" aria-hidden="true" tabindex="-1"></a>$$NDWI = \frac{NIR - SWIR}{NIR + SWIR}$$</span>
+<span id="cb64-546"><a href="#cb64-546" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-547"><a href="#cb64-547" aria-hidden="true" tabindex="-1"></a>Interpretación, oscila de -1 a 1:</span>
+<span id="cb64-548"><a href="#cb64-548" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-549"><a href="#cb64-549" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Valores altos y positivos (0.3 a 0.8): Indican un dosel vegetal con un óptimo contenido de humedad, tejidos completamente turgentes y nula presencia de estrés hídrico.</span>
+<span id="cb64-550"><a href="#cb64-550" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-551"><a href="#cb64-551" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Valores cercanos a cero o ligeramente negativos (-0.1 a 0.2): Se asocian a vegetación con bajo contenido de agua, cultivos bajo estrés por sequía o áreas con presencia de rastrojo y suelo desnudo.</span>
+<span id="cb64-552"><a href="#cb64-552" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-553"><a href="#cb64-553" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Valores muy bajos o negativos cercanos a -1: Corresponden a superficies inertes o estructuras donde la absorción en el SWIR es drásticamente superior a la reflexión en el NIR.</span>
+<span id="cb64-554"><a href="#cb64-554" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-557"><a href="#cb64-557" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb64-558"><a href="#cb64-558" aria-hidden="true" tabindex="-1"></a>NDWI <span class="op">=</span> (banda_infrarrojo_norm <span class="op">-</span> banda_swir1_norm) <span class="op">/</span> (banda_infrarrojo_norm <span class="op">+</span> banda_swir1_norm)</span>
+<span id="cb64-559"><a href="#cb64-559" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb64-560"><a href="#cb64-560" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-561"><a href="#cb64-561" aria-hidden="true" tabindex="-1"></a><span class="fu">## SAVI</span></span>
+<span id="cb64-562"><a href="#cb64-562" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-563"><a href="#cb64-563" aria-hidden="true" tabindex="-1"></a>El Índice de Vegetación Ajustado al Suelo (SAVI) es un indice que atenua y corrige los efectos del brillo del suelo de fondo en zonas donde la cobertura vegetal es escasa o fragmentaria. En áreas con baja densidad de cultivo o durante las primeras etapas fenológicas, la reflectancia del suelo desnudo se mezcla con la de las plantas, induciendo a errores y subestimaciones en el NDVI tradicional. El SAVI resuelve esta limitación introduciendo un factor de ajuste constante ($L$) que equilibra las firmas espectrales de ambas superficies.</span>
+<span id="cb64-564"><a href="#cb64-564" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-565"><a href="#cb64-565" aria-hidden="true" tabindex="-1"></a>Es un índice muy adecuado para trabajos en zonas semiáridas, donde la contribución del suelo es muy importante.</span>
+<span id="cb64-566"><a href="#cb64-566" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-567"><a href="#cb64-567" aria-hidden="true" tabindex="-1"></a>Su cálculo es:</span>
+<span id="cb64-568"><a href="#cb64-568" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-569"><a href="#cb64-569" aria-hidden="true" tabindex="-1"></a>$$SAVI = \frac{NIR - Rojo}{NIR + Rojo + L} \times (1 + L)$$</span>
+<span id="cb64-570"><a href="#cb64-570" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-573"><a href="#cb64-573" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb64-574"><a href="#cb64-574" aria-hidden="true" tabindex="-1"></a>L <span class="op">=</span> <span class="fl">0.5</span> </span>
+<span id="cb64-575"><a href="#cb64-575" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-576"><a href="#cb64-576" aria-hidden="true" tabindex="-1"></a>SAVI <span class="op">=</span> ((banda_infrarrojo <span class="op">-</span> banda_rojo) <span class="op">/</span> (banda_infrarrojo <span class="op">+</span> banda_rojo <span class="op">+</span> L)) <span class="op">*</span> (<span class="dv">1</span> <span class="op">+</span> L)</span>
+<span id="cb64-577"><a href="#cb64-577" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb64-578"><a href="#cb64-578" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-579"><a href="#cb64-579" aria-hidden="true" tabindex="-1"></a><span class="fu">## EVI</span></span>
+<span id="cb64-580"><a href="#cb64-580" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-581"><a href="#cb64-581" aria-hidden="true" tabindex="-1"></a>El Indice de Vegetación Mejorada (EVI) se optimizó a partir del NDVI aumentando la sensibilidad en las regiones de alta biomasa y mejoró el monitoreo de la vegetación mediante la disociación de la señal del fondo del dosel y una reducción de la influencia atmosférica. La ecuación utilizada para su obtención se indica a continuación:</span>
+<span id="cb64-582"><a href="#cb64-582" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-583"><a href="#cb64-583" aria-hidden="true" tabindex="-1"></a>$$EVI = G \times \frac{NIR - Rojo}{NIR + C_1 \times Rojo - C_2 \times Azul + L}$$</span>
+<span id="cb64-584"><a href="#cb64-584" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-587"><a href="#cb64-587" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb64-588"><a href="#cb64-588" aria-hidden="true" tabindex="-1"></a>EVI <span class="op">=</span> <span class="fl">2.5</span> <span class="op">*</span> ((banda_infrarrojo_norm <span class="op">-</span> banda_rojo_norm) <span class="op">/</span> (banda_infrarrojo_norm <span class="op">+</span> <span class="dv">6</span> <span class="op">*</span> banda_rojo_norm <span class="op">-</span> <span class="fl">7.5</span> <span class="op">*</span> banda_azul_norm <span class="op">+</span> <span class="dv">1</span>))</span>
+<span id="cb64-589"><a href="#cb64-589" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb64-590"><a href="#cb64-590" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-591"><a href="#cb64-591" aria-hidden="true" tabindex="-1"></a><span class="fu">## NDTI</span></span>
+<span id="cb64-592"><a href="#cb64-592" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-593"><a href="#cb64-593" aria-hidden="true" tabindex="-1"></a>El Índice de Tolerancia a la Sequía Normalizado (NDTI), es un indicador espectral utilizado para dos objetivos: la estimación de la cobertura de rastrojo en el suelo y el monitoreo del estrés por sequía severa en la vegetación.</span>
+<span id="cb64-594"><a href="#cb64-594" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-595"><a href="#cb64-595" aria-hidden="true" tabindex="-1"></a>A diferencia de los índices basados en la clorofila (NDVI) o en la humedad del dosel vivo (NDWI), el NDTI aprovecha de forma pura la firma espectral del suelo y de la materia orgánica muerta. Se fundamenta en el contraste entre las dos bandas del infrarrojo de onda corta (SWIR): mientras que los rastrojos secos y los suelos bajo un severo déficit hídrico incrementan su reflectancia en la banda SWIR 1, muestran variaciones analíticas muy claras al cruzar los datos con la banda SWIR 2, permitiendo separar el suelo labrado del suelo con cobertura protectora. Su cálculo es:</span>
+<span id="cb64-596"><a href="#cb64-596" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-597"><a href="#cb64-597" aria-hidden="true" tabindex="-1"></a>$$NDTI = \frac{SWIR 1 - SWIR 2}{SWIR 1 + SWIR 2}$$</span>
+<span id="cb64-598"><a href="#cb64-598" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-601"><a href="#cb64-601" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb64-602"><a href="#cb64-602" aria-hidden="true" tabindex="-1"></a>NDTI <span class="op">=</span> (banda_swir1_norm <span class="op">-</span> banda_swir2_norm) <span class="op">/</span> (banda_swir1_norm <span class="op">+</span> banda_swir2_norm)</span>
+<span id="cb64-603"><a href="#cb64-603" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb64-604"><a href="#cb64-604" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-605"><a href="#cb64-605" aria-hidden="true" tabindex="-1"></a><span class="fu">## Visualizar Indices</span></span>
+<span id="cb64-606"><a href="#cb64-606" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-609"><a href="#cb64-609" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb64-610"><a href="#cb64-610" aria-hidden="true" tabindex="-1"></a>fig, axs <span class="op">=</span> plt.subplots(<span class="dv">2</span>, <span class="dv">3</span>, figsize<span class="op">=</span>(<span class="dv">18</span>, <span class="dv">12</span>), facecolor<span class="op">=</span><span class="st">'white'</span>)</span>
+<span id="cb64-611"><a href="#cb64-611" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-612"><a href="#cb64-612" aria-hidden="true" tabindex="-1"></a><span class="co"># NDVI </span></span>
+<span id="cb64-613"><a href="#cb64-613" aria-hidden="true" tabindex="-1"></a>im1 <span class="op">=</span> axs[<span class="dv">0</span>, <span class="dv">0</span>].imshow(NDVI, cmap<span class="op">=</span><span class="st">'RdYlGn'</span>)</span>
+<span id="cb64-614"><a href="#cb64-614" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">0</span>, <span class="dv">0</span>].set_title(<span class="st">'NDVI'</span>, fontsize<span class="op">=</span><span class="dv">12</span>, fontweight<span class="op">=</span><span class="st">'bold'</span>)</span>
+<span id="cb64-615"><a href="#cb64-615" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">0</span>, <span class="dv">0</span>].axis(<span class="st">'off'</span>)</span>
+<span id="cb64-616"><a href="#cb64-616" aria-hidden="true" tabindex="-1"></a>fig.colorbar(im1, ax<span class="op">=</span>axs[<span class="dv">0</span>, <span class="dv">0</span>], shrink<span class="op">=</span><span class="fl">0.7</span>, label<span class="op">=</span><span class="st">'Valor del Índice'</span>)</span>
+<span id="cb64-617"><a href="#cb64-617" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-618"><a href="#cb64-618" aria-hidden="true" tabindex="-1"></a><span class="co"># NDWI </span></span>
+<span id="cb64-619"><a href="#cb64-619" aria-hidden="true" tabindex="-1"></a>im4 <span class="op">=</span> axs[<span class="dv">1</span>, <span class="dv">0</span>].imshow(NDWI, cmap<span class="op">=</span><span class="st">'YlGnBu'</span>) </span>
+<span id="cb64-620"><a href="#cb64-620" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">0</span>, <span class="dv">1</span>].set_title(<span class="st">'NDWI'</span>, fontsize<span class="op">=</span><span class="dv">12</span>, fontweight<span class="op">=</span><span class="st">'bold'</span>)</span>
+<span id="cb64-621"><a href="#cb64-621" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">0</span>, <span class="dv">1</span>].axis(<span class="st">'off'</span>)</span>
+<span id="cb64-622"><a href="#cb64-622" aria-hidden="true" tabindex="-1"></a>fig.colorbar(im4, ax<span class="op">=</span>axs[<span class="dv">1</span>, <span class="dv">0</span>], shrink<span class="op">=</span><span class="fl">0.7</span>, label<span class="op">=</span><span class="st">'Valor del Índice'</span>)</span>
+<span id="cb64-623"><a href="#cb64-623" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-624"><a href="#cb64-624" aria-hidden="true" tabindex="-1"></a><span class="co"># SAVI</span></span>
+<span id="cb64-625"><a href="#cb64-625" aria-hidden="true" tabindex="-1"></a>im2 <span class="op">=</span> axs[<span class="dv">0</span>, <span class="dv">1</span>].imshow(SAVI, cmap<span class="op">=</span><span class="st">'RdYlGn'</span>, vmin<span class="op">=</span><span class="dv">0</span>, vmax<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb64-626"><a href="#cb64-626" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">0</span>, <span class="dv">2</span>].set_title(<span class="st">'SAVI'</span>, fontsize<span class="op">=</span><span class="dv">12</span>, fontweight<span class="op">=</span><span class="st">'bold'</span>)</span>
+<span id="cb64-627"><a href="#cb64-627" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">0</span>, <span class="dv">2</span>].axis(<span class="st">'off'</span>)</span>
+<span id="cb64-628"><a href="#cb64-628" aria-hidden="true" tabindex="-1"></a>fig.colorbar(im2, ax<span class="op">=</span>axs[<span class="dv">0</span>, <span class="dv">1</span>], shrink<span class="op">=</span><span class="fl">0.7</span>, label<span class="op">=</span><span class="st">'Valor del Índice'</span>)</span>
+<span id="cb64-629"><a href="#cb64-629" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-630"><a href="#cb64-630" aria-hidden="true" tabindex="-1"></a><span class="co"># EVI </span></span>
+<span id="cb64-631"><a href="#cb64-631" aria-hidden="true" tabindex="-1"></a>im3 <span class="op">=</span> axs[<span class="dv">0</span>, <span class="dv">2</span>].imshow(EVI, cmap<span class="op">=</span><span class="st">'RdYlGn'</span>)</span>
+<span id="cb64-632"><a href="#cb64-632" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">1</span>, <span class="dv">0</span>].set_title(<span class="st">'EVI'</span>, fontsize<span class="op">=</span><span class="dv">12</span>, fontweight<span class="op">=</span><span class="st">'bold'</span>)</span>
+<span id="cb64-633"><a href="#cb64-633" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">1</span>, <span class="dv">0</span>].axis(<span class="st">'off'</span>)</span>
+<span id="cb64-634"><a href="#cb64-634" aria-hidden="true" tabindex="-1"></a>fig.colorbar(im3, ax<span class="op">=</span>axs[<span class="dv">0</span>, <span class="dv">2</span>], shrink<span class="op">=</span><span class="fl">0.7</span>, label<span class="op">=</span><span class="st">'Valor del Índice'</span>)</span>
+<span id="cb64-635"><a href="#cb64-635" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-636"><a href="#cb64-636" aria-hidden="true" tabindex="-1"></a><span class="co"># NDTI </span></span>
+<span id="cb64-637"><a href="#cb64-637" aria-hidden="true" tabindex="-1"></a>im5 <span class="op">=</span> axs[<span class="dv">1</span>, <span class="dv">1</span>].imshow(NDTI, cmap<span class="op">=</span><span class="st">'copper'</span>)</span>
+<span id="cb64-638"><a href="#cb64-638" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">1</span>, <span class="dv">1</span>].set_title(<span class="st">'NDTI'</span>, fontsize<span class="op">=</span><span class="dv">12</span>, fontweight<span class="op">=</span><span class="st">'bold'</span>)</span>
+<span id="cb64-639"><a href="#cb64-639" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">1</span>, <span class="dv">1</span>].axis(<span class="st">'off'</span>)</span>
+<span id="cb64-640"><a href="#cb64-640" aria-hidden="true" tabindex="-1"></a>fig.colorbar(im5, ax<span class="op">=</span>axs[<span class="dv">1</span>, <span class="dv">1</span>], shrink<span class="op">=</span><span class="fl">0.7</span>, label<span class="op">=</span><span class="st">'Valor del Índice'</span>)</span>
+<span id="cb64-641"><a href="#cb64-641" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb64-642"><a href="#cb64-642" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-643"><a href="#cb64-643" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-644"><a href="#cb64-644" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">1</span>, <span class="dv">2</span>].axis(<span class="st">'off'</span>)</span>
-<span id="cb64-645"><a href="#cb64-645" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-646"><a href="#cb64-646" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
-<span id="cb64-647"><a href="#cb64-647" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
-<span id="cb64-648"><a href="#cb64-648" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb64-643"><a href="#cb64-643" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">1</span>, <span class="dv">2</span>].axis(<span class="st">'off'</span>)</span>
+<span id="cb64-644"><a href="#cb64-644" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-645"><a href="#cb64-645" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb64-646"><a href="#cb64-646" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
+<span id="cb64-647"><a href="#cb64-647" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 </code></pre></div><button title="Copiar al portapapeles" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
