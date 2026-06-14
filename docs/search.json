@@ -1,66 +1,80 @@
 [
   {
-    "objectID": "proyectos/zonificacion.html",
-    "href": "proyectos/zonificacion.html",
+    "objectID": "proyectos/zonificacion/zonificacion.html",
+    "href": "proyectos/zonificacion/zonificacion.html",
     "title": "Proceso de Zonificacion con R",
     "section": "",
     "text": "Este reporte estará disponible próximamente."
   },
   {
-    "objectID": "proyectos/zonificacion.html#en-construcción",
-    "href": "proyectos/zonificacion.html#en-construcción",
+    "objectID": "proyectos/zonificacion/zonificacion.html#en-construcción",
+    "href": "proyectos/zonificacion/zonificacion.html#en-construcción",
     "title": "Proceso de Zonificacion con R",
     "section": "",
     "text": "Este reporte estará disponible próximamente."
   },
   {
-    "objectID": "proyectos/teledeteccion-gee.html",
-    "href": "proyectos/teledeteccion-gee.html",
+    "objectID": "proyectos/teledeteccion-gee/teledeteccion-gee.html",
+    "href": "proyectos/teledeteccion-gee/teledeteccion-gee.html",
     "title": "Teledetección con Google Earth Engine",
     "section": "",
     "text": "Este reporte estará disponible próximamente."
   },
   {
-    "objectID": "proyectos/teledeteccion-gee.html#en-construcción",
-    "href": "proyectos/teledeteccion-gee.html#en-construcción",
+    "objectID": "proyectos/teledeteccion-gee/teledeteccion-gee.html#en-construcción",
+    "href": "proyectos/teledeteccion-gee/teledeteccion-gee.html#en-construcción",
     "title": "Teledetección con Google Earth Engine",
     "section": "",
     "text": "Este reporte estará disponible próximamente."
   },
   {
-    "objectID": "proyectos/mapa-rendimiento.html",
-    "href": "proyectos/mapa-rendimiento.html",
-    "title": "Mapa de rendimiento",
+    "objectID": "proyectos/regresion-espacial/regresion-espacial.html",
+    "href": "proyectos/regresion-espacial/regresion-espacial.html",
+    "title": "Análisis de Regresión Espacial",
     "section": "",
     "text": "Este reporte estará disponible próximamente."
   },
   {
-    "objectID": "proyectos/mapa-rendimiento.html#en-construcción",
-    "href": "proyectos/mapa-rendimiento.html#en-construcción",
-    "title": "Mapa de rendimiento",
+    "objectID": "proyectos/regresion-espacial/regresion-espacial.html#en-construcción",
+    "href": "proyectos/regresion-espacial/regresion-espacial.html#en-construcción",
+    "title": "Análisis de Regresión Espacial",
     "section": "",
     "text": "Este reporte estará disponible próximamente."
   },
   {
-    "objectID": "proyectos/fenologia-gee.html",
-    "href": "proyectos/fenologia-gee.html",
-    "title": "Seguimiento de cultivo con GEE",
+    "objectID": "proyectos/interpolacion-espacial/intepolacion-espacial.html",
+    "href": "proyectos/interpolacion-espacial/intepolacion-espacial.html",
+    "title": "Interpolacion Espacial",
     "section": "",
     "text": "Este reporte estará disponible próximamente."
   },
   {
-    "objectID": "proyectos/fenologia-gee.html#en-construcción",
-    "href": "proyectos/fenologia-gee.html#en-construcción",
-    "title": "Seguimiento de cultivo con GEE",
+    "objectID": "proyectos/interpolacion-espacial/intepolacion-espacial.html#en-construcción",
+    "href": "proyectos/interpolacion-espacial/intepolacion-espacial.html#en-construcción",
+    "title": "Interpolacion Espacial",
     "section": "",
     "text": "Este reporte estará disponible próximamente."
   },
   {
     "objectID": "index.html",
     "href": "index.html",
-    "title": "mi-portfolio",
+    "title": "Juan Pablo Heiland",
     "section": "",
-    "text": "This is a Quarto website.\nTo learn more about Quarto websites visit https://quarto.org/docs/websites.\n\n1 + 1\n\n[1] 2"
+    "text": "Ingeniero Agrónomo con sólida formación en el manejo integral de cultivos extensivos y suelos, complementado con especialización en agricultura de precisión, análisis y ciencia de datos. Cuento con dominio avanzado en SIG y Google Earth Engine para teledetección, integrando herramientas de programación y gestión de bases de datos (Python, R y SQL) aplicadas al agro."
+  },
+  {
+    "objectID": "index.html#sobre-mí",
+    "href": "index.html#sobre-mí",
+    "title": "Juan Pablo Heiland",
+    "section": "",
+    "text": "Ingeniero Agrónomo con sólida formación en el manejo integral de cultivos extensivos y suelos, complementado con especialización en agricultura de precisión, análisis y ciencia de datos. Cuento con dominio avanzado en SIG y Google Earth Engine para teledetección, integrando herramientas de programación y gestión de bases de datos (Python, R y SQL) aplicadas al agro."
+  },
+  {
+    "objectID": "index.html#herramientas",
+    "href": "index.html#herramientas",
+    "title": "Juan Pablo Heiland",
+    "section": "2 Herramientas",
+    "text": "2 Herramientas\nR · Python · Google Earth Engine · Quarto · QGIS · Git. SQL"
   },
   {
     "objectID": "about.html",
@@ -70,72 +84,93 @@
     "text": "About this site\n\n1 + 1\n\n[1] 2"
   },
   {
-    "objectID": "proyectos/anova.html",
-    "href": "proyectos/anova.html",
+    "objectID": "proyectos/anova/anova.html",
+    "href": "proyectos/anova/anova.html",
     "title": "ANOVA",
     "section": "",
     "text": "Este reporte estará disponible próximamente."
   },
   {
-    "objectID": "proyectos/anova.html#en-construcción",
-    "href": "proyectos/anova.html#en-construcción",
+    "objectID": "proyectos/anova/anova.html#en-construcción",
+    "href": "proyectos/anova/anova.html#en-construcción",
     "title": "ANOVA",
     "section": "",
     "text": "Este reporte estará disponible próximamente."
   },
   {
-    "objectID": "proyectos/intepolacion-espacial.html",
-    "href": "proyectos/intepolacion-espacial.html",
-    "title": "Interpolacion Espacial",
+    "objectID": "proyectos/mapa-rendimiento/mapa-rendimiento.html",
+    "href": "proyectos/mapa-rendimiento/mapa-rendimiento.html",
+    "title": "Limpieza de Mapa de rendimiento",
+    "section": "",
+    "text": "El presente documento describe el flujo de trabajo para la limpieza y visualización de una mapa de rendimiento mediante R. El propósito es eliminar las anomalías y errores de medición de los monitores de la cosechadora, transformando los datos “sucios” en información confiable para la toma de decisiones."
+  },
+  {
+    "objectID": "proyectos/mapa-rendimiento/mapa-rendimiento.html#parámetros-del-set-de-datos",
+    "href": "proyectos/mapa-rendimiento/mapa-rendimiento.html#parámetros-del-set-de-datos",
+    "title": "Limpieza de Mapa de rendimiento",
+    "section": "\n4.1 Parámetros del set de datos",
+    "text": "4.1 Parámetros del set de datos\nSe creó una tabla para comprobar los Parámetros más importante del set de datos. Estos son:\n\nClase del objeto usando class().\nCantidad de filas y columnas a través de dim().\nSistema de Referencia de Coordenadas a través de st_crs().\n\n\nCódigoresumen_estructura &lt;- tibble(\n  Métrica = c(\n    \"Clase del objeto\",\n    \"Cantidad de registros (filas)\",\n    \"Cantidad de variables (columnas)\",\n    \"Sistema de Referencia de Coordenadas (CRS)\"\n  ),\n  Valor = c(\n    paste(class(soja11), collapse = \", \"),\n    as.character(dim(soja11)[1]),\n    as.character(dim(soja11)[2]),\n    if(!is.null(st_crs(soja11)$epsg)) as.character(st_crs(soja11)$epsg) else \"No definido\"\n  )\n)\n\n\nresumen_estructura %&gt;%\n  kable(\n    format = \"html\",\n    col.names = c(\"Parámetro\", \"Valor /Propiedad\"),\n    align = c(\"l\", \"c\")\n  ) %&gt;%\n  kable_minimal(\n    full_width = FALSE,\n    font_size = 14\n  ) %&gt;%\n  kable_styling(\n    bootstrap_options = c(\"striped\", \"hover\", \"condensed\"),\n    position = \"left\"\n  ) %&gt;%\n  row_spec(0, bold = TRUE, color = \"black\", extra_css = \"border-bottom: 2px solid black;\") %&gt;%\n  row_spec(nrow(resumen_estructura), extra_css = \"border-bottom: 2px solid black;\")\n\n\nTabla 2: Parámetros más importantes del set de datos.\n\n\n\n\nParámetro\nValor /Propiedad\n\n\n\nClase del objeto\nspec_tbl_df, tbl_df, tbl, data.frame\n\n\nCantidad de registros (filas)\n62716\n\n\nCantidad de variables (columnas)\n31\n\n\nSistema de Referencia de Coordenadas (CRS)\nNA\n\n\n\n\n\n\n\n\nComo se detalla en la Tabla 2 la clase del objeto es un Tibble. La función class() muestra toda la jerarquía de clases a la que pertenece ese objeto, ordenada desde la más específica hasta la más general (de izquierda a derecha), el significado de cada una es:\n\nspec_tbl_df (Specification Tibble Data Frame): Indica que el objeto contiene una “especificación” oculta de las columnas. R guarda el registro de qué tipo de dato asignó automáticamente a cada columna.\ntbl_df (Tibble Data Frame): Es la clase central. Confirma que el objeto es un tibble.\ntbl (Table): Es una clase genérica intermedia de la que heredan los tibbles.\ndata.frame: Es la estructura de datos base y más antigua de R para tablas. Al estar al final de la lista, significa que el tibble sigue siendo un data frame.\n\nAdemás, se observa que el set de datos NO tiene un Sistema de Referencia de Coordenadas definido."
+  },
+  {
+    "objectID": "proyectos/mapa-rendimiento/mapa-rendimiento.html#eliminar-de-inliers",
+    "href": "proyectos/mapa-rendimiento/mapa-rendimiento.html#eliminar-de-inliers",
+    "title": "Limpieza de Mapa de rendimiento",
+    "section": "\n8.1 Eliminar de Inliers\n",
+    "text": "8.1 Eliminar de Inliers\n\nSe usó la función filter() de la libreria dplyr (se encuentra dentro de tidyverse).\nLa función permite utilizar una o más condiciones. De esta forma el resultado obtenido serán aquellas observaciones donde se cumplan las restricciones indicadas.\n\nLimpiar datos por Altura de plataforma:\n\n\nsoja11_sf &lt;- soja11_sf %&gt;% \nfilter(Record01 == \"Activ.\") \n\n\nLimpiar por Ancho de plataforma:\n\n\nsoja11_sf &lt;- soja11_sf %&gt;% \nfilter(Width &gt; 20) \n\n\nLimpiar por Distancia:\n\n\nsoja11_sf &lt;- soja11_sf %&gt;% \nfilter(Distance &gt; 1.5)"
+  },
+  {
+    "objectID": "proyectos/mapa-rendimiento/mapa-rendimiento.html#eliminar-outliers-por-cuantiles",
+    "href": "proyectos/mapa-rendimiento/mapa-rendimiento.html#eliminar-outliers-por-cuantiles",
+    "title": "Limpieza de Mapa de rendimiento",
+    "section": "\n8.2 Eliminar Outliers por Cuantiles",
+    "text": "8.2 Eliminar Outliers por Cuantiles\nSe considerarán valores atípicos (outliers) aquellos valores que cumplan una de las siguientes condiciones:\n\nEl valor es menor que el primer cuartil menos 1,5 veces el rango intercuartílico = \\(q &lt; Q1 – 1,5 * IQR\\)\n\nEl valor es mayor que el tercer cuartil más 1,5 veces el rango intercuartílico = \\(q &gt; Q3 + 1,5 * IQR\\)\n\n\nCalcular los cuantiles Q1 y Q3:\n\nQ1 &lt;- quantile(soja11_sf$Rto11, probs = 0.25, na.rm = TRUE)\nQ3 &lt;- quantile(soja11_sf$Rto11, probs = 0.75, na.rm = TRUE)\n\nCalcular IQR:\n\nIQR &lt;- IQR(soja11_sf$Rto11)\n\nCalcular los datos a eliminar:\n\neliminar1 = Q1 - (1.5 * IQR) \neliminar2 = Q3 + (1.5 * IQR) \n\nEliminar Outliers:\n\nsoja11_sf &lt;- soja11_sf %&gt;% \nfilter(Rto11 &gt; eliminar1 & Rto11 &lt; eliminar2)"
+  },
+  {
+    "objectID": "proyectos/mapa-rendimiento/mapa-rendimiento.html#visualizar-tabla-limpia",
+    "href": "proyectos/mapa-rendimiento/mapa-rendimiento.html#visualizar-tabla-limpia",
+    "title": "Limpieza de Mapa de rendimiento",
+    "section": "\n10.1 Visualizar tabla limpia",
+    "text": "10.1 Visualizar tabla limpia\n\nCódigoprimeras_filas_2 &lt;- soja11_sf %&gt;%\n  head(5) \n\n\nprimeras_filas_2 %&gt;%\n  kable(\n    format = \"html\",\n    align = \"c\" \n  ) %&gt;%\n  kable_classic(\n    full_width = TRUE, \n    font_size = 13\n  ) %&gt;%\n  kable_styling(\n    bootstrap_options = c(\"striped\", \"hover\", \"condensed\")\n  ) %&gt;%\n  row_spec(0, bold = TRUE, color = \"black\", extra_css = \"border-bottom: 2px solid black;\") %&gt;%\n  row_spec(nrow(primeras_filas_2), extra_css = \"border-bottom: 2px solid black;\")\n\n\nTabla 3: Visualización de los primeros diez registros de la base de datos limpia.\n\n\n\n\nElev11\nAno\nRecord01\nWidth\nHG11\nLote\nVar11\nDistance\nRto11\ngeometry\nRTO11_q\nIP\n\n\n\n477.2713\n2011\nActiv.\n29.85\n0\n14\nAX5009\n1.718328\n4593.616\nPOINT (-64.96421 -33.63864)\n3720.4–66982\n1.3564929\n\n\n477.3313\n2011\nActiv.\n29.85\n0\n14\nAX5009\n3.866189\n4176.491\nPOINT (-64.96426 -33.63864)\n3720.4–66982\n1.2333161\n\n\n477.3303\n2011\nActiv.\n29.85\n0\n14\nAX5009\n4.831787\n3737.202\nPOINT (-64.96428 -33.63864)\n3720.4–66982\n1.1035944\n\n\n477.3213\n2011\nActiv.\n29.85\n0\n14\nAX5009\n4.992473\n3017.708\nPOINT (-64.96429 -33.63864)\n2875.4–3314.4\n0.8911279\n\n\n477.3163\n2011\nActiv.\n29.85\n0\n14\nAX5009\n4.929319\n3275.727\nPOINT (-64.96431 -33.63864)\n2875.4–3314.4\n0.9673210\n\n\n\n\n\n\n\n\nRendimiento Medio y Cantidad de Datos luego de la limpieza:\n\n\n\nRendimiento Medio (kg/ha)\n\n\n3386\n\n\n\n\nCantidad de Filas\n\n\n55524"
+  },
+  {
+    "objectID": "proyectos/mapa-rendimiento/mapa-rendimiento.html#crear-cuantiles",
+    "href": "proyectos/mapa-rendimiento/mapa-rendimiento.html#crear-cuantiles",
+    "title": "Limpieza de Mapa de rendimiento",
+    "section": "\n12.1 Crear cuantiles",
+    "text": "12.1 Crear cuantiles\n\nbreaks &lt;- quantile(soja11_sf_20S$Rto11, probs = seq(0, 1, 0.25), na.rm = TRUE) \n\nsoja11_sf_20S &lt;- soja11_sf_20S %&gt;% \n  mutate( \n    RTO11_q = cut(Rto11, breaks = breaks, include.lowest = TRUE, labels = paste0(round(breaks[-5],1), \"–\", round(breaks[-1],1))))"
+  },
+  {
+    "objectID": "proyectos/mapa-rendimiento/mapa-rendimiento.html#graficar",
+    "href": "proyectos/mapa-rendimiento/mapa-rendimiento.html#graficar",
+    "title": "Limpieza de Mapa de rendimiento",
+    "section": "\n12.2 Graficar",
+    "text": "12.2 Graficar\n\nCódigoggplot(soja11_sf_20S) +\n  geom_sf(aes(color = RTO11_q), size = 1.3, alpha = 1, stroke = 0) +\n  scale_color_brewer(\n    palette = \"RdYlGn\",\n    direction = 1,\n    name = \"Rendimiento (kg/ha)\") +\n  labs(\n    title = \"Mapa de Rendimiento Limpio\",\n    subtitle = \"Visualización post al proceso de limpieza de datos\"\n  ) +\n  theme_void() + \n  theme(\n    text = element_text(family = \"sans\"), \n    plot.title = element_text(\n      face = \"bold\",\n      size = 18,\n      color = \"grey10\",\n      margin = margin(b = 4, t = 10)\n    ),\n    plot.subtitle = element_text(\n      size = 13,\n      color = \"grey40\",\n      margin = margin(b = 15)\n    ),\n    legend.position = \"bottom\",\n    legend.title = element_text(size = 10, face = \"bold\", color = \"grey20\"),\n    legend.text = element_text(size = 9, color = \"grey30\"),\n    legend.key = element_blank(), \n    plot.margin = margin(15, 15, 15, 15)\n  )"
+  },
+  {
+    "objectID": "proyectos/serie-temporal-gee/fenologia-gee.html",
+    "href": "proyectos/serie-temporal-gee/fenologia-gee.html",
+    "title": "Seguimiento de cultivo con GEE",
     "section": "",
     "text": "Este reporte estará disponible próximamente."
   },
   {
-    "objectID": "proyectos/intepolacion-espacial.html#en-construcción",
-    "href": "proyectos/intepolacion-espacial.html#en-construcción",
-    "title": "Interpolacion Espacial",
+    "objectID": "proyectos/serie-temporal-gee/fenologia-gee.html#en-construcción",
+    "href": "proyectos/serie-temporal-gee/fenologia-gee.html#en-construcción",
+    "title": "Seguimiento de cultivo con GEE",
     "section": "",
     "text": "Este reporte estará disponible próximamente."
   },
   {
-    "objectID": "proyectos/regresion-espacial.html",
-    "href": "proyectos/regresion-espacial.html",
-    "title": "Análisis de Regresión Espacial",
-    "section": "",
-    "text": "Este reporte estará disponible próximamente."
-  },
-  {
-    "objectID": "proyectos/regresion-espacial.html#en-construcción",
-    "href": "proyectos/regresion-espacial.html#en-construcción",
-    "title": "Análisis de Regresión Espacial",
-    "section": "",
-    "text": "Este reporte estará disponible próximamente."
-  },
-  {
-    "objectID": "proyectos/teledeteccion-python.html",
-    "href": "proyectos/teledeteccion-python.html",
+    "objectID": "proyectos/teledeteccion-python/teledeteccion-python.html",
+    "href": "proyectos/teledeteccion-python/teledeteccion-python.html",
     "title": "Teledetección con Python",
     "section": "",
     "text": "Este reporte estará disponible próximamente."
   },
   {
-    "objectID": "proyectos/teledeteccion-python.html#en-construcción",
-    "href": "proyectos/teledeteccion-python.html#en-construcción",
+    "objectID": "proyectos/teledeteccion-python/teledeteccion-python.html#en-construcción",
+    "href": "proyectos/teledeteccion-python/teledeteccion-python.html#en-construcción",
     "title": "Teledetección con Python",
-    "section": "",
-    "text": "Este reporte estará disponible próximamente."
-  },
-  {
-    "objectID": "docs/proyectos/teledeteccion-GEE.html",
-    "href": "docs/proyectos/teledeteccion-GEE.html",
-    "title": "Teledetección con Google Earth Engine",
-    "section": "",
-    "text": "Este reporte estará disponible próximamente."
-  },
-  {
-    "objectID": "docs/proyectos/teledeteccion-GEE.html#en-construcción",
-    "href": "docs/proyectos/teledeteccion-GEE.html#en-construcción",
-    "title": "Teledetección con Google Earth Engine",
     "section": "",
     "text": "Este reporte estará disponible próximamente."
   }

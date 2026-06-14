@@ -1,0 +1,10 @@
+---
+title: "ANOVA"
+subtitle: "Análisi de la Varianza"
+date: 2024-01
+categories: [R, Agricultura de precisión]
+---
+
+## En construcción
+
+Este reporte estará disponible próximamente.

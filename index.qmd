@@ -1,11 +1,29 @@
 ---
-title: "mi-portfolio"
+title: "Juan Pablo Heiland"
+subtitle: "Ingeniero Agrónomo"
+image: img/foto.jpg
+about:
+  template: trestles
+  image-shape: round
+  image-width: 160px
+  links:
+    - icon: envelope
+      text: Email
+      href: pabloheiland1@gmail.com
+    - icon: linkedin
+      text: LinkedIn
+      href: https://linkedin.com/in/juan-pablo-heiland
+    - icon: github
+      text: GitHub
+      href: https://github.com/jpablo-heiland
 ---
 
-This is a Quarto website.
+## Sobre mí
 
-To learn more about Quarto websites visit <https://quarto.org/docs/websites>.
+Ingeniero Agrónomo con sólida formación en el manejo integral de cultivos extensivos y suelos, complementado con especialización en agricultura de precisión, análisis y ciencia de datos. Cuento con dominio avanzado en SIG y Google Earth Engine para teledetección, integrando herramientas de programación y gestión de bases de datos (Python, R y SQL) aplicadas al agro. 
 
-```{r}
-1 + 1
-```
+## Herramientas
+
+`R` · `Python` · `Google Earth Engine` · `Quarto` · `QGIS` · `Git`. `SQL`
+
+

@@ -15,24 +15,28 @@ website:
         text: Inicio
       - text: Proyectos
         menu:
-          - href: proyectos/mapa-rendimiento.qmd
-            text: "Limpieza de Mapa de rendimiento"
-          - href: proyectos/teledeteccion-python.qmd
+          - href: proyectos/mapa-rendimiento/mapa-rendimiento.qmd
+            text: "Limpieza de mapa de rendimiento"
+          - href: proyectos/interpolacion-espacial/interpolacion-espacial.qmd
+            text: "Interpolación espacial"
+          - href: proyectos/zonificacion/zonificacion.qmd
+            text: "Zonificación con R"
+          - href: proyectos/regresion-espacial/regresion-espacial.qmd
+            text: "Regresión espacial"
+          - href: proyectos/serie-temporal-gee/fenologia-gee.qmd
+            text: "Optimización"
+          - href: proyectos/teledeteccion-python/teledeteccion-python.qmd
             text: "Teledetección con Python"
-          - href: proyectos/teledeteccion-GEE.qmd
+          - href: proyectos/teledeteccion-gee/teledeteccion-gee.qmd
             text: "Teledetección con GEE"
-          - href: proyectos/zonificacion.qmd
-            text: "Zonificación"
-          - href: proyectos/optimizacion.qmd
-            text: "Analisis de Regresion Espacial"
-          - href: proyectos/machine-learning.qmd
-            text: "Machine Learning"
+          - href: proyectos/anova/anova.qmd
+            text: "Análisis de varianza con R"
     right:
       - icon: github
-        href: https://github.com/pabloheiland1-droid
+        href: https://github.com/jpablo-heiland
         aria-label: GitHub
       - icon: linkedin
-        href: https://linkedin.com/in/juan-pablo-heiland 
+        href: https://linkedin.com/in/juan-pablo-heiland
         aria-label: LinkedIn
 
   sidebar: false
@@ -46,7 +50,6 @@ website:
 format:
   html:
     theme: flatly
-    css: styles.css
     lang: es
     toc: true
     toc-depth: 3

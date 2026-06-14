@@ -1,0 +1,454 @@
+---
+title: "Limpieza de Mapa de rendimiento"
+subtitle: "Limpieza y análisis de un mapa de rendimiento con R"
+date: 2026-01
+categories: [R, Agricultura de precisión, Mapa de Rendimiento]
+css: styles3.css
+---
+
+# Introducción 
+
+El presente documento describe el flujo de trabajo para la limpieza y visualización de una mapa de rendimiento mediante R. El propósito es eliminar las anomalías y errores de medición de los monitores de la cosechadora, transformando los datos “sucios” en información confiable para la toma de decisiones.
+
+# Librerías Necesarias
+
+```{r}
+library(tidyverse)   
+library(sf)   
+library(knitr)
+library(kableExtra)
+library(ggspatial)
+```
+
+
+# Lectura de Datos
+
+Para la lectura de datos se usó `read_csv()` del paquete `readr` que forma parte del ecosistema `tidyverse`.
+
+```{r}
+soja11 <- read_csv("data/Soja2011.csv") 
+```
+
+# Exploración de datos
+
+En primer lugar, se visualizan las primeras filas del set de datos original a partir de la librería `kableExtra`.
+
+```{r}
+#| label: tbl-primeros-registros
+#| tbl-cap: "Visualización de los primeros registros de la base de datos original."
+#| code-fold: true
+#| code-summary: "Código"
+
+
+primeras_filas <- soja11 %>%
+  head(5) 
+
+
+primeras_filas %>%
+  kable(
+    format = "html",
+    align = "c" 
+  ) %>%
+  kable_classic(
+    full_width = FALSE,          
+    font_size = 11               
+  ) %>%
+  kable_styling(
+    bootstrap_options = c("striped", "hover", "condensed")
+  ) %>%
+  row_spec(0, bold = TRUE, color = "black", 
+           extra_css = "border-bottom: 2px solid black; white-space: nowrap;") %>% 
+  row_spec(nrow(primeras_filas), extra_css = "border-bottom: 2px solid black;") %>%
+  scroll_box(width = "100%")
+```
+
+## Parámetros del set de datos
+
+Se creó una tabla para comprobar los Parámetros más importante del set de datos. Estos son:
+
+* Clase del objeto usando `class()`.
+* Cantidad de filas y columnas a través de `dim()`.
+* Sistema de Referencia de Coordenadas a través de `st_crs()`.
+
+```{r}
+#| label: tbl-exploracion
+#| tbl-cap: "Parámetros más importantes del set de datos."
+#| code-fold: true
+#| code-summary: "Código"
+
+
+resumen_estructura <- tibble(
+  Métrica = c(
+    "Clase del objeto",
+    "Cantidad de registros (filas)",
+    "Cantidad de variables (columnas)",
+    "Sistema de Referencia de Coordenadas (CRS)"
+  ),
+  Valor = c(
+    paste(class(soja11), collapse = ", "),
+    as.character(dim(soja11)[1]),
+    as.character(dim(soja11)[2]),
+    if(!is.null(st_crs(soja11)$epsg)) as.character(st_crs(soja11)$epsg) else "No definido"
+  )
+)
+
+
+resumen_estructura %>%
+  kable(
+    format = "html",
+    col.names = c("Parámetro", "Valor /Propiedad"),
+    align = c("l", "c")
+  ) %>%
+  kable_minimal(
+    full_width = FALSE,
+    font_size = 14
+  ) %>%
+  kable_styling(
+    bootstrap_options = c("striped", "hover", "condensed"),
+    position = "left"
+  ) %>%
+  row_spec(0, bold = TRUE, color = "black", extra_css = "border-bottom: 2px solid black;") %>%
+  row_spec(nrow(resumen_estructura), extra_css = "border-bottom: 2px solid black;")
+```
+
+Como se detalla en la @tbl-exploracion la clase del objeto es un **Tibble**. La función `class()` muestra toda la jerarquía de clases a la que pertenece ese objeto, ordenada desde la más específica hasta la más general (de izquierda a derecha), el significado de cada una es:
+
+* `spec_tbl_df` (*Specification Tibble Data Frame*): Indica que el objeto contiene una "especificación" oculta de las columnas. R guarda el registro de qué tipo de dato asignó automáticamente a cada columna.
+
+* `tbl_df` (*Tibble Data Frame*): Es la clase central. Confirma que el objeto es un tibble. 
+
+* `tbl` (*Table*): Es una clase genérica intermedia de la que heredan los tibbles. 
+
+* `data.frame`: Es la estructura de datos base y más antigua de R para tablas. Al estar al final de la lista, significa que el tibble sigue siendo un data frame.
+
+
+Además, se observa que el set de datos **NO** tiene un **Sistema de Referencia de Coordenadas** definido.
+
+# Eliminar y Renombrar columnas
+
+Se seleccionaron las siguientes columnas:
+
+* Latitud (Latitude)
+* Longitud (Longitude)
+* Altimetría (Elevatio (ft))
+* Año (ProcYear)
+* Altura de Plataforma (Record01)
+* Ancho de Plataforma (Width (ft))
+* Humedad (HarvestM (%))
+* Lote (Field)
+* Genotipo (Machine)
+* Distancia (Distance (ft))
+* Rendimiento (DryYield (bu/ac))
+
+
+Para ello se usó la funcion `select()` de `dplyr`.
+
+
+```{r}
+soja11 <- select(soja11, Latitude, Longitude, 'Elevatio (ft)', ProcYear, Record01, 'Width (ft)', 'HarvestM (%)', Field, Machine, 'Distance (ft)', 'DryYield (bu/ac)') 
+```
+
+
+Renombrar las columnas antes seleccionadas:
+```{r}
+colnames(soja11) <- c("Lat", "Lon", "Elev11", "Ano", "Record01", "Width", "HG11", "Lote", "Var11",  "Distance","Rto11")
+```
+
+
+Modificar la columna "Var11" con el genotipo **AX5009**. Se usó la función `mutate()` de la libreria `dplyr`. Sirve para: generar nuevas columnas o para modificar columnas ya existentes.
+
+```{r}
+soja11 <- soja11 %>% 
+  mutate(Var11 = "AX5009") 
+```
+
+# Conversión de medidas inglesas a métricas
+
+Se convirtieron las medidas de las siguientes variables:
+
+* Rendimiento: de Bushels por Acre a Kilogramos por Hectáreas
+* Altimetría: de Pies (ft) a metros (m)
+
+
+Transformar las medidas de Rendimiento a kg ha^-1^:
+```{r}
+soja11 <- soja11 %>% 
+  mutate(Rto11 = Rto11 * 67.25) 
+```
+
+
+Transformar las medidas de la columna Altimetría (Elev11) a metros:
+```{r}
+soja11 <- soja11 %>% 
+  mutate(Elev11 = Elev11 * 0.3048) 
+```
+
+# Graficar datos sin limpiar
+
+Antes de proceder a la limpieza del mapa de rendimiento se visualiza el mapa sin limpiar.
+
+Como se mencionó en @tbl-exploracion, la clase del set de datos inicial se estructuró como tibble. Esta carece de propiedades espaciales. Lo que impide graficarlo mediante `ggplot`.
+
+Para resolver esto, se realizó una transformación hacia la clase `Simple Features (SF)` utilizando el paquete `sf`. 
+
+>Un objeto de clase `sf` es, esencialmente, un `data.frame` que tiene una columna especial llamada `geometry`, la cual almacena la representación espacial (puntos, líneas o polígonos) que corresponde a cada fila.
+
+Adicionalmente, se le asignó el Sistema de Referencia de Coordenadas (CRS) WGS 84 (EPSG:4326)
+
+```{r}
+soja11_sf <- st_as_sf(soja11, coords = c("Lon", "Lat"), crs = 4326)
+```
+
+La visualización del rendimiento de soja se estructuró mediante una discretización en cuantiles (4), para ello, primero se deben crear estos cuantiles:
+
+```{r}
+breaks <- quantile(soja11_sf$Rto11, probs = seq(0, 1, 0.25), na.rm = TRUE) 
+
+soja11_sf <- soja11_sf %>% 
+  mutate( 
+    RTO11_q = cut(Rto11, breaks = breaks, include.lowest = TRUE, labels = paste0(round(breaks[-5],1), "–", round(breaks[-1],1))))
+
+```
+
+Graficar con `ggplot`
+
+```{r fig.width=8, fig.height=6}
+#| code-fold: true
+#| code-summary: "Código"
+
+ggplot(soja11_sf) +
+  geom_sf(aes(color = RTO11_q), size = 1.3, alpha = 1, stroke = 0) +
+  scale_color_brewer(
+    palette = "RdYlGn",
+    direction = 1,
+    name = "Rendimiento (kg/ha)") +
+  labs(
+    title = "Mapa de Rendimiento sin Limpiar",
+    subtitle = "Visualización previa al proceso de limpieza de datos"
+  ) +
+  theme_void() + 
+  theme(
+    text = element_text(family = "sans"), 
+    plot.title = element_text(
+      face = "bold",
+      size = 18,
+      color = "grey10",
+      margin = margin(b = 4, t = 10)
+    ),
+    plot.subtitle = element_text(
+      size = 13,
+      color = "grey40",
+      margin = margin(b = 15)
+    ),
+    legend.position = "bottom",
+    legend.title = element_text(size = 10, face = "bold", color = "grey20"),
+    legend.text = element_text(size = 9, color = "grey30"),
+    legend.key = element_blank(), 
+    plot.margin = margin(15, 15, 15, 15)
+  )
+```
+
+
+# Limpiar datos
+
+## Eliminar de *Inliers*
+
+Se usó la función `filter()` de la libreria `dplyr` (se encuentra dentro de `tidyverse`). 
+
+La función permite utilizar una o más condiciones. De esta forma el resultado obtenido serán aquellas observaciones donde se cumplan las restricciones indicadas. 
+
+* Limpiar datos por Altura de plataforma:
+```{r}
+soja11_sf <- soja11_sf %>% 
+filter(Record01 == "Activ.") 
+```
+
+
+* Limpiar por Ancho de plataforma:
+```{r}
+soja11_sf <- soja11_sf %>% 
+filter(Width > 20) 
+```
+
+
+* Limpiar por Distancia:
+```{r}
+soja11_sf <- soja11_sf %>% 
+filter(Distance > 1.5) 
+```
+
+## Eliminar *Outliers* por Cuantiles
+
+Se considerarán valores atípicos (outliers) aquellos valores que cumplan una de las siguientes condiciones: 
+
+* El valor es menor que el primer cuartil menos 1,5 veces el rango intercuartílico = $q < Q1 – 1,5 * IQR$
+* El valor es mayor que el tercer cuartil más 1,5 veces el rango intercuartílico = $q > Q3 + 1,5 * IQR$ 
+
+Calcular los cuantiles Q1 y Q3:
+```{r}
+Q1 <- quantile(soja11_sf$Rto11, probs = 0.25, na.rm = TRUE)
+Q3 <- quantile(soja11_sf$Rto11, probs = 0.75, na.rm = TRUE)
+```
+
+
+Calcular IQR:
+```{r}
+IQR <- IQR(soja11_sf$Rto11)
+```
+
+
+Calcular los datos a eliminar:
+```{r}
+eliminar1 = Q1 - (1.5 * IQR) 
+eliminar2 = Q3 + (1.5 * IQR) 
+```
+
+
+Eliminar *Outliers*:
+```{r}
+soja11_sf <- soja11_sf %>% 
+filter(Rto11 > eliminar1 & Rto11 < eliminar2) 
+```
+
+# Calcular el IP
+
+El **Índice de Productividad (IP)** es una medida de rendimiento relativo. Se calcula dividiendo el rendimiento de cada punto individual por el rendimiento promedio de todo el lote.
+
+Permite comparar zonas de un lote con otros lotes que tienen potenciales de rendimiento diferentes.
+
+**Interpretación**:
+
+* IP > 1: La unidad rinde por encima del promedio. Un IP de 1.15 significa que rinde un 15% más que la media.
+* IP = 1: La unidad rinde lo mismo que el promedio.
+* IP < 1: La nidad rinde por debajo del promedio. Un IP de 0.85 significa que rinde un 15% menos que la media.
+
+```{r}
+soja11_sf <- soja11_sf %>% 
+mutate(IP = Rto11 / mean(Rto11)) 
+```
+
+# Explorar datos limpios
+
+## Visualizar tabla limpia
+
+```{r}
+#| label: tbl-primeros-registros2
+#| tbl-cap: "Visualización de los primeros diez registros de la base de datos limpia."
+#| code-fold: true
+
+
+primeras_filas_2 <- soja11_sf %>%
+  head(5) 
+
+
+primeras_filas_2 %>%
+  kable(
+    format = "html",
+    align = "c" 
+  ) %>%
+  kable_classic(
+    full_width = TRUE, 
+    font_size = 13
+  ) %>%
+  kable_styling(
+    bootstrap_options = c("striped", "hover", "condensed")
+  ) %>%
+  row_spec(0, bold = TRUE, color = "black", extra_css = "border-bottom: 2px solid black;") %>%
+  row_spec(nrow(primeras_filas_2), extra_css = "border-bottom: 2px solid black;")
+```
+
+```{r}
+#| include: false
+
+filas_limpias <- nrow(soja11_sf)
+rendimiento_medio <- mean(soja11_sf$Rto11, na.rm = TRUE)
+
+```
+
+Rendimiento Medio y Cantidad de Datos luego de la limpieza: 
+
+::: {.premium-metrics-grid}
+
+::: {.premium-metric}
+::: {.metric-name}
+Rendimiento Medio (kg/ha)
+:::
+
+::: {.metric-number .metric-highlight}
+`r round(rendimiento_medio, 0)`
+:::
+:::
+
+::: {.premium-metric}
+::: {.metric-name}
+Cantidad de Filas
+:::
+
+::: {.metric-number .metric-highlight}
+`r filas_limpias`
+:::
+:::
+
+
+:::
+
+# Proyectar a UTM 20S 
+
+Antes ya se transformó la clase del set de datos a `sf` y se le asignó el CRS WGS 84. En este punto se le asigna el CRS UTM 20S (EPSG:32720), usando la función `st_transform()`:
+
+```{r}
+soja11_sf_20S <- st_transform(soja11_sf, crs = 32720)
+```
+
+# Graficar Mapa de Rendimiento Limpio
+
+## Crear cuantiles
+
+```{r}
+breaks <- quantile(soja11_sf_20S$Rto11, probs = seq(0, 1, 0.25), na.rm = TRUE) 
+
+soja11_sf_20S <- soja11_sf_20S %>% 
+  mutate( 
+    RTO11_q = cut(Rto11, breaks = breaks, include.lowest = TRUE, labels = paste0(round(breaks[-5],1), "–", round(breaks[-1],1))))
+```
+
+
+## Graficar
+
+```{r fig.width=8, fig.height=6}
+#| code-fold: true
+#| code-summary: "Código"
+
+ggplot(soja11_sf_20S) +
+  geom_sf(aes(color = RTO11_q), size = 1.3, alpha = 1, stroke = 0) +
+  scale_color_brewer(
+    palette = "RdYlGn",
+    direction = 1,
+    name = "Rendimiento (kg/ha)") +
+  labs(
+    title = "Mapa de Rendimiento Limpio",
+    subtitle = "Visualización post al proceso de limpieza de datos"
+  ) +
+  theme_void() + 
+  theme(
+    text = element_text(family = "sans"), 
+    plot.title = element_text(
+      face = "bold",
+      size = 18,
+      color = "grey10",
+      margin = margin(b = 4, t = 10)
+    ),
+    plot.subtitle = element_text(
+      size = 13,
+      color = "grey40",
+      margin = margin(b = 15)
+    ),
+    legend.position = "bottom",
+    legend.title = element_text(size = 10, face = "bold", color = "grey20"),
+    legend.text = element_text(size = 9, color = "grey30"),
+    legend.key = element_blank(), 
+    plot.margin = margin(15, 15, 15, 15)
+  )
+```
+
+
