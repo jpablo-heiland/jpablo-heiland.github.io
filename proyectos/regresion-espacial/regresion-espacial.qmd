@@ -1,11 +1,1207 @@
 ---
-title: "Análisis de Regresión Espacial"
-subtitle: "Densidad Variable por Zona de Manejo en Maíz: Análisis Espacial, Optimización y Evaluación Económica con R"
+title: "Densidad Variable por Zona de Manejo en Maíz: Análisis Espacial, Optimización y Evaluación Económica con R"
 date: 2026-01
 categories: [R, Agricultura de precisión]
+css: styles3.css
 ---
 
-## En construcción
+# Introducción
 
-Este reporte estará disponible próximamente.
+El objetivo de este documento es evaluar el impacto agronómico y económico de la aplicación de dosis variables de insumos mediante el uso de herramientas de agricultura de precisión y análisis espacial de datos. Se procesa la información proveniente de un ensayo de densidad de siembra en maíz con el fin de determinar recomendaciones óptimas para diferentes ambientes productivos.
 
+El punto de partida es la carga del ensayo y su exploración estructural. A partir de allí, los datos de cosecha se agregan dentro de una cuadrícula de polígonos. Sobre esa cuadrícula se incorpora la capa de Zonas de Manejo, asignando a cada celda la zona a la que pertenece.
+
+Con el dataset consolidado se construyen las variables de contraste (*dummy*) que permiten estimar efectos diferenciados por zona.
+
+Se calcula luego la matriz de vecinos bajo criterio *Queen* y se cuantifica la autocorrelación espacial del rendimiento mediante el Índice de Morán.
+
+Se comparan cuatro modelos: regresión clásica (OLS) y Modelo de Error Espacial (SEM), en versiones con y sin Zonas de Manejo.
+
+De los coeficientes estimados se reconstruyen las tres funciones cuadráticas de respuesta del rendimiento a la densidad: una para el manejo uniforme y una por cada zona (manejo variable). Aplicando la primera derivada de cada función se calculan la **Densidad Óptima Agronómica (DOAS)** y la **Densidad Óptima Económica (DOES)**, incorporando la relación de precios.
+
+Finalmente, se realizan presupuestos parciales que cuantifican, en USD/ha y a escala de lote, el beneficio diferencial de aplicar densidad variable respecto del manejo uniforme.
+
+# Librerías necesarias
+
+```{r}
+library(sf)         
+library(spdep)     
+library(spatialreg) 
+library(tidyverse)
+library(kableExtra)
+library(knitr)
+library(mapview)
+library(RColorBrewer)
+library(leafpop)
+library(leaflet)
+
+options(scipen = 999) 
+```
+
+# Carga y Exploración de Datos
+
+La gestión de las capas geoespaciales se realizó mediante el paquete `Simple Feature (sf)`. El cual utiliza objetos clase `sf`. Un objeto de clase `sf` es, esencialmente, un `data.frame` (estructura de datos más común de R) que tiene una columna especial llamada `geometry`, la cual almacena la representación espacial (puntos, líneas o polígonos) que corresponde a cada fila.
+
+## Cargar datos
+
+Se empleó la función `st_read()` correspondiente al paquete `sf`. La cual permite leer archivos geoespaciales (como Shapefile, GeoPackage, GeoJSON, KML, etc.) y transformarlos en objetos clase `sf`.
+
+```{r message=FALSE, warning=FALSE}
+ensayo <- st_read("data/Ensayo.shp", quiet = TRUE)
+```
+
+## Visualizar datos
+
+Se muestra las primeras 5 filas del ensayo:
+
+```{r}
+#| label: tbl-primeros-registros
+#| tbl-cap: "Visualización de los primeros cinco registros de la base de datos del ensayo."
+#| code-fold: true
+#| code-summary: "Código"
+
+
+primeras_filas <- ensayo %>%
+  head(5) 
+
+
+primeras_filas %>%
+  kable(
+    format = "html",
+    align = "c" 
+  ) %>%
+  kable_classic(
+    full_width = TRUE, 
+    font_size = 13
+  ) %>%
+  kable_styling(
+    bootstrap_options = c("striped", "hover", "condensed")
+  ) %>%
+  row_spec(0, bold = TRUE, color = "black", extra_css = "border-bottom: 2px solid black;") %>%
+  row_spec(nrow(primeras_filas), extra_css = "border-bottom: 2px solid black;")
+```
+
+La @tbl-primeros-registros muestra los campos (X, Y, R y D) los cuales son las coordenadas planares, el rendimiento (kg/ha) y la densidad de siembra (semillas/ha) de un ensayo de densidad de siembra de maíz atravesando zonas de manejo dentro de un lote de producción.
+
+## Propiedades del set de datos
+
+Se generó una tabla resumen que muestra las siguientes propiedades:
+
+-   Clase del objeto
+-   Cantidad de filas
+-   Cantidad de columnas
+-   CRS
+-   Columnas numéricas.
+
+```{r}
+#| label: tbl-exploracion
+#| tbl-cap: "Estructura y Parámetros del set de datos del ensayo."
+#| code-fold: true
+#| code-summary: "Código"
+
+resumen_estructura <- tibble(
+  Métrica = c(
+    "Clase del objeto",
+    "Cantidad de registros (filas)",
+    "Cantidad de variables (columnas)",
+    "Sistema de Referencia Espacial (CRS)",
+    "Columnas numéricas"
+  ),
+  Valor = c(
+    paste(class(ensayo), collapse = ", "),
+    as.character(dim(ensayo)[1]),
+    as.character(dim(ensayo)[2]),
+    if(!is.null(st_crs(ensayo)$epsg)) as.character(st_crs(ensayo)$epsg) else "No definido",
+    paste(colnames(ensayo %>% select(where(is.numeric)))[1:min(4, ncol(ensayo))], collapse = ", ")
+  )
+)
+
+
+resumen_estructura %>%
+  kable(
+    format = "html",
+    col.names = c("Parámetro", "Valor /Propiedad"),
+    align = c("l", "c")
+  ) %>%
+  kable_minimal(
+    full_width = FALSE,
+    font_size = 14
+  ) %>%
+  kable_styling(
+    bootstrap_options = c("striped", "hover", "condensed"),
+    position = "left"
+  ) %>%
+  row_spec(0, bold = TRUE, color = "black", extra_css = "border-bottom: 2px solid black;") %>%
+  row_spec(nrow(resumen_estructura), extra_css = "border-bottom: 2px solid black;")
+```
+
+Como se detalla en la @tbl-exploracion, el set de datos original cuenta con una estructura de objeto *Simple Feature* (`sf`). Se constató que la capa se encuentra proyectada bajo el sistema **EPSG: 32720 (UTM zona 20S)**.
+
+# Crear Cuadrícula
+
+En la cosecha la maquina recolecta datos de campo que están mas cercas en la línea que entre líneas. Esto provoca cierta estructura espacial ficticia de los datos. Para evitar esto se procedió a generar una discretización continua del espacio mediante una cuadrícula regular de polígonos.
+
+Para la construcción de la cuadrícula, se contemplaron dos alternativas metodológicas:
+
+-   Alternativa A: Importación de una cuadrícula preexistente desde un archivo formato shapefile.
+
+-   Alternativa B: Generación de la grilla regular utilizando las funciones geoespaciales del paquete `sf`.
+
+## Alternativa A: Importar Cuadrícula
+
+```{r}
+cuadricula <- st_read("data/Cuadricula_.shp", quiet = TRUE)
+```
+
+Comprobar la clase del objeto
+
+```{r}
+class(cuadricula)
+```
+
+Comprobar el CRS del objeto
+
+```{r}
+st_crs(cuadricula)
+```
+
+## Alternativa B: Generar Cuadricula con sf
+
+Para llevar a cabo esta opción se utilizó la función `st_make_grid()` del paquete `sf`.
+
+El argumento `cellsize` refiere al ancho de cada polígono de la grilla. En este caso la siembra fue con 18 surcos a 52,5 cm de entre surco generando un ancho de 9,45 m, se cosechó el total del ancho, por eso se usó un polígono cuadrado de 9,45 m de lado.
+
+```{r}
+cuadricula_sf <- st_make_grid(
+  ensayo, 
+  cellsize = 9.45, 
+  what = "polygons"
+)
+```
+
+Comprobar la clase de la cuadrícula creada:
+
+```{r}
+class(cuadricula_sf)
+```
+
+La función `st_make_grid()` genera de manera nativa un objeto de clase `sfc` (*Simple Feature Column*). Esta estructura consiste en una lista de geometrías puras que carece de la capacidad de almacenar atributos o variables numéricas asociadas. Es por ello que se convierte en un objeto de clase `sf` con la función `st_sf()`. Adicionalmente, a través de `st_set_crs()` se le asigna el CRS UTM 20S.
+
+```{r}
+cuadricula_sf <- st_sf(geometry = cuadricula_sf) %>%
+  st_set_crs(32720)
+```
+
+# Unir el Ensayo con la Cuadrícula
+
+En primer lugar, se debe tener un identificador único de la cuadrícula.
+
+La cuadrícula cargada como archivo shape tiene el campo `OBS` que funciona como identificador único:
+
+```{r}
+colnames(cuadricula)
+```
+
+En caso de crear la cuadrícula con `sf` se le debe asignar el identificador único (id), mediante la función `mutate()` en combinación con `row_number()`.
+
+```{r}
+cuadricula_sf <- cuadricula_sf %>%
+  mutate(id_poligono = row_number())
+```
+
+Posteriormente, se ejecutó la unión de los datos del ensayo dentro de la estructura de la grilla. Este procedimiento se resolvió en cuatro etapas:
+
+-   (`st_join`): Sirve para unir dos objetos espaciales (`sf`) basándose en su relación espacial. Se realizó una intersección espacial entre los polígonos de la cuadrícula y la capa de puntos del ensayo. Con el argumento (`left = FALSE`) se asegura que solo se conservaran aquellas celdas de la grilla que contuvieran datos reales de campo.
+
+-   (`group_by`): Agrega una estructura de agrupamiento a los datos. En este caso, se agruparon los datos mediante la columna `OBS`.
+
+-   (`summarise`): Esta función permite reducir múltiples filas de un dataset a valores resumidos, mediante la aplicación de funciones de agregación. Se estimó el valor medio de rendimiento y de densidad para cada polígono mediante la función `mean()`.
+
+-   Finalmente, se añadió el campo $D^2$ (densidad al cuadrado), mediante `mutate()`.
+
+```{r}
+ensayo_D_sf <- cuadricula %>%
+  st_join(ensayo, left = FALSE) %>% 
+  group_by(OBS) %>%
+  summarise(
+    R_mean = mean(R, na.rm = TRUE),
+    D_mean = mean(D, na.rm = TRUE),
+    .groups = "drop"
+  ) %>%
+  mutate(
+    D2 = D_mean^2
+  )
+```
+
+Visualizar en un mapa la cuadrícula:
+
+```{r}
+#| code-fold: true
+#| code-summary: "Código"
+
+ensayo_mapview_D <- ensayo_D_sf %>%
+  mutate(
+    Densidad_Target = round(D_mean / 1000, 0),
+    Densidad_Factor = factor(
+      Densidad_Target, 
+      levels = c(50, 70, 90, 110),
+      labels = c("50 mil sem/ha", "70 mil sem/ha", "90 mil sem/ha", "110 mil sem/ha")
+    )
+  ) %>%
+  filter(!is.na(Densidad_Factor))
+
+colores_fijos <- c("#3182bd", "#fec44f", "#31a354", "#8856a7")
+
+m <- mapview(
+  ensayo_mapview_D,
+  zcol = "Densidad_Factor",
+  col.regions = colores_fijos,   
+  layer.name = "Tratamiento Densidad",
+  label = "Densidad_Factor",
+  legend = TRUE,
+  alpha.regions = 0.85,
+  stroke = FALSE,
+  map.types = c("Esri.WorldImagery", "OpenStreetMap"), 
+  popup = popupTable(
+    ensayo_mapview_D, 
+    zcol = c("R_mean", "D_mean"),
+    row.numbers = FALSE, 
+    feature.id = FALSE
+  ))
+
+m@map %>% addMiniMap( 
+  map, 
+  tiles = providers$Esri.WorldImagery, 
+  toggleDisplay = FALSE, 
+  position = "bottomright", 
+  zoomLevelOffset = -5, 
+  zoomLevelFixed = NULL, 
+  width = 150, 
+  height = 150, 
+  minimized = FALSE 
+)
+```
+
+# Zonas de Manejo
+
+Se cargó la capa ZM.shp, la cual contiene las Zonas de Manejo del lote donde se realizó el ensayo
+
+```{r}
+ZM <- st_read("data/ZM.shp", quiet = TRUE)
+```
+
+Transformar los datos de las Zonas de Manejo (ZM) al mismo CRS del ensayo
+
+```{r}
+zm_sf <- st_transform(ZM, st_crs(ensayo_D_sf))
+```
+
+Visualizar las zonas de manejo junto con el ensayo realizado
+
+```{r}
+#| code-fold: true
+#| code-summary: "Código"
+
+mapa_zm <- mapview(
+  zm_sf, 
+  zcol = "Zonas",                     
+  layer.name = "Zonas de Manejo",
+  legend = FALSE,
+  alpha.regions = 0.6,               
+  stroke = TRUE,
+  color = "black",
+  map.types = c("Esri.WorldImagery", "OpenStreetMap"), 
+  popup = popupTable(
+    zm_sf, 
+    zcol = c("Zonas", "Sup"),
+    row.numbers = FALSE, 
+    feature.id = FALSE
+  ))
+
+
+
+(mapa_zm + m)@map %>% 
+  addMiniMap(
+    tiles = providers$Esri.WorldImagery, 
+    toggleDisplay = TRUE,                
+    position = "bottomright", 
+    zoomLevelOffset = -5,                
+    width = 150, 
+    height = 150, 
+    minimized = FALSE
+  )
+```
+
+## Unir Zonas de Manejo al Ensayo
+
+Se realizó una unión espacial para identificar a qué zona de manejo pertenece cada polígono de la cuadrícula del ensayo, es decir, se adicionó la Zona de Manejo a la capa Ensayo_D_sf. Este bloque se estructuró en:
+
+-   Los polígonos correspondientes a cada celda de la cuadrícula (ensayo_D_sf) fueron transformados temporalmente en entidades de puntos mediante el cálculo de sus centroides mediante la función `st_centroid()`.
+
+-   Los centroides generados se intersectaron con la capa vectorial de las Zonas de Manejo (`zm_sf`) mediante una unión espacial (`st_joint()`). Al operar con geometrías de puntos en lugar de polígonos, se fuerza al sistema a establecer una relación unívoca de tipo 1-a-1 (es decir, cada celda matemática es asignada estrictamente a una única zona de manejo). De esta manera, se evita la duplicación de registros en aquellas celdas ubicadas sobre los límites de transición.
+
+-   Se eliminó el componente espacial, es decir, la columna `geometry` del objeto con `st_drop_geometry()`, para que el algoritmo funcione correctamente.
+
+-   Finalmente, se filtraron los datos (`select()`) reteniendo exclusivamente las columnas adecuadas.
+
+```{r}
+celdas_con_zona <- ensayo_D_sf %>%
+  st_centroid() %>%                  
+  st_join(zm_sf, left = TRUE) %>%    
+  st_drop_geometry() %>%             
+  select(OBS, Zonas, Sup) 
+```
+
+Luego se realizó la consolidación de la base de datos final mediante los siguientes pasos:
+
+-   Se integraron las zona de manejo y superficie (`celdas_con_zona`) a la cuadrícula (`ensayo_D_sf`), utilizando como llave primaria el identificador único de celda (`OBS`), mediante `inner_join()`.
+
+-   La columna correspondiente a las zonas de manejo (Zonas) fue transformada a un vector de tipo factor (`as.factor`). Esto le permite a los algoritmos de regresión interpretar la variable como niveles cualitativos discretos en lugar de cadenas de texto ordinarias, posibilitando la estimación diferenciada de interceptos y pendientes (efectos fijos) para cada zona de manejo.
+
+```{r}
+ensayo_D_ZM_sf <- ensayo_D_sf %>%
+  inner_join(celdas_con_zona, by = "OBS") %>% 
+  mutate(
+    Zonas = as.factor(Zonas)
+  )
+```
+
+# Crear Variables "Dummy"
+
+## Preparar Datos
+
+Comprobar las columnas del set de datos `ensayo_D_ZM_sf`
+
+```{r}
+colnames(ensayo_D_ZM_sf)
+```
+
+Seleccionar las columnas adecuadas
+
+```{r}
+ensayo_D_ZM_sf <- ensayo_D_ZM_sf %>%
+  select(ID = OBS, R = R_mean, D = D_mean, D2, Zonas, Sup, geometry)
+```
+
+Por lo que se genera el siguiente set de datos
+
+```{r}
+#| label: tbl-ensayo_D_ZM_sf
+#| tbl-cap: "Visualización de los datos del ensayo unidos a la cuadrícula"
+#| code-fold: true
+#| code-summary: "Código"
+
+
+primeras_filas_2 <- ensayo_D_ZM_sf %>%
+  head(5) 
+
+
+primeras_filas_2 %>%
+  kable(
+    format = "html",
+    align = "c" 
+  ) %>%
+  kable_classic(
+    full_width = TRUE, 
+    font_size = 13
+  ) %>%
+  kable_styling(
+    bootstrap_options = c("striped", "hover", "condensed")
+  ) %>%
+  row_spec(0, bold = TRUE, color = "black", extra_css = "border-bottom: 2px solid black;") %>%
+  row_spec(nrow(primeras_filas_2), extra_css = "border-bottom: 2px solid black;")
+```
+
+## Crear Variables "Dummy"
+
+Se crearon las variables “Dummy” para poder evaluar la significancia estadística de los corrimientos de los parámetros por zona de manejo.
+
+```{r}
+
+ensayo_final_sf <- ensayo_D_ZM_sf %>%
+  mutate(
+    Z2 = case_when(
+      Zonas == 1 ~ -1,
+      Zonas == 2 ~ 1,
+      TRUE ~ 0
+    ),
+    Z2D  = Z2 * D,
+    Z2D2 = Z2 * D2,
+    OBS = row_number()
+  )
+```
+
+Las variables "dummy" se crearon en la columna Z2, que se generan mediante una condición lógica (`case_when()`). Esto analiza la columna Zonas de la celda y le asigna un valor numérico fijo de contraste:
+
+-   Si la celda pertenece a la Zona 1, le da un valor de -1.
+
+-   Si la celda pertenece a la Zona 2, le de un valor de un 1.
+
+-   Si por algún motivo hay un dato raro o un borde sin zona, le pone 0.
+
+Luego se creó Z2D de la siguiente manera $\text{Z2D} = \text{Z2} \times \text{D}$
+
+Por último, se generó Z2D2: $\text{Z2D2} = \text{Z2} \times \text{D2}$
+
+A continuación se observa el dataset con las variables creadas:
+
+```{r}
+#| label: tbl-ensayo_final_sf
+#| tbl-cap: 'Visualización de las variables "dummy"'
+#| code-fold: true
+#| code-summary: "Código"
+
+primeras_filas_3 <- ensayo_final_sf %>%
+  head(5) 
+
+
+primeras_filas_3 %>%
+  kable(
+    format = "html",
+    align = "c" 
+  ) %>%
+  kable_classic(
+    full_width = TRUE, 
+    font_size = 13
+  ) %>%
+  kable_styling(
+    bootstrap_options = c("striped", "hover", "condensed")
+  ) %>%
+  row_spec(0, bold = TRUE, color = "black", extra_css = "border-bottom: 2px solid black;") %>%
+  row_spec(nrow(primeras_filas_3), extra_css = "border-bottom: 2px solid black;")
+```
+
+# Matriz de Vecinos
+
+Para el análisis de regresión espacial debemos, en primer lugar, crear la **matriz de vecinos** según la estructura Queen y luego, convertir esa lista en una **matriz de pesos espaciales (W)**. Esto se realizó a de la siguiente forma:
+
+-   Se utilizó la función `poly2nb()` para crear la matriz de vecinos, la cual identifica las celdas vecinas bajo el criterio de contigüidad tipo Reina (Queen) (`queen = TRUE`).
+
+-   La lista de vecinos se transformó en una matriz de pesos espaciales mediante la función `nb2listw()`. Para ello se aplicó el estilo de ponderación "W". Asimismo, se activó el argumento `zero.policy = TRUE` para prevenir la interrupción de los cálculos en caso de que existan celdas aisladas en los bordes del lote o zonas de descarte.
+
+```{r}
+vecinos_queen <- poly2nb(ensayo_final_sf, queen = TRUE)
+
+matriz_W_final <- nb2listw(vecinos_queen, style = "W", zero.policy = TRUE)
+```
+
+# Indice de Moran
+
+## Calcular y ver el Indice de Moran
+
+```{r}
+test_moran <- moran.test(ensayo_final_sf$R, matriz_W_final, zero.policy = TRUE)
+print(test_moran)
+```
+
+El Índice de Morán oscila teóricamente entre $-1$ (autocorrelación negativa) y $+1$ (autocorrelación positiva), representando el cero la completa aleatoriedad espacial. El valor obtenido de $0.737$ evidencia una fuerte autocorrelación espacial positiva en la distribución del rendimiento. Asimismo, el p-valor asociado ($p < 0.0001$) permite rechazar categóricamente la hipótesis nula de aleatoriedad, confirmando que la estructura espacial en el lote es altamente significativa desde el punto de vista estadístico.
+
+## Graficar el Indice de Moran
+
+Primero se generó el diagrama de dispersión de Morán (*Moran Scatterplot*). La función `moran.plot()` extrae las coordenadas de los puntos y el rezago (lag)
+
+```{r}
+datos_moran <- moran.plot(
+  ensayo_final_sf$R, 
+  matriz_W_final, 
+  zero.policy = TRUE, 
+  plot = FALSE 
+)
+
+```
+
+Convertir a `data.frame` para graficar con ggplot
+
+```{r}
+df_moran <- as.data.frame(datos_moran)
+```
+
+Graficar con `ggplot`
+
+```{r}
+#| code-fold: true
+#| code-summary: "Código"
+
+ggplot(df_moran, aes(x = x, y = wx)) +
+  geom_point(color = "#3182bd", alpha = 0.5, size = 1.5) + 
+  geom_smooth(method = "lm", color = "#de2d26", se = FALSE, size = 1) + 
+  geom_vline(xintercept = mean(df_moran$x), linetype = "dashed", color = "grey50") + 
+  geom_hline(yintercept = mean(df_moran$wx), linetype = "dashed", color = "grey50") + 
+  labs(
+    title = paste("Diagrama de Dispersión de Morán (I =", round(test_moran$estimate[1], 2), ")"),
+    x = "Rendimiento Estandarizado (R)",
+    y = "Rendimiento Rezagado Espacialmente (Spatial Lag - W_R)"
+  ) +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(face = "bold", size = 12),
+    panel.grid.minor = element_blank()
+  )
+```
+
+# Realizar Regresiones Clásicas y Espaciales
+
+Previo al análisis estadístico, se debe reescalar la densidad a "miles de semillas/ha" (dividiendo los valores por 1000). Esta modificación es un requisito técnico para evitar errores en el sistema: Al elevar la densidad original al cuadrado, se generan números muy grandes (doce mil millones). Trabajar en simultáneo con números tan gigantescos y valores tan chicos (como el $0$ o $1$ de las zonas de manejo) hace que el programa de R falle por un problema de desbordamiento numérico. El reescalado achica los números y estabiliza el cálculo.
+
+```{r}
+ensayo_final_sf <- ensayo_final_sf %>%
+  mutate(
+    D_miles = D / 1000, 
+    D2_miles = D_miles^2,
+    Z2D_miles  = Z2 * D_miles,
+    Z2D2_miles = Z2 * D2_miles
+  )
+```
+
+A continuación se realizan las siguientes regresiones:
+
+-   Regresión Clásica sin Zonas de Manejo
+-   Regresión Espacial sin Zonas de Manejo
+-   Regresión Clásica con Zonas de Manejo
+-   Regresión Espacial con Zonas de Manejo
+
+::: {.panel-tabset .tabset-topline}
+## Regresión Clásica sin Zonas de Manejo
+
+```{r}
+modelo_ols_sin <- lm(
+  R ~ D + D2, 
+  data = ensayo_final_sf
+)
+```
+
+## Regresión Espacial sin Zonas de Manejo
+
+```{r}
+modelo_sem_sin <- errorsarlm(
+  R ~ D_miles + D2_miles, 
+  data = ensayo_final_sf, 
+  listw = matriz_W_final, 
+  zero.policy = TRUE
+)
+```
+
+## Regresión Clásica con Zonas de Manejo
+
+```{r}
+modelo_ols_con <- lm(
+  R ~ D + D2 + Z2 + Z2D + Z2D2, 
+  data = ensayo_final_sf
+)
+```
+
+## Regresión Espacial con Zonas de Manejo
+
+```{r}
+modelo_sem_con <- errorsarlm(
+  R ~ D_miles + D2_miles + Z2 + Z2D_miles + Z2D2_miles, 
+  data = ensayo_final_sf, 
+  listw = matriz_W_final, 
+  zero.policy = TRUE
+)
+```
+:::
+
+## Generar una tabla resumen
+
+Generar una tabla resumen con los valores de **Log_Likelihood**, **AIC** y **R2** para cada modelo
+
+```{r}
+pred_sem_sin <- predict(modelo_sem_sin)
+pseudo_r2_sem_sin <- cor(ensayo_final_sf$R, pred_sem_sin)^2
+
+
+pred_sem_con <- predict(modelo_sem_con)
+pseudo_r2_sem_con <- cor(ensayo_final_sf$R, pred_sem_con)^2
+
+
+tabla_comparativa <- tibble(
+  Modelos = c(
+    "OLS Sin Zonas de Manejo",
+    "SEM Sin Zonas de Manejo",
+    "OLS Con Zonas de Manejo",
+    "SEM Con Zonas de Manejo"
+  ),
+  Log_Likelihood = c(
+    as.numeric(logLik(modelo_ols_sin)),
+    as.numeric(logLik(modelo_sem_sin)),
+    as.numeric(logLik(modelo_ols_con)),
+    as.numeric(logLik(modelo_sem_con))
+  ),
+  AIC = c(
+    as.numeric(AIC(modelo_ols_sin)),
+    as.numeric(AIC(modelo_sem_sin)),
+    as.numeric(AIC(modelo_ols_con)),
+    as.numeric(AIC(modelo_sem_con))
+  ),
+  R2 = c(
+    as.numeric(summary(modelo_ols_sin)$r.squared),
+    as.numeric(pseudo_r2_sem_sin),
+    as.numeric(summary(modelo_ols_con)$r.squared),
+    as.numeric(pseudo_r2_sem_con)
+  )
+)
+
+
+tabla_informe <- tabla_comparativa %>%
+  mutate(
+    Log_Likelihood = round(Log_Likelihood, 2),
+    AIC            = round(AIC, 2),
+    R2             = round(R2, 4)
+  )
+```
+
+Visualizar la tabla
+
+```{r}
+#| label: tbl-parametros-significativos
+#| tbl-cap: "Parámetros significativos de los modelos Clásicos y Espaciales con y sin Zonas de Manejo"
+#| code-fold: true
+#| code-summary: "Código"
+
+
+tabla_informe %>%
+  kable(
+    format = "html",
+    align = "c" 
+  ) %>%
+  kable_classic(
+    full_width = TRUE, 
+    font_size = 13
+  ) %>%
+  kable_styling(
+    bootstrap_options = c("striped", "hover", "condensed")
+  ) %>%
+  row_spec(0, bold = TRUE, color = "black", extra_css = "border-bottom: 2px solid black;") %>%
+  row_spec(nrow(tabla_informe), extra_css = "border-bottom: 2px solid black;")
+```
+
+La @tbl-parametros-significativos muestra que el **Modelo de Error Espacial incorporando las Zonas de Manejo (SEM con ZM)** exhibió el menor valor en términos abosluto de Log-Likelihood y el menor valor de AIC. Asimismo, registró el coeficiente de determinación ($R^2$) más elevado. En función de este comportamiento conjunto, se determinó que este modelo presenta el mejor ajuste, siendo el seleccionado para describir el ensayo.
+
+# Extracción de Parámetros
+
+Una vez ajustado el Modelo de Error Espacial (SEM) con y sin zonas de manejo se procedió a extraer los coeficientes estimados ($\beta$) para reconstruir la función cuadrática media del lote.
+
+Los parámetros se extraen a través de la funcion `coef()`. Este vector contiene los valores numéricos correspondientes a cada término de la ecuación ajustada.
+
+## Manejo Uniforme (sin ZM)
+
+Extraer los parámetros estimados ($\beta$)
+
+```{r}
+parametros_sin <- coef(modelo_sem_sin)
+```
+
+Extraer los parámetros $\beta_0$, $\beta_1$ y $\beta_2$
+
+```{r}
+b0_unif <- parametros_sin["(Intercept)"]
+b1_unif <- parametros_sin["D_miles"]
+b2_unif <- parametros_sin["D2_miles"]
+```
+
+## Manejo Variable (con ZM)
+
+Extraer los parámetros estimados ($\beta$) a partir del objeto del Modelo de Error Espacial con zonas de manejo
+
+```{r}
+parametros_con <- coef(modelo_sem_con)
+```
+
+Extraer los parámetros $\beta_0$, $\beta_1$ y $\beta_2$ de la **Zona 1 (Zona Baja Productividad)**
+
+```{r}
+b0_z1 <- parametros_con["(Intercept)"] - parametros_con["Z2"]
+b1_z1 <- parametros_con["D_miles"]     - parametros_con["Z2D_miles"]
+b2_z1 <- parametros_con["D2_miles"]    - parametros_con["Z2D2_miles"]
+```
+
+Extraer los parámetros $\beta_0$, $\beta_1$ y $\beta_2$ de la **Zona 2 (Zona Alta Productividad)**
+
+```{r}
+b0_z2 = parametros_con["(Intercept)"] + parametros_con["Z2"]
+b1_z2 = parametros_con["D_miles"]     + parametros_con["Z2D_miles"]
+b2_z2 = parametros_con["D2_miles"]    + parametros_con["Z2D2_miles"]
+```
+
+## Generar Tabla Resumen
+
+Preparar los datos
+
+```{r}
+resultados_parametros <- tibble(
+  Estrategia = c("Manejo Uniforme (Todo el lote)", "Zona de Manejo BP", "Zona de Manejo BP"),
+  b0 = c(b0_unif, b0_z1, b0_z2),
+  b1 = c(b1_unif, b1_z1, b1_z2),
+  b2 = c(b2_unif, b2_z1, b2_z2)
+)
+
+
+resultados_parametros <- resultados_parametros %>%
+  mutate(
+    b0         = round(b0, 2),
+    b1         = round(b1, 2),
+    b2         = round(b2, 4)
+  )
+```
+
+Visualizar en tabla
+
+```{r}
+#| label: tbl-parametros-estimados
+#| tbl-cap: "Parámetros estimados de los distintos modelos"
+#| code-fold: true
+#| code-summary: "Código"
+
+resultados_parametros %>%
+  kable(
+    format = "html",
+    align = "c" 
+  ) %>%
+  kable_classic(
+    full_width = TRUE, 
+    font_size = 13
+  ) %>%
+  kable_styling(
+    bootstrap_options = c("striped", "hover", "condensed")
+  ) %>%
+  row_spec(0, bold = TRUE, color = "black", extra_css = "border-bottom: 2px solid black;") %>%
+  row_spec(nrow(resultados_parametros), extra_css = "border-bottom: 2px solid black;")
+```
+
+# Reconstrucción de las Funciones Cuadráticas
+
+Una vez desagregados los coeficientes del modelo de regresión espacial seleccionado para el manejo uniforme y variable (Zona 1 y Zona 2), se procedió a ensamblar las ecuaciones polinómicas de segundo grado
+
+Recuperar Ecuaciones
+
+```{r}
+eq_uniforme <- paste0("$$Y = ", round(b0_unif, 2), " + ", round(b1_unif, 4), " \\cdot D - ", abs(round(b2_unif, 5)), " \\cdot D^2$$")
+eq_zona1    <- paste0("$$Y = ", round(b0_z1, 2), " + ", round(b1_z1, 4), " \\cdot D - ", abs(round(b2_z1, 5)), " \\cdot D^2$$")
+eq_zona2    <- paste0("$$Y = ", round(b0_z2, 2), " + ", round(b1_z2, 4), " \\cdot D - ", abs(round(b2_z2, 5)), " \\cdot D^2$$")
+```
+
+Mostrar en una Tabla
+
+```{r}
+#| label: tbl-ecuaciones
+#| tbl-cap: "Ecuaciones estimadas de las distintas estrategias"
+#| code-fold: true
+#| code-summary: "Código"
+
+
+tabla_eq <- data.frame(
+  Estrategia = c("Manejo Uniforme", "Manejo Variable - Zona 1 (BP)", "Manejo Variable - Zona 2 (AP)"),
+  Ecuación = c(eq_uniforme, eq_zona1, eq_zona2)
+)
+
+tabla_eq %>%
+  kable(
+    format = "html",
+    col.names = c("Estrategia", "Ecuación"),
+    align = c("l", "c")
+  ) %>%
+  kable_minimal(
+    full_width = FALSE,
+    font_size = 14
+  ) %>%
+  kable_styling(
+    bootstrap_options = c("striped", "hover", "condensed"),
+    position = "left"
+  ) %>%
+  row_spec(0, bold = TRUE, color = "black", extra_css = "border-bottom: 2px solid black;") %>%
+  row_spec(nrow(tabla_eq), extra_css = "border-bottom: 2px solid black;")
+```
+
+# Rendimiento vs. Densidad
+
+Con las ecuaciones cuadráticas de respuesta se procedió a simular el comportamiento del rendimiento frente a diferentes densidades de siembra. Este proceso permite proyectar las curvas de respuesta del rendimiento al incremento de la densidad.
+
+Definir las densidades a evaluar
+
+```{r}
+densidades_simuladas <- c(50, 60, 70, 80, 90, 100, 110)
+```
+
+Crear el cuadro calculando el rendimiento (kg/ha) para cada densidad
+
+```{r}
+cuadro_simulacion <- tibble(
+  Densidad_Miles = densidades_simuladas,
+  Manejo_Uniforme = b0_unif + (b1_unif * Densidad_Miles) + (b2_unif * Densidad_Miles^2),
+  Zona_BP = b0_z1 + (b1_z1 * Densidad_Miles) + (b2_z1 * Densidad_Miles^2),
+  Zona_AP = b0_z2 + (b1_z2 * Densidad_Miles) + (b2_z2 * Densidad_Miles^2)
+)
+```
+
+Visualizar en una tabla
+
+```{r}
+#| label: tbl-rendimientovsds
+#| tbl-cap: "Rendimiento (kg/ha) para diferentes densidades"
+#| code-fold: true
+#| code-summary: "Código"
+
+cuadro_simulacion %>%
+  kable(
+    format = "html",
+    align = "c" 
+  ) %>%
+  kable_classic(
+    full_width = TRUE, 
+    font_size = 13
+  ) %>%
+  kable_styling(
+    bootstrap_options = c("striped", "hover", "condensed")
+  ) %>%
+  row_spec(0, bold = TRUE, color = "black", extra_css = "border-bottom: 2px solid black;") %>%
+  row_spec(nrow(cuadro_simulacion), extra_css = "border-bottom: 2px solid black;")
+```
+
+Graficar con `ggplot`:
+
+```{r}
+#| code-fold: true
+#| code-summary: "Código"
+
+curvas_suaves <- tibble(D_miles = seq(45, 115, by = 0.5)) %>%
+  mutate(
+    Uniforme = b0_unif + (b1_unif * D_miles) + (b2_unif * D_miles^2),
+    Zona_BP   = b0_z1 + (b1_z1 * D_miles) + (b2_z1 * D_miles^2),
+    Zona_AP   = b0_z2 + (b1_z2 * D_miles) + (b2_z2 * D_miles^2)
+  ) %>%
+  pivot_longer(cols = c(Uniforme, Zona_BP, Zona_AP), 
+               names_to = "Estrategia", 
+               values_to = "Rendimiento") %>%
+  mutate(Densidad_pl_ha = D_miles * 1000)
+
+
+grafico_curvas <- ggplot(curvas_suaves, aes(x = Densidad_pl_ha, y = Rendimiento, color = Estrategia)) +
+  geom_line(linewidth = 1.2) +
+  scale_color_manual(values = c("Uniforme" = "dimgray", "Zona_BP" = "firebrick3", "Zona_AP" = "forestgreen")) +
+  scale_x_continuous(labels = scales::label_comma(big.mark = "."), 
+                     breaks = seq(50000, 110000, by = 10000)) +
+  scale_y_continuous(
+    labels = scales::label_comma(big.mark = "."),
+    limits = c(0, NA)    
+  ) +
+  labs(
+    title    = "Curvas de Respuesta del Rendimiento de Maíz a la Densidad",
+    x        = "Densidad de Siembra (plantas / ha)",
+    y        = "Rendimiento Estimado (kg / ha)",
+    color    = "Ambiente / Estrategia"
+  ) +
+  theme_minimal() +
+  theme(
+    plot.title    = element_text(face = "bold", size = 14),
+    axis.title    = element_text(face = "bold"),
+    legend.position = "bottom",
+    panel.grid.minor = element_blank()
+  )
+
+
+grafico_curvas
+```
+
+# Cálculo DOAS y DOES
+
+A partir de las funciones cuadráticas estimadas para cada manejo y zona de manejo, se calcularon dos tipos de densidades óptimas mediante la aplicación de derivadas:
+
+-   **Densidad Óptima Agronómica (DOAS)**: Representa la cantidad de plantas necesaria para alcanzar el máximo rendimiento absoluto, sin considerar costos. Matemáticamente, se obtiene igualando la primera derivada de la función a cero ($dY/dD = 0$), lo que resulta en la fórmula:
+
+$$\text{DOAS} = \frac{-b_1}{2 \cdot b_2}$$
+
+-   **Densidad Óptima Económica (DOES)**: Representa la densidad que maximiza el retorno económico. Se calcula igualando la primera derivada a la relación de precios ($dY/dD = R_p$), despejándose como:
+
+$$\text{DOES} = \frac{R_p - b_1}{2 \cdot b_2}$$
+
+## Relación de Precios
+
+Definir la relación de precios. El precio de maíz fue de 100 USD/tn (0.1 USD/kg), mientras que, el precio de la semilla fue de 180 USD/bolsa (0.0023 USD/semilla)
+
+```{r}
+relacion_precios <-  2.3 / 0.1
+```
+
+Recordar que para realizar las regresiones se reescaló la densidad a miles de semillas/ha (dividiendo los valores por 1000). Al hacer esto el coeficiente lineal del modelo ($\beta_1$) deja de representar el ingreso por una sola semilla y pasa a representar el valor generado por cada bloque de 1.000 semillas extras. Se procedió a ajustar la escala del precio de la semilla a la misma unidad de medida del modelo (USD por cada 1.000 semillas). Así, el costo del insumo se fijó en $2,3 \text{ USD/mil de semillas}$ ($0,0023 \times 1.000$), estableciendo una relación de precios final de $23$ ($2,3 \text{ USD/mil} / 0,1 \text{ USD/kg}$).
+
+## Manejo Uniforme (Modelo SEM SIN Zonas)
+
+```{r}
+doas_unif_miles <- -b1_unif / (2 * b2_unif)
+does_unif_miles <- (relacion_precios - b1_unif) / (2 * b2_unif)
+
+```
+
+## Manejo Variable (Modelo SEM CON Zonas)
+
+Zona 1 (BP)
+
+```{r}
+doas_z1_miles <- -b1_z1 / (2 * b2_z1)
+does_z1_miles <- (relacion_precios - b1_z1) / (2 * b2_z1)
+```
+
+Zona 2 (AP)
+
+```{r}
+doas_z2_miles <- -b1_z2 / (2 * b2_z2)
+does_z2_miles <- (relacion_precios - b1_z2) / (2 * b2_z2)
+```
+
+## Visualizar en una tabla los Resultados
+
+Calcular el Rendimiento para la DOES del Manejo Uniforme y Variable
+
+```{r}
+r_does_unif <- b0_unif + (b1_unif * does_unif_miles) + (b2_unif * does_unif_miles^2)
+
+r_does_z1   <- b0_z1 + (b1_z1 * does_z1_miles) + (b2_z1 * does_z1_miles^2)
+
+r_does_z2   <- b0_z2 + (b1_z2 * does_z2_miles) + (b2_z2 * does_z2_miles^2)
+```
+
+Preparar datos
+
+```{r}
+resultados_do <- tibble(
+  Estrategia   = c("Manejo Uniforme", "Zona de Manejo BP (Z1)", "Zona de Manejo AP (Z2)"),
+  DOAS_pl_ha   = c(doas_unif_miles, doas_z1_miles, doas_z2_miles) * 1000,
+  DOES_pl_ha   = c(does_unif_miles, does_z1_miles, does_z2_miles) * 1000,
+  R_DOES_t_ha  = c(r_does_unif, r_does_z1, r_does_z2)
+)
+
+resultados_do <- resultados_do %>%
+  mutate(
+    DOAS_pl_ha  = round(DOAS_pl_ha, 0),
+    DOES_pl_ha  = round(DOES_pl_ha, 0),
+    R_DOES_t_ha = round(R_DOES_t_ha, 2)
+  )
+```
+
+Visualizar en Tabla
+
+```{r}
+#| label: tbl-doas-does-rto
+#| tbl-cap: "DOAS, DOES y Rendimiento (DOES) para cada estrategia"
+#| code-fold: true
+#| code-summary: "Código"
+
+resultados_do %>%
+  kable(
+    format = "html",
+    align = "c",
+    col.names = c(
+      "Estrategia / Ambiente", 
+      "DOAS (pl/ha)", 
+      "DOES (pl/ha)", 
+      "Rendimiento (DOES)"
+    )
+  ) %>%
+  kable_classic(
+    full_width = TRUE, 
+    font_size = 13
+  ) %>%
+  kable_styling(
+    bootstrap_options = c("striped", "hover", "condensed")
+  ) %>%
+  row_spec(0, bold = TRUE, color = "black", extra_css = "border-bottom: 2px solid black;") %>%
+  row_spec(nrow(resultados_do), extra_css = "border-bottom: 2px solid black;")
+```
+
+# Análisis Económico
+
+Teniendo en cuenta que las zonas de manejo representan:
+
+-   AP: 18,54 ha (60%)
+-   BP: 12,36 ha (40%)
+
+Se determina la conveniencia de hacer siembra variable por zona de manejo en este lote.
+
+## Determinar Precios
+
+```{r}
+precio_semilla_ind <- 0.0023  
+precio_kg_maiz     <- 0.1     
+```
+
+## Determinar Superficies
+
+```{r}
+sup_z2 <- 18.5
+sup_z1 <- 12.4
+sup_total <- sup_z1 + sup_z2
+```
+
+## Construcción de tabla para Manejo Variable
+
+Preparar datos
+
+```{r}
+tabla_economica <- tibble(
+  Zona = c("Zona 1 (Bajo Potencial)", "Zona 2 (Alto Potencial)", "Total / Promedio Ponderado"),
+  `Superficie (ha)` = c(sup_z1, sup_z2, sup_total),
+  `Superficie (%)`  = c((sup_z1 / sup_total) * 100, (sup_z2 / sup_total) * 100, 100),
+  
+  `Costos Directos (USD/ha)` = c(
+    does_z1_miles * 1000 * precio_semilla_ind, 
+    does_z2_miles * 1000 * precio_semilla_ind, 
+    NA
+  ),
+  `Ingreso Bruto (USD/ha)` = c(
+    r_does_z1 * precio_kg_maiz, 
+    r_does_z2 * precio_kg_maiz, 
+    NA
+  ),
+  `Margen Bruto (USD/ha)` = `Ingreso Bruto (USD/ha)` - `Costos Directos (USD/ha)`
+)
+
+
+mb_pond_z1 <- tabla_economica$`Margen Bruto (USD/ha)`[1] * (tabla_economica$`Superficie (%)`[1] / 100)
+mb_pond_z2 <- tabla_economica$`Margen Bruto (USD/ha)`[2] * (tabla_economica$`Superficie (%)`[2] / 100)
+mb_pond_total <- mb_pond_z1 + mb_pond_z2
+
+tabla_economica <- tabla_economica %>%
+  mutate(
+    `Margen Bruto Ponderado (USD/ha)` = c(mb_pond_z1, mb_pond_z2, mb_pond_total)
+  )
+```
+
+Visualizar Tabla
+
+```{r}
+#| label: tbl-manejo-variable
+#| tbl-cap: "Análisis Económico para el Manejo Variable"
+#| code-fold: true
+#| code-summary: "Código"
+
+
+tabla_economica %>%
+  kable(
+    format = "html",
+    align = "c",
+    digits = 2, 
+    col.names = c(
+      "Ambiente / Zona", "Superficie (ha)", "Superficie (%)", 
+      "Costos Directos (USD/ha)", "Ingreso Bruto (USD/ha)", 
+      "Margen Bruto (USD/ha)", "Margen Bruto Pond. (USD/ha)"
+    )
+  ) %>%
+  kable_classic(
+    full_width = TRUE, 
+    font_size = 13
+  ) %>%
+  kable_styling(
+    bootstrap_options = c("striped", "hover", "condensed")
+  ) %>%
+  row_spec(0, bold = TRUE, color = "black", extra_css = "border-bottom: 2px solid black;") %>%
+  row_spec(2, extra_css = "border-bottom: 1px dashed gray;") %>% 
+  row_spec(3, bold = TRUE, background = "#f9f9f9", extra_css = "border-bottom: 2px solid black;")
+```
+
+## Construcción de Tabla para Manejo Uniforme
+
+Calcular los Rendimientos
+
+```{r}
+rend_ap_unif <- b0_z2 + (b1_z2 * does_unif_miles) + (b2_z2 * does_unif_miles^2)
+rend_bp_unif <- b0_z1 + (b1_z1 * does_unif_miles) + (b2_z1 * does_unif_miles^2)
+```
+
+Calcular Costos e Ingresos:
+
+```{r}
+costo_unif_ha   <- does_unif_miles * 1000 * precio_semilla_ind
+```
+
+Ingreso Bruto Ponderado por hectárea
+
+```{r}
+ingreso_unif_ha <- (rend_ap_unif * precio_kg_maiz * (sup_z2 / sup_total)) + 
+  (rend_bp_unif * precio_kg_maiz * (sup_z1 / sup_total))
+
+margen_unif_ha  <- ingreso_unif_ha - costo_unif_ha
+```
+
+Craer la tabla
+
+```{r}
+tabla_economica_2 <- tibble(
+  Zona = "Manejo Uniforme",
+  `Superficie (ha)` = sup_total,
+  `Superficie (%)`  = 100, 
+  
+  `Costos Directos (USD/ha)` = costo_unif_ha,
+  `Ingreso Bruto (USD/ha)`   = ingreso_unif_ha,
+  `Margen Bruto (USD/ha)`    = margen_unif_ha
+)
+```
+
+Visualizar tabla
+
+```{r}
+#| label: tbl-manejo-uniforme
+#| tbl-cap: "Análisis Económico para el Manejo Uniforme"
+#| code-fold: true
+#| code-summary: "Código"
+
+
+tabla_economica_2 %>%
+  kable(
+    format = "html",
+    align = "c",
+    digits = 2
+  ) %>%
+  kable_classic(
+    full_width = TRUE, 
+    font_size = 13
+  ) %>%
+  kable_styling(
+    bootstrap_options = c("striped", "hover", "condensed")
+  ) %>%
+  row_spec(0, bold = TRUE, color = "black", extra_css = "border-bottom: 2px solid black;") %>%
+  row_spec(nrow(tabla_economica_2), extra_css = "border-bottom: 2px solid black;")
+```
+
+:::::::::::::::: vr-hero-wrapper
+::: vr-eyebrow
+Análisis Económico
+:::
+
+:::::::::::::: vr-hero-row
+::::: vr-hero-main
+::: vr-hero-value
+\+`r round(tabla_economica$"Margen Bruto Ponderado (USD/ha)"[3] - tabla_economica_2$"Margen Bruto (USD/ha)"[1], 2)` [USD]{.vr-currency}[/ha]{.vr-unit}
+:::
+
+::: vr-hero-label
+Ganancia del manejo variable sobre el manejo uniforme
+:::
+:::::
+
+::: vr-divider
+:::
+
+::::::::: vr-breakdown
+::::: vr-breakdown-row
+::: vr-breakdown-label
+MB — Manejo Uniforme
+:::
+
+::: {.vr-breakdown-value .is-positive}
+`r round(tabla_economica_2$"Margen Bruto (USD/ha)"[1], 2)` USD/ha
+:::
+:::::
+
+::::: vr-breakdown-row
+::: vr-breakdown-label
+MB — Manejo Variable
+:::
+
+::: vr-breakdown-value
+`r round(tabla_economica$"Margen Bruto Ponderado (USD/ha)"[3], 2)` USD/ha
+:::
+:::::
+:::::::::
+::::::::::::::
+::::::::::::::::

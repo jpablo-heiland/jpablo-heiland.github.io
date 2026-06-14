@@ -1,10 +1,2022 @@
 ---
 title: "Proceso de Zonificacion con R"
-subtitle: "Flujo de trabajo de Zonificacion"
-date: 2026-01
-categories: [R, Agricultura de precisión]
+date: 2026-06
+categories: [R, Agricultura de precisión, Zonificación]
+css: styles3.css
 ---
 
-## En construcción
+# Introducción
 
-Este reporte estará disponible próximamente.
+El presente informe detalla el proceso de **Zonificación** de un lote de producción mediante el análisis de 3 Mapas de Rinde de soja, una imagen NDVI del cultivo de soja y la Altimetría del lote.
+
+El **Rendimiento** es considerado una variable síntesis; es decir, el resultado final donde convergen miles de factores que interactúan entre sí. Si bien por sí solo no explica las causas de la variabilidad, constituye a menudo la fuente de información más accesible y completa para entender qué sucedió en el lote.
+
+El flujo de trabajo propuesto se dividió en:
+
+**I. Carga de Datos**: Se cargan los datos de rendimiento 2009, 2011, 2013 y el NDVI. Los datos de Altimetría se hayan dentro del mapa de rendimiento 2011.
+
+**II. Creación de Grilla**: En la cosecha la maquina recolecta datos de campo que están mas cercas en la línea que entre líneas. Esto provoca cierta estructura espacial ficticia de los datos. Para evitar esto se procedió a generar una discretización continua del espacio mediante una cuadrícula regular de polígonos. En esta se unieron los datos de Rendimiento, Altimetría y NDVI.
+
+**III. Cálculo Indice de Productividad**: Para que los datos de diferentes campañas fueran comparables entre sí, los valores absolutos de rendimiento se transformaron en un Índice de Productividad (IP).
+
+**IV. Selección de Variables mediante Análisis de Regresión**: Se realizó un análisis de Regresión Lineal para evaluar la capacidad de las variables de explicar la variabilidad observada en el IP. Este paso es fundamental para asegurar que las variables seleccionadas para el PCA y el posterior Fuzzy k-means posean una relevancia comprobada.
+
+**V. Análisis de Componentes Principales Espaciales (MULTISPATI-PCA)**: Esta técnica permite reducir la dimensionalidad de un conjunto de datos, extrayendo "componentes" que explican la mayor parte de la variabilidad total. A diferencia del PCA clásico, el MULTISPATI-PCA incorpora la autocorrelación espacial mediante el Índice de Moran, asegurando que los datos sean analizados considerando la influencia de sus vecinos directos.
+
+**VI. Clasificación Multivariada (Fuzzy K-Means clustering)**: Una vez procesados los componentes principales, se aplica este algoritmo de agrupamiento "difuso". A diferencia de los métodos deterministas, el sistema Fuzzy permite que los puntos tengan grados de pertenencia a diferentes zonas, lo que resulta ideal para la agricultura donde las transiciones en el suelo no son líneas tajantes sino gradientes.
+
+**VII. Creación de zonas de manejo**: A partir de los resultados de Fuzzy K-Means cada zona de manejo se representó en polígonos.
+
+# Librerías Necesarias
+
+```{r}
+
+library(tidyverse)  
+library(gstat)
+library(sp)
+library(sf)
+library(e1071)
+library(spdep)
+library(caret)
+library(geoR)
+library(nlme)
+library(ade4)
+library(adespatial)
+library(knitr)
+library(kableExtra)
+library(patchwork)
+library(adegraphics)
+library(terra)
+library(mapview)
+library(leaflet)
+library(leafpop)
+library(RColorBrewer) 
+library(ggspatial)
+```
+
+```{r echo=FALSE}
+options(scipen = 999) 
+```
+
+# Carga de Datos
+
+La lectura de datos se realizó por medio de la función `st_read()` del paquete `sf`. Esta función lee archivos geoespaciales (Shapefile, GeoPackage, GeoJSON, KML, etc.) y los convierte en objetos `Simple Feature (sf)`.
+
+Un objeto de clase `sf` es, esencialmente, un `data.frame` que tiene una columna especial llamada `geometry`, la cual almacena la representación espacial (puntos, líneas o polígonos) que corresponde a cada fila.
+
+En el siguiente panel se cargan las distintas capas de información. En la capa de NDVI también se le asigna el Sistema de Referencia de Coordenadas UTM 20S.
+
+::: {.panel-tabset .tabset-topline}
+## Soja 2009
+
+```{r}
+soja2009 <- st_read("data/Sj2009.shp", quiet = TRUE) 
+```
+
+Visualizamos las primeras 5 filas de Soja 2009:
+
+```{r}
+#| label: tbl-primeros-registros_1
+#| tbl-cap: "Visualización de los primeros cinco registros del set de datos Soja 2009."
+#| code-fold: true
+
+primeras_filas <- soja2009 %>%
+  head(5) 
+
+
+primeras_filas %>%
+  kable(
+    format = "html",
+    align = "c" 
+  ) %>%
+  kable_classic(
+    full_width = TRUE, 
+    font_size = 13
+  ) %>%
+  kable_styling(
+    bootstrap_options = c("striped", "hover", "condensed")
+  ) %>%
+  row_spec(0, bold = TRUE, color = "black", extra_css = "border-bottom: 2px solid black;") %>%
+  row_spec(nrow(primeras_filas), extra_css = "border-bottom: 2px solid black;")
+```
+
+## Soja 2011
+
+```{r}
+soja2011 <- st_read("data/Soja2011_20S.shp", quiet = TRUE)
+```
+
+Visualizamos las primeras 5 filas de Soja 2011:
+
+```{r}
+#| label: tbl-primeros-registros_2
+#| tbl-cap: "Visualización de los primeros cinco registros del set de datos Soja 2011."
+#| code-fold: true
+#| code-summary: "Código"
+
+primeras_filas_2 <- soja2011 %>%
+  head(5) 
+
+
+primeras_filas_2 %>%
+  kable(
+    format = "html",
+    align = "c" 
+  ) %>%
+  kable_classic(
+    full_width = TRUE, 
+    font_size = 13
+  ) %>%
+  kable_styling(
+    bootstrap_options = c("striped", "hover", "condensed")
+  ) %>%
+  row_spec(0, bold = TRUE, color = "black", extra_css = "border-bottom: 2px solid black;") %>%
+  row_spec(nrow(primeras_filas_2), extra_css = "border-bottom: 2px solid black;")
+
+```
+
+## Soja 2013
+
+```{r}
+soja2013 <- st_read("data/Sj2013.shp", quiet = TRUE)
+```
+
+Visualizamos las primeras 5 filas de Soja 2013:
+
+```{r}
+#| label: tbl-primeros-registros_3
+#| tbl-cap: "Visualización de los primeros cinco registros del set de datos Soja 2013."
+#| code-fold: true
+#| code-summary: "Código"
+
+primeras_filas_3 <- soja2013 %>%
+  head(5) 
+
+
+primeras_filas_3 %>%
+  kable(
+    format = "html",
+    align = "c" 
+  ) %>%
+  kable_classic(
+    full_width = TRUE, 
+    font_size = 13
+  ) %>%
+  kable_styling(
+    bootstrap_options = c("striped", "hover", "condensed")
+  ) %>%
+  row_spec(0, bold = TRUE, color = "black", extra_css = "border-bottom: 2px solid black;") %>%
+  row_spec(nrow(primeras_filas_3), extra_css = "border-bottom: 2px solid black;")
+
+```
+
+## NDVI
+
+```{r}
+NDVI <- st_read("data/NDVI_25.shp", quiet = TRUE)
+```
+
+Comprobar su CRS
+
+```{r}
+st_crs(NDVI)
+```
+
+Asignar el CRS UTM 20 S:
+
+```{r}
+NDVI <- st_transform(NDVI, crs = 32720)
+```
+
+Visualizamos las primeras 5 filas de NDVI:
+
+```{r}
+#| label: tbl-primeros-registros_4
+#| tbl-cap: "Visualización de los primeros cinco registros del NDVI."
+#| code-fold: true
+#| code-summary: "Código"
+
+primeras_filas_4 <- NDVI %>%
+  head(5) 
+
+
+primeras_filas_4 %>%
+  kable(
+    format = "html",
+    align = "c" 
+  ) %>%
+  kable_classic(
+    full_width = TRUE, 
+    font_size = 13
+  ) %>%
+  kable_styling(
+    bootstrap_options = c("striped", "hover", "condensed")
+  ) %>%
+  row_spec(0, bold = TRUE, color = "black", extra_css = "border-bottom: 2px solid black;") %>%
+  row_spec(nrow(primeras_filas_4), extra_css = "border-bottom: 2px solid black;")
+
+```
+:::
+
+# Cuadrícula
+
+En este punto se procedió a la creación de la Cuadrícula. Posteriormente se unieron a ella los datos de Rendimiento 2009, 2011, 2013, Altimetría y Elevación.
+
+## Cargar la capa del Lote
+
+```{r}
+lote <- st_read("data/Lote14.shp", quiet = TRUE)
+```
+
+## Crear grilla
+
+Se usó la función `st_make_grid()` de `sf` para crear la grilla. Por medio del parámetro `cellsize` se determina que cada polígono de la grilla tiene una dimensión de 10 x 10 m.
+
+```{r}
+grilla <- st_make_grid(lote, cellsize = c(10, 10), what = "polygons", square = TRUE)
+```
+
+## Convertir la grilla a objeto Simple Feature (sf)
+
+```{r}
+grilla_sf <- st_as_sf(grilla) 
+```
+
+> Al convertir la grilla a `sf` cada fila queda vinculada permanentemente a un polígono geométrico que representa una celda en el lote. El paquete `sf` es el estándar para el manejo de datos vectoriales. Al tener los datos en este formato se puede hacer la Unión Espacial de los 3 mapas de rindes a la cuadrícula.
+
+## Crear un ID a la grilla
+
+```{r}
+grilla_sf <- grilla_sf %>% mutate(id_celda = row_number()) 
+```
+
+## Unir Rendimientos a la Grilla
+
+Para integrar la información de los 3 Mapas de Rendimiento, Altimetría y NDVI a la Grilla, se aplicó el siguiente flujo:
+
+-   Se realizó una unión espacial por medio de la función `st_join()` con el predicado `st_intersects` para identificar qué puntos de rendimiento caen dentro de cada celda de la grilla.
+
+-   Dado que una sola celda de la grilla suele contener múltiples puntos registrados, se procedió a agrupar los datos en función del `id_celda`, mediante `group_by`.
+
+-   Finalmente, se calculó el valor medio de rendimiento para cada unidad de la Grilla (`RTO_09 = mean`).
+
+Los datos de Altimetría proceden del set de datos de Soja 2011, tal como se observa en la @tbl-primeros-registros_2 (Elev11).
+
+A continuación se unen los diferentes datos a la grilla:
+
+::: {.panel-tabset .tabset-topline}
+## Unir Rendimiento 2009
+
+```{r}
+grilla_09 <- st_join( 
+x = grilla_sf, 
+y = soja2009 %>% dplyr::select(Rto09), 
+  join = st_intersects 
+)
+
+grilla_09 <- grilla_09 %>% 
+  group_by(id_celda) %>%          
+  summarise( 
+    n_puntos = n(),               
+    RTO_09 = mean(Rto09, na.rm = TRUE)  
+  )
+```
+
+## Unir Rendimiento 2011 y Altimetría
+
+```{r}
+grilla_11 <- st_join( 
+  x = grilla_sf,
+  y = soja2011 %>% dplyr::select(RTO11, Elev11), 
+  join = st_intersects 
+) 
+
+grilla_11 <- grilla_11 %>% 
+  group_by(id_celda) %>%        
+  summarise( 
+    n_puntos = n(),              
+    RTO_11   = mean(RTO11, na.rm = TRUE),
+    ELEV_11  = mean(Elev11, na.rm = TRUE)
+  ) 
+```
+
+## Unir Rendimiento 2013
+
+```{r}
+grilla_13 <- st_join( 
+  x = grilla_sf, 
+  y = soja2013 %>% dplyr::select(Rto13), 
+  join = st_intersects 
+) 
+ 
+grilla_13 <- grilla_13 %>% 
+  group_by(id_celda) %>%           
+  summarise( 
+    n_puntos = n(),                
+    RTO_13 = mean(Rto13, na.rm = TRUE)  
+  ) 
+```
+
+## Unir NDVI
+
+```{r}
+grilla_NDVI <- st_join( 
+  x = grilla_sf, 
+  y = NDVI %>% dplyr::select(NDVI25), 
+  join = st_intersects 
+) 
+
+grilla_NDVI <- grilla_NDVI %>% 
+  group_by(id_celda) %>%           
+  summarise( 
+    n_puntos = n(),                
+    NDVI25 = mean(NDVI25, na.rm = TRUE)  
+  ) 
+```
+:::
+
+## Unir las 4 grillas
+
+Se unieron las capas de información en un único set de datos (`grilla_rto`). El procedimiento se realizó mediante uniones relacionales por la izquierda (`left_join`) tomando como base la `grilla_09`. Con el propósito evitar conflictos de redundancia, se removió la columna `geometry` de las capas secundarias (grilla_11, grilla_13 y grilla_NDVI) mediante la función `st_drop_geometry()`, logrando así la unión de todos los datos a través del identificador común (`id_celda`).
+
+```{r}
+grilla_rto <- grilla_09 %>% 
+  left_join(st_drop_geometry(grilla_11), by = "id_celda") %>% 
+  left_join(st_drop_geometry(grilla_13), by = "id_celda") %>%
+  left_join(st_drop_geometry(grilla_NDVI), by = "id_celda")
+```
+
+Eliminar los polígonos de la grilla con valores `NA`, que complican los resultados posteriores:
+
+```{r}
+grilla_rto <- grilla_rto %>% 
+  filter( 
+    !is.na(RTO_13), 
+    !is.na(RTO_11), 
+    !is.na(RTO_09),
+    !is.na(NDVI25)
+    ) 
+```
+
+# IP {#sec-ip}
+
+El **Índice de Productividad (IP)** es una medida de rendimiento relativo. Se calcula dividiendo el rendimiento de cada punto individual por el rendimiento promedio de todo el lote.
+
+Permite comparar zonas de un lote con otros lotes que tienen potenciales de rendimiento diferentes.
+
+Interpretación:
+
+-   IP \> 1: La unidad rinde por encima del promedio. Un IP de 1.15 significa que rinde un 15% más que la media.
+-   IP = 1: La unidad rinde lo mismo que el promedio.
+-   IP \< 1: La nidad rinde por debajo del promedio. Un IP de 0.85 significa que rinde un 15% menos que la media.
+
+Cálculo:
+
+```{r}
+grilla_IP <- grilla_rto %>% 
+  mutate( 
+    IP = ( 
+      (RTO_09 / mean(RTO_09, na.rm = TRUE)) + 
+        (RTO_11 / mean(RTO_11, na.rm = TRUE)) + 
+        (RTO_13 / mean(RTO_13, na.rm = TRUE)) 
+    ) / 3 
+  )  
+```
+
+## Graficar el IP
+
+La visualización del IP se estructuró mediante una discretización en cuantiles (4), para ello, primero se deben crear estos cuantiles:
+
+```{r}
+breaks <- quantile(grilla_IP$IP, probs = seq(0, 1, 0.25), na.rm = TRUE)
+
+grilla_IP <- grilla_IP %>% 
+  mutate( 
+    ip_q = cut(IP, breaks = breaks, include.lowest = TRUE, 
+                 labels = paste0(round(breaks[-5],1), "–", round(breaks[-1],1))) 
+  ) 
+```
+
+Graficar:
+
+```{r}
+#| code-fold: true
+#| code-summary: "Código"
+
+
+ggplot(grilla_IP) + 
+  geom_sf(aes(fill = ip_q)) +  
+  scale_fill_manual(values = c("#e41a1c", "yellow", "yellowgreen", "#238b45"), name = "IP") + 
+  labs(title = "IP", subtitle = "Años 09, 11, 13") + 
+  theme_minimal() + 
+  theme( 
+    plot.title = element_text(size = 16, face = "bold", hjust = 0.5),  
+    plot.subtitle = element_text(size = 13, hjust = 0.5), 
+    axis.title = element_blank(),
+    axis.text = element_blank(),
+    axis.ticks = element_blank(),
+    panel.grid = element_blank(),
+    legend.position = "bottom",  
+    legend.box.background = element_rect(fill = "snow", colour = "black") 
+  ) 
+
+
+```
+
+# Selección de Variables mediante Análisis de Regresión
+
+Se trabaja con la grilla antes creada (llamada `grilla_IP`, @sec-ip).
+
+Comprobar las columnas de dicha grilla:
+
+```{r}
+colnames(grilla_IP)
+```
+
+Seleccionar las columnas adecuadas:
+
+```{r}
+grilla_IP <- grilla_IP %>%
+  select(id = id_celda, Alt = ELEV_11, Rto09 = RTO_09, RTO11 = RTO_11, Rto13 = RTO_13, NDVI = NDVI25, IP, geometry = x)
+```
+
+Para realizar las regresiones se usó la función `lm` (linear mode).
+
+En el siguiente panel se realizaron las regresiones entre las diferentes variables y el IP, se identificaron los parámetros más importantes y se generaron los gráficos de dispersión.
+
+::::::::::::::::::::::::::::::::::::::::::::::::::::: {.panel-tabset .tabset-topline}
+## IP x NDVI
+
+**Regresión**:
+
+```{r}
+IP_NDVI <- lm(IP ~ NDVI, data = grilla_IP)
+```
+
+**Parámetros de la Regresión**:
+
+:::::::::::: premium-metrics-grid
+::::: premium-metric
+::: metric-name
+Intercepto (β₀)
+:::
+
+::: {.metric-number .metric-highlight}
+`r round(coef(IP_NDVI)[1], 3)`
+:::
+:::::
+
+::::: premium-metric
+::: metric-name
+Pendiente (β₁)
+:::
+
+::: {.metric-number .metric-highlight}
+`r round(coef(IP_NDVI)[2], 6)`
+:::
+:::::
+
+::::: premium-metric
+::: metric-name
+R^2^
+:::
+
+::: {.metric-number .metric-highlight}
+`r round(summary(IP_NDVI)$r.squared, 3)`
+:::
+:::::
+::::::::::::
+
+**Gráfico**:
+
+```{r}
+#| code-fold: true
+#| code-summary: "Código"
+
+#Extraer valores para mostrar en el gráfico:
+intercepto <- coef(IP_NDVI)[1] 
+
+pendiente  <- coef(IP_NDVI)[2] 
+
+r2 <- summary(IP_NDVI)$r.squared 
+
+# Crear texto para mostrar en el grafico:
+ecuacion <- paste0( 
+"y = ", round(intercepto, 2),  
+" + ", round(pendiente, 2), "x\n", 
+"R² = ", round(r2, 3) 
+) 
+
+
+#Gráfico
+ggplot(grilla_IP, aes(x = NDVI, y = IP)) + 
+geom_point(color = "black", alpha = 0.6, size = 2) +  # Dispersión 
+geom_smooth(method = "lm", se = FALSE, color = "blue", size = 2) +  # Línea de tendencia 
+labs( 
+title = "IP vs NDVI", 
+x = "NDVI", 
+    y = "IP" 
+  ) + 
+  annotate( 
+    "text", 
+    x = Inf, y = -Inf, 
+    hjust = 1.1, vjust = -0.5, 
+    label = ecuacion, 
+    size = 4, color = "black" 
+  ) + 
+  theme_minimal(base_size = 13) + 
+  theme( 
+    panel.grid = element_blank(),        
+    axis.line = element_line(color = "black"),  
+    axis.ticks = element_line(color = "black"),  
+    axis.text = element_text(color = "black"),  
+    axis.title = element_text(color = "black"), 
+    plot.title = element_text(hjust = 0.5)      
+  ) 
+```
+
+## IP x Altimetría
+
+**Regresión**:
+
+```{r}
+IP_Alt <- lm(Alt ~ Rto09, data = grilla_IP) 
+```
+
+**Parámetros de la Regresión**:
+
+:::::::::::: premium-metrics-grid
+::::: premium-metric
+::: metric-name
+Intercepto (β₀)
+:::
+
+::: {.metric-number .metric-highlight}
+`r round(coef(IP_Alt)[1], 3)`
+:::
+:::::
+
+::::: premium-metric
+::: metric-name
+Pendiente (β₁)
+:::
+
+::: {.metric-number .metric-highlight}
+`r round(coef(IP_Alt)[2], 3)`
+:::
+:::::
+
+::::: premium-metric
+::: metric-name
+R^2^
+:::
+
+::: {.metric-number .metric-highlight}
+`r round(summary(IP_Alt)$r.squared, 3)`
+:::
+:::::
+::::::::::::
+
+**Gráfico**:
+
+```{r}
+#| code-fold: true
+#| code-summary: "Código"
+
+
+# Extraer valores para mostrar en el gráfico:
+
+intercepto_2 <- coef(IP_Alt)[1]   
+
+pendiente_2  <- coef(IP_Alt)[2]   
+
+r2_2 <- summary(IP_Alt)$r.squared 
+
+# Crear texto para mostrar en el gráfico:
+
+ecuacion_2 <- paste0(  "y = ", round(intercepto_2, 2),   " + ", round(pendiente_2, 2), "x\n",  "R² = ", round(r2_2, 3)  ) 
+
+# Gráfico
+ggplot(grilla_IP, aes(x = Alt, y = IP)) + 
+geom_point(color = "black", alpha = 0.6, size = 2) +   
+geom_smooth(method = "lm", se = FALSE, color = "blue", size = 2) +  
+labs( 
+title = "Alt vs IP", 
+x = "Altimetría", 
+y = "IP") + 
+  annotate( 
+    "text", 
+    x = Inf, y = Inf, 
+    hjust = 1.1, vjust = 1.1, 
+    label = ecuacion_2, 
+    size = 4, color = "black" 
+  ) + 
+  theme_minimal(base_size = 13) + 
+  theme( 
+    panel.grid = element_blank(),         
+    axis.line = element_line(color = "black"),  
+    axis.ticks = element_line(color = "black"), 
+    axis.text = element_text(color = "black"),   
+    axis.title = element_text(color = "black"), 
+    plot.title = element_text(hjust = 0.5)       
+  ) 
+```
+
+## IP x Rendimiento 2009
+
+**Regresión**:
+
+```{r}
+IP_Rto09 <- lm(IP ~ Rto09, data = grilla_IP) 
+```
+
+**Parámetros de la Regresión**:
+
+:::::::::::: premium-metrics-grid
+::::: premium-metric
+::: metric-name
+Intercepto (β₀)
+:::
+
+::: {.metric-number .metric-highlight}
+`r round(coef(IP_Rto09)[1], 3)`
+:::
+:::::
+
+::::: premium-metric
+::: metric-name
+Pendiente (β₁)
+:::
+
+::: {.metric-number .metric-highlight}
+`r format(round(coef(IP_Rto09)[2], 6), scientific = FALSE)`
+:::
+:::::
+
+::::: premium-metric
+::: metric-name
+R^2^
+:::
+
+::: {.metric-number .metric-highlight}
+`r round(summary(IP_Rto09)$r.squared, 3)`
+:::
+:::::
+::::::::::::
+
+**Gráfico**:
+
+```{r}
+#| code-fold: true
+#| code-summary: "Código"
+
+# Crear texto para mostrar en el gráfico:
+
+intercepto_3 <- coef(IP_Rto09)[1]     
+
+pendiente_3 <- coef(IP_Rto09)[2]     
+
+r2_3 <- summary(IP_Rto09)$r.squared 
+
+# Extraer valores para mostrar en el gráfico:
+
+ecuacion_3 <- paste0( 
+"y = ", round(intercepto_3, 2),  
+" + ", round(pendiente_3, 2), "x\n", 
+"R² = ", round(r2_3, 3) 
+) 
+
+#Gráfico
+
+ggplot(grilla_IP, aes(x = Rto09, y = IP)) + 
+geom_point(color = "black", alpha = 0.6, size = 2) +   
+geom_smooth(method = "lm", se = FALSE, color = "blue", size = 2) +  
+labs( 
+title = "Rendimiento 2009 vs IP", 
+x = "Rendimiento 2009", 
+y = "IP" 
+  ) + 
+  annotate( 
+    "text", 
+    x = Inf, y = -Inf, 
+    hjust = 1.1, vjust = -0.5, 
+    label = ecuacion_3, 
+    size = 4, color = "black" 
+  ) + 
+  theme_minimal(base_size = 13) + 
+  theme( 
+    panel.grid = element_blank(),         
+    axis.line = element_line(color = "black"),  
+    axis.ticks = element_line(color = "black"), 
+    axis.text = element_text(color = "black"),   
+    axis.title = element_text(color = "black"), 
+    plot.title = element_text(hjust = 0.5))       
+  
+```
+
+## IP x Rendimiento 2011
+
+**Regresión**:
+
+```{r}
+IP_Rto11 <- lm(IP ~ RTO11, data = grilla_IP) 
+```
+
+**Parámetros de la Regresión**:
+
+:::::::::::: premium-metrics-grid
+::::: premium-metric
+::: metric-name
+Intercepto (β₀)
+:::
+
+::: {.metric-number .metric-highlight}
+`r round(coef(IP_Rto11)[1], 3)`
+:::
+:::::
+
+::::: premium-metric
+::: metric-name
+Pendiente (β₁)
+:::
+
+::: {.metric-number .metric-highlight}
+`r format(round(coef(IP_Rto11)[2], 6), scientific = FALSE)`
+:::
+:::::
+
+::::: premium-metric
+::: metric-name
+R^2^
+:::
+
+::: {.metric-number .metric-highlight}
+`r round(summary(IP_Rto11)$r.squared, 3)`
+:::
+:::::
+::::::::::::
+
+**Gráfico**:
+
+```{r}
+#| code-fold: true
+#| code-summary: "Código"
+
+#Extraer valores para mostrar en el gráfico:
+
+intercepto_4 <- coef(IP_Rto11)[1]     
+
+pendiente_4 <- coef(IP_Rto11)[2]     
+
+r2_4 <- summary(IP_Rto11)$r.squared 
+
+# Crear texto para mostrar en el gráfico:
+
+ecuacion_4 <- paste0( 
+"y = ", round(intercepto_4, 2),  
+" + ", round(pendiente_4, 2), "x\n", 
+"R² = ", round(r2_4, 3) 
+) 
+
+# Gráfico
+ggplot(grilla_IP, aes(x = RTO11, y = IP)) + 
+geom_point(color = "black", alpha = 0.6, size = 2) +   
+geom_smooth(method = "lm", se = FALSE, color = "blue", size = 2) +  
+labs( 
+title = "Rendimiento 20011 vs IP", 
+x = "Rendimiento 2011", 
+y = "IP" 
+  ) + 
+  annotate( 
+    "text", 
+    x = Inf, y = -Inf, 
+    hjust = 1.1, vjust = -0.5, 
+    label = ecuacion_4, 
+    size = 4, color = "black" 
+  ) + 
+  theme_minimal(base_size = 13) + 
+  theme( 
+    panel.grid = element_blank(),         
+    axis.line = element_line(color = "black"),  
+    axis.ticks = element_line(color = "black"), 
+    axis.text = element_text(color = "black"),   
+    axis.title = element_text(color = "black"), 
+    plot.title = element_text(hjust = 0.5))       
+  
+```
+
+## IP x Rendimiento 2013
+
+**Regresion**:
+
+```{r}
+IP_Rto13 <- lm(IP ~ Rto13, data = grilla_IP) 
+```
+
+**Parámetros de la Regresión**:
+
+:::::::::::: premium-metrics-grid
+::::: premium-metric
+::: metric-name
+Intercepto (β₀)
+:::
+
+::: {.metric-number .metric-highlight}
+`r round(coef(IP_Rto13)[1], 3)`
+:::
+:::::
+
+::::: premium-metric
+::: metric-name
+Pendiente (β₁)
+:::
+
+::: {.metric-number .metric-highlight}
+`r format(round(coef(IP_Rto13)[2], 6), scientific = FALSE)`
+:::
+:::::
+
+::::: premium-metric
+::: metric-name
+R^2^
+:::
+
+::: {.metric-number .metric-highlight}
+`r round(summary(IP_Rto13)$r.squared, 3)`
+:::
+:::::
+::::::::::::
+
+**Gráfico**:
+
+```{r}
+#| code-fold: true
+#| code-summary: "Código"
+
+# Extraer valores para mostrar en el gráfico:
+intercepto_5 <- coef(IP_Rto13)[1]     
+
+pendiente_5 <- coef(IP_Rto13)[2]     
+
+r2_5 <- summary(IP_Rto13)$r.squared 
+
+# Crear texto para mostrar en el gráfico:
+
+ecuacion_5 <- paste0( 
+"y = ", round(intercepto_5, 2),  
+" + ", round(pendiente_5, 2), "x\n", 
+"R² = ", round(r2_5, 3) 
+) 
+
+
+#Gráfico
+
+ggplot(grilla_IP, aes(x = Rto13, y = IP)) + 
+geom_point(color = "black", alpha = 0.6, size = 2) +   
+geom_smooth(method = "lm", se = FALSE, color = "blue", size = 2) +  
+labs( 
+title = "Rendimiento 2013 vs IP", 
+x = "Rendimiento 2013", 
+y = "IP" 
+  ) + 
+  annotate( 
+    "text", 
+    x = Inf, y = -Inf, 
+    hjust = 1.1, vjust = -0.5, 
+    label = ecuacion_5, 
+    size = 4, color = "black" 
+  ) + 
+  theme_minimal(base_size = 13) + 
+  theme( 
+    panel.grid = element_blank(),         
+    axis.line = element_line(color = "black"),  
+    axis.ticks = element_line(color = "black"), 
+    axis.text = element_text(color = "black"),   
+    axis.title = element_text(color = "black"), 
+    plot.title = element_text(hjust = 0.5))       
+  
+```
+:::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+## Selección de variables
+
+Se evaluan los valores de R^2^ y se seleccionan sólo aquellos atributos con R^2^ mayor a 0,6.
+
+Los atributos seleccionados para el proceso de zonificación son: [Rendimiento 2009]{.destacado}, [Rendimiento 2011]{.destacado} y [Rendimiento 2013]{.destacado}
+
+# Análisis de Componentes Principales (PCA) {#sec-pca}
+
+Primero se realiza el Análisis de Componentes Principales (PCA) clásico y posteriormente sobre los componentes generados por PCA, se aplica el MULTISPATI-PCA.
+
+## Preparación de datos
+
+Se utiliza el objeto `grilla_IP` antes creado (@sec-ip).
+
+-   Generar los centroides de cada polígono de la cuadrícula. Dado que la grilla está compuesta por polígonos, es necesario simplificar su posición a un punto único para el análisis estadístico. Se utilizó la función `st_centroid()` de `sf`:
+
+```{r}
+centroides <- st_centroid(grilla_IP)
+```
+
+-   Agregar columnas con las geometrías X e Y. Se extrajeron las coordenadas cartesianas X e Y con `st_coordinates`, permitiendo que la ubicación espacial sea tratada como una variable numérica más dentro del modelo.
+
+```{r}
+coords1 <- st_coordinates(centroides)
+
+centroides <- centroides %>% 
+  mutate(X = coords1[,1], Y = coords1[,2])
+```
+
+-   Convertir la clase de centroides (`sf`) a `data.frame` para realizar el PCA. Este paso consiste en eliminar la columna de geometría, por lo que, a partir de aquí se usan las columnas de coordenadas antes creadas.
+
+```{r}
+df_centroides <- st_drop_geometry(centroides) 
+```
+
+-   Seleccionar las columnas adecuadas para hacer el PCA:
+
+```{r}
+df_centroides <- df_centroides %>% 
+  select(X, Y, Rto09, RTO11, Rto13)
+```
+
+-   Visualizar las primeras filas del set de datos creado:
+
+```{r}
+#| label: tbl-primeros-registros_5
+#| tbl-cap: "Visualización de los primeros cinco registros del set de datos Centroides."
+#| code-fold: true
+#| code-summary: "Código"
+
+primeras_filas_5 <- df_centroides %>%
+  head(5) 
+
+
+primeras_filas_5 %>%
+  kable(
+    format = "html",
+    align = "c",
+    digits = 1
+  ) %>%
+  kable_classic(
+    full_width = TRUE, 
+    font_size = 13
+  ) %>%
+  kable_styling(
+    bootstrap_options = c("striped", "hover", "condensed")
+  ) %>%
+  row_spec(0, bold = TRUE, color = "black", extra_css = "border-bottom: 2px solid black;") %>%
+  row_spec(nrow(primeras_filas_5), extra_css = "border-bottom: 2px solid black;")
+
+```
+
+## PCA
+
+Para realizar el PCA se usa la función `dudi.pca()` del paquete `ade4`:
+
+```{r}
+pca <- dudi.pca( 
+  df_centroides[, 3:5], 
+  center = TRUE, 
+  scale = TRUE, 
+  scannf = FALSE, 
+  nf = 5 
+) 
+```
+
+El resultado (pca) es un objeto con toda la información del PCA:
+
+-   Valores propios (autovalores),
+-   Coordenadas de las observaciones,
+-   Pesos de las variables,
+-   Proporción de varianza explicada por cada componente.
+
+# Multispati-PCA
+
+Para poder ejecutar el MULTISPATI-PCA, es un requisito estructurar el espacio, definiendo cómo interactúan las celdas de la grilla entre sí. Esto se construye en dos etapas sucesivas:
+
+**1. Identificación de Vecinos**: El primer paso es crear una lista de vecindad basada en distancias euclidianas. A partir de las coordenadas de los centroides de la grilla, la función `dnearneigh` (paquete `spdep`) evalúa qué puntos se encuentran dentro de un radio de distancia específico, en este caso de 35 metros. Todas las celdas que caigan dentro de esa distancia umbral son catalogadas formalmente como "vecinas".
+
+**2. Ponderación de Influencia Espacial**: Una vez definido quiénes son los vecinos, es necesario determinar cuánta influencia ejercen. La función `nb2listw` transforma la lista de vecindades en una matriz de pesos espaciales.
+
+## Identificación de Vecinos
+
+-   En primer lugar, se extraen las coordenadas:
+
+```{r}
+cord2 <- coordinates(df_centroides[, 1:2]) 
+```
+
+> `cord2`es una matriz de coordenadas (dos columnas: X e Y), que se usará para definir los vecindarios espaciales.
+
+-   Crear la matriz de vecinos. Como se mencionó, se indica que dos puntos son vecinos si están entre 0 y 35 unidades de distancia.
+
+```{r}
+vecindarios <- dnearneigh(cord2, 0, 35)
+```
+
+## Matriz de Pesos Espaciales
+
+```{r}
+pesos_esp <- nb2listw(vecindarios, 
+                     style = "W", 
+                     zero.policy = T)
+```
+
+## Multispati-PCA
+
+Se usó la función `multispati()` del paquete `adespatial`. Su propósito es incorporar la autocorrelación espacial (es decir, la semejanza entre puntos cercanos) dentro de un análisis de componentes principales.
+
+```{r}
+pca_esp <- adespatial::multispati(pca, pesos_esp, scannf = F, nfposi = 5)
+```
+
+## Resultado
+
+Se guarda un objeto “multispati” llamado `pca_esp`, con varios elementos:
+
+-   `eig`: Son los Autovalores espaciales, explica cuánta varianza espacial explica cada componente.
+-   `var`: Varianza explicada por cada componente del PCA clásico, representa cuánta variabilidad original capta cada eje
+-   `cum`: Varianza acumulada
+-   `ratio`: Porcentaje acumulado (normalizado entre 0 y 1)\
+-   `moran`: índice de Moran de cada componente
+
+Visualizar un resumen del resultado:
+
+```{r}
+summary(pca_esp) 
+```
+
+## Presentar los resultados en una Tabla
+
+Una vez ejecutado el algoritmo **MULTISPATI-PCA**, el modelo genera una serie de componentes o "ejes" espaciales (CS1, CS2, etc.). Para determinar cuántos de estos componentes poseen información útil para la delimitación de los ambientes, se extrajeron sus métricas principales y se estructuraron en una tabla resumen.
+
+-   Crear el data frame con los datos de Descomposición:
+
+```{r}
+multispati_data <- data.frame(
+  Componente = c("CS1", "CS2", "CS3", "CS4"),
+  Valor_Propio = c(2.4866999, 0.4576106, 0.1635219, 0.0983285),
+  Varianza_Explicada = c(2.7567345, 0.5600055, 0.4182351, 0.2650249),
+  Indice_Moran = c(0.9020455, 0.8171539, 0.3909809, 0.3710160)
+)
+```
+
+-   Calcular la suma total del Valor Propio (eig) para calcular el porcentaje:
+
+```{r}
+suma_total_vp <- sum(multispati_data$Valor_Propio)
+```
+
+-   Calcular la columna `% Varianza Explicada`:
+
+```{r}
+multispati_data$Porcentaje_Varianza <- (multispati_data$Valor_Propio / suma_total_vp) * 100
+```
+
+-   Calcular la columna `Varianza Acumulada`:
+
+```{r}
+multispati_data$Varianza_Acumulada <- cumsum(multispati_data$Porcentaje_Varianza)
+```
+
+-   Seleccionar y reordenar las columnas para la presentación:
+
+```{r}
+tabla_final <- multispati_data[c("Componente", "Valor_Propio", "Porcentaje_Varianza", "Varianza_Acumulada", "Varianza_Explicada", "Indice_Moran")]
+```
+
+-   Presentar los datos:
+
+```{r}
+#| label: tbl-multispati-pca
+#| tbl-cap: "Visualización del resultado de MULTISPATI-PCA."
+#| code-fold: true
+#| code-summary: "Código"
+
+tabla_final %>%
+  kbl(
+    digits = 2,
+    escape = FALSE,   
+    col.names = c(
+      "Comp. Espacial",
+      "Valor Propio (eig)",
+      "% Varianza Explicada",
+      "% Varianza Acumulada",
+      "Varianza Total (var)",
+      "Índice de Moran"
+    ),
+    align = c("l", rep("c", 5))
+  ) %>%
+  kable_classic(
+    full_width = TRUE, 
+    font_size = 13
+  ) %>%
+  kable_styling(
+    bootstrap_options = c("striped", "hover", "condensed")
+  ) %>%
+  row_spec(0, bold = TRUE, color = "black", extra_css = "border-bottom: 2px solid black;") %>%
+  row_spec(nrow(tabla_final), extra_css = "border-bottom: 2px solid black;")
+```
+
+## Interpretación
+
+-   **CS1 (77.6%)** → explica la mayor parte de la varianza espacial. Es el eje principal que combina alta variabilidad y fuerte patrón espacial (Moran = 0.90). Representa el patrón dominante del lote.
+-   **CS2 (14.3%)** → segundo eje relevante, también con patrón espacial fuerte (Moran = 0.82). Refleja una segunda tendencia espacial, quizás más local o secundaria.
+-   **CS3 (5.1%)** y **CS4 (3.0%)** → aportan muy poca varianza y tienen baja autocorrelación. Probablemente representen ruido o variación local sin estructura clara.
+
+## Resultados en Gráficos
+
+Se exploran dos librerías a la hora de graficar: `adegraphics` y `ggplot2`:
+
+::: {.panel-tabset .tabset-topline}
+### adegraphics
+
+```{r}
+s.corcircle(pca_esp$c1, 
+            xax = 1,  
+            yax = 2,  
+            clabel = 1,
+            fullcircle = TRUE,
+            box = TRUE)
+```
+
+### ggplot2
+
+Convertir a `data.frame`:
+
+```{r}
+df_arrows <- as.data.frame(pca_esp$c1) 
+```
+
+Agregar nombres de las variables como columna:
+
+```{r}
+df_arrows$Variable <- rownames(pca_esp$c1) 
+```
+
+Graficar:
+
+```{r}
+#| fig-width: 7
+#| fig-height: 7
+#| code-fold: true
+#| code-summary: "Código"
+
+ggplot(df_arrows, aes(x = CS1, y = CS2)) + 
+  annotate("path",
+           x = cos(seq(0, 2*pi, length.out = 100)),
+           y = sin(seq(0, 2*pi, length.out = 100)),
+           color = "gray80", linetype = "dashed") +
+  geom_segment(aes(x = 0, y = 0, xend = CS1, yend = CS2), 
+               arrow = arrow(length = unit(0.25, "cm")), 
+               color = "steelblue", linewidth = 0.8) + 
+  geom_text(aes(label = Variable), 
+            hjust = -0.2, vjust = -0.2, size = 4, fontface = "bold") + 
+  coord_equal() + 
+  geom_hline(yintercept = 0, color = "gray50", linetype = "dotted") + 
+  geom_vline(xintercept = 0, color = "gray50", linetype = "dotted") + 
+  theme_minimal() + 
+  labs(title = "Círculo de Correlaciones (Multispati-PCA)", 
+       x = "Componente Espacial 1 (CS1)", 
+       y = "Componente Espacial 2 (CS2)")
+
+```
+:::
+
+Si en el PCA además de las tres variables de rendimiento seleccionadas (Rendimiento 2009, 2011, 2013), seleccionamos la altimetría esto se vería:
+
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+
+# Datos
+
+grilla_pca_alt <- st_read("data/Cuadricula_IP.shp", quiet=TRUE) 
+
+# Centroides
+
+centroides_alt <- st_centroid(grilla_pca_alt)
+
+# Agregar columnas X e Y
+
+coords_alt <- st_coordinates(centroides_alt) 
+
+centroides_alt <- centroides_alt %>% 
+  mutate(X = coords_alt[,1], Y = coords_alt[,2])
+
+# Convertir a SF
+
+df_centroides_alt <- st_drop_geometry(centroides_alt) 
+
+# Seleccionar columnas
+
+df_centroides_alt <- df_centroides_alt %>% 
+  select(X, Y, Alt, Rto09, RTO11, Rto13)
+
+# PCA
+
+pca_alt <- dudi.pca( 
+  df_centroides_alt[, 3:6], 
+  center = TRUE, 
+  scale = TRUE, 
+  scannf = FALSE, 
+  nf = 5 
+) 
+
+
+# MULTISPATI
+
+# Extraer coordenadas
+
+cord_alt <- coordinates(df_centroides_alt[, 1:2]) 
+
+
+# Crear matriz de vecinos
+
+vecindarios_alt <- dnearneigh(cord_alt, 0, 35)
+
+# Crear matriz de pesos espaciales
+
+pesos_sp_alt <- nb2listw(vecindarios_alt, 
+                     style = "W", 
+                     zero.policy = T)
+
+# Hacer Multispati
+
+pesos_sp_alt <- adespatial::multispati(pca_alt, pesos_sp_alt, scannf = F, nfposi = 5)
+
+
+# Graficar
+
+s.corcircle(pesos_sp_alt$c1, 
+            xax = 1,  
+            yax = 2,  
+            clabel = 1,
+            fullcircle = TRUE,
+            box = TRUE)
+```
+
+# Fuzzy K-Means
+
+Los scores parciales derivados del **MULTISPATI-PCA** son el insumo directo para el Fuzzy K-Means.
+
+## Preparación de los datos
+
+-   A partir del objeto `pca_esp` (salida del MULTISPATI-PCA), se extraen los valores de los primeros tres componentes espaciales (CS1, CS2 Y CS3) mediante `pca_esp$li[, 1:3]`. Estos componentes acumulan el **97 %** de la varianza total del lote.
+
+Además, se vinculan las coordenadas geográficas extraídas del objeto `centroides` anteriormente creado (@sec-pca) para preservar la referencia espacial y permitir la posterior espacialización de las zonas clasificadas.
+
+```{r}
+cs <- pca_esp$li[, 1:3] 
+
+pred_am <-cbind(centroides[,c("X","Y")], cs) 
+```
+
+-   Dado que `pred_am` hereda la clase `sf`, se elimina la columna de geometría con `st_drop_geometry()`.
+
+> Los objetos `sf` llevan una columna geometry implícita que el algoritmo `cmeans()` no puede manejar. `st_drop_geometry()` la elimina y convierte el objeto en un `data.frame` estándar, operación necesaria antes de cualquier análisis matricial.
+
+```{r}
+pred_am_clean <- st_drop_geometry(pred_am) 
+```
+
+-   Luego se selecciona el componente CS1, el cual se usará en el clustering, y se convierte a matriz númerica.
+
+La decisión de trabajar exclusivamente con `CS1` (77,6 % de varianza, Moran = 0,90) responde a que este eje combina alta variabilidad y la mayor autocorrelación espacial
+
+```{r}
+datos_cluster <- as.matrix(pred_am_clean[, 3])
+```
+
+## Cálculo Fuzzy K-Means y sus Índices
+
+Para realizar el análisis de Cluster Fuzzy K-Means se utiliza la función `cmeans()` del paquete `e1071`.
+
+El parámetro `m` (exponente de difusividad, *fuzziness exponent*) controla el grado de solapamiento entre clases: valores cercanos a 1 producen una clasificación prácticamente rígida, mientras que valores elevados generan pertenencias uniformemente difusas. En este análisis se adopta `m = 1,3`, valor conservador que permite fronteras suaves sin sacrificar la definición de las zonas centrales.
+
+Se evaluaron tres alternativas (2, 3 y 4 clases). La selección del número óptimo de zonas se realiza *a posteriori* mediante índices de validez de clustering.
+
+::: {.panel-tabset .tabset-topline}
+## 2 Clases
+
+```{r}
+set.seed(123); clases2 <- e1071::cmeans(x = datos_cluster, 
+                         centers = 2, 
+                         iter.max = 100, 
+                         dist = "euclidean", 
+                         method = "cmeans", 
+                         m = 1.3)
+```
+
+## 3 Clases
+
+```{r}
+set.seed(123); clases3 <- e1071::cmeans(x = datos_cluster, 
+                         centers = 3, 
+                         iter.max = 100, 
+                         dist = "euclidean", 
+                         method = "cmeans", 
+                         m = 1.3)
+```
+
+## 4 Clases
+
+```{r}
+set.seed(123); clases4 <- e1071::cmeans(x = datos_cluster, 
+                         centers = 4, 
+                         iter.max = 100, 
+                         dist = "euclidean", 
+                         method = "cmeans", 
+                         m = 1.3)
+```
+:::
+
+::: callout-note
+Para garantizar la reproducibilidad del análisis, se fijó una semilla aleatoria (`set.seed(123)`) antes de cada llamada a `cmeans()`. La inicialización aleatoria de los centroides es inherente al algoritmo; sin semilla fija, las etiquetas de clase pueden permutar entre ejecuciones aunque la geometría de las zonas sea estable.
+:::
+
+## Índices de Validación del Clustering {#sec-indices}
+
+Para determinar el número de zonas estadísticamente justificable se calculan cuatro índices de validez mediante `fclustIndex()`:
+
+| Índice | Denominación | Criterio |
+|-------------------|------------------------------|-----------------------|
+| [XB]{.variable} | Xie-Beni | Minimizar — mide compacidad intra-cluster relativa a la separación inter-cluster |
+| [PC]{.variable} | Coeficiente de partición | Maximizar — cuantifica la nitidez de las membresías (1 = clasificación rígida) |
+| [PE]{.variable} | Entropía de partición | Minimizar — mide la incertidumbre en la asignación de membresías |
+| [FS]{.variable} | Fukuyama-Sugeno | Minimizar — balance entre compacidad y distancia al centroide global |
+
+::: {.panel-tabset .tabset-topline}
+## Indices para 2 Clases
+
+```{r}
+indices2_xb <- e1071::fclustIndex(clases2, pred_am[, 3, drop = FALSE], index = "xie.beni") 
+
+indices2_pc <- e1071::fclustIndex(clases2, pred_am[, 3, drop = FALSE], index = "partition.coefficient") 
+
+indices2_pe <- e1071::fclustIndex(clases2, pred_am[, 3, drop = FALSE], index = "partition.entropy") 
+
+indices2_fs <- e1071::fclustIndex(clases2, pred_am[, 3, drop = FALSE], index = "fukuyama.sugeno") 
+```
+
+Unir todos los indices de 2 clases en un objeto:
+
+```{r}
+indices2 <- data.frame( 
+    XB = indices2_xb, 
+    PC = indices2_pc, 
+    PE = indices2_pe, 
+    FS = indices2_fs) 
+```
+
+Transponer:
+
+```{r}
+indices2_l <- data.frame(
+  Indice = rownames(t(indices2)), 
+  "Clase 2" = as.numeric(t(indices2))) 
+```
+
+## Indices para 3 Clases
+
+```{r}
+indices3_xb <- e1071::fclustIndex(clases3, pred_am[, 3, drop = FALSE], index = "xie.beni") 
+
+indices3_pc <- e1071::fclustIndex(clases3, pred_am[, 3, drop = FALSE], index = "partition.coefficient") 
+
+indices3_pe <- e1071::fclustIndex(clases3, pred_am[, 3, drop = FALSE], index = "partition.entropy") 
+
+indices3_fs <- e1071::fclustIndex(clases3, pred_am[, 3, drop = FALSE], index = "fukuyama.sugeno") 
+```
+
+Unir todos los indices de 3 clases en un objeto:
+
+```{r}
+indices3 <- data.frame( 
+  XB = indices3_xb, 
+  PC = indices3_pc, 
+  PE = indices3_pe, 
+  FS = indices3_fs) 
+```
+
+Transponer:
+
+```{r}
+indices3_l <- data.frame( 
+  Indice = rownames(t(indices3)), 
+  "Clase 3" = as.numeric(t(indices3))) 
+```
+
+## Indices para 4 Clases
+
+```{r}
+indices4_xb <- e1071::fclustIndex(clases4, pred_am[, 3, drop = FALSE], index = "xie.beni") 
+
+indices4_pc <- e1071::fclustIndex(clases4, pred_am[, 3, drop = FALSE], index = "partition.coefficient") 
+
+indices4_pe <- e1071::fclustIndex(clases4, pred_am[, 3, drop = FALSE], index = "partition.entropy")
+
+indices4_fs <- e1071::fclustIndex(clases4, pred_am[, 3, drop = FALSE], index = "fukuyama.sugeno") 
+```
+
+Unir todos los indices de 3 clases en un objeto:
+
+```{r}
+indices4 <- data.frame( 
+  XB = indices4_xb, 
+  PC = indices4_pc, 
+  PE = indices4_pe, 
+  FS = indices4_fs) 
+```
+
+Transponer:
+
+```{r}
+indices4_l <- data.frame( 
+  Indice = rownames(t(indices4)), 
+  "Clase 4" = as.numeric(t(indices4))) 
+```
+:::
+
+## Visualizar los índices en una tabla
+
+-   Primero unir los índices con la función `cbind()`:
+
+```{r}
+indices_todos <- cbind( 
+  Indice = rownames(indices2_l), 
+  indices2_l, 
+  indices3_l, 
+  indices4_l)
+```
+
+-   Cambiar nombres de las columnas:
+
+```{r}
+colnames(indices_todos) <- c("Indice_", "Indice", "Clase2", "Ind", "Clase3", "in", "Clase4")
+```
+
+-   Seleccionar las columnas adecuadas:
+
+```{r}
+indices_todos <- indices_todos %>% 
+  select(Indice, Clase2, Clase3, Clase4) 
+```
+
+-   Visualizar:
+
+```{r}
+#| label: tbl-indices
+#| tbl-cap: "Visualización de los Indices para cada Clasificación."
+#| code-fold: true
+#| code-summary: "Código"
+
+indices_todos %>%
+  kable(
+    format = "html",
+    align = "c" 
+  ) %>%
+  kable_classic(
+    full_width = TRUE, 
+    font_size = 13
+  ) %>%
+  kable_styling(
+    bootstrap_options = c("striped", "hover", "condensed")
+  ) %>%
+  row_spec(0, bold = TRUE, color = "black", extra_css = "border-bottom: 2px solid black;") %>%
+  row_spec(nrow(indices_todos), extra_css = "border-bottom: 2px solid black;")
+
+```
+
+## Calcular Índice Resumen
+
+Para determinar el número óptimo de zonas de manejo ($k = 2, 3, 4$), se calculó un **índice resumen** para cada clasificación, esto unifica el comportamiento de los cuatro índices de validación difusa ($XB$, $PC$, $PE$, $FS$). El procedimiento siguió los siguientes pasos:
+
+-   El primer paso fue extraer las respuestas numéricas de cada índice para las diferentes clasificaciones de clústeres analizadas a partir del objeto `indices_todos`, convirtiéndolas en vectores continuos mediante `as.numeric()`:
+
+```{r}
+xb <- as.numeric(indices_todos[1, 2:4])
+pc <- as.numeric(indices_todos[2, 2:4])
+pe <- as.numeric(indices_todos[3, 2:4])
+fs <- as.numeric(indices_todos[4, 2:4])
+```
+
+> Cada vector contiene tres valores, uno por número de clases, representando el comportamiento de ese índice a lo largo de las particiones evaluadas.
+
+-   Dado que los índices tienen distintas escalas y unidades, no son comparables directamente. Se aplica una normalización Min-Max que proyecta cada vector al intervalo \[0,1\]\[0, 1\] \[0,1\], reorientada de modo que el valor 0 siempre corresponda al comportamiento ideal de cada índice
+
+Para *XB*, *PE* y *FS*, donde el criterio de optimalidad es minimizar, la normalización se realiza de la siguiente manera:
+
+$$I_{\text{norm}} = \frac{I - I_{\min}}{I_{\max} - I_{\min}}$$
+
+```{r}
+XieBeniN  <- (xb - min(xb)) / (max(xb) - min(xb))
+EntrPartN <- (pe - min(pe)) / (max(pe) - min(pe))
+FukSugN   <- (fs - min(fs)) / (max(fs) - min(fs))
+```
+
+Para *PC*, donde el criterio es maximizar, se invierte la fórmula de modo que el máximo quede en 0 y el mínimo en 1:
+
+$$I_{\text{norm}} = \frac{I_{\max} - I}{I_{\max} - I_{\min}}$$
+
+```{r}
+CoefPartN <- (max(pc) - pc) / (max(pc) - min(pc))
+```
+
+Tras esta transformación, los cuatro vectores normalizados comparten la misma semántica: valores más cercanos a 0 indican mejor desempeño.
+
+-   Los cuatro vectores normalizados se consolidan en un `data.frame` de dimensión 4 x 3 (cuatro índices, tres particiones), cuyos valores se elevan al cuadrado como paso intermedio del cálculo de la distancia euclídea:
+
+```{r}
+indicesN <- data.frame(rbind(XieBeniN, CoefPartN, EntrPartN, FukSugN))
+indicesN_2 <- indicesN^2
+```
+
+-   Finalmente, se calcula el **Índice Resumen (IR)** para cada nivel de partición ($k$) mediante la aplicación de la norma Euclídea ($L_2$). Geométricamente, el algoritmo proyecta las puntuaciones de los cuatro índices estandarizados como coordenadas dentro de un espacio tetradimensional ($\mathbb{R}^4$).
+
+El "Punto Ideal" está definido por el vector $(0, 0, 0, 0)$, donde todos los índices alcanzarían simultáneamente su mejor rendimiento posible. El Índice Resumen para cada clase $k$ se calcula formalmente como:
+
+$$IR_k = \sqrt{\sum_{i=1}^{m} (I_{i,k,\text{norm}})^2}$$
+
+```{r}
+indices2N <- sqrt(sum(indicesN_2[, 1])) 
+indices3N <- sqrt(sum(indicesN_2[, 2])) 
+indices4N <- sqrt(sum(indicesN_2[, 3])) 
+```
+
+**El Indice Resumen para cada clase es**:
+
+:::::::::::: premium-metrics-grid
+::::: premium-metric
+::: metric-name
+2 Clases
+:::
+
+::: {.metric-number .metric-highlight}
+`r round(indices2N, 4)`
+:::
+:::::
+
+::::: premium-metric
+::: metric-name
+3 Clases
+:::
+
+::: {.metric-number .metric-highlight}
+`r round(indices3N, 4)`
+:::
+:::::
+
+::::: premium-metric
+::: metric-name
+4 Clases
+:::
+
+::: {.metric-number .metric-highlight}
+`r round(indices4N, 3)`
+:::
+:::::
+::::::::::::
+
+La partición de [3 Clases]{.destacado} registra el menor valor de **Indice Resumen**, por lo que se adopta $k = 3$ como el número de zonas de manejo para el lote.
+
+## Reetiquetado de las Clases
+
+La asignación de etiquetas numéricas por parte de `cmeans()` es arbitraria: el algoritmo no garantiza que la Clase 1 corresponda siempre a la misma zona entre distintas ejecuciones. Para asegurar que la interpretación agronómica sea estable y reproducible, se reordenan las etiquetas de `clases3` según el valor ascendente del centroide sobre `CS1`: la clase con el centroide más bajo queda asignada como Clase 1 (Baja Productividad) y la de centroide más alto como Clase 3 (Alta Productividad).
+
+```{r}
+orden <- order(clases3$centers[, 1])          
+mapa  <- setNames(seq_along(orden), orden)    
+clases3$cluster <- mapa[as.character(clases3$cluster)]
+```
+
+## Espacialización de las Zonas de Manejo
+
+Una vez determinado el número óptimo de clases mediante el Índice Resumen ($k = 3$, @sec-indices), se procede a la espacialización de la clasificación final. Para ello se extraen los datos de las clases delimitadas por el algoritmo Fuzzy K-Means y se combinan con las coordenadas gegráfias originales de la grilla de predicción:
+
+```{r}
+base_am <- cbind(pred_am[,1:2], 
+                 "2clases"= clases2$cluster, 
+                 "3clases"= clases3$cluster, 
+                 "4clases"= clases4$cluster)
+```
+
+El `data.frame` resultante se convierte a objeto `sf` especificando las columnas de coordenadas y el sistema de referencia **WGS 84 / UTM zona 20S** (`EPSG:32720`):
+
+```{r}
+base_am <-st_as_sf(base_am, 
+                   coords=c("X","Y"), 
+                   crs =32720) 
+```
+
+```{r}
+colnames(base_am)
+```
+
+Graficar:
+
+```{r}
+#| code-fold: true
+#| code-summary: "Código"
+
+ggplot() + 
+  geom_sf(data = base_am, aes(color = factor(`X3clases`))) + 
+  scale_color_manual(
+    values = c("1" = "firebrick", "2" = "yellow", "3" = "darkgreen"), 
+    labels = c("1" = "Baja Productividad", 
+               "2" = "Media Productividad",
+               "3" = "Alta Productividad"),
+    name = "Zona" 
+  ) + 
+  theme_minimal() +
+  labs(
+    title = "Zonas de Manejo") +
+  theme(
+    plot.title = element_text(size = 16, face = "bold"),
+    axis.title = element_blank(),
+    axis.text = element_blank(),
+    axis.ticks = element_blank(),
+    panel.grid = element_blank(),
+    legend.position = "bottom",  
+    legend.box.background = element_rect(fill = "snow", colour = "black") 
+  )
+```
+
+Y en el siguiente gráfico se observa la espacialización de las otras 2 alternativas evaluadas (2 y 4 clases)
+
+```{r}
+#| code-fold: true
+#| code-summary: "Código"
+
+p2 <- ggplot() +
+  geom_sf(data = base_am, aes(color = factor(`X2clases`)), size = 0.8) +
+  scale_color_manual(
+    values = c("1" = "firebrick", "2" = "darkgreen"),
+    labels = c("1" = "Zona A", "2" = "Zona B"),
+    name   = NULL
+  ) +
+  labs(title = "k = 2") +
+  theme_minimal() +
+  theme(axis.text = element_blank(), axis.ticks = element_blank(),
+        panel.grid = element_blank(), plot.title = element_text(face = "bold"),
+        legend.position = "bottom")
+
+p3 <- ggplot() +
+  geom_sf(data = base_am, aes(color = factor(`X3clases`)), size = 0.8) +
+  scale_color_manual(
+    values = c("1" = "firebrick", "2" = "yellow", "3" = "darkgreen"),
+    labels = c("1" = "Baja", "2" = "Media", "3" = "Alta"),
+    name   = NULL
+  ) +
+  labs(title = "k = 3 ✓") +  
+  theme_minimal() +
+  theme(axis.text = element_blank(), axis.ticks = element_blank(),
+        panel.grid = element_blank(), plot.title = element_text(face = "bold"),
+        legend.position = "bottom")
+
+p4 <- ggplot() +
+  geom_sf(data = base_am, aes(color = factor(`X4clases`)), size = 0.8) +
+  scale_color_manual(
+    values = c("1" = "firebrick", "2" = "yellow", "3" = "yellowgreen", "darkgreen" = ""),
+    labels = c("1" = "Zona 1", "2" = "Zona 2", "3" = "Zona 3", "4" = "Zona 4"),
+    name = NULL
+  ) +
+  labs(title = "k = 4") +
+  theme_minimal() +
+  theme(axis.text = element_blank(), axis.ticks = element_blank(),
+        panel.grid = element_blank(), plot.title = element_text(face = "bold"),
+        legend.position = "bottom")
+
+p2 + p4 +
+  plot_annotation(
+    title    = "Comparación de Clases — Fuzzy K-Means",
+    theme    = theme(plot.title    = element_text(face = "bold", size = 13),
+                     plot.subtitle = element_text(size = 10, color = "grey40"))
+  )
+```
+
+# Crear Zonas de Manejo como Polígonos
+
+El resultado de Fuzzy K-Means son discretos con una etiqueta de clase entera (1, 2 o 3). El objetivo es convertir esa nube de puntos en polígonos continuos que representen zonas de manejo.
+
+Se llevaron a cabo 2 alternativas:
+
+1.  **Interpolación IDW**.
+2.  **Rasterizar con Terra** y
+
+## Interpolación IDW
+
+-   Se aisla únicamente la variable a interpolar (`Clase`) junto con la geometría de puntos.
+
+```{r}
+datos_3Clases <- base_am %>% 
+  select(X3clases, geometry) 
+```
+
+-   Cambiar el nombre de las columnas por un nombre genérico que simplifica esa referencia:
+
+```{r}
+colnames(datos_3Clases) <- c("Clase", "geometry") 
+```
+
+-   Convertir a objeto `sp`, La conversión es obligatoria porque `gstat` no acepta objetos `sf` directamente como argumento locations. El objeto resultante es un `SpatialPointsDataFrame`.
+
+```{r}
+datos_sp <- as(datos_3Clases, "Spatial")
+```
+
+-   Crear grilla. Este es el destino de la interpolación: una grilla regular de celdas de 10 × 10 m que cubre la extensión del lote. Cada celda recibirá un valor interpolado de `Clase`. El tamaño de celda determina la resolución espacial del resultado final (celdas más pequeñas producen polígonos más detallados pero mayor costo computacional).
+
+El objeto pasa por tres estados: `sfc` (geometría pura de `st_make_grid`) → `sf` (para agregar el campo id_celda) → `sp` (requerido por `gstat`).
+
+```{r}
+grilla_2 <- st_make_grid(datos_sp, cellsize = c(10, 10), what = "polygons", square = TRUE)
+
+grilla_sf <- st_as_sf(grilla_2) 
+
+grilla_sf <- grilla_sf %>% mutate(id_celda = row_number())
+
+grilla_sp <- as(grilla_sf, "Spatial") 
+```
+
+-   Interpolación IDW.
+
+```{r}
+idw_model <- gstat::idw(formula = Clase ~ 1, locations = datos_sp, newdata = grilla_sp, idp = 2) 
+```
+
+El resultado es un `SpatialPixelsDataFrame`\] con una columna `var1.pred` que contiene el valor interpolado en cada celda —un número continuo entre 1 y 3.
+
+-   Se extrae el resultado a un `data.frame` con columnas `x`, `y` y `var1.pred`, y se reconstruye como un ráster con `terra::rast()`. El argumento `type = "xyz"` indica que las dos primeras columnas son coordenadas y la tercera es el valor de celda. Este paso es necesario porque las operaciones siguientes (reclasificación y vectorización) pertenecen al ecosistema `terra`, no a `gstat`.
+
+```{r}
+idw_df <- as.data.frame(idw_model) 
+r_pred <- terra::rast(idw_df[, c("x", "y", "var1.pred")], type = "xyz")
+```
+
+-   Reclasificar: La IDW es un interpolador de valores continuos. A los input de puntos con valores 1, 2 y 3 los trata como si fueran una variable cuantitativa cualquiera. El resultado es una superficie donde cada celda puede tomar cualquier valor real dentro del rango observado: una celda ubicada en la transición entre la zona 1 y la zona 2 puede tener un valor interpolado de 1.3, 1.7 o 2.1, dependiendo de qué tan cerca esté de cada grupo de puntos. Por eso es que se realiza un **reclasificado**.
+
+La superficie continua se convierte de vuelta a clases enteras mediante umbrales equidistantes entre los valores de clase (1, 2, 3): el punto medio entre clase 1 y clase 2 es 1.5, y entre clase 2 y clase 3 es 2.5. Cualquier celda con valor interpolado por debajo de 1.5 queda asignada a la Clase 1, entre 1.5 y 2.5 a la Clase 2, y por encima de 2.5 a la Clase 3. La conversión con `as.factor()` explicita que el ráster resultante es categórico.
+
+```{r}
+rcl <- matrix(c(-Inf, 1.5, 1, 
+                1.5, 2.5, 2, 
+                2.5, Inf, 3), 
+              ncol = 3, byrow = TRUE) 
+
+reclasificado <- classify(r_pred, rcl = rcl) %>% as.factor()
+```
+
+-   Vectorización y conversión final: `as.polygons()` con `dissolve = TRUE` agrupa todas las celdas contiguas de la misma clase y las fusiona en un único polígono por zona, eliminando los bordes internos de la grilla. El resultado es un `SpatVector` con tres campos (uno por zona). La conversión a `sf` y la asignación del CRS (EPSG:32720, WGS 84 / UTM zona 20S) devuelven el objeto estándar para realizar su gráfico:
+
+```{r}
+poligonos <- as.polygons(reclasificado, dissolve = TRUE)
+
+poligonos_sf <- st_as_sf(poligonos) 
+
+poligonos_sf <- st_set_crs(poligonos_sf, value = 32720) 
+```
+
+## Gráfico
+
+```{r}
+#| code-fold: true
+#| code-summary: "Código"
+
+ggplot(data = poligonos_sf) + 
+  geom_sf(aes(fill = as.factor(var1.pred)), color = "black", linewidth = 0.3) + 
+  scale_fill_manual( 
+    name = "Zona de manejo", 
+    values = c("firebrick", "yellow", "darkgreen"),  
+    labels = c("BP", "MP", "AP") 
+) + 
+  labs( 
+    title = "Zonas de manejo", 
+    subtitle = "Clasificación en 3 clusters") + 
+  theme_minimal(base_size = 13) + 
+  theme( 
+    legend.position = "bottom", 
+    legend.title = element_text(size = 12, face = "bold"), 
+    panel.grid = element_blank(), 
+    plot.title = element_text(size = 16, face = "bold"), 
+    plot.subtitle = element_text(size = 13), 
+    axis.title = element_blank(),
+    axis.text = element_blank(),
+    axis.ticks = element_blank())
+
+```
+
+## Rasterizar con Terra
+
+-   Filtrar los datos `base_am` de manera que queden: la clasificación de las 3 zonas (`X3clases`) y la información de la posición geográfica de cada punto (`geometry`).
+
+```{r}
+datos_3Clases <- base_am %>% 
+  select(X3clases, geometry) 
+```
+
+-   Convertir el objeto `sf` a `SpatVector`.
+
+> `SpatVector` es la estructura nativa que utiliza el paquete `terra` para manejar datos vectoriales (puntos, líneas o polígonos). Aunque `sf` es excelente para manejar bases de datos geográficas, `terra` es mucho más rápido para operaciones de rasterización.
+
+```{r}
+puntos_terra <- vect(datos_3Clases)
+```
+
+-   Crear un mapa cuadriculado (raster) completamente vacío mediante `rast`, que cubre exactamente el mismo tamaño que el lote de puntos. El parámetro `resolution = 10` define que cada píxel de esa grilla medirá 10 x 10 metros en el terreno:
+
+```{r}
+raster_base <- rast(puntos_terra, resolution = 10)
+```
+
+-   Rasterizar los puntos indicando que el valor de cada pixel será el del clúster:
+
+```{r}
+raster_zonas <- rasterize(puntos_terra, raster_base, field = "X3clases")
+```
+
+-   Crear Polígonos mediante `as.polygons`: agrupa todos los píxeles vecinos que pertenecen a la misma clase y traza un vector (un polígono) alrededor de ellos. El argumento `dissolve = TRUE` indica que si hay parches contiguos de la misma clase, los funda en un único polígono en lugar de dejar miles de cuadraditos de 10x10 metros separados.
+
+```{r}
+poligonos_terra <- as.polygons(raster_zonas, dissolve = TRUE)
+```
+
+-   Volver al formato `sf`:
+
+```{r}
+poligonos_finales <- st_as_sf(poligonos_terra)
+```
+
+-   Calcular el área de cada zona:
+
+```{r}
+poligonos_finales <- poligonos_finales %>%
+  mutate(area_ha = as.numeric(st_area(geometry)) / 10000)
+```
+
+-   Graficar:
+
+```{r}
+#| code-fold: true
+#| code-summary: "Código"
+
+ggplot(data = poligonos_finales) + 
+  geom_sf(aes(fill = as.factor(last)), color = "black", linewidth = 0.3) + 
+  scale_fill_manual( 
+    name = "Zona de manejo", 
+    values = c("firebrick", "yellow", "darkgreen"),  
+    labels = c("BP", "MP", "AP") 
+  ) + 
+  labs( 
+    title = "Zonas de manejo", 
+    subtitle = "Clasificación en 3 clusters") + 
+  theme_minimal(base_size = 13) + 
+  theme( 
+    legend.position = "bottom", 
+    legend.title = element_text(size = 12, face = "bold"), 
+    panel.grid = element_blank(), 
+    plot.title = element_text(size = 18, face = "bold", color = "#1f5e63", hjust = 0.5), 
+    plot.subtitle = element_text(size = 13, color = "#8faf9a", hjust = 0.5), 
+    axis.title = element_blank(),
+    axis.text = element_blank(),
+    axis.ticks = element_blank())
+
+```
+
+# MapView
+
+Otra opción es realizar un gráfico interactivo con `mapview` y `leaflet`:
+
+```{r}
+#| code-fold: true
+#| code-summary: "Código"
+
+#| code-fold: true
+#| code-summary: "Código"
+
+poligonos_sf$var1.pred <- as.factor(poligonos_sf$var1.pred)
+
+
+poligonos_finales <- poligonos_finales %>%
+  mutate(last_1 = case_when(
+    last == 1 ~ "Baja Productividad",
+    last == 2 ~ "Alta Productividad",
+    last == 3 ~ "Media Productividad"
+  ))
+
+
+mapa_unificado <- mapview(
+  poligonos_sf, 
+  zcol = "var1.pred", 
+  col.regions = c("firebrick", "yellow", "darkgreen"),
+  layer.name = "ZM - Interpolacion IDW", 
+  color = "black", 
+  lwd = 0.3,
+  alpha.regions = 0.9,
+  map.types = c("Esri.WorldImagery", "OpenStreetMap")
+) + 
+mapview(
+  poligonos_finales, 
+  zcol = "last", 
+  col.regions = c("firebrick", "yellow", "darkgreen"),
+  layer.name = "ZM - Rasterización",   
+  color = "black", 
+  lwd = 0.3,
+  alpha.regions = 0.9,
+  hide = TRUE,                           
+  popup = popupTable(
+    poligonos_finales, 
+    zcol = c("last_1", "area_ha"),
+    row.numbers = FALSE, 
+    feature.id = FALSE
+  ),
+  label = poligonos_finales$zona_nombre
+)
+
+
+mapa_unificado@map %>% addMiniMap( 
+  tiles = providers$Esri.WorldImagery, 
+  toggleDisplay = FALSE, 
+  position = "bottomright", 
+  zoomLevelOffset = -5, 
+  zoomLevelFixed = NULL, 
+  width = 150, 
+  height = 150, 
+  minimized = FALSE 
+)
+```
+
+# Unir Datos
+
+En el mapa con las zonas creadas no sabemos cuál es la zona más productiva y/o el orden de productividad de las mismas. Para poder caracterizar cada zona vamos a unir al mapa de zonas el mapa de puntos con los valores de rendimiento y elevación.
+
+-   Cargar capa que contiene los datos:
+
+```{r}
+datos <- st_read("data/Centroides.shp", quiet = TRUE)
+```
+
+-   Unir por atributos los puntos de datos a los polígonos de `polígonos_sf`:
+
+```{r}
+union <- st_join(poligonos_sf, datos, join = st_intersects) 
+```
+
+-   Resumen Estadístico por Zona:
+
+```{r}
+resumen <- union %>% 
+  st_drop_geometry() %>%                      
+  group_by(var1.pred) %>%                     
+  summarise( 
+    mean_Rto09     = mean(Rto09, na.rm = TRUE), 
+    mean_RTO11     = mean(RTO11, na.rm = TRUE), 
+    mean_Rto13     = mean(Rto13, na.rm = TRUE), 
+    mean_Alt = mean(Alt, na.rm = TRUE) 
+  ) 
+```
+
+-   Volver a unir los resultados estadisticos al objeto espacial original, le sumamos el campo geometría:
+
+```{r}
+poligonos_resumen <- left_join(poligonos_sf, resumen, by = "var1.pred")
+```
+
+-   Renombrar las columnas:
+
+```{r}
+colnames(poligonos_resumen) <- c("Clase", "Rto09", "Rto11", "Rto13", "Alt", "geometry")
+```
+
+-   Calcular el área de cada polígono:
+
+```{r}
+Zonas_Manejo_R_Final <- poligonos_resumen %>% 
+  mutate(Sup_ha = as.numeric(st_area(geometry))/10000)
+```
+
+-   Presentar los resultados en una tabla:
+
+```{r}
+#| label: tbl-zonas-de-manejo
+#| tbl-cap: "Variables para cada Zona de Manejo"
+#| code-fold: true
+#| code-summary: "Código"
+
+Zonas_Manejo_R_Final %>%
+  kable(
+    format = "html",
+    align = "c" 
+  ) %>%
+  kable_classic(
+    full_width = TRUE, 
+    font_size = 13
+  ) %>%
+  kable_styling(
+    bootstrap_options = c("striped", "hover", "condensed")
+  ) %>%
+  row_spec(0, bold = TRUE, color = "black", extra_css = "border-bottom: 2px solid black;") %>%
+  row_spec(nrow(Zonas_Manejo_R_Final), extra_css = "border-bottom: 2px solid black;")
+```

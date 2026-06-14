@@ -1,10 +1,9 @@
 ---
 title: "Teledetección con Google Earth Engine"
-subtitle: "Procesamiento de imagenes satelitales e índices de vegetación con Google Earth Engine"
-date: 2024-01
-categories: [Python, Google Earth Engine, Agricultura de precisión]
+subtitle: "Procesamiento de imagenes satelitales y cálculo de índices de vegetación con Google Earth Engine"
+date: 2026-06
+categories: [Python, Google Earth Engine, Agricultura de precisión, Teledetección, Indices de Vegetación]
+css: styles.css
 ---
-
-## En construcción
-
-Este reporte estará disponible próximamente.
+ 
+# En construcción

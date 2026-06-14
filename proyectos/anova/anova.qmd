@@ -1,10 +1,516 @@
 ---
-title: "ANOVA"
-subtitle: "Análisi de la Varianza"
-date: 2024-01
-categories: [R, Agricultura de precisión]
+title: "Análisis de la Varianza (ANOVA) con R"
+date: 2026-06
+categories: [R, Agricultura de precisión, ANOVA, Estadística]
+css: styles3.css
 ---
 
-## En construcción
+# Introducción
 
-Este reporte estará disponible próximamente.
+Este documento presenta un flujo de trabajo completo para el análisis de un experimento agrícola mediante el **Análisis de la Varianza (ANOVA)** con R. El conjunto de datos empleado es **npk**, incluido en la base de R, que registra la respuesta en rendimiento de *Pisum sativum* a la aplicación de tres nutrientes: Nitrógeno (N), Fósforo (P) y Potasio (K).
+
+El experimento implementa un Diseño en Bloques Completos Aleatorizados (DBCA) con estructura factorial: tres factores, cada uno con dos niveles (presencia vs. ausencia de aplicación). El ensayo comprende 24 unidades experimentales organizadas en 6 bloques de 4 parcelas cada uno. La variable respuesta es el rendimiento, expresado en libras por parcela.
+
+El flujo de trabajo consta de las siguientes etapas:
+
+1.  Carga y exploración inicial del conjunto de datos.
+2.  Estadísticas descriptivas por factor.
+3.  Especificación y ajuste del modelo ANOVA.
+4.  Validación de supuestos: normalidad y homocedasticidad.
+5.  Comparación de medias mediante el Test LSD de Fisher.
+
+# Librerías necesarias
+
+```{r}
+library(ggplot2)
+library(ggpubr)
+library(tidyverse)
+library(broom)
+library(agricolae) 
+library(car)
+library(kableExtra)
+library(ggfortify)    
+library(effectsize)
+library(parameters)
+
+```
+
+# Carga y exploración del conjunto de datos
+
+## Carga del dataset
+
+```{r}
+data("npk")
+```
+
+## Resumen del conjunto de datos
+
+```{r}
+summary(npk)
+```
+
+El resumen permite identificar la estructura del dataset:
+
+-   **yield**: variable respuesta. El rendimiento varió entre 44.20 y 69.50 lb/parcela. La media (54.88) y la mediana (55.65) son muy cercanas, lo que sugiere una distribución aproximadamente simétrica.
+-   **block**: factor de bloqueo con 6 niveles. La notación `1:4` indica que cada bloque contiene exactamente 4 unidades experimentales.
+-   **N, P, K**: factores independientes con 2 niveles cada uno (0 = sin aplicación, 1 = con aplicación). Las notaciones `0:12` y `1:12` indican un balance perfecto: 12 parcelas por nivel en cada nutriente.
+
+## Verificación de datos faltantes
+
+```{r}
+sum(is.na(npk))
+```
+
+No se detectaron valores faltantes en el conjunto de datos.
+
+## Distribución de la variable respuesta
+
+```{r}
+#| code-fold: true
+#| code-summary: "Código"
+
+ggplot(npk, aes(x = yield)) +
+  geom_histogram(
+    aes(y = after_stat(density)),
+    bins = 10,
+    fill  = "#1f5e63",
+    color = "white",
+    alpha = 0.75
+  ) +
+  geom_density(color = "#ffb162", linewidth = 0.9) +
+  theme_minimal() +
+  theme(
+    panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank(),
+    axis.line  = element_line(colour = "black", linewidth = 0.4),
+    plot.title = element_text(face = "bold", size = 13)
+  ) +
+  labs(
+    title    = "Distribución del Rendimiento",
+    x        = "Rendimiento (lb/parcela)",
+    y        = "Densidad"
+  )
+```
+
+Se observa que la distribución es aproximadamente unimodal y simétrica. Aunque no es una “campana de Gauss” perfecta, debido al tamaño de muestra pequeño de $n = 24$.
+
+## Gráfico Q-Q de la variable respuesta
+
+```{r}
+#| code-fold: true
+#| code-summary: "Código"
+
+ggplot(npk, aes(sample = yield)) +
+  stat_qq(color = "#1f5e63", size = 2.5, alpha = 0.85) +
+  stat_qq_line(color = "#ffb162", linewidth = 0.8, linetype = "dashed") +
+  theme_minimal() +
+  theme(
+    panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank(),
+    axis.line  = element_line(colour = "black", linewidth = 0.4),
+    plot.title = element_text(face = "bold", size = 13)
+  ) +
+  labs(
+    title    = "Gráfico Q-Q — Rendimiento",
+    x        = "Cuantiles teóricos",
+    y        = "Cuantiles muestrales"
+  )
+```
+
+Los puntos se distribuyen de manera cercana a la línea de referencia teórica, sin desviaciones sistemáticas en las colas. Esto refuerza la hipótesis de normalidad de la variable respuesta.
+
+## Boxplots por factor
+
+::: {.panel-tabset .tabset-topline}
+## Nitrógeno
+
+```{r}
+#| code-fold: true
+#| code-summary: "Código"
+
+ggplot(npk, aes(x = N, y = yield, fill = N)) +
+  geom_boxplot(outlier.shape = 16, alpha = 0.75, linewidth = 0.5) +
+  geom_jitter(width = 0.08, size = 2, alpha = 0.6, color = "#1B2632") +
+  scale_fill_manual(values = c("0" = "#2c3b4d", "1" = "#ffb162")) +
+  theme_minimal() +
+  theme(
+    panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank(),
+    axis.line        = element_line(colour = "black", linewidth = 0.4),
+    plot.title       = element_text(face = "bold", size = 13),
+    legend.position  = "none"
+  ) +
+  labs(
+    title    = "Efecto del Nitrógeno sobre el Rendimiento",
+    x        = "Nitrógeno (0 = Ausencia · 1 = Presencia)",
+    y        = "Rendimiento (lb/parcela)"
+  )
+```
+
+## Fósforo
+
+```{r}
+#| code-fold: true
+#| code-summary: "Código"
+
+ggplot(npk, aes(x = P, y = yield, fill = P)) +
+  geom_boxplot(outlier.shape = 16, alpha = 0.75, linewidth = 0.5) +
+  geom_jitter(width = 0.08, size = 2, alpha = 0.6, color = "#1B2632") +
+  scale_fill_manual(values = c("0" = "#2c3b4d", "1" = "#ffb162")) +
+  theme_minimal() +
+  theme(
+    panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank(),
+    axis.line        = element_line(colour = "black", linewidth = 0.4),
+    plot.title       = element_text(face = "bold", size = 13),
+    legend.position  = "none"
+  ) +
+  labs(
+    title    = "Efecto del Fósforo sobre el Rendimiento",
+    x        = "Fósforo (0 = Ausencia · 1 = Presencia)",
+    y        = "Rendimiento (lb/parcela)"
+  )
+```
+
+## Potasio
+
+```{r}
+#| code-fold: true
+#| code-summary: "Código"
+
+ggplot(npk, aes(x = K, y = yield, fill = K)) +
+  geom_boxplot(outlier.shape = 16, alpha = 0.75, linewidth = 0.5) +
+  geom_jitter(width = 0.08, size = 2, alpha = 0.6, color = "#1B2632") +
+  scale_fill_manual(values = c("0" = "#2c3b4d", "1" = "#ffb162")) +
+  theme_minimal() +
+  theme(
+    panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank(),
+    axis.line        = element_line(colour = "black", linewidth = 0.4),
+    plot.title       = element_text(face = "bold", size = 13),
+    legend.position  = "none"
+  ) +
+  labs(
+    title    = "Efecto del Potasio sobre el Rendimiento",
+    x        = "Potasio (0 = Ausencia · 1 = Presencia)",
+    y        = "Rendimiento (lb/parcela)"
+  )
+```
+:::
+
+## Estadísticas descriptivas por factor
+
+```{r}
+#| code-fold: true
+#| code-summary: "Código"
+
+factores <- list(
+  list(var = "N", nombre = "Nitrógeno"),
+  list(var = "P", nombre = "Fósforo"),
+  list(var = "K", nombre = "Potasio")
+)
+
+tabla_desc <- map_dfr(factores, function(f) {
+  npk %>%
+    group_by(Nivel = .data[[f$var]]) %>%
+    summarise(
+      n      = n(),
+      Media  = mean(yield),
+      Mediana = median(yield),
+      DE     = sd(yield),
+      Min    = min(yield),
+      Max    = max(yield),
+      .groups = "drop"
+    ) %>%
+    mutate(Factor = f$nombre, Nivel = as.character(Nivel)) %>%
+    select(Factor, Nivel, everything())
+})
+
+tabla_desc %>%
+  kable(
+    digits     = 2,
+    col.names  = c("Factor", "Nivel", "n", "Media", "Mediana",
+                   "DE", "Mínimo", "Máximo"),
+    caption    = "<span style='color:black; font-weight:bold;
+                  font-size:16px;'>Estadísticas descriptivas del rendimiento
+                  por factor y nivel</span>",
+    escape     = FALSE,
+    align      = c("l", "c", "c", "c", "c", "c", "c", "c")
+  ) %>%
+  kable_styling(
+    bootstrap_options = c("striped", "hover", "condensed"),
+    full_width        = FALSE,
+    position          = "center",
+    font_size         = 13
+  ) %>%
+  row_spec(0, bold = TRUE, color = "white", background = "#1B2632") %>%
+  column_spec(1, bold = TRUE) %>%
+  pack_rows("Nitrógeno", 1, 2) %>%
+  pack_rows("Fósforo",   3, 4) %>%
+  pack_rows("Potasio",   5, 6)
+```
+
+# Especificación del modelo
+
+El modelo se ajusta con el bloque como factor de control y los tres nutrientes con sus interacciones como efectos de tratamiento:
+
+```{r}
+modelo <- aov(yield ~ block + N * P * K, data = npk)
+```
+
+## Tabla ANOVA
+
+```{r}
+#| code-fold: true
+#| code-summary: "Código"
+
+tidy(anova(modelo)) %>%
+  kable(
+    digits     = 4,
+    col.names  = c("Factor", "gl", "SC", "CM", "Estadístico F", "p-valor"),
+    caption    = "<span style='color:black; font-weight:bold;
+                  font-size:16px;'>Tabla ANOVA — Modelo DBCA Factorial 2³</span>",
+    escape     = FALSE,
+    align      = c("l", "c", "c", "c", "c", "c")
+  ) %>%
+  kable_styling(
+    bootstrap_options = c("striped", "hover", "condensed"),
+    full_width        = FALSE,
+    position          = "center",
+    font_size         = 13
+  ) %>%
+  row_spec(0, bold = TRUE, color = "white", background = "#1B2632") %>%
+  column_spec(1, bold = TRUE, border_right = TRUE) %>%
+  column_spec(6, bold = TRUE) %>%
+  row_spec(c(2, 4), background = "#eef4f0")  # N y K significativos
+```
+
+Los resultados del ANOVA indican lo siguiente:
+
+-   **Nitrógeno** ($p = 0.0043$): factor más determinante del rendimiento. Su efecto es altamente significativo.
+-   **Fósforo** ($p = 0.4749$): no significativo bajo las condiciones del ensayo. La aplicación de P por sí sola no produjo cambios estadísticamente comprobables en el rendimiento.
+-   **Potasio** ($p = 0.0288$): efecto significativo, aunque menos pronunciado que el de N.
+-   **Interacciones dobles y triple**: ninguna resultó estadísticamente significativa ($p > 0.05$), lo que indica que los factores actúan de manera independiente en este experimento.
+
+# Validación de supuestos
+
+## Panel de diagnóstico gráfico
+
+Antes de los tests formales, el análisis gráfico de residuos es la herramienta más informativa para evaluar el cumplimiento de los supuestos del modelo.
+
+```{r}
+#| fig-height: 6.5
+#| code-fold: true
+#| code-summary: "Código"
+
+autoplot(modelo,
+         which  = 1:4,
+         ncol   = 2,
+         label.size = 3,
+         colour = "#1f5e63",
+         smooth.colour = "#ffb162",
+         smooth.linetype = "dashed") +
+  theme_minimal() +
+  theme(
+    panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank(),
+    plot.title = element_text(face = "bold", size = 11)
+  )
+```
+
+Los cuatro gráficos permiten evaluar:
+
+-   **Residuals vs Fitted**: la dispersión de los residuos es homogénea a lo largo de los valores ajustados, sin tendencias sistemáticas.
+-   **Q-Q de residuos**: los puntos siguen la línea teórica de normalidad de manera satisfactoria.
+-   **Scale-Location**: la raíz cuadrada de los residuos estandarizados no muestra tendencia creciente ni decreciente (homocedasticidad visual).
+-   **Cook's Distance**: ninguna observación supera valores de influencia preocupantes.
+
+## Normalidad de residuos — Test de Shapiro-Wilk
+
+```{r}
+shapiro.test(modelo$residuals)
+```
+
+La hipótesis nula ($H_0$) postula que los residuos siguen una distribución normal. Con $p\text{-valor} = 0.6363 \gg \alpha = 0.05$, no hay evidencia para rechazar $H_0$. **El supuesto de normalidad se cumple.**
+
+## Homocedasticidad — Test de Levene
+
+```{r}
+leveneTest(yield ~ N * P * K, data = npk)
+```
+
+La hipótesis nula ($H_0$) postula igualdad de varianzas entre los grupos de tratamiento. Con $p\text{-valor} = 0.9287 \gg \alpha = 0.05$, no se rechaza $H_0$. **El supuesto de homocedasticidad se cumple.**
+
+> Ambos supuestos del modelo ANOVA quedan validados tanto gráfica como formalmente. Las inferencias realizadas a partir del modelo son estadísticamente válidas.
+
+# Comparación de medias — Test LSD de Fisher
+
+::: {.panel-tabset .tabset-topline}
+## Nitrógeno
+
+Realizar el Test LSD:
+
+```{r}
+test_lsd_N <- LSD.test(modelo, "N")
+```
+
+Presentar resultados en una tabla con [kableExtra]{.func-tecnica}
+
+```{r}
+#| code-fold: true
+#| code-summary: "Código"
+
+tabla_medias_n <- test_lsd_N$groups %>%
+  rownames_to_column(var = "Nitrogeno") %>%
+  rename(Rendimiento = yield, Grupos = groups)
+
+
+tabla_medias_n %>%
+  kbl(caption = "<span style='color: black; font-weight: bold; font-size: 18px;'>Prueba de Comparación de Medias LSD (Nitrógeno)</span>",
+      align = "c",
+      digits = 2) %>%
+  kable_classic(full_width = F, html_font = "Cambria") %>%
+  row_spec(0, bold = T, color = "white", background = "#2c3b4d") 
+```
+
+Graficar mediante [ggplot]{.func-tecnica}
+
+```{r}
+#| code-fold: true
+#| code-summary: "Código"
+
+df_lsd_n <- test_lsd_N$groups %>%
+  rownames_to_column(var = "Nivel") %>%
+  rename(Rendimiento = yield, Letra = groups)
+
+ggplot(df_lsd_n, aes(x = Nivel, y = Rendimiento, fill = Nivel)) +
+  geom_bar(stat = "identity", width = 0.6, color = "black", alpha = 0.9) +
+  geom_text(aes(label = Letra), vjust = -0.5, size = 5, fontface = "bold") +
+  scale_fill_manual(values = c("0" = "#2c3b4d", "1" = "#ffb162")) +
+  scale_y_continuous(expand = expansion(mult = c(0, 0.15))) +
+  labs(title = "Efecto del Nitrógeno sobre el Rendimiento",
+       subtitle = "Test LSD (p < 0.05)",
+       x = "Nivel de Nitrógeno (0: Ausencia, 1: Presencia)",
+       y = "Rendimiento (lb/parcela)") +
+  theme_minimal() +
+  theme(
+    panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank(),
+    axis.line = element_line(colour = "black"),
+    plot.title = element_text(face = "bold", size = 14),
+    legend.position = "none"
+  )
+```
+
+## Fósforo
+
+Realizar el Test LSD:
+
+```{r}
+test_lsd_P <- LSD.test(modelo, "P")
+```
+
+Presentar resultados en una tabla con [kableExtra]{.func-tecnica}
+
+```{r}
+#| code-fold: true
+#| code-summary: "Código"
+
+tabla_medias_p <- test_lsd_P$groups %>%
+  rownames_to_column(var = "Fósforo") %>%
+  rename(Rendimiento = yield, Grupos = groups)
+
+
+tabla_medias_p %>%
+  kbl(caption = "<span style='color: black; font-weight: bold; font-size: 18px;'>Prueba de Comparación de Medias LSD (Fósforo)</span>",
+      align = "c",
+      digits = 2) %>%
+  kable_classic(full_width = F, html_font = "Cambria") %>%
+  row_spec(0, bold = T, color = "white", background = "#2c3b4d") 
+```
+
+Graficar mediante [ggplot]{.func-tecnica}
+
+```{r}
+#| code-fold: true
+#| code-summary: "Código"
+
+df_lsd_p <- test_lsd_P$groups %>%
+  rownames_to_column(var = "Nivel") %>%
+  rename(Rendimiento = yield, Letra = groups)
+
+ggplot(df_lsd_p, aes(x = Nivel, y = Rendimiento, fill = Nivel)) +
+  geom_bar(stat = "identity", width = 0.6, color = "black", alpha = 0.9) +
+  geom_text(aes(label = Letra), vjust = -0.5, size = 5, fontface = "bold") +
+  scale_fill_manual(values = c("0" = "#2c3b4d", "1" = "#ffb162")) +
+  scale_y_continuous(expand = expansion(mult = c(0, 0.15))) +
+  labs(title = "Efecto del Fósforo sobre el Rendimiento",
+       subtitle = "Test LSD (p < 0.05)",
+       x = "Nivel de Fósforo (0: Ausencia, 1: Presencia)",
+       y = "Rendimiento (lb/parcela)") +
+  theme_minimal() +
+  theme(
+    panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank(),
+    axis.line = element_line(colour = "black"),
+    plot.title = element_text(face = "bold", size = 14),
+    legend.position = "none"
+  )
+```
+
+## Potasio
+
+Realizar el Test LSD:
+
+```{r}
+test_lsd_K <- LSD.test(modelo, "K")
+```
+
+Presentar resultados en una tabla con [kableExtra]{.func-tecnica}
+
+```{r}
+#| code-fold: true
+#| code-summary: "Código"
+
+tabla_medias_k <- test_lsd_K$groups %>%
+  rownames_to_column(var = "Potasio") %>%
+  rename(Rendimiento = yield, Grupos = groups)
+
+
+tabla_medias_k %>%
+  kbl(caption = "<span style='color: black; font-weight: bold; font-size: 18px;'>Prueba de Comparación de Medias LSD (Potasio)</span>",
+      align = "c",
+      digits = 2) %>%
+  kable_classic(full_width = F, html_font = "Cambria") %>%
+  row_spec(0, bold = T, color = "white", background = "#2c3b4d") 
+```
+
+Graficar mediante [ggplot]{.func-tecnica}
+
+```{r}
+#| code-fold: true
+#| code-summary: "Código"
+
+df_lsd_k <- test_lsd_K$groups %>%
+  rownames_to_column(var = "Nivel") %>%
+  rename(Rendimiento = yield, Letra = groups)
+
+ggplot(df_lsd_k, aes(x = Nivel, y = Rendimiento, fill = Nivel)) +
+  geom_bar(stat = "identity", width = 0.6, color = "black", alpha = 0.9) +
+  geom_text(aes(label = Letra), vjust = -0.5, size = 5, fontface = "bold") +
+  scale_fill_manual(values = c("0" = "#2c3b4d", "1" = "#ffb162")) +
+  scale_y_continuous(expand = expansion(mult = c(0, 0.15))) +
+  labs(title = "Efecto del Potasio sobre el Rendimiento",
+       subtitle = "Test LSD (p < 0.05)",
+       x = "Nivel de Potasio (0: Ausencia, 1: Presencia)",
+       y = "Rendimiento (lb/parcela)") +
+  theme_minimal() +
+  theme(
+    panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank(),
+    axis.line = element_line(colour = "black"),
+    plot.title = element_text(face = "bold", size = 14),
+    legend.position = "none"
+  )
+```
+:::
