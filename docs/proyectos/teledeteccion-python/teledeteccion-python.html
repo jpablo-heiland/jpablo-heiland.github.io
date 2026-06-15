@@ -173,7 +173,7 @@ window.Quarto = {
  <span class="dropdown-text">Regresión espacial</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../../proyectos/serie-temporal-gee/fenologia-gee.html">
+    <a class="dropdown-item" href="../../proyectos/serie-temporal-gee/fenologia-gee.qmd">
  <span class="dropdown-text">Optimización</span></a>
   </li>  
         <li>
@@ -834,7 +834,7 @@ Tabla&nbsp;1
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb43"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>fig.colorbar(im1, ax<span class="op">=</span>axs[<span class="dv">0</span>, <span class="dv">0</span>], shrink<span class="op">=</span><span class="fl">0.7</span>, label<span class="op">=</span><span class="st">'Valor del Índice'</span>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>&lt;matplotlib.colorbar.Colorbar object at 0x000001950CC5A260&gt;</code></pre>
+<pre><code>&lt;matplotlib.colorbar.Colorbar object at 0x000001A7308564A0&gt;</code></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb45"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="co"># NDWI </span></span>
 <span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>im4 <span class="op">=</span> axs[<span class="dv">1</span>, <span class="dv">0</span>].imshow(NDWI, cmap<span class="op">=</span><span class="st">'YlGnBu'</span>) </span>
@@ -845,7 +845,7 @@ Tabla&nbsp;1
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb47"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>fig.colorbar(im4, ax<span class="op">=</span>axs[<span class="dv">1</span>, <span class="dv">0</span>], shrink<span class="op">=</span><span class="fl">0.7</span>, label<span class="op">=</span><span class="st">'Valor del Índice'</span>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>&lt;matplotlib.colorbar.Colorbar object at 0x000001950CC87A30&gt;</code></pre>
+<pre><code>&lt;matplotlib.colorbar.Colorbar object at 0x000001A730887A00&gt;</code></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb49"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="co"># SAVI</span></span>
 <span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a>im2 <span class="op">=</span> axs[<span class="dv">0</span>, <span class="dv">1</span>].imshow(SAVI, cmap<span class="op">=</span><span class="st">'RdYlGn'</span>, vmin<span class="op">=</span><span class="dv">0</span>, vmax<span class="op">=</span><span class="dv">1</span>)</span>
@@ -856,7 +856,7 @@ Tabla&nbsp;1
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb51"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a>fig.colorbar(im2, ax<span class="op">=</span>axs[<span class="dv">0</span>, <span class="dv">1</span>], shrink<span class="op">=</span><span class="fl">0.7</span>, label<span class="op">=</span><span class="st">'Valor del Índice'</span>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>&lt;matplotlib.colorbar.Colorbar object at 0x000001950CCDAAA0&gt;</code></pre>
+<pre><code>&lt;matplotlib.colorbar.Colorbar object at 0x000001A7308DAAA0&gt;</code></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb53"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="co"># EVI </span></span>
 <span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a>im3 <span class="op">=</span> axs[<span class="dv">0</span>, <span class="dv">2</span>].imshow(EVI, cmap<span class="op">=</span><span class="st">'RdYlGn'</span>)</span>
@@ -867,7 +867,7 @@ Tabla&nbsp;1
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb55"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a>fig.colorbar(im3, ax<span class="op">=</span>axs[<span class="dv">0</span>, <span class="dv">2</span>], shrink<span class="op">=</span><span class="fl">0.7</span>, label<span class="op">=</span><span class="st">'Valor del Índice'</span>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>&lt;matplotlib.colorbar.Colorbar object at 0x000001950CD2C610&gt;</code></pre>
+<pre><code>&lt;matplotlib.colorbar.Colorbar object at 0x000001A73092C3D0&gt;</code></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb57"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a><span class="co"># NDTI </span></span>
 <span id="cb57-2"><a href="#cb57-2" aria-hidden="true" tabindex="-1"></a>im5 <span class="op">=</span> axs[<span class="dv">1</span>, <span class="dv">1</span>].imshow(NDTI, cmap<span class="op">=</span><span class="st">'copper'</span>)</span>
@@ -878,7 +878,7 @@ Tabla&nbsp;1
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb59"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a>fig.colorbar(im5, ax<span class="op">=</span>axs[<span class="dv">1</span>, <span class="dv">1</span>], shrink<span class="op">=</span><span class="fl">0.7</span>, label<span class="op">=</span><span class="st">'Valor del Índice'</span>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>&lt;matplotlib.colorbar.Colorbar object at 0x000001950CD6C0D0&gt;</code></pre>
+<pre><code>&lt;matplotlib.colorbar.Colorbar object at 0x000001A730952FE0&gt;</code></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb61"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">1</span>, <span class="dv">2</span>].axis(<span class="st">'off'</span>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
