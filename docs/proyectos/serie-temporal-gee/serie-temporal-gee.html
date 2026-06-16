@@ -539,1284 +539,12 @@ window.Quarto = {
 <span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">'Lote'</span></span>
 <span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>Map  </span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output-display">
-
-
-
-    <meta charset="UTF-8">
-<title>My Map</title>
-<!-- Load require.js. Delete this if your page already loads require.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" crossorigin="anonymous"></script><script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.1/dist/embed-amd.js" crossorigin="anonymous"></script><script type="application/vnd.jupyter.widget-state+json">
-{
-  "version_major": 2,
-  "version_minor": 0,
-  "state": {
-    "e95e31ba69c44dbf805100639ecc4380": {
-      "model_name": "LayoutModel",
-      "model_module": "@jupyter-widgets/base",
-      "model_module_version": "1.2.0",
-      "state": {
-        "width": "500px"
-      }
-    },
-    "be281a8177bb43db9bfc59476b65d331": {
-      "model_name": "LayoutModel",
-      "model_module": "@jupyter-widgets/base",
-      "model_module_version": "1.2.0",
-      "state": {
-        "height": "880px",
-        "width": "100%"
-      }
-    },
-    "c6c9ef7c82164ab3bab3200dc7cae6e4": {
-      "model_name": "LeafletMapStyleModel",
-      "model_module": "jupyter-leaflet",
-      "model_module_version": "^0.20",
-      "state": {}
-    },
-    "365ef386c01a4926a4332f810468d19c": {
-      "model_name": "LeafletMapStyleModel",
-      "model_module": "jupyter-leaflet",
-      "model_module_version": "^0.20",
-      "state": {
-        "cursor": "move"
-      }
-    },
-    "5bc2974f34e9463391abc1d455b5e09e": {
-      "model_name": "LeafletTileLayerModel",
-      "model_module": "jupyter-leaflet",
-      "model_module_version": "^0.20",
-      "state": {
-        "attribution": "&copy; <a href=\"https://www.openstreetmap.org/copyright\">OpenStreetMap</a> contributors",
-        "base": true,
-        "max_zoom": 30,
-        "min_zoom": 1,
-        "name": "OpenStreetMap.Mapnik",
-        "options": [
-          "attribution",
-          "bounds",
-          "detect_retina",
-          "max_native_zoom",
-          "max_zoom",
-          "min_native_zoom",
-          "min_zoom",
-          "no_wrap",
-          "pm_ignore",
-          "tile_size",
-          "tms",
-          "zoom_offset"
-        ],
-        "subitems": []
-      }
-    },
-    "75a4c74bc9d145d79e9ec83ec26259d4": {
-      "model_name": "LeafletMapStyleModel",
-      "model_module": "jupyter-leaflet",
-      "model_module_version": "^0.20",
-      "state": {}
-    },
-    "5fff4b44159f483f8b60270301413e90": {
-      "model_name": "LeafletMapModel",
-      "model_module": "jupyter-leaflet",
-      "model_module_version": "^0.20",
-      "state": {
-        "_dom_classes": [],
-        "center": [
-          -33.637327788734545,
-          -64.97064945248421
-        ],
-        "controls": [
-          "IPY_MODEL_8ac26daf8c4f45d1bc33f6d9b8fc73d1",
-          "IPY_MODEL_8fbaeb1b16ac49c9af0b88321f6df586",
-          "IPY_MODEL_ad6ab84e1e7e4c119de0ed25875f0345",
-          "IPY_MODEL_95362c462d6540bea60578c772e9c814",
-          "IPY_MODEL_74fc30cc27b04c018ef511dcc4090d75",
-          "IPY_MODEL_79f94075da6f4364bd5c36b3c8497807",
-          "IPY_MODEL_12bf252b0a1e4aa99bb5b334ca88dd5b",
-          "IPY_MODEL_9e652764b8bf480f88fdcb4a50d55e38",
-          "IPY_MODEL_8cbe30e67d6b49c1acd8145e9731712b"
-        ],
-        "crs": {
-          "name": "EPSG3857",
-          "custom": false
-        },
-        "default_style": "IPY_MODEL_c6c9ef7c82164ab3bab3200dc7cae6e4",
-        "dragging_style": "IPY_MODEL_365ef386c01a4926a4332f810468d19c",
-        "layers": [
-          "IPY_MODEL_5bc2974f34e9463391abc1d455b5e09e",
-          "IPY_MODEL_27f4b228fa274c5f8cf195f552ecd9a0",
-          "IPY_MODEL_169585b6ad3a43b19c03e289d5430ffb",
-          "IPY_MODEL_5aa5e6bd339d489fa9a4188fc7b4933a"
-        ],
-        "layout": "IPY_MODEL_be281a8177bb43db9bfc59476b65d331",
-        "max_zoom": 24.0,
-        "options": [
-          "bounce_at_zoom_limits",
-          "box_zoom",
-          "center",
-          "close_popup_on_click",
-          "double_click_zoom",
-          "dragging",
-          "fullscreen",
-          "inertia",
-          "inertia_deceleration",
-          "inertia_max_speed",
-          "interpolation",
-          "keyboard",
-          "keyboard_pan_offset",
-          "keyboard_zoom_offset",
-          "max_zoom",
-          "min_zoom",
-          "prefer_canvas",
-          "scroll_wheel_zoom",
-          "tap",
-          "tap_tolerance",
-          "touch_zoom",
-          "world_copy_jump",
-          "zoom",
-          "zoom_animation_threshold",
-          "zoom_delta",
-          "zoom_snap"
-        ],
-        "panes": {},
-        "scroll_wheel_zoom": true,
-        "style": "IPY_MODEL_75a4c74bc9d145d79e9ec83ec26259d4",
-        "zoom": 14.0
-      }
-    },
-    "27be38e58fe34f6e956b7a2d610eab25": {
-      "model_name": "LayoutModel",
-      "model_module": "@jupyter-widgets/base",
-      "model_module_version": "1.2.0",
-      "state": {
-        "grid_gap": "0px 10px",
-        "grid_template_columns": "auto auto",
-        "overflow": "visible"
-      }
-    },
-    "a7d5971bc25e4c98b8604ae79070913d": {
-      "model_name": "GridBoxModel",
-      "model_module": "@jupyter-widgets/controls",
-      "model_module_version": "1.5.0",
-      "state": {
-        "_dom_classes": [],
-        "children": [
-          "IPY_MODEL_826cb6b6b9ea4b3480004cca0dc6576a",
-          "IPY_MODEL_c6ba4ecb733d4eabb200fc4df71ca9ed"
-        ],
-        "layout": "IPY_MODEL_27be38e58fe34f6e956b7a2d610eab25"
-      }
-    },
-    "8ac26daf8c4f45d1bc33f6d9b8fc73d1": {
-      "model_name": "LeafletWidgetControlModel",
-      "model_module": "jupyter-leaflet",
-      "model_module_version": "^0.20",
-      "state": {
-        "options": [
-          "position",
-          "transparent_bg"
-        ],
-        "position": "topright",
-        "transparent_bg": true,
-        "widget": "IPY_MODEL_a7d5971bc25e4c98b8604ae79070913d"
-      }
-    },
-    "562f2c527c8a455abf6d694abd8c9f11": {
-      "model_name": "LayoutModel",
-      "model_module": "@jupyter-widgets/base",
-      "model_module_version": "1.2.0",
-      "state": {}
-    },
-    "d66415b6348e493190a16baa8a64cce5": {
-      "model_name": "AnyModel",
-      "model_module": "anywidget",
-      "model_module_version": "~0.11.*",
-      "state": {
-        "_dom_classes": [
-          "geemap-light"
-        ],
-        "layout": "IPY_MODEL_562f2c527c8a455abf6d694abd8c9f11"
-      }
-    },
-    "8fbaeb1b16ac49c9af0b88321f6df586": {
-      "model_name": "LeafletWidgetControlModel",
-      "model_module": "jupyter-leaflet",
-      "model_module_version": "^0.20",
-      "state": {
-        "options": [
-          "position",
-          "transparent_bg"
-        ],
-        "transparent_bg": true,
-        "widget": "IPY_MODEL_d66415b6348e493190a16baa8a64cce5"
-      }
-    },
-    "ad6ab84e1e7e4c119de0ed25875f0345": {
-      "model_name": "LeafletZoomControlModel",
-      "model_module": "jupyter-leaflet",
-      "model_module_version": "^0.20",
-      "state": {
-        "options": [
-          "position",
-          "zoom_in_text",
-          "zoom_in_title",
-          "zoom_out_text",
-          "zoom_out_title"
-        ]
-      }
-    },
-    "95362c462d6540bea60578c772e9c814": {
-      "model_name": "LeafletFullScreenControlModel",
-      "model_module": "jupyter-leaflet",
-      "model_module_version": "^0.20",
-      "state": {
-        "options": [
-          "position"
-        ]
-      }
-    },
-    "74fc30cc27b04c018ef511dcc4090d75": {
-      "model_name": "LeafletDrawControlModel",
-      "model_module": "jupyter-leaflet",
-      "model_module_version": "^0.20",
-      "state": {
-        "circle": {},
-        "circlemarker": {},
-        "data": [],
-        "marker": {
-          "shapeOptions": {
-            "color": "#3388ff"
-          }
-        },
-        "options": [
-          "position"
-        ],
-        "polygon": {
-          "shapeOptions": {}
-        },
-        "polyline": {
-          "shapeOptions": {}
-        },
-        "rectangle": {
-          "shapeOptions": {
-            "color": "#3388ff"
-          }
-        }
-      }
-    },
-    "79f94075da6f4364bd5c36b3c8497807": {
-      "model_name": "LeafletScaleControlModel",
-      "model_module": "jupyter-leaflet",
-      "model_module_version": "^0.20",
-      "state": {
-        "options": [
-          "imperial",
-          "max_width",
-          "metric",
-          "position",
-          "update_when_idle"
-        ],
-        "position": "bottomleft"
-      }
-    },
-    "12bf252b0a1e4aa99bb5b334ca88dd5b": {
-      "model_name": "LeafletMeasureControlModel",
-      "model_module": "jupyter-leaflet",
-      "model_module_version": "^0.20",
-      "state": {
-        "_custom_units": {},
-        "active_color": "orange",
-        "options": [
-          "active_color",
-          "capture_z_index",
-          "completed_color",
-          "popup_options",
-          "position",
-          "primary_area_unit",
-          "primary_length_unit",
-          "secondary_area_unit",
-          "secondary_length_unit"
-        ],
-        "popup_options": {
-          "className": "leaflet-measure-resultpopup",
-          "autoPanPadding": [
-            10,
-            10
-          ]
-        },
-        "position": "bottomleft",
-        "primary_length_unit": "kilometers"
-      }
-    },
-    "aaa2a4abb768452f9c6143a115b43651": {
-      "model_name": "LayoutModel",
-      "model_module": "@jupyter-widgets/base",
-      "model_module_version": "1.2.0",
-      "state": {}
-    },
-    "826cb6b6b9ea4b3480004cca0dc6576a": {
-      "model_name": "AnyModel",
-      "model_module": "anywidget",
-      "model_module_version": "~0.11.*",
-      "state": {
-        "_dom_classes": [],
-        "children": [
-          "IPY_MODEL_99135c603b0b4e00815fe6d9dcae180a",
-          "IPY_MODEL_60648995a6de46e28c607726ccef3472",
-          "IPY_MODEL_d36bcb7ebddf4fdeb8a91ebb7e589897",
-          "IPY_MODEL_0a67f4ea9f374fd88589700d87a8b6b2"
-        ],
-        "layout": "IPY_MODEL_aaa2a4abb768452f9c6143a115b43651"
-      }
-    },
-    "920cfddee6ae4aafbd66fd9913819dc9": {
-      "model_name": "LayoutModel",
-      "model_module": "@jupyter-widgets/base",
-      "model_module_version": "1.2.0",
-      "state": {}
-    },
-    "7d7fbda1d584458ebdf8cb791a7c5e63": {
-      "model_name": "AnyModel",
-      "model_module": "anywidget",
-      "model_module_version": "~0.11.*",
-      "state": {
-        "_dom_classes": [
-          "geemap-light"
-        ],
-        "layout": "IPY_MODEL_920cfddee6ae4aafbd66fd9913819dc9",
-        "name": "OpenStreetMap.Mapnik"
-      }
-    },
-    "2b8772b71ba2410da9ee28ee6ff37942": {
-      "model_name": "LinkModel",
-      "model_module": "@jupyter-widgets/controls",
-      "model_module_version": "1.5.0",
-      "state": {
-        "source": [
-          "IPY_MODEL_5bc2974f34e9463391abc1d455b5e09e",
-          "opacity"
-        ],
-        "target": [
-          "IPY_MODEL_7d7fbda1d584458ebdf8cb791a7c5e63",
-          "opacity"
-        ]
-      }
-    },
-    "fcd49e0ce68c45908ad72975da929023": {
-      "model_name": "LinkModel",
-      "model_module": "@jupyter-widgets/controls",
-      "model_module_version": "1.5.0",
-      "state": {
-        "source": [
-          "IPY_MODEL_5bc2974f34e9463391abc1d455b5e09e",
-          "visible"
-        ],
-        "target": [
-          "IPY_MODEL_7d7fbda1d584458ebdf8cb791a7c5e63",
-          "visible"
-        ]
-      }
-    },
-    "1e77a8b7b8c84435be232051064321f6": {
-      "model_name": "LayoutModel",
-      "model_module": "@jupyter-widgets/base",
-      "model_module_version": "1.2.0",
-      "state": {}
-    },
-    "80a1a0a1aa0840c7ac84b47843903249": {
-      "model_name": "AnyModel",
-      "model_module": "anywidget",
-      "model_module_version": "~0.11.*",
-      "state": {
-        "_dom_classes": [
-          "geemap-light"
-        ],
-        "icon": "point_scan",
-        "layout": "IPY_MODEL_1e77a8b7b8c84435be232051064321f6",
-        "tooltip_text": "Inspector"
-      }
-    },
-    "a35efda7c096448ca12e911f82a7b1b9": {
-      "model_name": "LayoutModel",
-      "model_module": "@jupyter-widgets/base",
-      "model_module_version": "1.2.0",
-      "state": {}
-    },
-    "2a6a7aca18b0480b914a2114e443beba": {
-      "model_name": "AnyModel",
-      "model_module": "anywidget",
-      "model_module_version": "~0.11.*",
-      "state": {
-        "_dom_classes": [
-          "geemap-light"
-        ],
-        "icon": "bar_chart",
-        "layout": "IPY_MODEL_a35efda7c096448ca12e911f82a7b1b9",
-        "tooltip_text": "Plotting"
-      }
-    },
-    "c169afb9214044a5a2808f38c5ff8b0e": {
-      "model_name": "LayoutModel",
-      "model_module": "@jupyter-widgets/base",
-      "model_module_version": "1.2.0",
-      "state": {}
-    },
-    "a9c74c6ff94b4f1781da70836edad5ef": {
-      "model_name": "AnyModel",
-      "model_module": "anywidget",
-      "model_module_version": "~0.11.*",
-      "state": {
-        "_dom_classes": [
-          "geemap-light"
-        ],
-        "icon": "history",
-        "layout": "IPY_MODEL_c169afb9214044a5a2808f38c5ff8b0e",
-        "tooltip_text": "Create timelapse"
-      }
-    },
-    "37069d95dea94eedb5233bfc8c216229": {
-      "model_name": "LayoutModel",
-      "model_module": "@jupyter-widgets/base",
-      "model_module_version": "1.2.0",
-      "state": {}
-    },
-    "221d4de5d54c4d5bae26d29b168f98fe": {
-      "model_name": "AnyModel",
-      "model_module": "anywidget",
-      "model_module_version": "~0.11.*",
-      "state": {
-        "_dom_classes": [
-          "geemap-light"
-        ],
-        "icon": "map",
-        "layout": "IPY_MODEL_37069d95dea94eedb5233bfc8c216229",
-        "tooltip_text": "Change basemap"
-      }
-    },
-    "b87e8e84036a44fd88f7154a8a1500aa": {
-      "model_name": "LayoutModel",
-      "model_module": "@jupyter-widgets/base",
-      "model_module_version": "1.2.0",
-      "state": {}
-    },
-    "25848becd9444fd7a982b2fa90d85036": {
-      "model_name": "AnyModel",
-      "model_module": "anywidget",
-      "model_module_version": "~0.11.*",
-      "state": {
-        "_dom_classes": [
-          "geemap-light"
-        ],
-        "icon": "code",
-        "layout": "IPY_MODEL_b87e8e84036a44fd88f7154a8a1500aa",
-        "tooltip_text": "Convert Earth Engine JavaScript to Python"
-      }
-    },
-    "add7e04456184e43a8503c662f903a31": {
-      "model_name": "LayoutModel",
-      "model_module": "@jupyter-widgets/base",
-      "model_module_version": "1.2.0",
-      "state": {}
-    },
-    "3203b92bee744ecda116cc42f5ad3a23": {
-      "model_name": "AnyModel",
-      "model_module": "anywidget",
-      "model_module_version": "~0.11.*",
-      "state": {
-        "_dom_classes": [
-          "geemap-light"
-        ],
-        "icon": "ink_eraser",
-        "layout": "IPY_MODEL_add7e04456184e43a8503c662f903a31",
-        "tooltip_text": "Remove all drawn features"
-      }
-    },
-    "538a3a9933e84ee5a9646b282a5bb9f3": {
-      "model_name": "LayoutModel",
-      "model_module": "@jupyter-widgets/base",
-      "model_module_version": "1.2.0",
-      "state": {}
-    },
-    "0c9c286d292f4f1cbe099efdd3283a70": {
-      "model_name": "AnyModel",
-      "model_module": "anywidget",
-      "model_module_version": "~0.11.*",
-      "state": {
-        "_dom_classes": [
-          "geemap-light"
-        ],
-        "icon": "upload",
-        "layout": "IPY_MODEL_538a3a9933e84ee5a9646b282a5bb9f3",
-        "tooltip_text": "Open local vector/raster data"
-      }
-    },
-    "ff300f05409a4d6090aeda74f1ffcfb9": {
-      "model_name": "LayoutModel",
-      "model_module": "@jupyter-widgets/base",
-      "model_module_version": "1.2.0",
-      "state": {}
-    },
-    "46b6005d65c44f8bafc5752e9db6e1e0": {
-      "model_name": "AnyModel",
-      "model_module": "anywidget",
-      "model_module_version": "~0.11.*",
-      "state": {
-        "_dom_classes": [
-          "geemap-light"
-        ],
-        "icon": "manufacturing",
-        "layout": "IPY_MODEL_ff300f05409a4d6090aeda74f1ffcfb9",
-        "tooltip_text": "WhiteboxTools for local geoprocessing"
-      }
-    },
-    "50d711904bdc4c8097b7c82fcfc72a35": {
-      "model_name": "LayoutModel",
-      "model_module": "@jupyter-widgets/base",
-      "model_module_version": "1.2.0",
-      "state": {}
-    },
-    "d51435e943f44b63b3651bc3a28f33df": {
-      "model_name": "AnyModel",
-      "model_module": "anywidget",
-      "model_module_version": "~0.11.*",
-      "state": {
-        "_dom_classes": [
-          "geemap-light"
-        ],
-        "icon": "dns",
-        "layout": "IPY_MODEL_50d711904bdc4c8097b7c82fcfc72a35",
-        "tooltip_text": "GEE Toolbox for cloud computing"
-      }
-    },
-    "4ba180c5ccab4814a66e8dadd93cf3b0": {
-      "model_name": "LayoutModel",
-      "model_module": "@jupyter-widgets/base",
-      "model_module_version": "1.2.0",
-      "state": {}
-    },
-    "c9eab4f7916b42349ba5daf53f700a07": {
-      "model_name": "AnyModel",
-      "model_module": "anywidget",
-      "model_module_version": "~0.11.*",
-      "state": {
-        "_dom_classes": [
-          "geemap-light"
-        ],
-        "icon": "fast_forward",
-        "layout": "IPY_MODEL_4ba180c5ccab4814a66e8dadd93cf3b0",
-        "tooltip_text": "Activate timeslider"
-      }
-    },
-    "70fcc49b8bf04adfa082d4147f3b7557": {
-      "model_name": "LayoutModel",
-      "model_module": "@jupyter-widgets/base",
-      "model_module_version": "1.2.0",
-      "state": {}
-    },
-    "bf345001e9c94d2fa5f939442217c68f": {
-      "model_name": "AnyModel",
-      "model_module": "anywidget",
-      "model_module_version": "~0.11.*",
-      "state": {
-        "_dom_classes": [
-          "geemap-light"
-        ],
-        "icon": "pan_tool_alt",
-        "layout": "IPY_MODEL_70fcc49b8bf04adfa082d4147f3b7557",
-        "tooltip_text": "Collect training samples"
-      }
-    },
-    "ba35684ec9134129a16ca922f77eb169": {
-      "model_name": "LayoutModel",
-      "model_module": "@jupyter-widgets/base",
-      "model_module_version": "1.2.0",
-      "state": {}
-    },
-    "b7a27fdaddd9427d86bf6c2e9540159b": {
-      "model_name": "AnyModel",
-      "model_module": "anywidget",
-      "model_module_version": "~0.11.*",
-      "state": {
-        "_dom_classes": [
-          "geemap-light"
-        ],
-        "icon": "show_chart",
-        "layout": "IPY_MODEL_ba35684ec9134129a16ca922f77eb169",
-        "tooltip_text": "Creating and plotting transects"
-      }
-    },
-    "31670cfdc9104e219caae9b96dc3552f": {
-      "model_name": "LayoutModel",
-      "model_module": "@jupyter-widgets/base",
-      "model_module_version": "1.2.0",
-      "state": {}
-    },
-    "5dab70ddf0684fb7868949d3b0bb8451": {
-      "model_name": "AnyModel",
-      "model_module": "anywidget",
-      "model_module_version": "~0.11.*",
-      "state": {
-        "_dom_classes": [
-          "geemap-light"
-        ],
-        "icon": "shuffle",
-        "layout": "IPY_MODEL_31670cfdc9104e219caae9b96dc3552f",
-        "tooltip_text": "Sankey plots"
-      }
-    },
-    "4baefec5af634597993b75cc6a8574a3": {
-      "model_name": "LayoutModel",
-      "model_module": "@jupyter-widgets/base",
-      "model_module_version": "1.2.0",
-      "state": {}
-    },
-    "45cc870306fa4cb1af4203c394e1e0f1": {
-      "model_name": "AnyModel",
-      "model_module": "anywidget",
-      "model_module_version": "~0.11.*",
-      "state": {
-        "_dom_classes": [
-          "geemap-light"
-        ],
-        "icon": "image",
-        "layout": "IPY_MODEL_4baefec5af634597993b75cc6a8574a3",
-        "tooltip_text": "Planet imagery"
-      }
-    },
-    "9b87ea0c4cbd4c70bcb7992a50140c04": {
-      "model_name": "LayoutModel",
-      "model_module": "@jupyter-widgets/base",
-      "model_module_version": "1.2.0",
-      "state": {}
-    },
-    "a27a98bad3b84b93a44280f5cafb22a6": {
-      "model_name": "AnyModel",
-      "model_module": "anywidget",
-      "model_module_version": "~0.11.*",
-      "state": {
-        "_dom_classes": [
-          "geemap-light"
-        ],
-        "icon": "target",
-        "layout": "IPY_MODEL_9b87ea0c4cbd4c70bcb7992a50140c04",
-        "tooltip_text": "Get COG/STAC pixel value"
-      }
-    },
-    "e594f1cf7f66498bb9c28d239cf0c61c": {
-      "model_name": "LayoutModel",
-      "model_module": "@jupyter-widgets/base",
-      "model_module_version": "1.2.0",
-      "state": {}
-    },
-    "056c2b150c074ba4ab54913245e15ce7": {
-      "model_name": "AnyModel",
-      "model_module": "anywidget",
-      "model_module_version": "~0.11.*",
-      "state": {
-        "_dom_classes": [
-          "geemap-light"
-        ],
-        "icon": "question_mark",
-        "layout": "IPY_MODEL_e594f1cf7f66498bb9c28d239cf0c61c",
-        "tooltip_text": "Get help"
-      }
-    },
-    "119676c48ff6493b896664fd571d8a93": {
-      "model_name": "LayoutModel",
-      "model_module": "@jupyter-widgets/base",
-      "model_module_version": "1.2.0",
-      "state": {}
-    },
-    "c6ba4ecb733d4eabb200fc4df71ca9ed": {
-      "model_name": "AnyModel",
-      "model_module": "anywidget",
-      "model_module_version": "~0.11.*",
-      "state": {
-        "_dom_classes": [],
-        "extra_tools": [
-          "IPY_MODEL_3203b92bee744ecda116cc42f5ad3a23",
-          "IPY_MODEL_0c9c286d292f4f1cbe099efdd3283a70",
-          "IPY_MODEL_46b6005d65c44f8bafc5752e9db6e1e0",
-          "IPY_MODEL_d51435e943f44b63b3651bc3a28f33df",
-          "IPY_MODEL_c9eab4f7916b42349ba5daf53f700a07",
-          "IPY_MODEL_bf345001e9c94d2fa5f939442217c68f",
-          "IPY_MODEL_b7a27fdaddd9427d86bf6c2e9540159b",
-          "IPY_MODEL_5dab70ddf0684fb7868949d3b0bb8451",
-          "IPY_MODEL_45cc870306fa4cb1af4203c394e1e0f1",
-          "IPY_MODEL_a27a98bad3b84b93a44280f5cafb22a6",
-          "IPY_MODEL_056c2b150c074ba4ab54913245e15ce7"
-        ],
-        "layout": "IPY_MODEL_119676c48ff6493b896664fd571d8a93",
-        "main_tools": [
-          "IPY_MODEL_80a1a0a1aa0840c7ac84b47843903249",
-          "IPY_MODEL_2a6a7aca18b0480b914a2114e443beba",
-          "IPY_MODEL_a9c74c6ff94b4f1781da70836edad5ef",
-          "IPY_MODEL_221d4de5d54c4d5bae26d29b168f98fe",
-          "IPY_MODEL_25848becd9444fd7a982b2fa90d85036",
-          "IPY_MODEL_502d60b8156b4f4289fd442a387d5e4d"
-        ]
-      }
-    },
-    "5c29479002e1403e8aee3e4ec75c44a3": {
-      "model_name": "LayoutModel",
-      "model_module": "@jupyter-widgets/base",
-      "model_module_version": "1.2.0",
-      "state": {}
-    },
-    "502d60b8156b4f4289fd442a387d5e4d": {
-      "model_name": "AnyModel",
-      "model_module": "anywidget",
-      "model_module_version": "~0.11.*",
-      "state": {
-        "_dom_classes": [
-          "geemap-light"
-        ],
-        "icon": "add",
-        "layout": "IPY_MODEL_5c29479002e1403e8aee3e4ec75c44a3",
-        "tooltip_text": "Expand toolbar"
-      }
-    },
-    "9e652764b8bf480f88fdcb4a50d55e38": {
-      "model_name": "LeafletAttributionControlModel",
-      "model_module": "jupyter-leaflet",
-      "model_module_version": "^0.20",
-      "state": {
-        "options": [
-          "position",
-          "prefix"
-        ],
-        "position": "bottomright"
-      }
-    },
-    "27f4b228fa274c5f8cf195f552ecd9a0": {
-      "model_name": "LeafletTileLayerModel",
-      "model_module": "jupyter-leaflet",
-      "model_module_version": "^0.20",
-      "state": {
-        "attribution": "Tiles (C) Esri -- Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community",
-        "max_zoom": 30,
-        "name": "Esri.WorldImagery",
-        "options": [
-          "attribution",
-          "bounds",
-          "detect_retina",
-          "max_native_zoom",
-          "max_zoom",
-          "min_native_zoom",
-          "min_zoom",
-          "no_wrap",
-          "pm_ignore",
-          "tile_size",
-          "tms",
-          "zoom_offset"
-        ],
-        "subitems": [],
-        "url": "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
-      }
-    },
-    "94a7b68ea93440c1a361a57a096b652e": {
-      "model_name": "LayoutModel",
-      "model_module": "@jupyter-widgets/base",
-      "model_module_version": "1.2.0",
-      "state": {}
-    },
-    "34f13110fdb64ec69030ec3696ef76a2": {
-      "model_name": "AnyModel",
-      "model_module": "anywidget",
-      "model_module_version": "~0.11.*",
-      "state": {
-        "_dom_classes": [
-          "geemap-light"
-        ],
-        "layout": "IPY_MODEL_94a7b68ea93440c1a361a57a096b652e",
-        "name": "OpenStreetMap.Mapnik"
-      }
-    },
-    "928aacae52164706a6a784c4a2992a6a": {
-      "model_name": "LinkModel",
-      "model_module": "@jupyter-widgets/controls",
-      "model_module_version": "1.5.0",
-      "state": {
-        "source": [
-          "IPY_MODEL_5bc2974f34e9463391abc1d455b5e09e",
-          "opacity"
-        ],
-        "target": [
-          "IPY_MODEL_34f13110fdb64ec69030ec3696ef76a2",
-          "opacity"
-        ]
-      }
-    },
-    "a2b8f8b94b544a158b474e1e4c53d45c": {
-      "model_name": "LinkModel",
-      "model_module": "@jupyter-widgets/controls",
-      "model_module_version": "1.5.0",
-      "state": {
-        "source": [
-          "IPY_MODEL_5bc2974f34e9463391abc1d455b5e09e",
-          "visible"
-        ],
-        "target": [
-          "IPY_MODEL_34f13110fdb64ec69030ec3696ef76a2",
-          "visible"
-        ]
-      }
-    },
-    "732f54eea78c48c9a8aaf1cf5007ce35": {
-      "model_name": "LayoutModel",
-      "model_module": "@jupyter-widgets/base",
-      "model_module_version": "1.2.0",
-      "state": {}
-    },
-    "17bf771ed7f449d8892a0dff09fcb215": {
-      "model_name": "AnyModel",
-      "model_module": "anywidget",
-      "model_module_version": "~0.11.*",
-      "state": {
-        "_dom_classes": [
-          "geemap-light"
-        ],
-        "layout": "IPY_MODEL_732f54eea78c48c9a8aaf1cf5007ce35",
-        "name": "Esri.WorldImagery"
-      }
-    },
-    "eb6b5de65cb04a85b3d254ce39a916ee": {
-      "model_name": "LinkModel",
-      "model_module": "@jupyter-widgets/controls",
-      "model_module_version": "1.5.0",
-      "state": {
-        "source": [
-          "IPY_MODEL_27f4b228fa274c5f8cf195f552ecd9a0",
-          "opacity"
-        ],
-        "target": [
-          "IPY_MODEL_17bf771ed7f449d8892a0dff09fcb215",
-          "opacity"
-        ]
-      }
-    },
-    "c792293f578947d299ca42562e04c370": {
-      "model_name": "LinkModel",
-      "model_module": "@jupyter-widgets/controls",
-      "model_module_version": "1.5.0",
-      "state": {
-        "source": [
-          "IPY_MODEL_27f4b228fa274c5f8cf195f552ecd9a0",
-          "visible"
-        ],
-        "target": [
-          "IPY_MODEL_17bf771ed7f449d8892a0dff09fcb215",
-          "visible"
-        ]
-      }
-    },
-    "169585b6ad3a43b19c03e289d5430ffb": {
-      "model_name": "LeafletTileLayerModel",
-      "model_module": "jupyter-leaflet",
-      "model_module_version": "^0.20",
-      "state": {
-        "attribution": "Google Earth Engine",
-        "max_zoom": 24,
-        "name": "NDVI",
-        "options": [
-          "attribution",
-          "bounds",
-          "detect_retina",
-          "max_native_zoom",
-          "max_zoom",
-          "min_native_zoom",
-          "min_zoom",
-          "no_wrap",
-          "pm_ignore",
-          "tile_size",
-          "tms",
-          "zoom_offset"
-        ],
-        "subitems": [],
-        "url": "https://earthengine.googleapis.com/v1/projects/ee-jpablo-heiland/maps/e5294325d7f2bfa9340f40820fab6551-2cb38080cadf534fe614e86ebe2acdc5/tiles/{z}/{x}/{y}"
-      }
-    },
-    "73d646b26e34487892d522b9de9fba27": {
-      "model_name": "LayoutModel",
-      "model_module": "@jupyter-widgets/base",
-      "model_module_version": "1.2.0",
-      "state": {}
-    },
-    "23efca4355114a9ab1ebe2f53d311597": {
-      "model_name": "AnyModel",
-      "model_module": "anywidget",
-      "model_module_version": "~0.11.*",
-      "state": {
-        "_dom_classes": [
-          "geemap-light"
-        ],
-        "layout": "IPY_MODEL_73d646b26e34487892d522b9de9fba27",
-        "name": "OpenStreetMap.Mapnik"
-      }
-    },
-    "592ff9f97c1e43f4af11bb1b89232348": {
-      "model_name": "LinkModel",
-      "model_module": "@jupyter-widgets/controls",
-      "model_module_version": "1.5.0",
-      "state": {
-        "source": [
-          "IPY_MODEL_5bc2974f34e9463391abc1d455b5e09e",
-          "opacity"
-        ],
-        "target": [
-          "IPY_MODEL_23efca4355114a9ab1ebe2f53d311597",
-          "opacity"
-        ]
-      }
-    },
-    "a4a8365dddf348f5886c58b579142b8c": {
-      "model_name": "LinkModel",
-      "model_module": "@jupyter-widgets/controls",
-      "model_module_version": "1.5.0",
-      "state": {
-        "source": [
-          "IPY_MODEL_5bc2974f34e9463391abc1d455b5e09e",
-          "visible"
-        ],
-        "target": [
-          "IPY_MODEL_23efca4355114a9ab1ebe2f53d311597",
-          "visible"
-        ]
-      }
-    },
-    "6999dc3ae1f74011a3f77328d0ea782d": {
-      "model_name": "LayoutModel",
-      "model_module": "@jupyter-widgets/base",
-      "model_module_version": "1.2.0",
-      "state": {}
-    },
-    "678cfaabb04c42af8c32a2727f0270a9": {
-      "model_name": "AnyModel",
-      "model_module": "anywidget",
-      "model_module_version": "~0.11.*",
-      "state": {
-        "_dom_classes": [
-          "geemap-light"
-        ],
-        "layout": "IPY_MODEL_6999dc3ae1f74011a3f77328d0ea782d",
-        "name": "Esri.WorldImagery"
-      }
-    },
-    "a8913b51d0174d4f95e00d82ac67bf7b": {
-      "model_name": "LinkModel",
-      "model_module": "@jupyter-widgets/controls",
-      "model_module_version": "1.5.0",
-      "state": {
-        "source": [
-          "IPY_MODEL_27f4b228fa274c5f8cf195f552ecd9a0",
-          "opacity"
-        ],
-        "target": [
-          "IPY_MODEL_678cfaabb04c42af8c32a2727f0270a9",
-          "opacity"
-        ]
-      }
-    },
-    "801518ced32a418c906bb4c51262ae50": {
-      "model_name": "LinkModel",
-      "model_module": "@jupyter-widgets/controls",
-      "model_module_version": "1.5.0",
-      "state": {
-        "source": [
-          "IPY_MODEL_27f4b228fa274c5f8cf195f552ecd9a0",
-          "visible"
-        ],
-        "target": [
-          "IPY_MODEL_678cfaabb04c42af8c32a2727f0270a9",
-          "visible"
-        ]
-      }
-    },
-    "2371edf765884151a9320efab20fb1e4": {
-      "model_name": "LayoutModel",
-      "model_module": "@jupyter-widgets/base",
-      "model_module_version": "1.2.0",
-      "state": {}
-    },
-    "81504a570f1240449c1d384d78e2feeb": {
-      "model_name": "AnyModel",
-      "model_module": "anywidget",
-      "model_module_version": "~0.11.*",
-      "state": {
-        "_dom_classes": [
-          "geemap-light"
-        ],
-        "layout": "IPY_MODEL_2371edf765884151a9320efab20fb1e4",
-        "name": "NDVI"
-      }
-    },
-    "65348c37384740ffabc6847a8fb3091c": {
-      "model_name": "LinkModel",
-      "model_module": "@jupyter-widgets/controls",
-      "model_module_version": "1.5.0",
-      "state": {
-        "source": [
-          "IPY_MODEL_169585b6ad3a43b19c03e289d5430ffb",
-          "opacity"
-        ],
-        "target": [
-          "IPY_MODEL_81504a570f1240449c1d384d78e2feeb",
-          "opacity"
-        ]
-      }
-    },
-    "8c425fc67efe4fbcaa58ee5dd19d2f89": {
-      "model_name": "LinkModel",
-      "model_module": "@jupyter-widgets/controls",
-      "model_module_version": "1.5.0",
-      "state": {
-        "source": [
-          "IPY_MODEL_169585b6ad3a43b19c03e289d5430ffb",
-          "visible"
-        ],
-        "target": [
-          "IPY_MODEL_81504a570f1240449c1d384d78e2feeb",
-          "visible"
-        ]
-      }
-    },
-    "5aa5e6bd339d489fa9a4188fc7b4933a": {
-      "model_name": "LeafletTileLayerModel",
-      "model_module": "jupyter-leaflet",
-      "model_module_version": "^0.20",
-      "state": {
-        "attribution": "Google Earth Engine",
-        "max_zoom": 24,
-        "name": "Lote",
-        "options": [
-          "attribution",
-          "bounds",
-          "detect_retina",
-          "max_native_zoom",
-          "max_zoom",
-          "min_native_zoom",
-          "min_zoom",
-          "no_wrap",
-          "pm_ignore",
-          "tile_size",
-          "tms",
-          "zoom_offset"
-        ],
-        "subitems": [],
-        "url": "https://earthengine.googleapis.com/v1/projects/ee-jpablo-heiland/maps/e87798b0163bc28329a844935e8838b0-51bb1c1f0c314f8502c5cd79e53d8169/tiles/{z}/{x}/{y}"
-      }
-    },
-    "734658e1108c4414820241135a800dca": {
-      "model_name": "LayoutModel",
-      "model_module": "@jupyter-widgets/base",
-      "model_module_version": "1.2.0",
-      "state": {}
-    },
-    "99135c603b0b4e00815fe6d9dcae180a": {
-      "model_name": "AnyModel",
-      "model_module": "anywidget",
-      "model_module_version": "~0.11.*",
-      "state": {
-        "_dom_classes": [
-          "geemap-light"
-        ],
-        "layout": "IPY_MODEL_734658e1108c4414820241135a800dca",
-        "name": "OpenStreetMap.Mapnik"
-      }
-    },
-    "efc3b6ab2e9747ff93629c253bc55036": {
-      "model_name": "LinkModel",
-      "model_module": "@jupyter-widgets/controls",
-      "model_module_version": "1.5.0",
-      "state": {
-        "source": [
-          "IPY_MODEL_5bc2974f34e9463391abc1d455b5e09e",
-          "opacity"
-        ],
-        "target": [
-          "IPY_MODEL_99135c603b0b4e00815fe6d9dcae180a",
-          "opacity"
-        ]
-      }
-    },
-    "4ad30a87240340e095dfa0aa51537517": {
-      "model_name": "LinkModel",
-      "model_module": "@jupyter-widgets/controls",
-      "model_module_version": "1.5.0",
-      "state": {
-        "source": [
-          "IPY_MODEL_5bc2974f34e9463391abc1d455b5e09e",
-          "visible"
-        ],
-        "target": [
-          "IPY_MODEL_99135c603b0b4e00815fe6d9dcae180a",
-          "visible"
-        ]
-      }
-    },
-    "4832280481be40248467acd89f7678df": {
-      "model_name": "LayoutModel",
-      "model_module": "@jupyter-widgets/base",
-      "model_module_version": "1.2.0",
-      "state": {}
-    },
-    "60648995a6de46e28c607726ccef3472": {
-      "model_name": "AnyModel",
-      "model_module": "anywidget",
-      "model_module_version": "~0.11.*",
-      "state": {
-        "_dom_classes": [
-          "geemap-light"
-        ],
-        "layout": "IPY_MODEL_4832280481be40248467acd89f7678df",
-        "name": "Esri.WorldImagery"
-      }
-    },
-    "03dfd2445eeb457299246a1df07ec864": {
-      "model_name": "LinkModel",
-      "model_module": "@jupyter-widgets/controls",
-      "model_module_version": "1.5.0",
-      "state": {
-        "source": [
-          "IPY_MODEL_27f4b228fa274c5f8cf195f552ecd9a0",
-          "opacity"
-        ],
-        "target": [
-          "IPY_MODEL_60648995a6de46e28c607726ccef3472",
-          "opacity"
-        ]
-      }
-    },
-    "4ece1737ebb049eea12587a510f1ddd6": {
-      "model_name": "LinkModel",
-      "model_module": "@jupyter-widgets/controls",
-      "model_module_version": "1.5.0",
-      "state": {
-        "source": [
-          "IPY_MODEL_27f4b228fa274c5f8cf195f552ecd9a0",
-          "visible"
-        ],
-        "target": [
-          "IPY_MODEL_60648995a6de46e28c607726ccef3472",
-          "visible"
-        ]
-      }
-    },
-    "2bf38d8fe47845aabcc9c3adef55023d": {
-      "model_name": "LayoutModel",
-      "model_module": "@jupyter-widgets/base",
-      "model_module_version": "1.2.0",
-      "state": {}
-    },
-    "d36bcb7ebddf4fdeb8a91ebb7e589897": {
-      "model_name": "AnyModel",
-      "model_module": "anywidget",
-      "model_module_version": "~0.11.*",
-      "state": {
-        "_dom_classes": [
-          "geemap-light"
-        ],
-        "layout": "IPY_MODEL_2bf38d8fe47845aabcc9c3adef55023d",
-        "name": "NDVI"
-      }
-    },
-    "14b49f8e1bf04058ae6b1cc5e4a4e194": {
-      "model_name": "LinkModel",
-      "model_module": "@jupyter-widgets/controls",
-      "model_module_version": "1.5.0",
-      "state": {
-        "source": [
-          "IPY_MODEL_169585b6ad3a43b19c03e289d5430ffb",
-          "opacity"
-        ],
-        "target": [
-          "IPY_MODEL_d36bcb7ebddf4fdeb8a91ebb7e589897",
-          "opacity"
-        ]
-      }
-    },
-    "afcfcdae54184630903891a2a304b508": {
-      "model_name": "LinkModel",
-      "model_module": "@jupyter-widgets/controls",
-      "model_module_version": "1.5.0",
-      "state": {
-        "source": [
-          "IPY_MODEL_169585b6ad3a43b19c03e289d5430ffb",
-          "visible"
-        ],
-        "target": [
-          "IPY_MODEL_d36bcb7ebddf4fdeb8a91ebb7e589897",
-          "visible"
-        ]
-      }
-    },
-    "54ffcc32cfb54c32af480ebbcca0fbe1": {
-      "model_name": "LayoutModel",
-      "model_module": "@jupyter-widgets/base",
-      "model_module_version": "1.2.0",
-      "state": {}
-    },
-    "0a67f4ea9f374fd88589700d87a8b6b2": {
-      "model_name": "AnyModel",
-      "model_module": "anywidget",
-      "model_module_version": "~0.11.*",
-      "state": {
-        "_dom_classes": [
-          "geemap-light"
-        ],
-        "layout": "IPY_MODEL_54ffcc32cfb54c32af480ebbcca0fbe1",
-        "name": "Lote"
-      }
-    },
-    "9509fc13579f4f67a270a2ce58af8069": {
-      "model_name": "LinkModel",
-      "model_module": "@jupyter-widgets/controls",
-      "model_module_version": "1.5.0",
-      "state": {
-        "source": [
-          "IPY_MODEL_5aa5e6bd339d489fa9a4188fc7b4933a",
-          "opacity"
-        ],
-        "target": [
-          "IPY_MODEL_0a67f4ea9f374fd88589700d87a8b6b2",
-          "opacity"
-        ]
-      }
-    },
-    "e2ea0eb683fc445eaaacfda51b455243": {
-      "model_name": "LinkModel",
-      "model_module": "@jupyter-widgets/controls",
-      "model_module_version": "1.5.0",
-      "state": {
-        "source": [
-          "IPY_MODEL_5aa5e6bd339d489fa9a4188fc7b4933a",
-          "visible"
-        ],
-        "target": [
-          "IPY_MODEL_0a67f4ea9f374fd88589700d87a8b6b2",
-          "visible"
-        ]
-      }
-    },
-    "8cbe30e67d6b49c1acd8145e9731712b": {
-      "model_name": "LeafletLayersControlModel",
-      "model_module": "jupyter-leaflet",
-      "model_module_version": "^0.20",
-      "state": {
-        "options": [
-          "collapsed",
-          "position"
-        ],
-        "position": "topright"
-      }
-    }
-  }
-}
-</script><script type="application/vnd.jupyter.widget-view+json">
-{"version_major": 2, "version_minor": 0, "model_id": "5fff4b44159f483f8b60270301413e90"}
-</script>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>Map.add_layer_control()</span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>Map.save(<span class="st">"mapa_indices_2.html"</span>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-</div>
+<p>El mapa fue generado con <span class="func-tecnica">geemap</span> y la API de Python de Google Earth Engine. Dado que los widgets interactivos de <span class="func-tecnica">geemap</span> requieren un kernel Python activo para funcionar, el mapa fue exportado como HTML autocontenido mediante <span class="func-tecnica">Map.add_layer_control()</span> y <span class="func-tecnica">Map.save(“mapa_indices.html”)</span>, y embebido en este documento a través de un <span class="func-tecnica">iframe.</span> Esto permite la visualización interactiva de los índices de vegetación calculado.</p>
+<iframe src="mapa_indices_2.html" width="100%" height="800px" frameborder="0">
+</iframe>
 </section></section><section id="generación-del-gif" class="level1" data-number="9"><h1 data-number="9">
 <span class="header-section-number">9</span> Generación del GIF</h1>
 <p>El objetivo es transformar la secuencia de mapas de NDVI en una animación fluida que muestre la evolución del cultivo a lo largo del tiempo.</p>
@@ -2699,140 +1427,149 @@ window.Quarto = {
 <span id="cb21-330"><a href="#cb21-330" aria-hidden="true" tabindex="-1"></a>    <span class="st">'Lote'</span></span>
 <span id="cb21-331"><a href="#cb21-331" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb21-332"><a href="#cb21-332" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-333"><a href="#cb21-333" aria-hidden="true" tabindex="-1"></a>Map  </span>
-<span id="cb21-334"><a href="#cb21-334" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb21-335"><a href="#cb21-335" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-333"><a href="#cb21-333" aria-hidden="true" tabindex="-1"></a>Map.add_layer_control()</span>
+<span id="cb21-334"><a href="#cb21-334" aria-hidden="true" tabindex="-1"></a>Map.save(<span class="st">"mapa_indices_2.html"</span>)</span>
+<span id="cb21-335"><a href="#cb21-335" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb21-336"><a href="#cb21-336" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-337"><a href="#cb21-337" aria-hidden="true" tabindex="-1"></a><span class="fu"># Generación del GIF</span></span>
+<span id="cb21-337"><a href="#cb21-337" aria-hidden="true" tabindex="-1"></a>El mapa fue generado con <span class="co">[</span><span class="ot">geemap</span><span class="co">]</span>{.func-tecnica} y la API de Python de Google Earth Engine. Dado que los widgets interactivos de <span class="co">[</span><span class="ot">geemap</span><span class="co">]</span>{.func-tecnica} requieren un kernel Python activo para funcionar, el mapa fue exportado como HTML autocontenido mediante <span class="co">[</span><span class="ot">Map.add_layer_control()</span><span class="co">]</span>{.func-tecnica} y <span class="co">[</span><span class="ot">Map.save(“mapa_indices.html”)</span><span class="co">]</span>{.func-tecnica}, y embebido en este documento a través de un <span class="co">[</span><span class="ot">iframe.</span><span class="co">]</span>{.func-tecnica} Esto permite la visualización interactiva de los índices de vegetación calculado.</span>
 <span id="cb21-338"><a href="#cb21-338" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-339"><a href="#cb21-339" aria-hidden="true" tabindex="-1"></a>El objetivo es transformar la secuencia de mapas de NDVI en una animación fluida que muestre la evolución del cultivo a lo largo del tiempo.</span>
-<span id="cb21-340"><a href="#cb21-340" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-341"><a href="#cb21-341" aria-hidden="true" tabindex="-1"></a><span class="fu">## Creación y Descarga del GIF</span></span>
-<span id="cb21-342"><a href="#cb21-342" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-343"><a href="#cb21-343" aria-hidden="true" tabindex="-1"></a>Cada imagen de <span class="co">[</span><span class="ot">col_composita</span><span class="co">]</span>{.func-tecnica} (@sec-comp) contiene una banda NDVI con valores entre -1 y 1, que no son directamente representables como imagen RGB. La función <span class="co">[</span><span class="ot">visualizar_frame</span><span class="co">]</span>{.func-tecnica} aplica los parámetros de <span class="in">`VIS_NDVI`</span> (@sec-para) para convertir cada composite en una imagen de tres bandas RGB lista para ser renderizada. El resultado es <span class="co">[</span><span class="ot">col_para_gif</span><span class="co">]</span>{.func-tecnica}, una colección donde cada elemento es ya un frame con colores interpretables.</span>
-<span id="cb21-344"><a href="#cb21-344" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-345"><a href="#cb21-345" aria-hidden="true" tabindex="-1"></a>En <span class="co">[</span><span class="ot">gif_params</span><span class="co">]</span>{.func-tecnica} definen los parámetros del GIF.</span>
-<span id="cb21-346"><a href="#cb21-346" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-347"><a href="#cb21-347" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">getVideoThumbURL()</span><span class="co">]</span>{.func-tecnica} solicita al servidor de GEE que genere el GIF a partir de la colección visualizada y devuelve una URL de descarga temporal. </span>
-<span id="cb21-350"><a href="#cb21-350" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb21-351"><a href="#cb21-351" aria-hidden="true" tabindex="-1"></a><span class="co">#| output: false</span></span>
-<span id="cb21-352"><a href="#cb21-352" aria-hidden="true" tabindex="-1"></a><span class="co">#| warning: false</span></span>
+<span id="cb21-339"><a href="#cb21-339" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-340"><a href="#cb21-340" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">iframe</span><span class="ot"> src</span><span class="op">=</span><span class="st">"mapa_indices_2.html"</span><span class="ot"> </span></span>
+<span id="cb21-341"><a href="#cb21-341" aria-hidden="true" tabindex="-1"></a><span class="ot">        width</span><span class="op">=</span><span class="st">"100%"</span><span class="ot"> </span></span>
+<span id="cb21-342"><a href="#cb21-342" aria-hidden="true" tabindex="-1"></a><span class="ot">        height</span><span class="op">=</span><span class="st">"800px"</span></span>
+<span id="cb21-343"><a href="#cb21-343" aria-hidden="true" tabindex="-1"></a><span class="ot">        frameborder</span><span class="op">=</span><span class="st">"0"</span><span class="dt">&gt;</span></span>
+<span id="cb21-344"><a href="#cb21-344" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">iframe</span><span class="dt">&gt;</span></span>
+<span id="cb21-345"><a href="#cb21-345" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-346"><a href="#cb21-346" aria-hidden="true" tabindex="-1"></a><span class="fu"># Generación del GIF</span></span>
+<span id="cb21-347"><a href="#cb21-347" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-348"><a href="#cb21-348" aria-hidden="true" tabindex="-1"></a>El objetivo es transformar la secuencia de mapas de NDVI en una animación fluida que muestre la evolución del cultivo a lo largo del tiempo.</span>
+<span id="cb21-349"><a href="#cb21-349" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-350"><a href="#cb21-350" aria-hidden="true" tabindex="-1"></a><span class="fu">## Creación y Descarga del GIF</span></span>
+<span id="cb21-351"><a href="#cb21-351" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-352"><a href="#cb21-352" aria-hidden="true" tabindex="-1"></a>Cada imagen de <span class="co">[</span><span class="ot">col_composita</span><span class="co">]</span>{.func-tecnica} (@sec-comp) contiene una banda NDVI con valores entre -1 y 1, que no son directamente representables como imagen RGB. La función <span class="co">[</span><span class="ot">visualizar_frame</span><span class="co">]</span>{.func-tecnica} aplica los parámetros de <span class="in">`VIS_NDVI`</span> (@sec-para) para convertir cada composite en una imagen de tres bandas RGB lista para ser renderizada. El resultado es <span class="co">[</span><span class="ot">col_para_gif</span><span class="co">]</span>{.func-tecnica}, una colección donde cada elemento es ya un frame con colores interpretables.</span>
 <span id="cb21-353"><a href="#cb21-353" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-354"><a href="#cb21-354" aria-hidden="true" tabindex="-1"></a>region <span class="op">=</span> geometry.bounds()</span>
+<span id="cb21-354"><a href="#cb21-354" aria-hidden="true" tabindex="-1"></a>En <span class="co">[</span><span class="ot">gif_params</span><span class="co">]</span>{.func-tecnica} definen los parámetros del GIF.</span>
 <span id="cb21-355"><a href="#cb21-355" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-356"><a href="#cb21-356" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> visualizar_frame(image):</span>
-<span id="cb21-357"><a href="#cb21-357" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> image.visualize(<span class="op">**</span>VIS_NDVI)</span>
-<span id="cb21-358"><a href="#cb21-358" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-359"><a href="#cb21-359" aria-hidden="true" tabindex="-1"></a>col_para_gif <span class="op">=</span> col_composita.<span class="bu">map</span>(visualizar_frame)</span>
-<span id="cb21-360"><a href="#cb21-360" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-361"><a href="#cb21-361" aria-hidden="true" tabindex="-1"></a>out_gif <span class="op">=</span> <span class="st">'ndvi_ciclo_cultivo.gif'</span></span>
+<span id="cb21-356"><a href="#cb21-356" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">getVideoThumbURL()</span><span class="co">]</span>{.func-tecnica} solicita al servidor de GEE que genere el GIF a partir de la colección visualizada y devuelve una URL de descarga temporal. </span>
+<span id="cb21-359"><a href="#cb21-359" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb21-360"><a href="#cb21-360" aria-hidden="true" tabindex="-1"></a><span class="co">#| output: false</span></span>
+<span id="cb21-361"><a href="#cb21-361" aria-hidden="true" tabindex="-1"></a><span class="co">#| warning: false</span></span>
 <span id="cb21-362"><a href="#cb21-362" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-363"><a href="#cb21-363" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-364"><a href="#cb21-364" aria-hidden="true" tabindex="-1"></a>gif_params <span class="op">=</span> {</span>
-<span id="cb21-365"><a href="#cb21-365" aria-hidden="true" tabindex="-1"></a>    <span class="st">'region'</span>:          region,</span>
-<span id="cb21-366"><a href="#cb21-366" aria-hidden="true" tabindex="-1"></a>    <span class="st">'dimensions'</span>:      <span class="dv">600</span>,      <span class="co">#</span></span>
-<span id="cb21-367"><a href="#cb21-367" aria-hidden="true" tabindex="-1"></a>    <span class="st">'framesPerSecond'</span>: <span class="fl">1.5</span>,</span>
-<span id="cb21-368"><a href="#cb21-368" aria-hidden="true" tabindex="-1"></a>    <span class="st">'format'</span>:          <span class="st">'gif'</span></span>
-<span id="cb21-369"><a href="#cb21-369" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb21-370"><a href="#cb21-370" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-363"><a href="#cb21-363" aria-hidden="true" tabindex="-1"></a>region <span class="op">=</span> geometry.bounds()</span>
+<span id="cb21-364"><a href="#cb21-364" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-365"><a href="#cb21-365" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> visualizar_frame(image):</span>
+<span id="cb21-366"><a href="#cb21-366" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> image.visualize(<span class="op">**</span>VIS_NDVI)</span>
+<span id="cb21-367"><a href="#cb21-367" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-368"><a href="#cb21-368" aria-hidden="true" tabindex="-1"></a>col_para_gif <span class="op">=</span> col_composita.<span class="bu">map</span>(visualizar_frame)</span>
+<span id="cb21-369"><a href="#cb21-369" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-370"><a href="#cb21-370" aria-hidden="true" tabindex="-1"></a>out_gif <span class="op">=</span> <span class="st">'ndvi_ciclo_cultivo.gif'</span></span>
 <span id="cb21-371"><a href="#cb21-371" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-372"><a href="#cb21-372" aria-hidden="true" tabindex="-1"></a>url <span class="op">=</span> col_para_gif.getVideoThumbURL(gif_params)</span>
-<span id="cb21-373"><a href="#cb21-373" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-374"><a href="#cb21-374" aria-hidden="true" tabindex="-1"></a>response <span class="op">=</span> requests.get(url, stream<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb21-375"><a href="#cb21-375" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> <span class="bu">open</span>(out_gif, <span class="st">'wb'</span>) <span class="im">as</span> f:</span>
-<span id="cb21-376"><a href="#cb21-376" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> chunk <span class="kw">in</span> response.iter_content(chunk_size<span class="op">=</span><span class="dv">8192</span>):</span>
-<span id="cb21-377"><a href="#cb21-377" aria-hidden="true" tabindex="-1"></a>        f.write(chunk)</span>
-<span id="cb21-378"><a href="#cb21-378" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-379"><a href="#cb21-379" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb21-372"><a href="#cb21-372" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-373"><a href="#cb21-373" aria-hidden="true" tabindex="-1"></a>gif_params <span class="op">=</span> {</span>
+<span id="cb21-374"><a href="#cb21-374" aria-hidden="true" tabindex="-1"></a>    <span class="st">'region'</span>:          region,</span>
+<span id="cb21-375"><a href="#cb21-375" aria-hidden="true" tabindex="-1"></a>    <span class="st">'dimensions'</span>:      <span class="dv">600</span>,      <span class="co">#</span></span>
+<span id="cb21-376"><a href="#cb21-376" aria-hidden="true" tabindex="-1"></a>    <span class="st">'framesPerSecond'</span>: <span class="fl">1.5</span>,</span>
+<span id="cb21-377"><a href="#cb21-377" aria-hidden="true" tabindex="-1"></a>    <span class="st">'format'</span>:          <span class="st">'gif'</span></span>
+<span id="cb21-378"><a href="#cb21-378" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb21-379"><a href="#cb21-379" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb21-380"><a href="#cb21-380" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-381"><a href="#cb21-381" aria-hidden="true" tabindex="-1"></a><span class="fu">## Renderizado</span></span>
+<span id="cb21-381"><a href="#cb21-381" aria-hidden="true" tabindex="-1"></a>url <span class="op">=</span> col_para_gif.getVideoThumbURL(gif_params)</span>
 <span id="cb21-382"><a href="#cb21-382" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-383"><a href="#cb21-383" aria-hidden="true" tabindex="-1"></a>La visualización del GIF se realiza con R. <span class="co">[</span><span class="ot">base64enc</span><span class="co">]</span>{.func-tecnica} lee el archivo GIF y lo codifica en <span class="co">[</span><span class="ot">base64</span><span class="co">]</span>{.func-tecnica}, un formato que permite incrustar archivos binarios directamente dentro del HTML como una cadena de texto. <span class="co">[</span><span class="ot">htmltools</span><span class="co">]</span>{.func-tecnica} construye la etiqueta <span class="dt">&lt;</span><span class="kw">img</span><span class="dt">&gt;</span> con esa cadena como fuente, lo que garantiza que el GIF quede autocontenido en el documento final sin depender de rutas externas.</span>
-<span id="cb21-384"><a href="#cb21-384" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-385"><a href="#cb21-385" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-388"><a href="#cb21-388" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb21-389"><a href="#cb21-389" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(htmltools)</span>
-<span id="cb21-390"><a href="#cb21-390" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(base64enc)</span>
+<span id="cb21-383"><a href="#cb21-383" aria-hidden="true" tabindex="-1"></a>response <span class="op">=</span> requests.get(url, stream<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb21-384"><a href="#cb21-384" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> <span class="bu">open</span>(out_gif, <span class="st">'wb'</span>) <span class="im">as</span> f:</span>
+<span id="cb21-385"><a href="#cb21-385" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> chunk <span class="kw">in</span> response.iter_content(chunk_size<span class="op">=</span><span class="dv">8192</span>):</span>
+<span id="cb21-386"><a href="#cb21-386" aria-hidden="true" tabindex="-1"></a>        f.write(chunk)</span>
+<span id="cb21-387"><a href="#cb21-387" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-388"><a href="#cb21-388" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb21-389"><a href="#cb21-389" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-390"><a href="#cb21-390" aria-hidden="true" tabindex="-1"></a><span class="fu">## Renderizado</span></span>
 <span id="cb21-391"><a href="#cb21-391" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-392"><a href="#cb21-392" aria-hidden="true" tabindex="-1"></a>gif_path <span class="ot">&lt;-</span> <span class="st">"ndvi_ciclo_cultivo.gif"</span></span>
+<span id="cb21-392"><a href="#cb21-392" aria-hidden="true" tabindex="-1"></a>La visualización del GIF se realiza con R. <span class="co">[</span><span class="ot">base64enc</span><span class="co">]</span>{.func-tecnica} lee el archivo GIF y lo codifica en <span class="co">[</span><span class="ot">base64</span><span class="co">]</span>{.func-tecnica}, un formato que permite incrustar archivos binarios directamente dentro del HTML como una cadena de texto. <span class="co">[</span><span class="ot">htmltools</span><span class="co">]</span>{.func-tecnica} construye la etiqueta <span class="dt">&lt;</span><span class="kw">img</span><span class="dt">&gt;</span> con esa cadena como fuente, lo que garantiza que el GIF quede autocontenido en el documento final sin depender de rutas externas.</span>
 <span id="cb21-393"><a href="#cb21-393" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-394"><a href="#cb21-394" aria-hidden="true" tabindex="-1"></a>gif_b64 <span class="ot">&lt;-</span> base64enc<span class="sc">::</span><span class="fu">base64encode</span>(gif_path)</span>
-<span id="cb21-395"><a href="#cb21-395" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-396"><a href="#cb21-396" aria-hidden="true" tabindex="-1"></a>html_gif <span class="ot">&lt;-</span> tags<span class="sc">$</span><span class="fu">div</span>(</span>
-<span id="cb21-397"><a href="#cb21-397" aria-hidden="true" tabindex="-1"></a>  <span class="at">style =</span> <span class="st">"text-align: center; margin: 1rem 0;"</span>,</span>
-<span id="cb21-398"><a href="#cb21-398" aria-hidden="true" tabindex="-1"></a>  tags<span class="sc">$</span><span class="fu">img</span>(</span>
-<span id="cb21-399"><a href="#cb21-399" aria-hidden="true" tabindex="-1"></a>    <span class="at">src   =</span> <span class="fu">paste0</span>(<span class="st">"data:image/gif;base64,"</span>, gif_b64),</span>
-<span id="cb21-400"><a href="#cb21-400" aria-hidden="true" tabindex="-1"></a>    <span class="at">style =</span> <span class="st">"width: 600px; border-radius: 8px;"</span></span>
-<span id="cb21-401"><a href="#cb21-401" aria-hidden="true" tabindex="-1"></a>  ),</span>
-<span id="cb21-402"><a href="#cb21-402" aria-hidden="true" tabindex="-1"></a>  tags<span class="sc">$</span><span class="fu">p</span>(</span>
-<span id="cb21-403"><a href="#cb21-403" aria-hidden="true" tabindex="-1"></a>    <span class="at">style =</span> <span class="st">"font-size: 0.85rem; color: #666; margin-top: 0.5rem;"</span>,</span>
-<span id="cb21-404"><a href="#cb21-404" aria-hidden="true" tabindex="-1"></a>    <span class="st">"NDVI Sentinel-2 — ciclo de cultivo"</span></span>
-<span id="cb21-405"><a href="#cb21-405" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb21-406"><a href="#cb21-406" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb21-407"><a href="#cb21-407" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-408"><a href="#cb21-408" aria-hidden="true" tabindex="-1"></a>html_gif</span>
-<span id="cb21-409"><a href="#cb21-409" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb21-410"><a href="#cb21-410" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-411"><a href="#cb21-411" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-412"><a href="#cb21-412" aria-hidden="true" tabindex="-1"></a><span class="fu"># Gráfico NDVI temporal con matplotlib</span></span>
-<span id="cb21-413"><a href="#cb21-413" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-414"><a href="#cb21-414" aria-hidden="true" tabindex="-1"></a>Este último paso se extrae el valor medio de NDVI sobre el lote para cada composición temporal y lo representa gráficamente, produciendo la curva del NDVI a lo largo del ciclo del cultivo.</span>
-<span id="cb21-415"><a href="#cb21-415" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-416"><a href="#cb21-416" aria-hidden="true" tabindex="-1"></a><span class="fu">## Exracción de datos</span></span>
-<span id="cb21-417"><a href="#cb21-417" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-418"><a href="#cb21-418" aria-hidden="true" tabindex="-1"></a>Para cada imagen de <span class="co">[</span><span class="ot">col_composita</span><span class="co">]</span>{.func-tecnica} (@sec-comp) se aplica <span class="co">[</span><span class="ot">reduceRegion</span><span class="co">]</span>{.func-tecnica} con el reductor <span class="co">[</span><span class="ot">mean</span><span class="co">]</span>{.func-tecnica}, que promedia todos los píxeles válidos dentro de la geometría del lote a una resolución de 20 m. El resultado es un diccionario con el valor medio de NDVI para ese período, que se recupera del servidor con <span class="co">[</span><span class="ot">.getInfo()</span><span class="co">]</span>{.func-tecnica} y se almacena en <span class="co">[</span><span class="ot">ndvi_valores</span><span class="co">]</span>{.func-tecnica}. </span>
+<span id="cb21-394"><a href="#cb21-394" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-397"><a href="#cb21-397" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb21-398"><a href="#cb21-398" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(htmltools)</span>
+<span id="cb21-399"><a href="#cb21-399" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(base64enc)</span>
+<span id="cb21-400"><a href="#cb21-400" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-401"><a href="#cb21-401" aria-hidden="true" tabindex="-1"></a>gif_path <span class="ot">&lt;-</span> <span class="st">"ndvi_ciclo_cultivo.gif"</span></span>
+<span id="cb21-402"><a href="#cb21-402" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-403"><a href="#cb21-403" aria-hidden="true" tabindex="-1"></a>gif_b64 <span class="ot">&lt;-</span> base64enc<span class="sc">::</span><span class="fu">base64encode</span>(gif_path)</span>
+<span id="cb21-404"><a href="#cb21-404" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-405"><a href="#cb21-405" aria-hidden="true" tabindex="-1"></a>html_gif <span class="ot">&lt;-</span> tags<span class="sc">$</span><span class="fu">div</span>(</span>
+<span id="cb21-406"><a href="#cb21-406" aria-hidden="true" tabindex="-1"></a>  <span class="at">style =</span> <span class="st">"text-align: center; margin: 1rem 0;"</span>,</span>
+<span id="cb21-407"><a href="#cb21-407" aria-hidden="true" tabindex="-1"></a>  tags<span class="sc">$</span><span class="fu">img</span>(</span>
+<span id="cb21-408"><a href="#cb21-408" aria-hidden="true" tabindex="-1"></a>    <span class="at">src   =</span> <span class="fu">paste0</span>(<span class="st">"data:image/gif;base64,"</span>, gif_b64),</span>
+<span id="cb21-409"><a href="#cb21-409" aria-hidden="true" tabindex="-1"></a>    <span class="at">style =</span> <span class="st">"width: 600px; border-radius: 8px;"</span></span>
+<span id="cb21-410"><a href="#cb21-410" aria-hidden="true" tabindex="-1"></a>  ),</span>
+<span id="cb21-411"><a href="#cb21-411" aria-hidden="true" tabindex="-1"></a>  tags<span class="sc">$</span><span class="fu">p</span>(</span>
+<span id="cb21-412"><a href="#cb21-412" aria-hidden="true" tabindex="-1"></a>    <span class="at">style =</span> <span class="st">"font-size: 0.85rem; color: #666; margin-top: 0.5rem;"</span>,</span>
+<span id="cb21-413"><a href="#cb21-413" aria-hidden="true" tabindex="-1"></a>    <span class="st">"NDVI Sentinel-2 — ciclo de cultivo"</span></span>
+<span id="cb21-414"><a href="#cb21-414" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb21-415"><a href="#cb21-415" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb21-416"><a href="#cb21-416" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-417"><a href="#cb21-417" aria-hidden="true" tabindex="-1"></a>html_gif</span>
+<span id="cb21-418"><a href="#cb21-418" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb21-419"><a href="#cb21-419" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb21-420"><a href="#cb21-420" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-423"><a href="#cb21-423" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb21-424"><a href="#cb21-424" aria-hidden="true" tabindex="-1"></a>ndvi_valores <span class="op">=</span> []</span>
-<span id="cb21-425"><a href="#cb21-425" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-426"><a href="#cb21-426" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i, (comp, fecha) <span class="kw">in</span> <span class="bu">enumerate</span>(<span class="bu">zip</span>(compositas, fechas_validas)):</span>
-<span id="cb21-427"><a href="#cb21-427" aria-hidden="true" tabindex="-1"></a>    stats <span class="op">=</span> comp.reduceRegion(</span>
-<span id="cb21-428"><a href="#cb21-428" aria-hidden="true" tabindex="-1"></a>        reducer  <span class="op">=</span> ee.Reducer.mean(),</span>
-<span id="cb21-429"><a href="#cb21-429" aria-hidden="true" tabindex="-1"></a>        geometry <span class="op">=</span> geometry,</span>
-<span id="cb21-430"><a href="#cb21-430" aria-hidden="true" tabindex="-1"></a>        scale    <span class="op">=</span> <span class="dv">20</span>,</span>
-<span id="cb21-431"><a href="#cb21-431" aria-hidden="true" tabindex="-1"></a>        maxPixels<span class="op">=</span> <span class="fl">1e8</span></span>
-<span id="cb21-432"><a href="#cb21-432" aria-hidden="true" tabindex="-1"></a>    ).getInfo()</span>
-<span id="cb21-433"><a href="#cb21-433" aria-hidden="true" tabindex="-1"></a>    ndvi_valores.append(stats.get(<span class="st">'NDVI'</span>, np.nan))</span>
+<span id="cb21-421"><a href="#cb21-421" aria-hidden="true" tabindex="-1"></a><span class="fu"># Gráfico NDVI temporal con matplotlib</span></span>
+<span id="cb21-422"><a href="#cb21-422" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-423"><a href="#cb21-423" aria-hidden="true" tabindex="-1"></a>Este último paso se extrae el valor medio de NDVI sobre el lote para cada composición temporal y lo representa gráficamente, produciendo la curva del NDVI a lo largo del ciclo del cultivo.</span>
+<span id="cb21-424"><a href="#cb21-424" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-425"><a href="#cb21-425" aria-hidden="true" tabindex="-1"></a><span class="fu">## Exracción de datos</span></span>
+<span id="cb21-426"><a href="#cb21-426" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-427"><a href="#cb21-427" aria-hidden="true" tabindex="-1"></a>Para cada imagen de <span class="co">[</span><span class="ot">col_composita</span><span class="co">]</span>{.func-tecnica} (@sec-comp) se aplica <span class="co">[</span><span class="ot">reduceRegion</span><span class="co">]</span>{.func-tecnica} con el reductor <span class="co">[</span><span class="ot">mean</span><span class="co">]</span>{.func-tecnica}, que promedia todos los píxeles válidos dentro de la geometría del lote a una resolución de 20 m. El resultado es un diccionario con el valor medio de NDVI para ese período, que se recupera del servidor con <span class="co">[</span><span class="ot">.getInfo()</span><span class="co">]</span>{.func-tecnica} y se almacena en <span class="co">[</span><span class="ot">ndvi_valores</span><span class="co">]</span>{.func-tecnica}. </span>
+<span id="cb21-428"><a href="#cb21-428" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-429"><a href="#cb21-429" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-432"><a href="#cb21-432" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb21-433"><a href="#cb21-433" aria-hidden="true" tabindex="-1"></a>ndvi_valores <span class="op">=</span> []</span>
 <span id="cb21-434"><a href="#cb21-434" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-435"><a href="#cb21-435" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb21-436"><a href="#cb21-436" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-437"><a href="#cb21-437" aria-hidden="true" tabindex="-1"></a><span class="fu">## Graficar</span></span>
-<span id="cb21-438"><a href="#cb21-438" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-441"><a href="#cb21-441" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb21-442"><a href="#cb21-442" aria-hidden="true" tabindex="-1"></a><span class="co">#| code-fold: true</span></span>
-<span id="cb21-443"><a href="#cb21-443" aria-hidden="true" tabindex="-1"></a><span class="co">#| code-summary: "Código"</span></span>
-<span id="cb21-444"><a href="#cb21-444" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-445"><a href="#cb21-445" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">5</span>))</span>
-<span id="cb21-446"><a href="#cb21-446" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-447"><a href="#cb21-447" aria-hidden="true" tabindex="-1"></a>ax.plot(fechas_validas, ndvi_valores,</span>
-<span id="cb21-448"><a href="#cb21-448" aria-hidden="true" tabindex="-1"></a>        color<span class="op">=</span><span class="st">'#2c3b4d'</span>, linewidth<span class="op">=</span><span class="dv">2</span>, marker<span class="op">=</span><span class="st">'o'</span>,</span>
-<span id="cb21-449"><a href="#cb21-449" aria-hidden="true" tabindex="-1"></a>        markersize<span class="op">=</span><span class="dv">5</span>, markerfacecolor<span class="op">=</span><span class="st">'white'</span>, markeredgewidth<span class="op">=</span><span class="fl">1.5</span>)</span>
-<span id="cb21-450"><a href="#cb21-450" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-451"><a href="#cb21-451" aria-hidden="true" tabindex="-1"></a>ax.fill_between(fechas_validas, ndvi_valores,</span>
-<span id="cb21-452"><a href="#cb21-452" aria-hidden="true" tabindex="-1"></a>                alpha<span class="op">=</span><span class="fl">0.15</span>, color<span class="op">=</span><span class="st">'#2c3b4d'</span>)</span>
+<span id="cb21-435"><a href="#cb21-435" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i, (comp, fecha) <span class="kw">in</span> <span class="bu">enumerate</span>(<span class="bu">zip</span>(compositas, fechas_validas)):</span>
+<span id="cb21-436"><a href="#cb21-436" aria-hidden="true" tabindex="-1"></a>    stats <span class="op">=</span> comp.reduceRegion(</span>
+<span id="cb21-437"><a href="#cb21-437" aria-hidden="true" tabindex="-1"></a>        reducer  <span class="op">=</span> ee.Reducer.mean(),</span>
+<span id="cb21-438"><a href="#cb21-438" aria-hidden="true" tabindex="-1"></a>        geometry <span class="op">=</span> geometry,</span>
+<span id="cb21-439"><a href="#cb21-439" aria-hidden="true" tabindex="-1"></a>        scale    <span class="op">=</span> <span class="dv">20</span>,</span>
+<span id="cb21-440"><a href="#cb21-440" aria-hidden="true" tabindex="-1"></a>        maxPixels<span class="op">=</span> <span class="fl">1e8</span></span>
+<span id="cb21-441"><a href="#cb21-441" aria-hidden="true" tabindex="-1"></a>    ).getInfo()</span>
+<span id="cb21-442"><a href="#cb21-442" aria-hidden="true" tabindex="-1"></a>    ndvi_valores.append(stats.get(<span class="st">'NDVI'</span>, np.nan))</span>
+<span id="cb21-443"><a href="#cb21-443" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-444"><a href="#cb21-444" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb21-445"><a href="#cb21-445" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-446"><a href="#cb21-446" aria-hidden="true" tabindex="-1"></a><span class="fu">## Graficar</span></span>
+<span id="cb21-447"><a href="#cb21-447" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-450"><a href="#cb21-450" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb21-451"><a href="#cb21-451" aria-hidden="true" tabindex="-1"></a><span class="co">#| code-fold: true</span></span>
+<span id="cb21-452"><a href="#cb21-452" aria-hidden="true" tabindex="-1"></a><span class="co">#| code-summary: "Código"</span></span>
 <span id="cb21-453"><a href="#cb21-453" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-454"><a href="#cb21-454" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="ss">f'NDVI medio del lote — </span><span class="sc">{</span>FECHA_INI<span class="sc">}</span><span class="ss"> a </span><span class="sc">{</span>FECHA_FIN<span class="sc">}</span><span class="ss">'</span>,</span>
-<span id="cb21-455"><a href="#cb21-455" aria-hidden="true" tabindex="-1"></a>             fontsize<span class="op">=</span><span class="dv">13</span>, pad<span class="op">=</span><span class="dv">12</span>)</span>
-<span id="cb21-456"><a href="#cb21-456" aria-hidden="true" tabindex="-1"></a>             </span>
-<span id="cb21-457"><a href="#cb21-457" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">'Fecha'</span>)</span>
-<span id="cb21-458"><a href="#cb21-458" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-459"><a href="#cb21-459" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">'NDVI'</span>)</span>
-<span id="cb21-460"><a href="#cb21-460" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-461"><a href="#cb21-461" aria-hidden="true" tabindex="-1"></a>ax.set_ylim(<span class="op">-</span><span class="fl">0.1</span>, <span class="fl">1.0</span>)</span>
-<span id="cb21-462"><a href="#cb21-462" aria-hidden="true" tabindex="-1"></a>ax.yaxis.set_major_locator(ticker.MultipleLocator(<span class="fl">0.1</span>))</span>
-<span id="cb21-463"><a href="#cb21-463" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-464"><a href="#cb21-464" aria-hidden="true" tabindex="-1"></a>ax.xaxis.set_major_formatter(mdates.DateFormatter(<span class="st">'%b %y'</span>))</span>
-<span id="cb21-465"><a href="#cb21-465" aria-hidden="true" tabindex="-1"></a>ax.xaxis.set_major_locator(mdates.MonthLocator())</span>
-<span id="cb21-466"><a href="#cb21-466" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-467"><a href="#cb21-467" aria-hidden="true" tabindex="-1"></a>ax.grid(<span class="va">True</span>, alpha<span class="op">=</span><span class="fl">0.3</span>, linestyle<span class="op">=</span><span class="st">'--'</span>)</span>
-<span id="cb21-468"><a href="#cb21-468" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-469"><a href="#cb21-469" aria-hidden="true" tabindex="-1"></a>ax.tick_params(axis<span class="op">=</span><span class="st">'x'</span>, rotation<span class="op">=</span><span class="dv">45</span>)</span>
-<span id="cb21-470"><a href="#cb21-470" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-471"><a href="#cb21-471" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
-<span id="cb21-472"><a href="#cb21-472" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
-<span id="cb21-473"><a href="#cb21-473" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb21-474"><a href="#cb21-474" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-454"><a href="#cb21-454" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">5</span>))</span>
+<span id="cb21-455"><a href="#cb21-455" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-456"><a href="#cb21-456" aria-hidden="true" tabindex="-1"></a>ax.plot(fechas_validas, ndvi_valores,</span>
+<span id="cb21-457"><a href="#cb21-457" aria-hidden="true" tabindex="-1"></a>        color<span class="op">=</span><span class="st">'#2c3b4d'</span>, linewidth<span class="op">=</span><span class="dv">2</span>, marker<span class="op">=</span><span class="st">'o'</span>,</span>
+<span id="cb21-458"><a href="#cb21-458" aria-hidden="true" tabindex="-1"></a>        markersize<span class="op">=</span><span class="dv">5</span>, markerfacecolor<span class="op">=</span><span class="st">'white'</span>, markeredgewidth<span class="op">=</span><span class="fl">1.5</span>)</span>
+<span id="cb21-459"><a href="#cb21-459" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-460"><a href="#cb21-460" aria-hidden="true" tabindex="-1"></a>ax.fill_between(fechas_validas, ndvi_valores,</span>
+<span id="cb21-461"><a href="#cb21-461" aria-hidden="true" tabindex="-1"></a>                alpha<span class="op">=</span><span class="fl">0.15</span>, color<span class="op">=</span><span class="st">'#2c3b4d'</span>)</span>
+<span id="cb21-462"><a href="#cb21-462" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-463"><a href="#cb21-463" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="ss">f'NDVI medio del lote — </span><span class="sc">{</span>FECHA_INI<span class="sc">}</span><span class="ss"> a </span><span class="sc">{</span>FECHA_FIN<span class="sc">}</span><span class="ss">'</span>,</span>
+<span id="cb21-464"><a href="#cb21-464" aria-hidden="true" tabindex="-1"></a>             fontsize<span class="op">=</span><span class="dv">13</span>, pad<span class="op">=</span><span class="dv">12</span>)</span>
+<span id="cb21-465"><a href="#cb21-465" aria-hidden="true" tabindex="-1"></a>             </span>
+<span id="cb21-466"><a href="#cb21-466" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">'Fecha'</span>)</span>
+<span id="cb21-467"><a href="#cb21-467" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-468"><a href="#cb21-468" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">'NDVI'</span>)</span>
+<span id="cb21-469"><a href="#cb21-469" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-470"><a href="#cb21-470" aria-hidden="true" tabindex="-1"></a>ax.set_ylim(<span class="op">-</span><span class="fl">0.1</span>, <span class="fl">1.0</span>)</span>
+<span id="cb21-471"><a href="#cb21-471" aria-hidden="true" tabindex="-1"></a>ax.yaxis.set_major_locator(ticker.MultipleLocator(<span class="fl">0.1</span>))</span>
+<span id="cb21-472"><a href="#cb21-472" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-473"><a href="#cb21-473" aria-hidden="true" tabindex="-1"></a>ax.xaxis.set_major_formatter(mdates.DateFormatter(<span class="st">'%b %y'</span>))</span>
+<span id="cb21-474"><a href="#cb21-474" aria-hidden="true" tabindex="-1"></a>ax.xaxis.set_major_locator(mdates.MonthLocator())</span>
+<span id="cb21-475"><a href="#cb21-475" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-476"><a href="#cb21-476" aria-hidden="true" tabindex="-1"></a>ax.grid(<span class="va">True</span>, alpha<span class="op">=</span><span class="fl">0.3</span>, linestyle<span class="op">=</span><span class="st">'--'</span>)</span>
+<span id="cb21-477"><a href="#cb21-477" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-478"><a href="#cb21-478" aria-hidden="true" tabindex="-1"></a>ax.tick_params(axis<span class="op">=</span><span class="st">'x'</span>, rotation<span class="op">=</span><span class="dv">45</span>)</span>
+<span id="cb21-479"><a href="#cb21-479" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-480"><a href="#cb21-480" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb21-481"><a href="#cb21-481" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
+<span id="cb21-482"><a href="#cb21-482" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb21-483"><a href="#cb21-483" aria-hidden="true" tabindex="-1"></a></span>
 </code></pre></div><button title="Copiar al portapapeles" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
