@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="generator" content="quarto-1.9.37">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-<title>Procesamiento de imagenes satelitales y cálculo de índices de vegetación con Google Earth Engine – Juan Pablo Heiland</title>
+<title>Teledetección e Indices de Vegetación con Google Earth Engine y Python – Juan Pablo Heiland</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -247,7 +247,6 @@ window.Quarto = {
   <ul class="collapse">
 <li><a href="#crear-paletas-de-colores" id="toc-crear-paletas-de-colores" class="nav-link" data-scroll-target="#crear-paletas-de-colores"><span class="header-section-number">13.1</span> Crear paletas de colores</a></li>
   <li><a href="#a%C3%B1adir-%C3%ADndices-de-vegetaci%C3%B3n-al-mapa" id="toc-añadir-índices-de-vegetación-al-mapa" class="nav-link" data-scroll-target="#a%C3%B1adir-%C3%ADndices-de-vegetaci%C3%B3n-al-mapa"><span class="header-section-number">13.2</span> Añadir índices de vegetación al mapa</a></li>
-  <li><a href="#mostrar-mapa" id="toc-mostrar-mapa" class="nav-link" data-scroll-target="#mostrar-mapa"><span class="header-section-number">13.3</span> Mostrar Mapa</a></li>
   </ul>
 </li>
   <li><a href="#exportar" id="toc-exportar" class="nav-link" data-scroll-target="#exportar"><span class="header-section-number">14</span> Exportar</a></li>
@@ -255,7 +254,7 @@ window.Quarto = {
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><div class="quarto-title">
-<div class="quarto-title-block"><div><h1 class="title">Procesamiento de imagenes satelitales y cálculo de índices de vegetación con Google Earth Engine</h1><button type="button" class="btn code-tools-button dropdown-toggle" id="quarto-code-tools-menu" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi"></i> Código</button><ul class="dropdown-menu dropdown-menu-end" aria-labelelledby="quarto-code-tools-menu"><li><a id="quarto-show-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Mostrar todo el código</a></li><li><a id="quarto-hide-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Ocultar todo el código</a></li><li><hr class="dropdown-divider"></li><li><a id="quarto-view-source" class="dropdown-item" href="javascript:void(0)" role="button">Ver el código fuente</a></li></ul></div></div>
+<div class="quarto-title-block"><div><h1 class="title">Teledetección e Indices de Vegetación con Google Earth Engine y Python</h1><button type="button" class="btn code-tools-button dropdown-toggle" id="quarto-code-tools-menu" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi"></i> Código</button><ul class="dropdown-menu dropdown-menu-end" aria-labelelledby="quarto-code-tools-menu"><li><a id="quarto-show-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Mostrar todo el código</a></li><li><a id="quarto-hide-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Ocultar todo el código</a></li><li><hr class="dropdown-divider"></li><li><a id="quarto-view-source" class="dropdown-item" href="javascript:void(0)" role="button">Ver el código fuente</a></li></ul></div></div>
   <div class="quarto-categories">
     <div class="quarto-category">Python</div>
     <div class="quarto-category">Google Earth Engine</div>
@@ -964,8 +963,6 @@ Tabla&nbsp;3: Estadísticos descriptivos de los índices espectrales calculados 
 <span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a>Map.save(<span class="st">"mapa_indices.html"</span>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>El mapa fue generado con <span class="func-tecnica">geemap</span> y la API de Python de Google Earth Engine. Dado que los widgets interactivos de <span class="func-tecnica">geemap</span> requieren un kernel Python activo para funcionar, el mapa fue exportado como HTML autocontenido mediante <span class="func-tecnica">Map.add_layer_control()</span> y <span class="func-tecnica">Map.save(“mapa_indices.html”)</span>, y embebido en este documento a través de un <span class="func-tecnica">iframe</span>. Esto permite la visualización interactiva de los índices de vegetación calculado.</p>
-</section><section id="mostrar-mapa" class="level2" data-number="13.3"><h2 data-number="13.3" class="anchored" data-anchor-id="mostrar-mapa">
-<span class="header-section-number">13.3</span> Mostrar Mapa</h2>
 <iframe src="mapa_indices.html" width="100%" height="800px" frameborder="0">
 </iframe>
 </section></section><section id="exportar" class="level1" data-number="14"><h1 data-number="14">
@@ -1455,7 +1452,7 @@ Tabla&nbsp;3: Estadísticos descriptivos de los índices espectrales calculados 
   });
   </script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Ejecutar el código</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb25" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "Procesamiento de imagenes satelitales y cálculo de índices de vegetación con Google Earth Engine"</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "Teledetección e Indices de Vegetación con Google Earth Engine y Python"</span></span>
 <span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a><span class="an">date:</span><span class="co"> 2026-06</span></span>
 <span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a><span class="an">categories:</span><span class="co"> [Python, Google Earth Engine, Agricultura de precisión, Teledetección, Indices de Vegetación]</span></span>
 <span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a><span class="an">css:</span><span class="co"> styles.css</span></span>
@@ -2162,41 +2159,39 @@ Tabla&nbsp;3: Estadísticos descriptivos de los índices espectrales calculados 
 <span id="cb25-764"><a href="#cb25-764" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb25-765"><a href="#cb25-765" aria-hidden="true" tabindex="-1"></a>El mapa fue generado con <span class="co">[</span><span class="ot">geemap</span><span class="co">]</span>{.func-tecnica} y la API de Python de Google Earth Engine. Dado que los widgets interactivos de <span class="co">[</span><span class="ot">geemap</span><span class="co">]</span>{.func-tecnica} requieren un kernel Python activo para funcionar, el mapa fue exportado como HTML autocontenido mediante <span class="co">[</span><span class="ot">Map.add_layer_control()</span><span class="co">]</span>{.func-tecnica} y <span class="co">[</span><span class="ot">Map.save("mapa_indices.html")</span><span class="co">]</span>{.func-tecnica}, y embebido en este documento a través de un <span class="co">[</span><span class="ot">iframe</span><span class="co">]</span>{.func-tecnica}. Esto permite la visualización interactiva de los índices de vegetación calculado.</span>
 <span id="cb25-766"><a href="#cb25-766" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-767"><a href="#cb25-767" aria-hidden="true" tabindex="-1"></a><span class="fu">## Mostrar Mapa</span></span>
-<span id="cb25-768"><a href="#cb25-768" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-769"><a href="#cb25-769" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">iframe</span><span class="ot"> src</span><span class="op">=</span><span class="st">"mapa_indices.html"</span><span class="ot"> </span></span>
-<span id="cb25-770"><a href="#cb25-770" aria-hidden="true" tabindex="-1"></a><span class="ot">        width</span><span class="op">=</span><span class="st">"100%"</span><span class="ot"> </span></span>
-<span id="cb25-771"><a href="#cb25-771" aria-hidden="true" tabindex="-1"></a><span class="ot">        height</span><span class="op">=</span><span class="st">"800px"</span></span>
-<span id="cb25-772"><a href="#cb25-772" aria-hidden="true" tabindex="-1"></a><span class="ot">        frameborder</span><span class="op">=</span><span class="st">"0"</span><span class="dt">&gt;</span></span>
-<span id="cb25-773"><a href="#cb25-773" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">iframe</span><span class="dt">&gt;</span></span>
+<span id="cb25-767"><a href="#cb25-767" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">iframe</span><span class="ot"> src</span><span class="op">=</span><span class="st">"mapa_indices.html"</span><span class="ot"> </span></span>
+<span id="cb25-768"><a href="#cb25-768" aria-hidden="true" tabindex="-1"></a><span class="ot">        width</span><span class="op">=</span><span class="st">"100%"</span><span class="ot"> </span></span>
+<span id="cb25-769"><a href="#cb25-769" aria-hidden="true" tabindex="-1"></a><span class="ot">        height</span><span class="op">=</span><span class="st">"800px"</span></span>
+<span id="cb25-770"><a href="#cb25-770" aria-hidden="true" tabindex="-1"></a><span class="ot">        frameborder</span><span class="op">=</span><span class="st">"0"</span><span class="dt">&gt;</span></span>
+<span id="cb25-771"><a href="#cb25-771" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">iframe</span><span class="dt">&gt;</span></span>
+<span id="cb25-772"><a href="#cb25-772" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-773"><a href="#cb25-773" aria-hidden="true" tabindex="-1"></a><span class="fu"># Exportar</span></span>
 <span id="cb25-774"><a href="#cb25-774" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-775"><a href="#cb25-775" aria-hidden="true" tabindex="-1"></a><span class="fu"># Exportar</span></span>
+<span id="cb25-775"><a href="#cb25-775" aria-hidden="true" tabindex="-1"></a>Una vez calculados los índices de vegetación, es posible almacenar los resultados en un formato ráster (TIF). Para exportar imágenes desde Google Earth Engine directamente a Google Drive en un entorno Python, se utiliza el módulo <span class="co">[</span><span class="ot">ee.batch.Export.image.toDrive()</span><span class="co">]</span>{.func-tecnica}. Sus argumentos son:</span>
 <span id="cb25-776"><a href="#cb25-776" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-777"><a href="#cb25-777" aria-hidden="true" tabindex="-1"></a>Una vez calculados los índices de vegetación, es posible almacenar los resultados en un formato ráster (TIF). Para exportar imágenes desde Google Earth Engine directamente a Google Drive en un entorno Python, se utiliza el módulo <span class="co">[</span><span class="ot">ee.batch.Export.image.toDrive()</span><span class="co">]</span>{.func-tecnica}. Sus argumentos son:</span>
-<span id="cb25-778"><a href="#cb25-778" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-779"><a href="#cb25-779" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span><span class="co">[</span><span class="ot">image</span><span class="co">]</span>{.func-tecnica}: Especifica el objeto ráster o la banda indexada a exportar (por ejemplo, el NDVI).</span>
-<span id="cb25-780"><a href="#cb25-780" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span><span class="co">[</span><span class="ot">description</span><span class="co">]</span>{.func-tecnica}: Asigna un nombre de identificación interna.</span>
-<span id="cb25-781"><a href="#cb25-781" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span><span class="co">[</span><span class="ot">scale</span><span class="co">]</span>{.func-tecnica}: Define la resolución espacial, en metros. Para las bandas visibles e infrarrojas de Sentinel-2, el valor óptimo es 10</span>
-<span id="cb25-782"><a href="#cb25-782" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span><span class="co">[</span><span class="ot">region</span><span class="co">]</span>{.func-tecnica}: Delimita el área geográfica de exportación mediante un objeto de geometría (ee.Geometry).</span>
-<span id="cb25-783"><a href="#cb25-783" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span><span class="co">[</span><span class="ot">folder</span><span class="co">]</span>{.func-tecnica}: Nombre de la carpeta dentro de Google Drive donde se almacenará el archivo. </span>
-<span id="cb25-784"><a href="#cb25-784" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span><span class="co">[</span><span class="ot">crs</span><span class="co">]</span>{.func-tecnica}: Determina el Sistema de Referencia de Coordenadas de salida. </span>
-<span id="cb25-785"><a href="#cb25-785" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span><span class="co">[</span><span class="ot">maxPixels</span><span class="co">]</span>{.func-tecnica}: Modifica el límite máximo de píxeles permitidos en la exportación (fijado en $1 \times 10^{13}$), lo que evita que tareas de gran extensión territorial se cancelen por exceso de computación.</span>
-<span id="cb25-786"><a href="#cb25-786" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-789"><a href="#cb25-789" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb25-790"><a href="#cb25-790" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
-<span id="cb25-791"><a href="#cb25-791" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-792"><a href="#cb25-792" aria-hidden="true" tabindex="-1"></a>Export.image.toDrive({ </span>
-<span id="cb25-793"><a href="#cb25-793" aria-hidden="true" tabindex="-1"></a>  image: NDVI, </span>
-<span id="cb25-794"><a href="#cb25-794" aria-hidden="true" tabindex="-1"></a>  description: <span class="st">"NDVI_Sentinel2"</span>, </span>
-<span id="cb25-795"><a href="#cb25-795" aria-hidden="true" tabindex="-1"></a>  scale: <span class="dv">10</span>, </span>
-<span id="cb25-796"><a href="#cb25-796" aria-hidden="true" tabindex="-1"></a>  region: geometry, </span>
-<span id="cb25-797"><a href="#cb25-797" aria-hidden="true" tabindex="-1"></a>  fileNamePrefix: <span class="st">"ndvi_s2_export"</span>, </span>
-<span id="cb25-798"><a href="#cb25-798" aria-hidden="true" tabindex="-1"></a>  folder: <span class="st">"GEE_exp"</span>, </span>
-<span id="cb25-799"><a href="#cb25-799" aria-hidden="true" tabindex="-1"></a>  maxPixels: <span class="fl">1e13</span>, </span>
-<span id="cb25-800"><a href="#cb25-800" aria-hidden="true" tabindex="-1"></a>  crs: <span class="st">"EPSG:32720"</span> </span>
-<span id="cb25-801"><a href="#cb25-801" aria-hidden="true" tabindex="-1"></a>})<span class="op">;</span></span>
-<span id="cb25-802"><a href="#cb25-802" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb25-803"><a href="#cb25-803" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-777"><a href="#cb25-777" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span><span class="co">[</span><span class="ot">image</span><span class="co">]</span>{.func-tecnica}: Especifica el objeto ráster o la banda indexada a exportar (por ejemplo, el NDVI).</span>
+<span id="cb25-778"><a href="#cb25-778" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span><span class="co">[</span><span class="ot">description</span><span class="co">]</span>{.func-tecnica}: Asigna un nombre de identificación interna.</span>
+<span id="cb25-779"><a href="#cb25-779" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span><span class="co">[</span><span class="ot">scale</span><span class="co">]</span>{.func-tecnica}: Define la resolución espacial, en metros. Para las bandas visibles e infrarrojas de Sentinel-2, el valor óptimo es 10</span>
+<span id="cb25-780"><a href="#cb25-780" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span><span class="co">[</span><span class="ot">region</span><span class="co">]</span>{.func-tecnica}: Delimita el área geográfica de exportación mediante un objeto de geometría (ee.Geometry).</span>
+<span id="cb25-781"><a href="#cb25-781" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span><span class="co">[</span><span class="ot">folder</span><span class="co">]</span>{.func-tecnica}: Nombre de la carpeta dentro de Google Drive donde se almacenará el archivo. </span>
+<span id="cb25-782"><a href="#cb25-782" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span><span class="co">[</span><span class="ot">crs</span><span class="co">]</span>{.func-tecnica}: Determina el Sistema de Referencia de Coordenadas de salida. </span>
+<span id="cb25-783"><a href="#cb25-783" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span><span class="co">[</span><span class="ot">maxPixels</span><span class="co">]</span>{.func-tecnica}: Modifica el límite máximo de píxeles permitidos en la exportación (fijado en $1 \times 10^{13}$), lo que evita que tareas de gran extensión territorial se cancelen por exceso de computación.</span>
+<span id="cb25-784"><a href="#cb25-784" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-787"><a href="#cb25-787" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb25-788"><a href="#cb25-788" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb25-789"><a href="#cb25-789" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-790"><a href="#cb25-790" aria-hidden="true" tabindex="-1"></a>Export.image.toDrive({ </span>
+<span id="cb25-791"><a href="#cb25-791" aria-hidden="true" tabindex="-1"></a>  image: NDVI, </span>
+<span id="cb25-792"><a href="#cb25-792" aria-hidden="true" tabindex="-1"></a>  description: <span class="st">"NDVI_Sentinel2"</span>, </span>
+<span id="cb25-793"><a href="#cb25-793" aria-hidden="true" tabindex="-1"></a>  scale: <span class="dv">10</span>, </span>
+<span id="cb25-794"><a href="#cb25-794" aria-hidden="true" tabindex="-1"></a>  region: geometry, </span>
+<span id="cb25-795"><a href="#cb25-795" aria-hidden="true" tabindex="-1"></a>  fileNamePrefix: <span class="st">"ndvi_s2_export"</span>, </span>
+<span id="cb25-796"><a href="#cb25-796" aria-hidden="true" tabindex="-1"></a>  folder: <span class="st">"GEE_exp"</span>, </span>
+<span id="cb25-797"><a href="#cb25-797" aria-hidden="true" tabindex="-1"></a>  maxPixels: <span class="fl">1e13</span>, </span>
+<span id="cb25-798"><a href="#cb25-798" aria-hidden="true" tabindex="-1"></a>  crs: <span class="st">"EPSG:32720"</span> </span>
+<span id="cb25-799"><a href="#cb25-799" aria-hidden="true" tabindex="-1"></a>})<span class="op">;</span></span>
+<span id="cb25-800"><a href="#cb25-800" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb25-801"><a href="#cb25-801" aria-hidden="true" tabindex="-1"></a></span>
 </code></pre></div><button title="Copiar al portapapeles" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
