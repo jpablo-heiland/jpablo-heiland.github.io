@@ -173,7 +173,7 @@ window.Quarto = {
  <span class="dropdown-text">Regresión espacial</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../../proyectos/serie-temporal-gee/fenologia-gee.html">
+    <a class="dropdown-item" href="../../proyectos/serie-temporal-gee/fenologia-gee.qmd">
  <span class="dropdown-text">Optimización</span></a>
   </li>  
         <li>
@@ -220,23 +220,21 @@ window.Quarto = {
   <li>
 <a href="#exploraci%C3%B3n-de-datos" id="toc-exploración-de-datos" class="nav-link" data-scroll-target="#exploraci%C3%B3n-de-datos"><span class="header-section-number">4</span> Exploración de datos</a>
   <ul class="collapse">
-<li><a href="#resumen" id="toc-resumen" class="nav-link" data-scroll-target="#resumen"><span class="header-section-number">4.1</span> Resumen</a></li>
-  <li><a href="#clase-del-objeto" id="toc-clase-del-objeto" class="nav-link" data-scroll-target="#clase-del-objeto"><span class="header-section-number">4.2</span> Clase del Objeto</a></li>
-  <li><a href="#crs" id="toc-crs" class="nav-link" data-scroll-target="#crs"><span class="header-section-number">4.3</span> CRS</a></li>
+<li><a href="#clase-del-objeto" id="toc-clase-del-objeto" class="nav-link" data-scroll-target="#clase-del-objeto"><span class="header-section-number">4.1</span> Clase del Objeto</a></li>
+  <li><a href="#crs" id="toc-crs" class="nav-link" data-scroll-target="#crs"><span class="header-section-number">4.2</span> CRS</a></li>
   </ul>
 </li>
   <li>
-<a href="#visualizar" id="toc-visualizar" class="nav-link" data-scroll-target="#visualizar"><span class="header-section-number">5</span> Visualizar</a>
+<a href="#visualizar-de-los-datos-de-cea" id="toc-visualizar-de-los-datos-de-cea" class="nav-link" data-scroll-target="#visualizar-de-los-datos-de-cea"><span class="header-section-number">5</span> Visualizar de los datos de CEa</a>
   <ul class="collapse">
-<li><a href="#cuantiles" id="toc-cuantiles" class="nav-link" data-scroll-target="#cuantiles"><span class="header-section-number">5.1</span> Cuantiles</a></li>
-  <li><a href="#graficar" id="toc-graficar" class="nav-link" data-scroll-target="#graficar"><span class="header-section-number">5.2</span> Graficar</a></li>
+<li><a href="#graficar" id="toc-graficar" class="nav-link" data-scroll-target="#graficar"><span class="header-section-number">5.1</span> Graficar</a></li>
   </ul>
 </li>
   <li>
 <a href="#sec-semiv" id="toc-sec-semiv" class="nav-link" data-scroll-target="#sec-semiv"><span class="header-section-number">6</span> Estimación Empírica del Semivariograma</a>
   <ul class="collapse">
 <li><a href="#generar-semivariograma" id="toc-generar-semivariograma" class="nav-link" data-scroll-target="#generar-semivariograma"><span class="header-section-number">6.1</span> Generar Semivariograma</a></li>
-  <li><a href="#visualizar-1" id="toc-visualizar-1" class="nav-link" data-scroll-target="#visualizar-1"><span class="header-section-number">6.2</span> Visualizar</a></li>
+  <li><a href="#visualizar" id="toc-visualizar" class="nav-link" data-scroll-target="#visualizar"><span class="header-section-number">6.2</span> Visualizar</a></li>
   </ul>
 </li>
   <li><a href="#sec-ajust" id="toc-sec-ajust" class="nav-link" data-scroll-target="#sec-ajust"><span class="header-section-number">7</span> Ajuste del Semivariograma</a></li>
@@ -299,7 +297,7 @@ window.Quarto = {
 
 </header><section id="sec-introduccion" class="level1" data-number="1"><h1 data-number="1">
 <span class="header-section-number">1</span> Introducción</h1>
-<p>Este documento describe un flujo de trabajo para la <strong>Interpolación Espacial</strong>. El punto de partida es un archivo vectorial de puntos de la Conductividad Eléctrica Aparente (CEa) del suelo, obtenido con un sensor <em>VERIS</em> para dos profundidades (0–30 cm y 0–90 cm).</p>
+<p>El presente documento describe el flujo de trabajo implementado para la <strong>Interpolación Espacial</strong> de datos de Conductividad Eléctrica Aparente (CEa) del suelo. El conjunto de datos inicial consiste en un archivo vectorial de puntos relevado mediante un sensor <em>VERIS</em> a dos profundidades de muestreo (0–30 cm y 0–90 cm).</p>
 <p>A partir de estos puntos, el flujo avanza en tres etapas principales:</p>
 <ul>
 <li><p>Primero, se construye el <strong>Semivariograma</strong> empírico y se ajustan tres modelos teóricos (Esférico, Gaussiano y Exponencial). La selección del mejor modelo es a trevés de un criterio visual y el error residual (SSErr).</p></li>
@@ -322,7 +320,7 @@ window.Quarto = {
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span><span class="op">(</span>scipen <span class="op">=</span> <span class="fl">999</span><span class="op">)</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>Tanto <code>gstat</code> como <code>geoR</code> son librerías de R diseñadas para el análisis geoestadístico, especialmente para:</p>
+<p>Tanto <span class="func-tecnica">gstat</span> como <span class="func-tecnica">geoR</span> son librerías de R diseñadas para el análisis geoestadístico, especialmente para:</p>
 <ul>
 <li>Construir semivariogramas empíricos y teóricos</li>
 <li>Ajustar modelos de variograma</li>
@@ -373,18 +371,14 @@ window.Quarto = {
 </div>
 </section><section id="carga-de-datos" class="level1" data-number="3"><h1 data-number="3">
 <span class="header-section-number">3</span> Carga de datos</h1>
-<p>Para leer datos se usó la función <code><a href="https://r-spatial.github.io/sf/reference/st_read.html">st_read()</a></code> del paquete <code>sf</code>. Esta función devuelve un objeto clase <code>Simple Feature (sf)</code></p>
-<blockquote class="blockquote">
-<p>Un objeto <code>sf</code> es, esencialmente, un <code>data.frame</code> (estructura de datos más común de R) que tiene una columna especial llamada <code>geometry</code>, la cual almacena la representación espacial (puntos, líneas o polígonos) que corresponde a cada fila. Todas las librerías usadas en este documento son compatible con esta estructura de datos, por lo que no es necesario modificarla.</p>
-</blockquote>
+<p>Para leer datos se usó la función <code><a href="https://r-spatial.github.io/sf/reference/st_read.html">st_read()</a></code> del paquete <span class="func-tecnica">sf</span>. Esta función devuelve un objeto clase <span class="func-tecnica">Simple Feature (sf)</span>.</p>
+<p>Un objeto <span class="func-tecnica">sf</span> es, esencialmente, un <span class="func-tecnica">data.frame</span> (estructura de datos más común de R) que tiene una columna especial llamada <span class="func-tecnica">geometry</span>, la cual almacena la representación espacial (puntos, líneas o polígonos) que corresponde a cada fila. Todas las librerías usadas en este documento son compatible con esta estructura de datos, por lo que no es necesario modificarla.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">veris</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_read.html">st_read</a></span><span class="op">(</span><span class="st">"data/Veris_EC_20S.shp"</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> </span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section><section id="exploración-de-datos" class="level1" data-number="4"><h1 data-number="4">
 <span class="header-section-number">4</span> Exploración de datos</h1>
-<section id="resumen" class="level2" data-number="4.1"><h2 data-number="4.1" class="anchored" data-anchor-id="resumen">
-<span class="header-section-number">4.1</span> Resumen</h2>
-<p>Se visualizan las primeras 5 filas de set de datos usando la librería <code>kableExtra</code>.</p>
+<p>Se visualizan las primeras 5 filas de set de datos usando la librería <span class="func-tecnica">kableExtra</span>:</p>
 <div class="cell">
 <details class="code-fold"><summary>Código</summary><div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">primeras_filas</span> <span class="op">&lt;-</span> <span class="va">veris</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://rspatial.github.io/terra/reference/headtail.html">head</a></span><span class="op">(</span><span class="fl">5</span><span class="op">)</span> </span>
@@ -459,17 +453,18 @@ window.Quarto = {
 </table>
 </div>
 </div>
-</section><section id="clase-del-objeto" class="level2" data-number="4.2"><h2 data-number="4.2" class="anchored" data-anchor-id="clase-del-objeto">
-<span class="header-section-number">4.2</span> Clase del Objeto</h2>
+<section id="clase-del-objeto" class="level2" data-number="4.1"><h2 data-number="4.1" class="anchored" data-anchor-id="clase-del-objeto">
+<span class="header-section-number">4.1</span> Clase del Objeto</h2>
+<p>Verificar la clase del objeto mediante <code><a href="https://rdrr.io/r/base/class.html">class()</a></code>:</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/class.html">class</a></span><span class="op">(</span><span class="va">veris</span><span class="op">)</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "sf"         "data.frame"</code></pre>
 </div>
 </div>
-</section><section id="crs" class="level2" data-number="4.3"><h2 data-number="4.3" class="anchored" data-anchor-id="crs">
-<span class="header-section-number">4.3</span> CRS</h2>
-<p>Se comprueba el Sistema de Referencia de Coordenadas (CRS) del objeto a través de <code><a href="https://r-spatial.github.io/sf/reference/st_crs.html">st_crs()</a></code>.</p>
+</section><section id="crs" class="level2" data-number="4.2"><h2 data-number="4.2" class="anchored" data-anchor-id="crs">
+<span class="header-section-number">4.2</span> CRS</h2>
+<p>Comprobar el Sistema de Referencia de Coordenadas (CRS) del objeto a través de <code><a href="https://r-spatial.github.io/sf/reference/st_crs.html">st_crs()</a></code>:</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_crs.html">st_crs</a></span><span class="op">(</span><span class="va">veris</span><span class="op">)</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
@@ -512,11 +507,10 @@ PROJCRS["WGS 84 / UTM zone 20S",
     ID["EPSG",32720]]</code></pre>
 </div>
 </div>
-</section></section><section id="visualizar" class="level1" data-number="5"><h1 data-number="5">
-<span class="header-section-number">5</span> Visualizar</h1>
-<p>La visualización se estructuró mediante una discretización en cuantiles (4), para ello, primero se deben crear estos cuantiles.</p>
-<section id="cuantiles" class="level2" data-number="5.1"><h2 data-number="5.1" class="anchored" data-anchor-id="cuantiles">
-<span class="header-section-number">5.1</span> Cuantiles</h2>
+</section></section><section id="visualizar-de-los-datos-de-cea" class="level1" data-number="5"><h1 data-number="5">
+<span class="header-section-number">5</span> Visualizar de los datos de CEa</h1>
+<p>En esta sección, se procede a la visualización espacial de los puntos de CEa mediante el paquete <span class="func-tecnica">ggplot2</span>. Se realiza para examinar la densidad del muestreo, evaluar la cobertura espacial del sensor VERIS en el lote y observar a grandes rasgos la variabilidad del suelo para ambas profundidades (0-30 y 0-90 cm).</p>
+<p>La visualización se estructuró mediante una discretización en cuantiles (4), para ello, primero se deben crear estos cuantiles:</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">veris</span> <span class="op">&lt;-</span> <span class="va">veris</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span> </span>
@@ -534,9 +528,9 @@ PROJCRS["WGS 84 / UTM zone 20S",
 <span>      include.lowest <span class="op">=</span> <span class="cn">TRUE</span> </span>
 <span><span class="op">)</span><span class="op">)</span> </span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-</section><section id="graficar" class="level2" data-number="5.2"><h2 data-number="5.2" class="anchored" data-anchor-id="graficar">
-<span class="header-section-number">5.2</span> Graficar</h2>
-<p>Se generan dos gráficos: en la pestaña 1 para la profundidad 0-30 cm y en la pestaña 2 para la profundidad 0-90 cm:</p>
+<section id="graficar" class="level2" data-number="5.1"><h2 data-number="5.1" class="anchored" data-anchor-id="graficar">
+<span class="header-section-number">5.1</span> Graficar</h2>
+<p>Se generan los mapas correspondientes a cada profundidad del suelo, accesibles a través de las siguientes pestañas</p>
 <div class="tabset-margin-container"></div><div class="panel-tabset tabset-topline">
 <ul class="nav nav-tabs" role="tablist">
 <li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true" href="">0-30 cm</a></li>
@@ -629,11 +623,11 @@ Figura&nbsp;1: Semivariograma
 </div>
 <section id="generar-semivariograma" class="level2" data-number="6.1"><h2 data-number="6.1" class="anchored" data-anchor-id="generar-semivariograma">
 <span class="header-section-number">6.1</span> Generar Semivariograma</h2>
-<p>Se usó la función <code><a href="https://r-spatial.github.io/gstat/reference/variogram.html">variogram()</a></code> del paquete <code>gstat</code>.</p>
+<p>Se usó la función <code><a href="https://r-spatial.github.io/gstat/reference/variogram.html">variogram()</a></code> del paquete <span class="func-tecnica">gstat</span>.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">vemp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/gstat/reference/variogram.html">variogram</a></span><span class="op">(</span><span class="va">Veris_0_30</span> <span class="op">~</span> <span class="fl">1</span>, <span class="va">veris</span><span class="op">)</span> </span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-</section><section id="visualizar-1" class="level2" data-number="6.2"><h2 data-number="6.2" class="anchored" data-anchor-id="visualizar-1">
+</section><section id="visualizar" class="level2" data-number="6.2"><h2 data-number="6.2" class="anchored" data-anchor-id="visualizar">
 <span class="header-section-number">6.2</span> Visualizar</h2>
 <p>Se utilizó la función <code>plot</code> para visualizarlo.</p>
 <div class="cell">
@@ -648,15 +642,15 @@ Figura&nbsp;1: Semivariograma
 </section></section><section id="sec-ajust" class="level1" data-number="7"><h1 data-number="7">
 <span class="header-section-number">7</span> Ajuste del Semivariograma</h1>
 <p><strong>¿Qué significa “ajustar un modelo”?</strong></p>
-<p>El semivariograma empírico muestra la relación espacial observada en los datos, pero al estar compuesto por puntos experimentales puede resultar irregular. Por esta razón, se ajusta una curva teórica que resume y representa esa tendencia general. De esta manera, se obtiene un modelo matemático continuo que describe cómo varía la CEa en el espacio y que puede ser utilizado por el método de Kriging para estimar valores en ubicaciones no muestreadas.</p>
-<p>En la Geoestadística, el ajuste automático asegura que el modelo sea insesgado y óptimo (MELI).</p>
-<p>El ajuste se realizó mediante el algoritmo de Mínimos Cuadrados Ponderados (utilizando la función <code>fit.variogram</code> de <code>gstat</code>), el cual busca minimizar la desviación entre los puntos observados y la curva teórica. Se evaluaron tres modelos fundamentales por su relevancia en estudios agronómicos:</p>
+<p>El semivariograma empírico muestra la relación espacial observada en los datos, pero al estar compuesto por puntos experimentales puede resultar irregular. Por esta razón, se ajusta una curva teórica que resume y representa esa tendencia general. De esta manera, se obtiene un modelo matemático continuo que describe cómo varía la CEa en el espacio y que puede ser utilizado por el método de Kriging.</p>
+<p>En la Geoestadística, el ajuste asegura que el modelo sea insesgado y óptimo (MELI).</p>
+<p>El ajuste se realizó mediante el algoritmo de Mínimos Cuadrados Ponderados (utilizando la función <code><a href="https://r-spatial.github.io/gstat/reference/fit.variogram.html">fit.variogram()</a></code> de <span class="func-tecnica">gstat</span>), el cual busca minimizar la desviación entre los puntos observados y la curva teórica. Se evaluaron tres modelos fundamentales por su relevancia en estudios agronómicos:</p>
 <ul>
 <li>Modelo Esférico</li>
 <li>Modelo Exponencial</li>
 <li>Modelo Gaussiano</li>
 </ul>
-<p>A través del ajuste automático, se determinaron los tres parámetros claves del semivariograma, que definen la morfología de la variabilidad (<a href="#fig-semivariograma" class="quarto-xref">Figura&nbsp;1</a>):</p>
+<p>A través del ajuste, se determinaron los tres parámetros claves del semivariograma, que definen la morfología de la variabilidad (<a href="#fig-semivariograma" class="quarto-xref">Figura&nbsp;1</a>):</p>
 <ul>
 <li>Efecto Pepita</li>
 <li>Meseta</li>
@@ -733,7 +727,7 @@ Figura&nbsp;1: Semivariograma
 </div>
 </div>
 </div>
-<p>A partir de esto, se podría inferir que, el <strong>Modelo Gaussiano</strong> es el que mejor representa la variabilidad espacial de la CEa.</p>
+<p>A partir de la inspección visual de los semivariogramas, se podría inferir que el <strong>Modelo Gaussiano</strong> es el que mejor representa la variabilidad espacial de la CEa.</p>
 </section><section id="comparación-cuantitativa" class="level2" data-number="8.2"><h2 data-number="8.2" class="anchored" data-anchor-id="comparación-cuantitativa">
 <span class="header-section-number">8.2</span> Comparación Cuantitativa</h2>
 <p>Se realiza a través del error residual (SSErr). Cuanto menor sea el SSErr, mejor se ajusta el modelo a los datos empíricos. Si el SSErr es grande, significa que la curva del modelo no “sigue” bien los puntos del variograma empírico.</p>
@@ -799,12 +793,12 @@ Figura&nbsp;1: Semivariograma
 <li>Insesgamiento: La media de los errores de estimación es nula</li>
 <li>Óptimo: Los errores de estimación tienen varianza mínima</li>
 </ul>
-<p>La interpolación espacial se ejecutó mediante el algoritmo de Kriging Ordinario, utilizando la función <code><a href="https://r-spatial.github.io/gstat/reference/krige.html">krige()</a></code> del paquete <code>gstat</code>. Esta función permite predecir valores en ubicaciones donde no se tomaron muestras, usando el modelo de variograma ajustado (<a href="#sec-ajust" class="quarto-xref">Sección&nbsp;7</a>) y la información espacial de los puntos conocidos.</p>
-<p>Para ejecutar la interpolación mediante la función <code><a href="https://r-spatial.github.io/gstat/reference/krige.html">krige()</a></code>, el flujo de trabajo requiere convertir los objetos de la clase <code>sf</code> a la clase <code>sp</code>. Esta conversión es por cuestiones de compatibilidad: el paquete <code>gstat</code> fue desarrollado sobre la arquitectura del paquete <code>sp</code>.</p>
-<p>El algoritmo de Kriging requiere dos elementos espaciales: los puntos observados y una grilla vacía sobre la cual calculará las estimaciones. Para que <code><a href="https://r-spatial.github.io/gstat/reference/krige.html">krige()</a></code> funcione correctamente tanto los puntos como la grilla deben estar en clases espaciales compatibles del paquete <code>sp</code>.</p>
+<p>La interpolación espacial se ejecutó mediante el algoritmo de Kriging Ordinario, utilizando la función <code><a href="https://r-spatial.github.io/gstat/reference/krige.html">krige()</a></code> del paquete <span class="func-tecnica">gstat</span>. Esta función permite predecir valores en ubicaciones donde no se tomaron muestras, usando el modelo de variograma ajustado (<a href="#sec-ajust" class="quarto-xref">Sección&nbsp;7</a>) y la información espacial de los puntos conocidos.</p>
+<p>Para ejecutar la interpolación mediante la función <code><a href="https://r-spatial.github.io/gstat/reference/krige.html">krige()</a></code>, el flujo de trabajo requiere convertir los objetos de la clase <span class="func-tecnica">sf</span> a la clase <span class="func-tecnica">sp</span>. Esta conversión es por cuestiones de compatibilidad: el paquete <span class="func-tecnica">gstat</span> fue desarrollado sobre la arquitectura del paquete <span class="func-tecnica">sp</span>.</p>
+<p>El algoritmo de Kriging requiere dos elementos espaciales: los puntos observados y una grilla vacía sobre la cual calculará las estimaciones. Para que <code><a href="https://r-spatial.github.io/gstat/reference/krige.html">krige()</a></code> funcione correctamente tanto los puntos como la grilla deben estar en clases espaciales compatibles del paquete <span class="func-tecnica">sp</span>.</p>
 <section id="realizar-el-kriging" class="level2" data-number="9.1"><h2 data-number="9.1" class="anchored" data-anchor-id="realizar-el-kriging">
 <span class="header-section-number">9.1</span> Realizar el Kriging</h2>
-<p>En primer lugar, se convierte el objeto <code>sf</code> a <code>sp</code>:</p>
+<p>En primer lugar, se convierte el objeto <span class="func-tecnica">sf</span> a <span class="func-tecnica">sp</span>:</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb19"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">veris_sp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/methods/as.html">as</a></span><span class="op">(</span><span class="va">veris</span>, <span class="st">"Spatial"</span><span class="op">)</span> </span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
@@ -818,7 +812,7 @@ Figura&nbsp;1: Semivariograma
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb21"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://edzer.github.io/sp/reference/coordinates.html">coordinates</a></span><span class="op">(</span><span class="va">grilla</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="op">~</span><span class="va">x</span><span class="op">+</span><span class="va">y</span> </span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>Se le asigna el mismo CRS que el del objeto <code>veris_sp</code>:</p>
+<p>Se le asigna el mismo CRS que el del objeto <span class="func-tecnica">veris_sp</span>:</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb22"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://edzer.github.io/sp/reference/is.projected.html">proj4string</a></span><span class="op">(</span><span class="va">grilla</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://edzer.github.io/sp/reference/is.projected.html">proj4string</a></span><span class="op">(</span><span class="va">veris_sp</span><span class="op">)</span> </span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
@@ -829,20 +823,20 @@ Figura&nbsp;1: Semivariograma
 <pre><code>[using ordinary kriging]</code></pre>
 </div>
 </div>
-<p>El objeto resultante (<code>krig_res</code>) no constituye una superficie continua en primera instancia, sino que consiste en una cantidad enorme de puntos espaciados de forma muy densa, cuyos centroides corresponden exactamente a los nodos de la grilla. Para cada nodo espacial coordenado <span class="math inline">\((X,Y)\)</span>, el objeto <code>krig_res</code> calcula y almacena internamente dos atributos fundamentales:</p>
+<p>El objeto resultante (<span class="func-tecnica">krig_res</span>) no constituye una superficie continua en primera instancia, sino que consiste en una cantidad enorme de puntos espaciados de forma muy densa, cuyos centroides corresponden exactamente a los nodos de la grilla. Para cada nodo espacial coordenado <span class="math inline">\((X,Y)\)</span>, el objeto <span class="func-tecnica">krig_res</span> calcula y almacena internamente dos atributos fundamentales:</p>
 <ul>
-<li><p>Predicción del Atributo (<code>var1.pred</code>): Es el valor estimado de la variable para ese punto del lote.</p></li>
-<li><p>Varianza del Kriging (<code>var1.var</code>): Es una medida cuantitativa del error cuadrático medio de la predicción en cada punto.</p></li>
+<li><p>Predicción del Atributo ([var1.pred]{.func-tecnica`): Es el valor estimado de la variable para ese punto del lote.</p></li>
+<li><p>Varianza del Kriging (<span class="func-tecnica">var1.var</span>): Es una medida cuantitativa del error cuadrático medio de la predicción en cada punto.</p></li>
 </ul></section></section><section id="graficar-1" class="level1" data-number="10"><h1 data-number="10">
 <span class="header-section-number">10</span> Graficar</h1>
 <p>Para graficar los resultados se llevaron a cabo dos alternativas:</p>
 <ul>
-<li>Alternativa A: <strong>Representación Vectorial</strong>, convirtiendo el resultado del Kriging a objeto <code>sf</code>.</li>
-<li>Alternativa B: <strong>Representación Matricial Continua</strong>: convirtiendo el resultado a <code>SpatRaster</code>.</li>
+<li>Alternativa A: <strong>Representación Vectorial</strong>, convirtiendo el resultado del Kriging a objeto <span class="func-tecnica">sf</span>.</li>
+<li>Alternativa B: <strong>Representación Matricial Continua</strong>: convirtiendo el resultado a <span class="func-tecnica">SpatRaster</span>.</li>
 </ul>
 <section id="alternativa-a" class="level2" data-number="10.1"><h2 data-number="10.1" class="anchored" data-anchor-id="alternativa-a">
 <span class="header-section-number">10.1</span> Alternativa A</h2>
-<p>Una vez obtenidos los resultados de la interpolación espacial mediante el algoritmo de Kriging Ordinario (<a href="#sec-krig" class="quarto-xref">Sección&nbsp;9</a>), el resultado se estructuró en formato vectorial como un objeto de la clase <code>sf</code>:</p>
+<p>Una vez obtenidos los resultados de la interpolación espacial mediante el algoritmo de Kriging Ordinario (<a href="#sec-krig" class="quarto-xref">Sección&nbsp;9</a>), el resultado se estructuró en formato vectorial como un objeto de la clase <span class="func-tecnica">sf</span>:</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb25"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">krig_sf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_as_sf.html">st_as_sf</a></span><span class="op">(</span><span class="va">krig_res</span><span class="op">)</span> </span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
@@ -852,7 +846,7 @@ Figura&nbsp;1: Semivariograma
 <span></span>
 <span><span class="va">krig_sf_cortado</span><span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/geos_binary_ops.html">st_intersection</a></span><span class="op">(</span><span class="va">krig_sf</span>, <span class="va">lote</span><span class="op">)</span> </span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>Se crearon los cuantiles, la variable continua de predicción (<code>var1.pred</code>) se transformó en una variable categórica ordinal de cuatro clases (<code>var1_q</code>):</p>
+<p>Se crearon los cuantiles, la variable continua de predicción (<span class="func-tecnica">var1.pred</span>) se transformó en una variable categórica ordinal de cuatro clases (<span class="func-tecnica">var1_q</span>):</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb27"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">breaks</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/quantile.html">quantile</a></span><span class="op">(</span><span class="va">krig_sf</span><span class="op">$</span><span class="va">var1.pred</span>, probs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">0.25</span><span class="op">)</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> </span>
 <span> </span>
@@ -893,16 +887,16 @@ Figura&nbsp;1: Semivariograma
 </div>
 </section><section id="alternativa-b" class="level2" data-number="10.2"><h2 data-number="10.2" class="anchored" data-anchor-id="alternativa-b">
 <span class="header-section-number">10.2</span> Alternativa B</h2>
-<p>En este opción se migró del modelo vectorial al modelo de datos ráster. Para ello, los puntos cortados se convirtieron a la clase <code>SpatRaster</code>.</p>
+<p>En este opción se migró del modelo vectorial al modelo de datos ráster. Para ello, los puntos cortados se convirtieron a la clase <span class="func-tecnica">SpatRaster</span>.</p>
 <blockquote class="blockquote">
-<p><code>SpatRaster</code> es la clase central del paquete <code>terra</code>. Este paquete está diseñado para manejar datos <strong>ráster</strong> de forma eficiente. A diferencia de un objeto vectorial (<code>sf</code>), un ráster no guarda coordenadas individuales para cada dato. Un <code>SpatRaster</code> representa el espacio como una grilla regular de celdas (píxeles) dispuestas en filas y columnas. Este objeto almacena cuatro componentes: (a) matriz de datos (filas y columnas), (b) la extensión espacial (Bounding Box), (c) el CRS, (d) las capas (un solo objeto SpatRaster puede contener una o múltiples capas).</p>
+<p><span class="func-tecnica">SpatRaster</span> es la clase central del paquete <span class="func-tecnica">terra</span>. Este paquete está diseñado para manejar datos <strong>ráster</strong> de forma eficiente. A diferencia de un objeto vectorial (<span class="func-tecnica">sf</span>), un ráster no guarda coordenadas individuales para cada dato. Un <span class="func-tecnica">SpatRaster</span> representa el espacio como una grilla regular de celdas (píxeles) dispuestas en filas y columnas. Este objeto almacena cuatro componentes: (a) matriz de datos (filas y columnas), (b) la extensión espacial (Bounding Box), (c) el CRS, (d) las capas (un solo objeto SpatRaster puede contener una o múltiples capas).</p>
 </blockquote>
 <p>El flujo de trabajo fue el siguiente:</p>
 <ul>
 <li>
 <strong>Convertir a clase SpatRaster</strong>:</li>
 </ul>
-<p>Se procedió a la conversión de la capa vectorial recortada hacia la clase <code>SpatRaster</code> del paquete <code>terra</code>, mediante la función <code><a href="https://rspatial.github.io/terra/reference/vect.html">vect()</a></code>:</p>
+<p>Se procedió a la conversión de la capa vectorial recortada hacia la clase <span class="func-tecnica">SpatRaster</span> del paquete <span class="func-tecnica">terra</span>, mediante la función <code><a href="https://rspatial.github.io/terra/reference/vect.html">vect()</a></code>:</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb29"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">krig_vect_cortado</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/vect.html">vect</a></span><span class="op">(</span><span class="va">krig_sf_cortado</span><span class="op">)</span> </span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
@@ -961,23 +955,23 @@ Figura&nbsp;1: Semivariograma
 <li>Localmente sensible</li>
 </ul>
 <p>A pesar de sus limitaciones, el IDW sigue siendo una referencia útil para comparaciones.</p>
-<p>Para realizar la interpolación se usó la función <code><a href="https://r-spatial.github.io/gstat/reference/krige.html">idw()</a></code> de <code>gstat</code>:</p>
+<p>Para realizar la interpolación se usó la función <code><a href="https://r-spatial.github.io/gstat/reference/krige.html">idw()</a></code> de <span class="func-tecnica">gstat</span>:</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb33"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">idw</span> <span class="op">=</span> <span class="fu"><a href="https://r-spatial.github.io/gstat/reference/krige.html">idw</a></span><span class="op">(</span><span class="va">Veris_0_30</span> <span class="op">~</span> <span class="fl">1</span>, <span class="va">veris_sp</span>, <span class="va">grilla</span><span class="op">)</span> </span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[inverse distance weighted interpolation]</code></pre>
 </div>
 </div>
-<p>El objeto resultante de esta operación (<code>idw</code>) comparte exactamente la misma estructura que el resultado del Kriging. Sin embargo, el contenido de su tabla de atributos presenta diferencias:</p>
+<p>El objeto resultante de esta operación (<span class="func-tecnica">idw</span>) comparte exactamente la misma estructura que el resultado del Kriging. Sin embargo, el contenido de su tabla de atributos presenta diferencias:</p>
 <ul>
-<li><p><code>var1.pred</code>: Almacena el valor estimado de conductividad eléctrica mediante un promedio ponderado.</p></li>
-<li><p>Ausencia de Varianza (<code>var1.var = NA</code>): Un rasgo fundamental es que la columna destinada a registrar la varianza de la predicción carece por completo de datos numéricos, devolviendo valores nulos (NA). Al tratarse de un método estrictamente geométrico y no de un modelo estocástico, el IDW no posee un marco probabilístico. En consecuencia, el objeto es incapaz de cuantificar la incertidumbre predictiva o de proveer un mapa de error que permita evaluar la confiabilidad de las estimaciones a lo largo del lote.</p></li>
+<li><p><span class="func-tecnica">var1.pred</span>: Almacena el valor estimado de conductividad eléctrica mediante un promedio ponderado.</p></li>
+<li><p>Ausencia de Varianza (<span class="func-tecnica">var1.var = NA</span>): Un rasgo fundamental es que la columna destinada a registrar la varianza de la predicción carece por completo de datos numéricos, devolviendo valores nulos (NA). Al tratarse de un método estrictamente geométrico y no de un modelo estocástico, el IDW no posee un marco probabilístico. En consecuencia, el objeto es incapaz de cuantificar la incertidumbre predictiva o de proveer un mapa de error que permita evaluar la confiabilidad de las estimaciones a lo largo del lote.</p></li>
 </ul></section><section id="graficar-2" class="level1" data-number="12"><h1 data-number="12">
 <span class="header-section-number">12</span> Graficar</h1>
 <p>Para graficar se usaron las dos alternativas descriptas para el Kriging Ordinario:</p>
 <section id="alternativa-a-1" class="level2" data-number="12.1"><h2 data-number="12.1" class="anchored" data-anchor-id="alternativa-a-1">
 <span class="header-section-number">12.1</span> Alternativa A</h2>
-<p>Convertir a objeto <code>sf</code>:</p>
+<p>Convertir a objeto <span class="func-tecnica">sf</span>:</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb35"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">idw_sf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_as_sf.html">st_as_sf</a></span><span class="op">(</span><span class="va">idw</span><span class="op">)</span> </span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
@@ -1023,7 +1017,7 @@ Figura&nbsp;1: Semivariograma
 </div>
 </section><section id="alternativa-b-1" class="level2" data-number="12.2"><h2 data-number="12.2" class="anchored" data-anchor-id="alternativa-b-1">
 <span class="header-section-number">12.2</span> Alternativa B</h2>
-<p>Convertir el objeto sf a <code>SpatVector</code>:</p>
+<p>Convertir el objeto sf a <span class="func-tecnica">SpatVector</span>:</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb39"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">idw_vect_cortado</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/vect.html">vect</a></span><span class="op">(</span><span class="va">idw_sf_cortado</span><span class="op">)</span> </span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
@@ -1525,7 +1519,7 @@ Figura&nbsp;1: Semivariograma
 <span id="cb43-7"><a href="#cb43-7" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb43-8"><a href="#cb43-8" aria-hidden="true" tabindex="-1"></a><span class="fu"># Introducción {#sec-introduccion}</span></span>
 <span id="cb43-9"><a href="#cb43-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb43-10"><a href="#cb43-10" aria-hidden="true" tabindex="-1"></a>Este documento describe un flujo de trabajo para la **Interpolación Espacial**. El punto de partida es un archivo vectorial de puntos de la Conductividad Eléctrica Aparente (CEa) del suelo, obtenido con un sensor *VERIS* para dos profundidades (0–30 cm y 0–90 cm).</span>
+<span id="cb43-10"><a href="#cb43-10" aria-hidden="true" tabindex="-1"></a>El presente documento describe el flujo de trabajo implementado para la **Interpolación Espacial** de datos de Conductividad Eléctrica Aparente (CEa) del suelo. El conjunto de datos inicial consiste en un archivo vectorial de puntos relevado mediante un sensor *VERIS* a dos profundidades de muestreo (0–30 cm y 0–90 cm).</span>
 <span id="cb43-11"><a href="#cb43-11" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb43-12"><a href="#cb43-12" aria-hidden="true" tabindex="-1"></a>A partir de estos puntos, el flujo avanza en tres etapas principales:</span>
 <span id="cb43-13"><a href="#cb43-13" aria-hidden="true" tabindex="-1"></a></span>
@@ -1553,7 +1547,7 @@ Figura&nbsp;1: Semivariograma
 <span id="cb43-37"><a href="#cb43-37" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="at">scipen =</span> <span class="dv">999</span>)</span>
 <span id="cb43-38"><a href="#cb43-38" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb43-39"><a href="#cb43-39" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb43-40"><a href="#cb43-40" aria-hidden="true" tabindex="-1"></a>Tanto <span class="in">`gstat`</span> como <span class="in">`geoR`</span> son librerías de R diseñadas para el análisis geoestadístico, especialmente para:</span>
+<span id="cb43-40"><a href="#cb43-40" aria-hidden="true" tabindex="-1"></a>Tanto <span class="co">[</span><span class="ot">gstat</span><span class="co">]</span>{.func-tecnica} como <span class="co">[</span><span class="ot">geoR</span><span class="co">]</span>{.func-tecnica} son librerías de R diseñadas para el análisis geoestadístico, especialmente para:</span>
 <span id="cb43-41"><a href="#cb43-41" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb43-42"><a href="#cb43-42" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Construir semivariogramas empíricos y teóricos</span>
 <span id="cb43-43"><a href="#cb43-43" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Ajustar modelos de variograma</span>
@@ -1609,9 +1603,9 @@ Figura&nbsp;1: Semivariograma
 <span id="cb43-93"><a href="#cb43-93" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb43-94"><a href="#cb43-94" aria-hidden="true" tabindex="-1"></a><span class="fu"># Carga de datos</span></span>
 <span id="cb43-95"><a href="#cb43-95" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb43-96"><a href="#cb43-96" aria-hidden="true" tabindex="-1"></a>Para leer datos se usó la función <span class="in">`st_read()`</span> del paquete <span class="in">`sf`</span>. Esta función devuelve un objeto clase <span class="in">`Simple Feature (sf)`</span></span>
+<span id="cb43-96"><a href="#cb43-96" aria-hidden="true" tabindex="-1"></a>Para leer datos se usó la función <span class="in">`st_read()`</span> del paquete <span class="co">[</span><span class="ot">sf</span><span class="co">]</span>{.func-tecnica}. Esta función devuelve un objeto clase <span class="co">[</span><span class="ot">Simple Feature (sf)</span><span class="co">]</span>{.func-tecnica}.</span>
 <span id="cb43-97"><a href="#cb43-97" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb43-98"><a href="#cb43-98" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; Un objeto </span><span class="in">`sf`</span><span class="at"> es, esencialmente, un </span><span class="in">`data.frame`</span><span class="at"> (estructura de datos más común de R) que tiene una columna especial llamada </span><span class="in">`geometry`</span><span class="at">, la cual almacena la representación espacial (puntos, líneas o polígonos) que corresponde a cada fila. Todas las librerías usadas en este documento son compatible con esta estructura de datos, por lo que no es necesario modificarla.</span></span>
+<span id="cb43-98"><a href="#cb43-98" aria-hidden="true" tabindex="-1"></a>Un objeto <span class="co">[</span><span class="ot">sf</span><span class="co">]</span>{.func-tecnica} es, esencialmente, un <span class="co">[</span><span class="ot">data.frame</span><span class="co">]</span>{.func-tecnica} (estructura de datos más común de R) que tiene una columna especial llamada <span class="co">[</span><span class="ot">geometry</span><span class="co">]</span>{.func-tecnica}, la cual almacena la representación espacial (puntos, líneas o polígonos) que corresponde a cada fila. Todas las librerías usadas en este documento son compatible con esta estructura de datos, por lo que no es necesario modificarla.</span>
 <span id="cb43-99"><a href="#cb43-99" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb43-100"><a href="#cb43-100" aria-hidden="true" tabindex="-1"></a><span class="in">```{r warning=FALSE}</span></span>
 <span id="cb43-101"><a href="#cb43-101" aria-hidden="true" tabindex="-1"></a>veris <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="st">"data/Veris_EC_20S.shp"</span>, <span class="at">quiet =</span> <span class="cn">TRUE</span>) </span>
@@ -1619,35 +1613,35 @@ Figura&nbsp;1: Semivariograma
 <span id="cb43-103"><a href="#cb43-103" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb43-104"><a href="#cb43-104" aria-hidden="true" tabindex="-1"></a><span class="fu"># Exploración de datos</span></span>
 <span id="cb43-105"><a href="#cb43-105" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb43-106"><a href="#cb43-106" aria-hidden="true" tabindex="-1"></a><span class="fu">## Resumen</span></span>
+<span id="cb43-106"><a href="#cb43-106" aria-hidden="true" tabindex="-1"></a>Se visualizan las primeras 5 filas de set de datos usando la librería <span class="co">[</span><span class="ot">kableExtra</span><span class="co">]</span>{.func-tecnica}:</span>
 <span id="cb43-107"><a href="#cb43-107" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb43-108"><a href="#cb43-108" aria-hidden="true" tabindex="-1"></a>Se visualizan las primeras 5 filas de set de datos usando la librería <span class="in">`kableExtra`</span>.</span>
-<span id="cb43-109"><a href="#cb43-109" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb43-112"><a href="#cb43-112" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb43-113"><a href="#cb43-113" aria-hidden="true" tabindex="-1"></a><span class="co">#| code-fold: true</span></span>
-<span id="cb43-114"><a href="#cb43-114" aria-hidden="true" tabindex="-1"></a><span class="co">#| code-summary: "Código"</span></span>
-<span id="cb43-115"><a href="#cb43-115" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb43-116"><a href="#cb43-116" aria-hidden="true" tabindex="-1"></a>primeras_filas <span class="ot">&lt;-</span> veris <span class="sc">%&gt;%</span></span>
-<span id="cb43-117"><a href="#cb43-117" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(<span class="dv">5</span>) </span>
-<span id="cb43-118"><a href="#cb43-118" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb43-119"><a href="#cb43-119" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb43-120"><a href="#cb43-120" aria-hidden="true" tabindex="-1"></a>primeras_filas <span class="sc">%&gt;%</span></span>
-<span id="cb43-121"><a href="#cb43-121" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(</span>
-<span id="cb43-122"><a href="#cb43-122" aria-hidden="true" tabindex="-1"></a>    <span class="at">format =</span> <span class="st">"html"</span>,</span>
-<span id="cb43-123"><a href="#cb43-123" aria-hidden="true" tabindex="-1"></a>    <span class="at">align =</span> <span class="st">"c"</span> </span>
-<span id="cb43-124"><a href="#cb43-124" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
-<span id="cb43-125"><a href="#cb43-125" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_classic</span>(</span>
-<span id="cb43-126"><a href="#cb43-126" aria-hidden="true" tabindex="-1"></a>    <span class="at">full_width =</span> <span class="cn">TRUE</span>, </span>
-<span id="cb43-127"><a href="#cb43-127" aria-hidden="true" tabindex="-1"></a>    <span class="at">font_size =</span> <span class="dv">13</span></span>
-<span id="cb43-128"><a href="#cb43-128" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
-<span id="cb43-129"><a href="#cb43-129" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling</span>(</span>
-<span id="cb43-130"><a href="#cb43-130" aria-hidden="true" tabindex="-1"></a>    <span class="at">bootstrap_options =</span> <span class="fu">c</span>(<span class="st">"striped"</span>, <span class="st">"hover"</span>, <span class="st">"condensed"</span>)</span>
-<span id="cb43-131"><a href="#cb43-131" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
-<span id="cb43-132"><a href="#cb43-132" aria-hidden="true" tabindex="-1"></a>  <span class="fu">row_spec</span>(<span class="dv">0</span>, <span class="at">bold =</span> <span class="cn">TRUE</span>, <span class="at">color =</span> <span class="st">"black"</span>, <span class="at">extra_css =</span> <span class="st">"border-bottom: 2px solid black;"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb43-133"><a href="#cb43-133" aria-hidden="true" tabindex="-1"></a>  <span class="fu">row_spec</span>(<span class="fu">nrow</span>(primeras_filas), <span class="at">extra_css =</span> <span class="st">"border-bottom: 2px solid black;"</span>)</span>
-<span id="cb43-134"><a href="#cb43-134" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb43-110"><a href="#cb43-110" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb43-111"><a href="#cb43-111" aria-hidden="true" tabindex="-1"></a><span class="co">#| code-fold: true</span></span>
+<span id="cb43-112"><a href="#cb43-112" aria-hidden="true" tabindex="-1"></a><span class="co">#| code-summary: "Código"</span></span>
+<span id="cb43-113"><a href="#cb43-113" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-114"><a href="#cb43-114" aria-hidden="true" tabindex="-1"></a>primeras_filas <span class="ot">&lt;-</span> veris <span class="sc">%&gt;%</span></span>
+<span id="cb43-115"><a href="#cb43-115" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(<span class="dv">5</span>) </span>
+<span id="cb43-116"><a href="#cb43-116" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-117"><a href="#cb43-117" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-118"><a href="#cb43-118" aria-hidden="true" tabindex="-1"></a>primeras_filas <span class="sc">%&gt;%</span></span>
+<span id="cb43-119"><a href="#cb43-119" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(</span>
+<span id="cb43-120"><a href="#cb43-120" aria-hidden="true" tabindex="-1"></a>    <span class="at">format =</span> <span class="st">"html"</span>,</span>
+<span id="cb43-121"><a href="#cb43-121" aria-hidden="true" tabindex="-1"></a>    <span class="at">align =</span> <span class="st">"c"</span> </span>
+<span id="cb43-122"><a href="#cb43-122" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb43-123"><a href="#cb43-123" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_classic</span>(</span>
+<span id="cb43-124"><a href="#cb43-124" aria-hidden="true" tabindex="-1"></a>    <span class="at">full_width =</span> <span class="cn">TRUE</span>, </span>
+<span id="cb43-125"><a href="#cb43-125" aria-hidden="true" tabindex="-1"></a>    <span class="at">font_size =</span> <span class="dv">13</span></span>
+<span id="cb43-126"><a href="#cb43-126" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb43-127"><a href="#cb43-127" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling</span>(</span>
+<span id="cb43-128"><a href="#cb43-128" aria-hidden="true" tabindex="-1"></a>    <span class="at">bootstrap_options =</span> <span class="fu">c</span>(<span class="st">"striped"</span>, <span class="st">"hover"</span>, <span class="st">"condensed"</span>)</span>
+<span id="cb43-129"><a href="#cb43-129" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb43-130"><a href="#cb43-130" aria-hidden="true" tabindex="-1"></a>  <span class="fu">row_spec</span>(<span class="dv">0</span>, <span class="at">bold =</span> <span class="cn">TRUE</span>, <span class="at">color =</span> <span class="st">"black"</span>, <span class="at">extra_css =</span> <span class="st">"border-bottom: 2px solid black;"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb43-131"><a href="#cb43-131" aria-hidden="true" tabindex="-1"></a>  <span class="fu">row_spec</span>(<span class="fu">nrow</span>(primeras_filas), <span class="at">extra_css =</span> <span class="st">"border-bottom: 2px solid black;"</span>)</span>
+<span id="cb43-132"><a href="#cb43-132" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb43-133"><a href="#cb43-133" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-134"><a href="#cb43-134" aria-hidden="true" tabindex="-1"></a><span class="fu">## Clase del Objeto</span></span>
 <span id="cb43-135"><a href="#cb43-135" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb43-136"><a href="#cb43-136" aria-hidden="true" tabindex="-1"></a><span class="fu">## Clase del Objeto</span></span>
+<span id="cb43-136"><a href="#cb43-136" aria-hidden="true" tabindex="-1"></a>Verificar la clase del objeto mediante <span class="in">`class()`</span>:</span>
 <span id="cb43-137"><a href="#cb43-137" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb43-140"><a href="#cb43-140" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
 <span id="cb43-141"><a href="#cb43-141" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(veris)</span>
@@ -1655,17 +1649,17 @@ Figura&nbsp;1: Semivariograma
 <span id="cb43-143"><a href="#cb43-143" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb43-144"><a href="#cb43-144" aria-hidden="true" tabindex="-1"></a><span class="fu">## CRS</span></span>
 <span id="cb43-145"><a href="#cb43-145" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb43-146"><a href="#cb43-146" aria-hidden="true" tabindex="-1"></a>Se comprueba el Sistema de Referencia de Coordenadas (CRS) del objeto a través de <span class="in">`st_crs()`</span>.</span>
+<span id="cb43-146"><a href="#cb43-146" aria-hidden="true" tabindex="-1"></a>Comprobar el Sistema de Referencia de Coordenadas (CRS) del objeto a través de <span class="in">`st_crs()`</span>:</span>
 <span id="cb43-147"><a href="#cb43-147" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb43-150"><a href="#cb43-150" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
 <span id="cb43-151"><a href="#cb43-151" aria-hidden="true" tabindex="-1"></a><span class="fu">st_crs</span>(veris)</span>
 <span id="cb43-152"><a href="#cb43-152" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb43-153"><a href="#cb43-153" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb43-154"><a href="#cb43-154" aria-hidden="true" tabindex="-1"></a><span class="fu"># Visualizar</span></span>
+<span id="cb43-154"><a href="#cb43-154" aria-hidden="true" tabindex="-1"></a><span class="fu"># Visualizar de los datos de CEa</span></span>
 <span id="cb43-155"><a href="#cb43-155" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb43-156"><a href="#cb43-156" aria-hidden="true" tabindex="-1"></a>La visualización se estructuró mediante una discretización en cuantiles (4), para ello, primero se deben crear estos cuantiles.</span>
+<span id="cb43-156"><a href="#cb43-156" aria-hidden="true" tabindex="-1"></a>En esta sección, se procede a la visualización espacial de los puntos de CEa mediante el paquete <span class="co">[</span><span class="ot">ggplot2</span><span class="co">]</span>{.func-tecnica}. Se realiza para examinar la densidad del muestreo, evaluar la cobertura espacial del sensor VERIS en el lote y observar a grandes rasgos la variabilidad del suelo para ambas profundidades (0-30 y 0-90 cm).</span>
 <span id="cb43-157"><a href="#cb43-157" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb43-158"><a href="#cb43-158" aria-hidden="true" tabindex="-1"></a><span class="fu">## Cuantiles</span></span>
+<span id="cb43-158"><a href="#cb43-158" aria-hidden="true" tabindex="-1"></a>La visualización se estructuró mediante una discretización en cuantiles (4), para ello, primero se deben crear estos cuantiles:</span>
 <span id="cb43-159"><a href="#cb43-159" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb43-162"><a href="#cb43-162" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
 <span id="cb43-163"><a href="#cb43-163" aria-hidden="true" tabindex="-1"></a>veris <span class="ot">&lt;-</span> veris <span class="sc">%&gt;%</span> </span>
@@ -1687,7 +1681,7 @@ Figura&nbsp;1: Semivariograma
 <span id="cb43-179"><a href="#cb43-179" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb43-180"><a href="#cb43-180" aria-hidden="true" tabindex="-1"></a><span class="fu">## Graficar</span></span>
 <span id="cb43-181"><a href="#cb43-181" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb43-182"><a href="#cb43-182" aria-hidden="true" tabindex="-1"></a>Se generan dos gráficos: en la pestaña 1 para la profundidad 0-30 cm y en la pestaña 2 para la profundidad 0-90 cm:</span>
+<span id="cb43-182"><a href="#cb43-182" aria-hidden="true" tabindex="-1"></a>Se generan los mapas correspondientes a cada profundidad del suelo, accesibles a través de las siguientes pestañas</span>
 <span id="cb43-183"><a href="#cb43-183" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb43-184"><a href="#cb43-184" aria-hidden="true" tabindex="-1"></a>::: {.panel-tabset .tabset-topline}</span>
 <span id="cb43-185"><a href="#cb43-185" aria-hidden="true" tabindex="-1"></a><span class="fu">## 0-30 cm</span></span>
@@ -1769,7 +1763,7 @@ Figura&nbsp;1: Semivariograma
 <span id="cb43-265"><a href="#cb43-265" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb43-266"><a href="#cb43-266" aria-hidden="true" tabindex="-1"></a><span class="fu">## Generar Semivariograma</span></span>
 <span id="cb43-267"><a href="#cb43-267" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb43-268"><a href="#cb43-268" aria-hidden="true" tabindex="-1"></a>Se usó la función <span class="in">`variogram()`</span> del paquete <span class="in">`gstat`</span>.</span>
+<span id="cb43-268"><a href="#cb43-268" aria-hidden="true" tabindex="-1"></a>Se usó la función <span class="in">`variogram()`</span> del paquete <span class="co">[</span><span class="ot">gstat</span><span class="co">]</span>{.func-tecnica}.</span>
 <span id="cb43-269"><a href="#cb43-269" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb43-272"><a href="#cb43-272" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
 <span id="cb43-273"><a href="#cb43-273" aria-hidden="true" tabindex="-1"></a>vemp <span class="ot">&lt;-</span> <span class="fu">variogram</span>(Veris_0_30 <span class="sc">~</span> <span class="dv">1</span>, veris) </span>
@@ -1787,17 +1781,17 @@ Figura&nbsp;1: Semivariograma
 <span id="cb43-287"><a href="#cb43-287" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb43-288"><a href="#cb43-288" aria-hidden="true" tabindex="-1"></a>**¿Qué significa “ajustar un modelo”?**</span>
 <span id="cb43-289"><a href="#cb43-289" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb43-290"><a href="#cb43-290" aria-hidden="true" tabindex="-1"></a>El semivariograma empírico muestra la relación espacial observada en los datos, pero al estar compuesto por puntos experimentales puede resultar irregular. Por esta razón, se ajusta una curva teórica que resume y representa esa tendencia general. De esta manera, se obtiene un modelo matemático continuo que describe cómo varía la CEa en el espacio y que puede ser utilizado por el método de Kriging para estimar valores en ubicaciones no muestreadas.</span>
+<span id="cb43-290"><a href="#cb43-290" aria-hidden="true" tabindex="-1"></a>El semivariograma empírico muestra la relación espacial observada en los datos, pero al estar compuesto por puntos experimentales puede resultar irregular. Por esta razón, se ajusta una curva teórica que resume y representa esa tendencia general. De esta manera, se obtiene un modelo matemático continuo que describe cómo varía la CEa en el espacio y que puede ser utilizado por el método de Kriging.</span>
 <span id="cb43-291"><a href="#cb43-291" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb43-292"><a href="#cb43-292" aria-hidden="true" tabindex="-1"></a>En la Geoestadística, el ajuste automático asegura que el modelo sea insesgado y óptimo (MELI).</span>
+<span id="cb43-292"><a href="#cb43-292" aria-hidden="true" tabindex="-1"></a>En la Geoestadística, el ajuste asegura que el modelo sea insesgado y óptimo (MELI).</span>
 <span id="cb43-293"><a href="#cb43-293" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb43-294"><a href="#cb43-294" aria-hidden="true" tabindex="-1"></a>El ajuste se realizó mediante el algoritmo de Mínimos Cuadrados Ponderados (utilizando la función <span class="in">`fit.variogram`</span> de <span class="in">`gstat`</span>), el cual busca minimizar la desviación entre los puntos observados y la curva teórica. Se evaluaron tres modelos fundamentales por su relevancia en estudios agronómicos:</span>
+<span id="cb43-294"><a href="#cb43-294" aria-hidden="true" tabindex="-1"></a>El ajuste se realizó mediante el algoritmo de Mínimos Cuadrados Ponderados (utilizando la función <span class="in">`fit.variogram()`</span> de <span class="co">[</span><span class="ot">gstat</span><span class="co">]</span>{.func-tecnica}), el cual busca minimizar la desviación entre los puntos observados y la curva teórica. Se evaluaron tres modelos fundamentales por su relevancia en estudios agronómicos:</span>
 <span id="cb43-295"><a href="#cb43-295" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb43-296"><a href="#cb43-296" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Modelo Esférico</span>
 <span id="cb43-297"><a href="#cb43-297" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Modelo Exponencial</span>
 <span id="cb43-298"><a href="#cb43-298" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Modelo Gaussiano</span>
 <span id="cb43-299"><a href="#cb43-299" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb43-300"><a href="#cb43-300" aria-hidden="true" tabindex="-1"></a>A través del ajuste automático, se determinaron los tres parámetros claves del semivariograma, que definen la morfología de la variabilidad (@fig-semivariograma):</span>
+<span id="cb43-300"><a href="#cb43-300" aria-hidden="true" tabindex="-1"></a>A través del ajuste, se determinaron los tres parámetros claves del semivariograma, que definen la morfología de la variabilidad (@fig-semivariograma):</span>
 <span id="cb43-301"><a href="#cb43-301" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb43-302"><a href="#cb43-302" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Efecto Pepita</span>
 <span id="cb43-303"><a href="#cb43-303" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Meseta</span>
@@ -1851,7 +1845,7 @@ Figura&nbsp;1: Semivariograma
 <span id="cb43-363"><a href="#cb43-363" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb43-364"><a href="#cb43-364" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb43-365"><a href="#cb43-365" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb43-366"><a href="#cb43-366" aria-hidden="true" tabindex="-1"></a>A partir de esto, se podría inferir que, el **Modelo Gaussiano** es el que mejor representa la variabilidad espacial de la CEa.</span>
+<span id="cb43-366"><a href="#cb43-366" aria-hidden="true" tabindex="-1"></a>A partir de la inspección visual de los semivariogramas, se podría inferir que el **Modelo Gaussiano** es el que mejor representa la variabilidad espacial de la CEa.</span>
 <span id="cb43-367"><a href="#cb43-367" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb43-368"><a href="#cb43-368" aria-hidden="true" tabindex="-1"></a><span class="fu">## Comparación Cuantitativa</span></span>
 <span id="cb43-369"><a href="#cb43-369" aria-hidden="true" tabindex="-1"></a></span>
@@ -1939,15 +1933,15 @@ Figura&nbsp;1: Semivariograma
 <span id="cb43-451"><a href="#cb43-451" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Insesgamiento: La media de los errores de estimación es nula</span>
 <span id="cb43-452"><a href="#cb43-452" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Óptimo: Los errores de estimación tienen varianza mínima</span>
 <span id="cb43-453"><a href="#cb43-453" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb43-454"><a href="#cb43-454" aria-hidden="true" tabindex="-1"></a>La interpolación espacial se ejecutó mediante el algoritmo de Kriging Ordinario, utilizando la función <span class="in">`krige()`</span> del paquete <span class="in">`gstat`</span>. Esta función permite predecir valores en ubicaciones donde no se tomaron muestras, usando el modelo de variograma ajustado (@sec-ajust) y la información espacial de los puntos conocidos.</span>
+<span id="cb43-454"><a href="#cb43-454" aria-hidden="true" tabindex="-1"></a>La interpolación espacial se ejecutó mediante el algoritmo de Kriging Ordinario, utilizando la función <span class="in">`krige()`</span> del paquete <span class="co">[</span><span class="ot">gstat</span><span class="co">]</span>{.func-tecnica}. Esta función permite predecir valores en ubicaciones donde no se tomaron muestras, usando el modelo de variograma ajustado (@sec-ajust) y la información espacial de los puntos conocidos.</span>
 <span id="cb43-455"><a href="#cb43-455" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb43-456"><a href="#cb43-456" aria-hidden="true" tabindex="-1"></a>Para ejecutar la interpolación mediante la función <span class="in">`krige()`</span>, el flujo de trabajo requiere convertir los objetos de la clase <span class="in">`sf`</span> a la clase <span class="in">`sp`</span>. Esta conversión es por cuestiones de compatibilidad: el paquete <span class="in">`gstat`</span> fue desarrollado sobre la arquitectura del paquete <span class="in">`sp`</span>.</span>
+<span id="cb43-456"><a href="#cb43-456" aria-hidden="true" tabindex="-1"></a>Para ejecutar la interpolación mediante la función <span class="in">`krige()`</span>, el flujo de trabajo requiere convertir los objetos de la clase <span class="co">[</span><span class="ot">sf</span><span class="co">]</span>{.func-tecnica} a la clase <span class="co">[</span><span class="ot">sp</span><span class="co">]</span>{.func-tecnica}. Esta conversión es por cuestiones de compatibilidad: el paquete <span class="co">[</span><span class="ot">gstat</span><span class="co">]</span>{.func-tecnica} fue desarrollado sobre la arquitectura del paquete <span class="co">[</span><span class="ot">sp</span><span class="co">]</span>{.func-tecnica}.</span>
 <span id="cb43-457"><a href="#cb43-457" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb43-458"><a href="#cb43-458" aria-hidden="true" tabindex="-1"></a>El algoritmo de Kriging requiere dos elementos espaciales: los puntos observados y una grilla vacía sobre la cual calculará las estimaciones. Para que <span class="in">`krige()`</span> funcione correctamente tanto los puntos como la grilla deben estar en clases espaciales compatibles del paquete <span class="in">`sp`</span>.</span>
+<span id="cb43-458"><a href="#cb43-458" aria-hidden="true" tabindex="-1"></a>El algoritmo de Kriging requiere dos elementos espaciales: los puntos observados y una grilla vacía sobre la cual calculará las estimaciones. Para que <span class="in">`krige()`</span> funcione correctamente tanto los puntos como la grilla deben estar en clases espaciales compatibles del paquete <span class="co">[</span><span class="ot">sp</span><span class="co">]</span>{.func-tecnica}.</span>
 <span id="cb43-459"><a href="#cb43-459" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb43-460"><a href="#cb43-460" aria-hidden="true" tabindex="-1"></a><span class="fu">## Realizar el Kriging</span></span>
 <span id="cb43-461"><a href="#cb43-461" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb43-462"><a href="#cb43-462" aria-hidden="true" tabindex="-1"></a>En primer lugar, se convierte el objeto <span class="in">`sf`</span> a <span class="in">`sp`</span>:</span>
+<span id="cb43-462"><a href="#cb43-462" aria-hidden="true" tabindex="-1"></a>En primer lugar, se convierte el objeto <span class="co">[</span><span class="ot">sf</span><span class="co">]</span>{.func-tecnica} a <span class="co">[</span><span class="ot">sp</span><span class="co">]</span>{.func-tecnica}:</span>
 <span id="cb43-463"><a href="#cb43-463" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb43-466"><a href="#cb43-466" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
 <span id="cb43-467"><a href="#cb43-467" aria-hidden="true" tabindex="-1"></a>veris_sp <span class="ot">&lt;-</span> <span class="fu">as</span>(veris, <span class="st">"Spatial"</span>) </span>
@@ -1967,7 +1961,7 @@ Figura&nbsp;1: Semivariograma
 <span id="cb43-485"><a href="#cb43-485" aria-hidden="true" tabindex="-1"></a><span class="fu">coordinates</span>(grilla) <span class="ot">&lt;-</span> <span class="er">~</span>x<span class="sc">+</span>y </span>
 <span id="cb43-486"><a href="#cb43-486" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb43-487"><a href="#cb43-487" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb43-488"><a href="#cb43-488" aria-hidden="true" tabindex="-1"></a>Se le asigna el mismo CRS que el del objeto <span class="in">`veris_sp`</span>:</span>
+<span id="cb43-488"><a href="#cb43-488" aria-hidden="true" tabindex="-1"></a>Se le asigna el mismo CRS que el del objeto <span class="co">[</span><span class="ot">veris_sp</span><span class="co">]</span>{.func-tecnica}:</span>
 <span id="cb43-489"><a href="#cb43-489" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb43-492"><a href="#cb43-492" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
 <span id="cb43-493"><a href="#cb43-493" aria-hidden="true" tabindex="-1"></a><span class="fu">proj4string</span>(grilla) <span class="ot">&lt;-</span> <span class="fu">proj4string</span>(veris_sp) </span>
@@ -1979,22 +1973,22 @@ Figura&nbsp;1: Semivariograma
 <span id="cb43-501"><a href="#cb43-501" aria-hidden="true" tabindex="-1"></a>krig_res <span class="ot">&lt;-</span> <span class="fu">krige</span>(Veris_0_30 <span class="sc">~</span> <span class="dv">1</span>, veris_sp, grilla, <span class="at">model =</span> modgau2) </span>
 <span id="cb43-502"><a href="#cb43-502" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb43-503"><a href="#cb43-503" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb43-504"><a href="#cb43-504" aria-hidden="true" tabindex="-1"></a>El objeto resultante (<span class="in">`krig_res`</span>) no constituye una superficie continua en primera instancia, sino que consiste en una cantidad enorme de puntos espaciados de forma muy densa, cuyos centroides corresponden exactamente a los nodos de la grilla. Para cada nodo espacial coordenado $(X,Y)$, el objeto <span class="in">`krig_res`</span> calcula y almacena internamente dos atributos fundamentales:</span>
+<span id="cb43-504"><a href="#cb43-504" aria-hidden="true" tabindex="-1"></a>El objeto resultante (<span class="co">[</span><span class="ot">krig_res</span><span class="co">]</span>{.func-tecnica}) no constituye una superficie continua en primera instancia, sino que consiste en una cantidad enorme de puntos espaciados de forma muy densa, cuyos centroides corresponden exactamente a los nodos de la grilla. Para cada nodo espacial coordenado $(X,Y)$, el objeto <span class="co">[</span><span class="ot">krig_res</span><span class="co">]</span>{.func-tecnica} calcula y almacena internamente dos atributos fundamentales:</span>
 <span id="cb43-505"><a href="#cb43-505" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb43-506"><a href="#cb43-506" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Predicción del Atributo (<span class="in">`var1.pred`</span>): Es el valor estimado de la variable para ese punto del lote.</span>
+<span id="cb43-506"><a href="#cb43-506" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Predicción del Atributo (<span class="co">[</span><span class="ot">var1.pred</span><span class="co">]</span>{.func-tecnica`): Es el valor estimado de la variable para ese punto del lote.</span>
 <span id="cb43-507"><a href="#cb43-507" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb43-508"><a href="#cb43-508" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Varianza del Kriging (<span class="in">`var1.var`</span>): Es una medida cuantitativa del error cuadrático medio de la predicción en cada punto.</span>
+<span id="cb43-508"><a href="#cb43-508" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Varianza del Kriging (<span class="co">[</span><span class="ot">var1.var</span><span class="co">]</span>{.func-tecnica}): Es una medida cuantitativa del error cuadrático medio de la predicción en cada punto.</span>
 <span id="cb43-509"><a href="#cb43-509" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb43-510"><a href="#cb43-510" aria-hidden="true" tabindex="-1"></a><span class="fu"># Graficar</span></span>
 <span id="cb43-511"><a href="#cb43-511" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb43-512"><a href="#cb43-512" aria-hidden="true" tabindex="-1"></a>Para graficar los resultados se llevaron a cabo dos alternativas:</span>
 <span id="cb43-513"><a href="#cb43-513" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb43-514"><a href="#cb43-514" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Alternativa A: **Representación Vectorial**, convirtiendo el resultado del Kriging a objeto <span class="in">`sf`</span>.</span>
-<span id="cb43-515"><a href="#cb43-515" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Alternativa B: **Representación Matricial Continua**: convirtiendo el resultado a <span class="in">`SpatRaster`</span>.</span>
+<span id="cb43-514"><a href="#cb43-514" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Alternativa A: **Representación Vectorial**, convirtiendo el resultado del Kriging a objeto <span class="co">[</span><span class="ot">sf</span><span class="co">]</span>{.func-tecnica}.</span>
+<span id="cb43-515"><a href="#cb43-515" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Alternativa B: **Representación Matricial Continua**: convirtiendo el resultado a <span class="co">[</span><span class="ot">SpatRaster</span><span class="co">]</span>{.func-tecnica}.</span>
 <span id="cb43-516"><a href="#cb43-516" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb43-517"><a href="#cb43-517" aria-hidden="true" tabindex="-1"></a><span class="fu">## Alternativa A</span></span>
 <span id="cb43-518"><a href="#cb43-518" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb43-519"><a href="#cb43-519" aria-hidden="true" tabindex="-1"></a>Una vez obtenidos los resultados de la interpolación espacial mediante el algoritmo de Kriging Ordinario (@sec-krig), el resultado se estructuró en formato vectorial como un objeto de la clase <span class="in">`sf`</span>:</span>
+<span id="cb43-519"><a href="#cb43-519" aria-hidden="true" tabindex="-1"></a>Una vez obtenidos los resultados de la interpolación espacial mediante el algoritmo de Kriging Ordinario (@sec-krig), el resultado se estructuró en formato vectorial como un objeto de la clase <span class="co">[</span><span class="ot">sf</span><span class="co">]</span>{.func-tecnica}:</span>
 <span id="cb43-520"><a href="#cb43-520" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb43-523"><a href="#cb43-523" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
 <span id="cb43-524"><a href="#cb43-524" aria-hidden="true" tabindex="-1"></a>krig_sf <span class="ot">&lt;-</span> <span class="fu">st_as_sf</span>(krig_res) </span>
@@ -2008,7 +2002,7 @@ Figura&nbsp;1: Semivariograma
 <span id="cb43-534"><a href="#cb43-534" aria-hidden="true" tabindex="-1"></a>krig_sf_cortado<span class="ot">&lt;-</span> <span class="fu">st_intersection</span>(krig_sf, lote) </span>
 <span id="cb43-535"><a href="#cb43-535" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb43-536"><a href="#cb43-536" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb43-537"><a href="#cb43-537" aria-hidden="true" tabindex="-1"></a>Se crearon los cuantiles, la variable continua de predicción (<span class="in">`var1.pred`</span>) se transformó en una variable categórica ordinal de cuatro clases (<span class="in">`var1_q`</span>):</span>
+<span id="cb43-537"><a href="#cb43-537" aria-hidden="true" tabindex="-1"></a>Se crearon los cuantiles, la variable continua de predicción (<span class="co">[</span><span class="ot">var1.pred</span><span class="co">]</span>{.func-tecnica}) se transformó en una variable categórica ordinal de cuatro clases (<span class="co">[</span><span class="ot">var1_q</span><span class="co">]</span>{.func-tecnica}):</span>
 <span id="cb43-538"><a href="#cb43-538" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb43-541"><a href="#cb43-541" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
 <span id="cb43-542"><a href="#cb43-542" aria-hidden="true" tabindex="-1"></a>breaks <span class="ot">&lt;-</span> <span class="fu">quantile</span>(krig_sf<span class="sc">$</span>var1.pred, <span class="at">probs =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="fl">0.25</span>), <span class="at">na.rm =</span> <span class="cn">TRUE</span>) </span>
@@ -2047,15 +2041,15 @@ Figura&nbsp;1: Semivariograma
 <span id="cb43-577"><a href="#cb43-577" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb43-578"><a href="#cb43-578" aria-hidden="true" tabindex="-1"></a><span class="fu">## Alternativa B</span></span>
 <span id="cb43-579"><a href="#cb43-579" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb43-580"><a href="#cb43-580" aria-hidden="true" tabindex="-1"></a>En este opción se migró del modelo vectorial al modelo de datos ráster. Para ello, los puntos cortados se convirtieron a la clase <span class="in">`SpatRaster`</span>.</span>
+<span id="cb43-580"><a href="#cb43-580" aria-hidden="true" tabindex="-1"></a>En este opción se migró del modelo vectorial al modelo de datos ráster. Para ello, los puntos cortados se convirtieron a la clase <span class="co">[</span><span class="ot">SpatRaster</span><span class="co">]</span>{.func-tecnica}.</span>
 <span id="cb43-581"><a href="#cb43-581" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb43-582"><a href="#cb43-582" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; </span><span class="in">`SpatRaster`</span><span class="at"> es la clase central del paquete </span><span class="in">`terra`</span><span class="at">. Este paquete está diseñado para manejar datos **ráster** de forma eficiente. A diferencia de un objeto vectorial (</span><span class="in">`sf`</span><span class="at">), un ráster no guarda coordenadas individuales para cada dato. Un </span><span class="in">`SpatRaster`</span><span class="at"> representa el espacio como una grilla regular de celdas (píxeles) dispuestas en filas y columnas. Este objeto almacena cuatro componentes: (a) matriz de datos (filas y columnas), (b) la extensión espacial (Bounding Box), (c) el CRS, (d) las capas (un solo objeto SpatRaster puede contener una o múltiples capas).</span></span>
+<span id="cb43-582"><a href="#cb43-582" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; </span><span class="co">[</span><span class="ot">SpatRaster</span><span class="co">]</span><span class="at">{.func-tecnica} es la clase central del paquete </span><span class="co">[</span><span class="ot">terra</span><span class="co">]</span><span class="at">{.func-tecnica}. Este paquete está diseñado para manejar datos **ráster** de forma eficiente. A diferencia de un objeto vectorial (</span><span class="co">[</span><span class="ot">sf</span><span class="co">]</span><span class="at">{.func-tecnica}), un ráster no guarda coordenadas individuales para cada dato. Un </span><span class="co">[</span><span class="ot">SpatRaster</span><span class="co">]</span><span class="at">{.func-tecnica} representa el espacio como una grilla regular de celdas (píxeles) dispuestas en filas y columnas. Este objeto almacena cuatro componentes: (a) matriz de datos (filas y columnas), (b) la extensión espacial (Bounding Box), (c) el CRS, (d) las capas (un solo objeto SpatRaster puede contener una o múltiples capas).</span></span>
 <span id="cb43-583"><a href="#cb43-583" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb43-584"><a href="#cb43-584" aria-hidden="true" tabindex="-1"></a>El flujo de trabajo fue el siguiente:</span>
 <span id="cb43-585"><a href="#cb43-585" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb43-586"><a href="#cb43-586" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>**Convertir a clase SpatRaster**:</span>
 <span id="cb43-587"><a href="#cb43-587" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb43-588"><a href="#cb43-588" aria-hidden="true" tabindex="-1"></a>Se procedió a la conversión de la capa vectorial recortada hacia la clase <span class="in">`SpatRaster`</span> del paquete <span class="in">`terra`</span>, mediante la función <span class="in">`vect()`</span>:</span>
+<span id="cb43-588"><a href="#cb43-588" aria-hidden="true" tabindex="-1"></a>Se procedió a la conversión de la capa vectorial recortada hacia la clase <span class="co">[</span><span class="ot">SpatRaster</span><span class="co">]</span>{.func-tecnica} del paquete <span class="co">[</span><span class="ot">terra</span><span class="co">]</span>{.func-tecnica}, mediante la función <span class="in">`vect()`</span>:</span>
 <span id="cb43-589"><a href="#cb43-589" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb43-592"><a href="#cb43-592" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
 <span id="cb43-593"><a href="#cb43-593" aria-hidden="true" tabindex="-1"></a>krig_vect_cortado <span class="ot">&lt;-</span> <span class="fu">vect</span>(krig_sf_cortado) </span>
@@ -2113,17 +2107,17 @@ Figura&nbsp;1: Semivariograma
 <span id="cb43-651"><a href="#cb43-651" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb43-652"><a href="#cb43-652" aria-hidden="true" tabindex="-1"></a>A pesar de sus limitaciones, el IDW sigue siendo una referencia útil para comparaciones.</span>
 <span id="cb43-653"><a href="#cb43-653" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb43-654"><a href="#cb43-654" aria-hidden="true" tabindex="-1"></a>Para realizar la interpolación se usó la función <span class="in">`idw()`</span> de <span class="in">`gstat`</span>:</span>
+<span id="cb43-654"><a href="#cb43-654" aria-hidden="true" tabindex="-1"></a>Para realizar la interpolación se usó la función <span class="in">`idw()`</span> de <span class="co">[</span><span class="ot">gstat</span><span class="co">]</span>{.func-tecnica}:</span>
 <span id="cb43-655"><a href="#cb43-655" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb43-658"><a href="#cb43-658" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
 <span id="cb43-659"><a href="#cb43-659" aria-hidden="true" tabindex="-1"></a>idw <span class="ot">=</span> <span class="fu">idw</span>(Veris_0_30 <span class="sc">~</span> <span class="dv">1</span>, veris_sp, grilla) </span>
 <span id="cb43-660"><a href="#cb43-660" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb43-661"><a href="#cb43-661" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb43-662"><a href="#cb43-662" aria-hidden="true" tabindex="-1"></a>El objeto resultante de esta operación (<span class="in">`idw`</span>) comparte exactamente la misma estructura que el resultado del Kriging. Sin embargo, el contenido de su tabla de atributos presenta diferencias:</span>
+<span id="cb43-662"><a href="#cb43-662" aria-hidden="true" tabindex="-1"></a>El objeto resultante de esta operación (<span class="co">[</span><span class="ot">idw</span><span class="co">]</span>{.func-tecnica}) comparte exactamente la misma estructura que el resultado del Kriging. Sin embargo, el contenido de su tabla de atributos presenta diferencias:</span>
 <span id="cb43-663"><a href="#cb43-663" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb43-664"><a href="#cb43-664" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span><span class="in">`var1.pred`</span>: Almacena el valor estimado de conductividad eléctrica mediante un promedio ponderado.</span>
+<span id="cb43-664"><a href="#cb43-664" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span><span class="co">[</span><span class="ot">var1.pred</span><span class="co">]</span>{.func-tecnica}: Almacena el valor estimado de conductividad eléctrica mediante un promedio ponderado.</span>
 <span id="cb43-665"><a href="#cb43-665" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb43-666"><a href="#cb43-666" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Ausencia de Varianza (<span class="in">`var1.var = NA`</span>): Un rasgo fundamental es que la columna destinada a registrar la varianza de la predicción carece por completo de datos numéricos, devolviendo valores nulos (NA). Al tratarse de un método estrictamente geométrico y no de un modelo estocástico, el IDW no posee un marco probabilístico. En consecuencia, el objeto es incapaz de cuantificar la incertidumbre predictiva o de proveer un mapa de error que permita evaluar la confiabilidad de las estimaciones a lo largo del lote.</span>
+<span id="cb43-666"><a href="#cb43-666" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Ausencia de Varianza (<span class="co">[</span><span class="ot">var1.var = NA</span><span class="co">]</span>{.func-tecnica}): Un rasgo fundamental es que la columna destinada a registrar la varianza de la predicción carece por completo de datos numéricos, devolviendo valores nulos (NA). Al tratarse de un método estrictamente geométrico y no de un modelo estocástico, el IDW no posee un marco probabilístico. En consecuencia, el objeto es incapaz de cuantificar la incertidumbre predictiva o de proveer un mapa de error que permita evaluar la confiabilidad de las estimaciones a lo largo del lote.</span>
 <span id="cb43-667"><a href="#cb43-667" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb43-668"><a href="#cb43-668" aria-hidden="true" tabindex="-1"></a><span class="fu"># Graficar</span></span>
 <span id="cb43-669"><a href="#cb43-669" aria-hidden="true" tabindex="-1"></a></span>
@@ -2131,7 +2125,7 @@ Figura&nbsp;1: Semivariograma
 <span id="cb43-671"><a href="#cb43-671" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb43-672"><a href="#cb43-672" aria-hidden="true" tabindex="-1"></a><span class="fu">## Alternativa A</span></span>
 <span id="cb43-673"><a href="#cb43-673" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb43-674"><a href="#cb43-674" aria-hidden="true" tabindex="-1"></a>Convertir a objeto <span class="in">`sf`</span>:</span>
+<span id="cb43-674"><a href="#cb43-674" aria-hidden="true" tabindex="-1"></a>Convertir a objeto <span class="co">[</span><span class="ot">sf</span><span class="co">]</span>{.func-tecnica}:</span>
 <span id="cb43-675"><a href="#cb43-675" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb43-678"><a href="#cb43-678" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
 <span id="cb43-679"><a href="#cb43-679" aria-hidden="true" tabindex="-1"></a>idw_sf <span class="ot">&lt;-</span> <span class="fu">st_as_sf</span>(idw) </span>
@@ -2179,7 +2173,7 @@ Figura&nbsp;1: Semivariograma
 <span id="cb43-727"><a href="#cb43-727" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb43-728"><a href="#cb43-728" aria-hidden="true" tabindex="-1"></a><span class="fu">## Alternativa B</span></span>
 <span id="cb43-729"><a href="#cb43-729" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb43-730"><a href="#cb43-730" aria-hidden="true" tabindex="-1"></a>Convertir el objeto sf a <span class="in">`SpatVector`</span>:</span>
+<span id="cb43-730"><a href="#cb43-730" aria-hidden="true" tabindex="-1"></a>Convertir el objeto sf a <span class="co">[</span><span class="ot">SpatVector</span><span class="co">]</span>{.func-tecnica}:</span>
 <span id="cb43-731"><a href="#cb43-731" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb43-734"><a href="#cb43-734" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
 <span id="cb43-735"><a href="#cb43-735" aria-hidden="true" tabindex="-1"></a>idw_vect_cortado <span class="ot">&lt;-</span> <span class="fu">vect</span>(idw_sf_cortado) </span>
