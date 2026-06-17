@@ -425,11 +425,9 @@ pre.code-output code {
 }
    
    
-/* ============================================================
-   HERO KPI — Diferencial económico manejo variable vs uniforme
-   Estilo: informe académico-agronómico, minimalista tipográfico
-   Tipografía: Space Grotesk (cifras), Libre Baskerville (labels)
-   ============================================================ */
+   
+   
+/* KPI */
 
 .vr-hero-wrapper {
   margin: 3.5rem 0 2rem;
@@ -448,17 +446,15 @@ pre.code-output code {
   margin-bottom: 1.6rem;
 }
 
-/* Fila principal: número hero + panel de desglose */
 .vr-hero-row {
   display: flex;
   align-items: stretch;
   gap: 0;
 }
 
-/* Número protagonista */
 .vr-hero-main {
   flex: 0 0 auto;
-  padding-right: 2.8rem;
+  padding-right: 1.2rem; 
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -502,15 +498,16 @@ pre.code-output code {
   line-height: 1.4;
 }
 
-/* Regla vertical divisora — el gesto de diseño */
 .vr-divider {
   flex: 0 0 1px;
   background-color: #c9d8e4;
-  margin: 0 2.8rem;
   align-self: stretch;
+  margin-top: 0;
+  margin-bottom: 0;
+  margin-left: 1rem;  
+  margin-right: 1.8rem; 
 }
 
-/* Panel de desglose a la derecha */
 .vr-breakdown {
   flex: 1;
   display: flex;
@@ -560,7 +557,6 @@ pre.code-output code {
   color: #9b2c2c;
 }
 
-/* Barra de progreso delgada bajo el valor (contexto visual) */
 .vr-breakdown-bar-track {
   width: 100%;
   height: 2px;
@@ -580,7 +576,6 @@ pre.code-output code {
   background: #1f5e63;
 }
 
-/* Nota al pie del KPI */
 .vr-footnote {
   margin-top: 2rem;
   padding-top: 1rem;
@@ -591,7 +586,6 @@ pre.code-output code {
   line-height: 1.6;
 }
 
-/* Animación de entrada al hacer scroll */
 @keyframes vr-fade-up {
   from {
     opacity: 0;
@@ -613,7 +607,7 @@ pre.code-output code {
   }
 }
 
-/* Responsive: colapso en pantallas angostas */
+
 @media (max-width: 640px) {
   .vr-hero-row {
     flex-direction: column;
@@ -630,4 +624,3 @@ pre.code-output code {
     font-size: 4rem;
   }
 }
-   
