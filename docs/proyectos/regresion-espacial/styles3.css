@@ -425,3 +425,209 @@ pre.code-output code {
 }
    
    
+/* ============================================================
+   HERO KPI — Diferencial económico manejo variable vs uniforme
+   Estilo: informe académico-agronómico, minimalista tipográfico
+   Tipografía: Space Grotesk (cifras), Libre Baskerville (labels)
+   ============================================================ */
+
+.vr-hero-wrapper {
+  margin: 3.5rem 0 2rem;
+  padding: 0;
+  border-top: 2px solid #1a202c;
+  padding-top: 2.5rem;
+}
+
+.vr-eyebrow {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #718096;
+  margin-bottom: 1.6rem;
+}
+
+/* Fila principal: número hero + panel de desglose */
+.vr-hero-row {
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+}
+
+/* Número protagonista */
+.vr-hero-main {
+  flex: 0 0 auto;
+  padding-right: 2.8rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.vr-hero-value {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 5.5rem;
+  font-weight: 700;
+  line-height: 1;
+  color: #1a202c;
+  letter-spacing: -0.03em;
+  /* Cifras tabulares para alineación perfecta */
+  font-variant-numeric: tabular-nums;
+}
+
+.vr-hero-value .vr-currency {
+  font-size: 2.4rem;
+  font-weight: 400;
+  color: #4a5568;
+  vertical-align: 0.55em;
+  margin-right: 0.08em;
+  letter-spacing: 0;
+}
+
+.vr-hero-value .vr-unit {
+  font-size: 1.4rem;
+  font-weight: 400;
+  color: #718096;
+  vertical-align: 0.18em;
+  margin-left: 0.12em;
+  letter-spacing: 0.02em;
+}
+
+.vr-hero-label {
+  font-family: 'Libre Baskerville', serif;
+  font-size: 0.92rem;
+  font-style: italic;
+  color: #4a5568;
+  margin-top: 0.7rem;
+  line-height: 1.4;
+}
+
+/* Regla vertical divisora — el gesto de diseño */
+.vr-divider {
+  flex: 0 0 1px;
+  background-color: #c9d8e4;
+  margin: 0 2.8rem;
+  align-self: stretch;
+}
+
+/* Panel de desglose a la derecha */
+.vr-breakdown {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.vr-breakdown-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1.2rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid #edf2f7;
+}
+
+.vr-breakdown-row:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.vr-breakdown-label {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #718096;
+  flex: 1;
+}
+
+.vr-breakdown-value {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.35rem;
+  font-weight: 600;
+  color: #1a202c;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.vr-breakdown-value.is-positive {
+  color: #1f5e63;
+}
+
+.vr-breakdown-value.is-negative {
+  color: #9b2c2c;
+}
+
+/* Barra de progreso delgada bajo el valor (contexto visual) */
+.vr-breakdown-bar-track {
+  width: 100%;
+  height: 2px;
+  background: #edf2f7;
+  border-radius: 1px;
+  margin-top: 0.3rem;
+}
+
+.vr-breakdown-bar-fill {
+  height: 2px;
+  border-radius: 1px;
+  background: #1a202c;
+  transition: width 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.vr-breakdown-bar-fill.is-positive {
+  background: #1f5e63;
+}
+
+/* Nota al pie del KPI */
+.vr-footnote {
+  margin-top: 2rem;
+  padding-top: 1rem;
+  border-top: 1px solid #edf2f7;
+  font-family: 'Libre Baskerville', serif;
+  font-size: 0.78rem;
+  color: #a0aec0;
+  line-height: 1.6;
+}
+
+/* Animación de entrada al hacer scroll */
+@keyframes vr-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.vr-hero-wrapper {
+  animation: vr-fade-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vr-hero-wrapper {
+    animation: none;
+  }
+}
+
+/* Responsive: colapso en pantallas angostas */
+@media (max-width: 640px) {
+  .vr-hero-row {
+    flex-direction: column;
+    gap: 2rem;
+  }
+  .vr-divider {
+    flex: 0 0 1px;
+    width: 100%;
+    height: 1px;
+    margin: 0;
+    align-self: auto;
+  }
+  .vr-hero-value {
+    font-size: 4rem;
+  }
+}
+   
