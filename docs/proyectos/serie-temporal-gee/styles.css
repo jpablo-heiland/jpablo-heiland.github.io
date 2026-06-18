@@ -537,6 +537,113 @@ blockquote {
 
 
 
+/* ── PANEL TABSET ────────────────────────────────────────────────────────── */
+
+/* Contenedor general */
+.panel-tabset {
+  margin: 1.8rem 0 2.2rem;
+  border: 1px solid var(--border);
+  border-radius: 0 6px 6px 6px;
+  background: white;
+  box-shadow: 0 2px 12px rgba(13, 33, 55, 0.05);
+  overflow: hidden;
+}
+
+/* Barra de pestañas */
+.panel-tabset .nav-tabs {
+  display: flex;
+  gap: 0;
+  border-bottom: 2px solid var(--gee-navy);
+  background: var(--gee-bg);
+  padding: 0 1rem;
+  margin: 0;
+  list-style: none;
+}
+
+/* Cada pestaña */
+.panel-tabset .nav-tabs .nav-item {
+  margin-bottom: -2px;
+}
+
+.panel-tabset .nav-tabs .nav-link {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.72rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--text-secondary);
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  border-radius: 0;
+  padding: 0.65rem 1.1rem;
+  display: block;
+  text-decoration: none;
+  transition: color 0.18s ease, border-color 0.18s ease;
+  white-space: nowrap;
+}
+
+/* Hover */
+.panel-tabset .nav-tabs .nav-link:hover {
+  color: var(--gee-teal);
+  border-bottom-color: var(--gee-ndvi-lt);
+  background: transparent;
+}
+
+/* Pestaña activa */
+.panel-tabset .nav-tabs .nav-link.active {
+  color: var(--gee-navy);
+  font-weight: 500;
+  border-bottom: 2px solid var(--gee-teal);
+  background: white;
+  position: relative;
+}
+
+/* Línea de color en la pestaña activa — acento teal igual que h2 */
+.panel-tabset .nav-tabs .nav-link.active::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--gee-teal);
+  border-radius: 0;
+}
+
+/* Contenido del panel */
+.panel-tabset .tab-content {
+  padding: 1.6rem 1.8rem;
+  background: white;
+}
+
+.panel-tabset .tab-pane {
+  animation: fadeTab 0.2s ease;
+}
+
+@keyframes fadeTab {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0);   }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .panel-tabset .nav-tabs {
+    padding: 0 0.5rem;
+    overflow-x: auto;
+    flex-wrap: nowrap;
+  }
+  .panel-tabset .nav-tabs .nav-link {
+    font-size: 0.68rem;
+    padding: 0.55rem 0.75rem;
+  }
+  .panel-tabset .tab-content {
+    padding: 1.2rem 1rem;
+  }
+}
+
+
+
 
 
 
