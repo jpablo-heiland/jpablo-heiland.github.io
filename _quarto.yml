@@ -2,9 +2,11 @@ project:
   type: website
   output-dir: docs
   resources:
-    - "proyectos/ndvi-tres-dim/mapa_3d.html"
+    - "proyectos/ndvi-tres-dim/index.html"
+    - "proyectos/ndvi-tres-dim/Qgis2threejs.js"
+    - "proyectos/ndvi-tres-dim/Qgis2threejs.css"
+    - "proyectos/ndvi-tres-dim/Qgis2threejs.png"
     - "proyectos/ndvi-tres-dim/data/"
-    - "proyectos/ndvi-tres-dim/NDVI_3D_files/"
     - "proyectos/ndvi-tres-dim/threejs/"
 
 website:
