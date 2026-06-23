@@ -382,28 +382,28 @@
     "href": "proyectos/serie-temporal-gee/serie-temporal-gee.html#agregar-el-mapa-base-satelital",
     "title": "Monitoreo Satelital de Cultivos con Google Earth Engine y Python: Composición Temporal de NDVI con Sentinel-2",
     "section": "\n8.6 Agregar el mapa base satelital",
-    "text": "8.6 Agregar el mapa base satelital\nSe incorpora el mapa base de Google mediante folium.TileLayer(). El parámetro overlay=False la define como capa base (no superpuesta), y control=True la hace visible en el selector de capas.\n\nfolium.TileLayer(\n    tiles='https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}',\n    attr='Google Satellite',\n    name='Satélite',\n    overlay=False,\n    control=True\n).add_to(mapa)\n\n&lt;folium.raster_layers.TileLayer object at 0x0000026C37E188B0&gt;"
+    "text": "8.6 Agregar el mapa base satelital\nSe incorpora el mapa base de Google mediante folium.TileLayer(). El parámetro overlay=False la define como capa base (no superpuesta), y control=True la hace visible en el selector de capas.\n\nfolium.TileLayer(\n    tiles='https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}',\n    attr='Google Satellite',\n    name='Satélite',\n    overlay=False,\n    control=True\n).add_to(mapa)\n\n&lt;folium.raster_layers.TileLayer object at 0x0000013F448E34C0&gt;"
   },
   {
     "objectID": "proyectos/serie-temporal-gee/serie-temporal-gee.html#agregar-la-capa-de-ndvi-con-url-permanente",
     "href": "proyectos/serie-temporal-gee/serie-temporal-gee.html#agregar-la-capa-de-ndvi-con-url-permanente",
     "title": "Monitoreo Satelital de Cultivos con Google Earth Engine y Python: Composición Temporal de NDVI con Sentinel-2",
     "section": "\n8.7 Agregar la capa de NDVI con URL permanente",
-    "text": "8.7 Agregar la capa de NDVI con URL permanente\n.getMapId() le pide a GEE que prepare la imagen para ser visualizada con la paleta y los rangos definidos en VIS_NDVI, y devuelve una dirección web (URL) que apunta permanentemente a esa imagen en los servidores de Google. Esa dirección se le entrega a folium.TileLayer(), que la usa para cargar y mostrar la imagen en el mapa como una capa con nombre, opacidad y control de visibilidad.\n\nmap_id   = ndvi_mediano_asset.getMapId(VIS_NDVI)\ntile_url = map_id['tile_fetcher'].url_format\n\nfolium.TileLayer(\n    tiles=tile_url,\n    attr='Google Earth Engine',\n    name='NDVI Mediano del Ciclo',\n    overlay=True,\n    control=True,\n    opacity=0.85\n).add_to(mapa)\n\n&lt;folium.raster_layers.TileLayer object at 0x0000026C379F6D40&gt;"
+    "text": "8.7 Agregar la capa de NDVI con URL permanente\n.getMapId() le pide a GEE que prepare la imagen para ser visualizada con la paleta y los rangos definidos en VIS_NDVI, y devuelve una dirección web (URL) que apunta permanentemente a esa imagen en los servidores de Google. Esa dirección se le entrega a folium.TileLayer(), que la usa para cargar y mostrar la imagen en el mapa como una capa con nombre, opacidad y control de visibilidad.\n\nmap_id   = ndvi_mediano_asset.getMapId(VIS_NDVI)\ntile_url = map_id['tile_fetcher'].url_format\n\nfolium.TileLayer(\n    tiles=tile_url,\n    attr='Google Earth Engine',\n    name='NDVI Mediano del Ciclo',\n    overlay=True,\n    control=True,\n    opacity=0.85\n).add_to(mapa)\n\n&lt;folium.raster_layers.TileLayer object at 0x0000013F448F18A0&gt;"
   },
   {
     "objectID": "proyectos/serie-temporal-gee/serie-temporal-gee.html#control-de-capas-y-guardado",
     "href": "proyectos/serie-temporal-gee/serie-temporal-gee.html#control-de-capas-y-guardado",
     "title": "Monitoreo Satelital de Cultivos con Google Earth Engine y Python: Composición Temporal de NDVI con Sentinel-2",
     "section": "\n8.8 Control de capas y guardado",
-    "text": "8.8 Control de capas y guardado\nfolium.LayerControl() inserta el selector interactivo de capas en el mapa. Finalmente, mapa.save() guarda el mapa como un archivo HTML autocontenido con URLs de tiles permanentes, que luego se embebe en el documento mediante un iframe.\n\nfolium.LayerControl(collapsed=False).add_to(mapa)\n\n&lt;folium.map.LayerControl object at 0x0000026C37E33AC0&gt;\n\nmapa.save(\"mapa_ndvi_ciclo.html\")"
+    "text": "8.8 Control de capas y guardado\nfolium.LayerControl() inserta el selector interactivo de capas en el mapa. Finalmente, mapa.save() guarda el mapa como un archivo HTML autocontenido con URLs de tiles permanentes, que luego se embebe en el documento mediante un iframe.\n\nfolium.LayerControl(collapsed=False).add_to(mapa)\n\n&lt;folium.map.LayerControl object at 0x0000013F44945F30&gt;\n\nmapa_html_1 = mapa._repr_html_()"
   },
   {
-    "objectID": "proyectos/serie-temporal-gee/serie-temporal-gee.html#mostrar-mapa",
-    "href": "proyectos/serie-temporal-gee/serie-temporal-gee.html#mostrar-mapa",
+    "objectID": "proyectos/serie-temporal-gee/serie-temporal-gee.html#visualizar",
+    "href": "proyectos/serie-temporal-gee/serie-temporal-gee.html#visualizar",
     "title": "Monitoreo Satelital de Cultivos con Google Earth Engine y Python: Composición Temporal de NDVI con Sentinel-2",
-    "section": "\n8.9 Mostrar Mapa",
-    "text": "8.9 Mostrar Mapa"
+    "section": "\n8.9 Visualizar",
+    "text": "8.9 Visualizar\nCon py$mapa_html se accede a la variable generada en el chunk anterior. La función htmltools::HTML() indica a Quarto que esa cadena de texto debe insertarse directamente en el documento como HTML, lo que hace que el mapa quede embebido de forma nativa en el flujo del documento, sin depender de ningún archivo externo.\n\nCódigohtmltools::HTML(py$mapa_html_1)\n\n\nMake this Notebook Trusted to load map: File -&gt; Trust Notebook"
   },
   {
     "objectID": "proyectos/serie-temporal-gee/serie-temporal-gee.html#creación-y-descarga-del-gif",
@@ -436,9 +436,170 @@
   {
     "objectID": "proyectos/ndvi-tres-dim/ndvi-tres-dim.html",
     "href": "proyectos/ndvi-tres-dim/ndvi-tres-dim.html",
-    "title": "NDVI 3D",
+    "title": "Visualización 3D del NDVI con PyDeck y Google Earth Engine",
     "section": "",
-    "text": "1 Mapa"
+    "text": "El Índice de Vegetación de Diferencia Normalizada (NDVI) es el índice de teledetección más utilizado en agronomía de precisión. Se calcula como:\n\\[NDVI = \\frac{{NIR} - {Red}}{{NIR} + {Red}}\\]\ndonde \\(NIR\\) y \\(Red\\) son las reflectancias superficiales en el infrarrojo cercano (banda B8, ~842 nm) y en el rojo (banda B4, ~665 nm) de Sentinel-2. El resultado varía entre \\(-1\\) y \\(+1\\):\n\n\nRango NDVI\nInterpretación agronómica\n\n\n\n&lt; 0\nAgua, nieve, nubes o suelo muy húmedo\n\n\n0.00 – 0.15\nSuelo desnudo o escasa cobertura vegetal\n\n\n0.15 – 0.35\nVegetación escasa o cultivo en estadios tempranos\n\n\n0.35 – 0.60\nVegetación moderada, cultivo en activo crecimiento\n\n\n&gt; 0.60\nVegetación densa y vigorosa, alta biomasa verde\n\n\n\nLa visualización tridimensional ofrece ventajas:\n\n\nHeterogeneidad espacial inmediata: las “montañas” y “valles” revelan zonas de estrés sin necesidad de interpretar escalas de color.\n\nComunicación efectiva: el modelo es intuitivo."
+  },
+  {
+    "objectID": "proyectos/ndvi-tres-dim/ndvi-tres-dim.html#del-proyecto",
+    "href": "proyectos/ndvi-tres-dim/ndvi-tres-dim.html#del-proyecto",
+    "title": "Visualización 3D del NDVI con PyDeck y Google Earth Engine",
+    "section": "\n3.1 Del Proyecto",
+    "text": "3.1 Del Proyecto\n\nPROJECT_ID   = \"ee-jpablo-heiland\"\nASSET_NDVI   = f\"projects/{PROJECT_ID}/assets/NDVI_Py12\"\nSHAPEFILE    = \"datos/lote_14.shp\""
+  },
+  {
+    "objectID": "proyectos/ndvi-tres-dim/ndvi-tres-dim.html#del-filtro-de-imágenes-s2",
+    "href": "proyectos/ndvi-tres-dim/ndvi-tres-dim.html#del-filtro-de-imágenes-s2",
+    "title": "Visualización 3D del NDVI con PyDeck y Google Earth Engine",
+    "section": "\n3.2 Del Filtro de Imágenes S2",
+    "text": "3.2 Del Filtro de Imágenes S2\n\nFECHA_INICIO  = \"2026-01-15\"\nFECHA_FIN     = \"2026-02-15\"\nMAX_NUBOSIDAD = 10"
+  },
+  {
+    "objectID": "proyectos/ndvi-tres-dim/ndvi-tres-dim.html#de-la-visualización-2d",
+    "href": "proyectos/ndvi-tres-dim/ndvi-tres-dim.html#de-la-visualización-2d",
+    "title": "Visualización 3D del NDVI con PyDeck y Google Earth Engine",
+    "section": "\n3.3 De la Visualización 2D",
+    "text": "3.3 De la Visualización 2D\n\nPALETA_2D = [\n    \"a52f04\", \"c67f3c\", \"e8b96a\", \"f5e4a0\",\n    \"c8e06a\", \"78c83c\", \"3da62a\", \"1a7a14\", \"0a4d08\"\n]\nVIS_NDVI = {\"min\": -0.1, \"max\": 0.85, \"palette\": PALETA_2D}"
+  },
+  {
+    "objectID": "proyectos/ndvi-tres-dim/ndvi-tres-dim.html#de-la-visualización-3d",
+    "href": "proyectos/ndvi-tres-dim/ndvi-tres-dim.html#de-la-visualización-3d",
+    "title": "Visualización 3D del NDVI con PyDeck y Google Earth Engine",
+    "section": "\n3.4 De la Visualización 3D",
+    "text": "3.4 De la Visualización 3D\n\nFACTOR_ESCALA_3D = 900    \nRADIO_COLUMNA    = 8       \nPITCH_CAMARA     = 52      \nBEARING_CAMARA   = 20"
+  },
+  {
+    "objectID": "proyectos/ndvi-tres-dim/ndvi-tres-dim.html#calcular-el-centro-del-área-de-estudio",
+    "href": "proyectos/ndvi-tres-dim/ndvi-tres-dim.html#calcular-el-centro-del-área-de-estudio",
+    "title": "Visualización 3D del NDVI con PyDeck y Google Earth Engine",
+    "section": "\n5.1 Calcular el centro del área de estudio",
+    "text": "5.1 Calcular el centro del área de estudio\nPara posicionar correctamente la vista inicial del mapa, se obtiene el centroide del área de estudio con .centroid(). El método .getInfo() descarga el resultado desde los servidores de GEE al entorno local como un diccionario Python. Las coordenadas en GEE se ordenan como [longitud, latitud], por lo que se invierten para obtener el formato [latitud, longitud] que espera folium.\n\ncentroid = geometry.centroid(maxError=1).getInfo()['coordinates']\ncentro = [centroid[1], centroid[0]]"
+  },
+  {
+    "objectID": "proyectos/ndvi-tres-dim/ndvi-tres-dim.html#colección-sentinel-2",
+    "href": "proyectos/ndvi-tres-dim/ndvi-tres-dim.html#colección-sentinel-2",
+    "title": "Visualización 3D del NDVI con PyDeck y Google Earth Engine",
+    "section": "\n6.1 Colección Sentinel-2",
+    "text": "6.1 Colección Sentinel-2\n\nimgs_s2 = (\n    ee.ImageCollection(\"COPERNICUS/S2_SR_HARMONIZED\")\n    .filterDate(FECHA_INICIO, FECHA_FIN)\n    .filterBounds(geometry)\n    .filterMetadata(\"CLOUDY_PIXEL_PERCENTAGE\", \"less_than\", MAX_NUBOSIDAD)\n)"
+  },
+  {
+    "objectID": "proyectos/ndvi-tres-dim/ndvi-tres-dim.html#selección-de-la-imagen-menos-nubosa",
+    "href": "proyectos/ndvi-tres-dim/ndvi-tres-dim.html#selección-de-la-imagen-menos-nubosa",
+    "title": "Visualización 3D del NDVI con PyDeck y Google Earth Engine",
+    "section": "\n6.2 Selección de la imagen menos nubosa",
+    "text": "6.2 Selección de la imagen menos nubosa\n\nimagen_seleccionada = imgs_s2.sort(\"CLOUDY_PIXEL_PERCENTAGE\").first()\n\nprops      = imagen_seleccionada.getInfo()[\"properties\"]\nfecha_img  = props.get(\"DATATAKE_IDENTIFIER\", \"N/A\")[:15]\nnubosidad  = props.get(\"CLOUDY_PIXEL_PERCENTAGE\", \"N/A\")\n\nprint(f\"📅  Imagen seleccionada : {fecha_img}\")\n\n📅  Imagen seleccionada : GS2C_20260116T1\n\nprint(f\"☁️   Nubosidad          : {nubosidad}%\")\n\n☁️   Nubosidad          : 0.000819%"
+  },
+  {
+    "objectID": "proyectos/ndvi-tres-dim/ndvi-tres-dim.html#cargar-asset",
+    "href": "proyectos/ndvi-tres-dim/ndvi-tres-dim.html#cargar-asset",
+    "title": "Visualización 3D del NDVI con PyDeck y Google Earth Engine",
+    "section": "\n8.1 Cargar Asset",
+    "text": "8.1 Cargar Asset\n\nNDVI_asset = ee.Image(ASSET_NDVI)"
+  },
+  {
+    "objectID": "proyectos/ndvi-tres-dim/ndvi-tres-dim.html#inicializar-el-mapa-base-con-folium",
+    "href": "proyectos/ndvi-tres-dim/ndvi-tres-dim.html#inicializar-el-mapa-base-con-folium",
+    "title": "Visualización 3D del NDVI con PyDeck y Google Earth Engine",
+    "section": "\n9.1 Inicializar el mapa base con Folium",
+    "text": "9.1 Inicializar el mapa base con Folium\nSe crea el objeto mapa con folium.Map(). El argumento tiles=None suprime el mapa base por defecto de Folium, ya que se agrega un mapa satelital de mayor calidad.\n\nmapa = folium.Map(location=centro, zoom_start=14, tiles=None)"
+  },
+  {
+    "objectID": "proyectos/ndvi-tres-dim/ndvi-tres-dim.html#agregar-el-mapa-base-satelital",
+    "href": "proyectos/ndvi-tres-dim/ndvi-tres-dim.html#agregar-el-mapa-base-satelital",
+    "title": "Visualización 3D del NDVI con PyDeck y Google Earth Engine",
+    "section": "\n9.2 Agregar el mapa base satelital",
+    "text": "9.2 Agregar el mapa base satelital\nSe incorpora el mapa base de Google mediante folium.TileLayer(). El parámetro overlay=False la define como capa base (no superpuesta), y control=True la hace visible en el selector de capas.\n\nfolium.TileLayer(\n    tiles='https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}',\n    attr='Google Satellite',\n    name='Satélite',\n    overlay=False,\n    control=True\n).add_to(mapa)\n\n&lt;folium.raster_layers.TileLayer object at 0x0000018D7DC07280&gt;"
+  },
+  {
+    "objectID": "proyectos/ndvi-tres-dim/ndvi-tres-dim.html#agregar-la-capa-de-ndvi-con-url-permanente",
+    "href": "proyectos/ndvi-tres-dim/ndvi-tres-dim.html#agregar-la-capa-de-ndvi-con-url-permanente",
+    "title": "Visualización 3D del NDVI con PyDeck y Google Earth Engine",
+    "section": "\n9.3 Agregar la capa de NDVI con URL permanente",
+    "text": "9.3 Agregar la capa de NDVI con URL permanente\n.getMapId() le pide a GEE que prepare la imagen para ser visualizada con la paleta y los rangos definidos en VIS_NDVI, y devuelve una dirección web (URL) que apunta permanentemente a esa imagen en los servidores de Google. Esa dirección se le entrega a folium.TileLayer(), que la usa para cargar y mostrar la imagen en el mapa como una capa con nombre, opacidad y control de visibilidad.\n\nmap_id   = NDVI_asset.getMapId(VIS_NDVI)\ntile_url = map_id['tile_fetcher'].url_format\n\nfolium.TileLayer(\n    tiles=tile_url,\n    attr='Google Earth Engine',\n    name='NDVI',\n    overlay=True,\n    control=True,\n    opacity=0.85\n).add_to(mapa)\n\n&lt;folium.raster_layers.TileLayer object at 0x0000018D7DC421A0&gt;"
+  },
+  {
+    "objectID": "proyectos/ndvi-tres-dim/ndvi-tres-dim.html#control-de-capas-y-guardado",
+    "href": "proyectos/ndvi-tres-dim/ndvi-tres-dim.html#control-de-capas-y-guardado",
+    "title": "Visualización 3D del NDVI con PyDeck y Google Earth Engine",
+    "section": "\n9.4 Control de capas y guardado",
+    "text": "9.4 Control de capas y guardado\nfolium.LayerControl() inserta el selector interactivo de capas en el mapa. Finalmente, mapa.save() guarda el mapa como un archivo HTML autocontenido con URLs de tiles permanentes, que luego se embebe en el documento mediante un iframe.\n\nfolium.LayerControl(collapsed=False).add_to(mapa)\n\n&lt;folium.map.LayerControl object at 0x0000018D7DC5C280&gt;\n\nmapa_html = mapa._repr_html_()"
+  },
+  {
+    "objectID": "proyectos/ndvi-tres-dim/ndvi-tres-dim.html#visualizar",
+    "href": "proyectos/ndvi-tres-dim/ndvi-tres-dim.html#visualizar",
+    "title": "Visualización 3D del NDVI con PyDeck y Google Earth Engine",
+    "section": "\n9.5 Visualizar",
+    "text": "9.5 Visualizar\nCon py$mapa_html se accede a la variable generada en el chunk anterior. La función htmltools::HTML() indica a Quarto que esa cadena de texto debe insertarse directamente en el documento como HTML, lo que hace que el mapa quede embebido de forma nativa en el flujo del documento, sin depender de ningún archivo externo.\n\nCódigohtmltools::HTML(py$mapa_html)\n\n\nMake this Notebook Trusted to load map: File -&gt; Trust Notebook"
+  },
+  {
+    "objectID": "proyectos/ndvi-tres-dim/ndvi-tres-dim.html#limpieza-tipado-y-normalización",
+    "href": "proyectos/ndvi-tres-dim/ndvi-tres-dim.html#limpieza-tipado-y-normalización",
+    "title": "Visualización 3D del NDVI con PyDeck y Google Earth Engine",
+    "section": "\n10.1 Limpieza, tipado y normalización",
+    "text": "10.1 Limpieza, tipado y normalización\n\nndvi_col = [c for c in df.columns if c not in (\"id\",\"time\",\"longitude\",\"latitude\")][0]\ndf = df.rename(columns={ndvi_col: \"NDVI\"})\n\ndf = (df\n      .dropna(subset=[\"NDVI\"])\n      .assign(\n          longitude = lambda d: d[\"longitude\"].astype(float),\n          latitude  = lambda d: d[\"latitude\"].astype(float),\n          NDVI      = lambda d: d[\"NDVI\"].astype(float),\n      )\n)"
+  },
+  {
+    "objectID": "proyectos/ndvi-tres-dim/ndvi-tres-dim.html#normalización-robusta-percentil-298-para-descartar-outliers-extremos",
+    "href": "proyectos/ndvi-tres-dim/ndvi-tres-dim.html#normalización-robusta-percentil-298-para-descartar-outliers-extremos",
+    "title": "Visualización 3D del NDVI con PyDeck y Google Earth Engine",
+    "section": "\n10.2 Normalización robusta (percentil 2–98 para descartar outliers extremos)",
+    "text": "10.2 Normalización robusta (percentil 2–98 para descartar outliers extremos)\n\nndvi_min = df[\"NDVI\"].quantile(0.02)\nndvi_max = df[\"NDVI\"].quantile(0.98)\ndf[\"NDVI_norm\"] = ((df[\"NDVI\"] - ndvi_min) / (ndvi_max - ndvi_min)).clip(0, 1)\n\nprint(f\"📐  Rango NDVI (p2–p98): [{ndvi_min:.4f}, {ndvi_max:.4f}]\")\n\n📐  Rango NDVI (p2–p98): [0.5374, 0.8804]\n\nprint(f\"📊  Píxeles válidos    : {len(df):,}\")\n\n📊  Píxeles válidos    : 11,607"
+  },
+  {
+    "objectID": "proyectos/ndvi-tres-dim/ndvi-tres-dim.html#tercera-dimensión-altura-proporcional-al-ndvi-normalizado",
+    "href": "proyectos/ndvi-tres-dim/ndvi-tres-dim.html#tercera-dimensión-altura-proporcional-al-ndvi-normalizado",
+    "title": "Visualización 3D del NDVI con PyDeck y Google Earth Engine",
+    "section": "\n10.3 Tercera dimensión: altura proporcional al NDVI normalizado",
+    "text": "10.3 Tercera dimensión: altura proporcional al NDVI normalizado\n\ndf[\"altura_3d\"]    = df[\"NDVI_norm\"] * FACTOR_ESCALA_3D\ndf[\"NDVI_positivo\"]= df[\"NDVI\"].clip(lower=0)\n\nprint(f\"📏  Alturas 3D — mín: {df['altura_3d'].min():.1f} m, \"\n      f\"máx: {df['altura_3d'].max():.1f} m\")\n\n📏  Alturas 3D — mín: 0.0 m, máx: 900.0 m"
+  },
+  {
+    "objectID": "proyectos/ndvi-tres-dim/ndvi-tres-dim.html#definición-de-nodos-de-color",
+    "href": "proyectos/ndvi-tres-dim/ndvi-tres-dim.html#definición-de-nodos-de-color",
+    "title": "Visualización 3D del NDVI con PyDeck y Google Earth Engine",
+    "section": "\n11.1 Definición de nodos de color",
+    "text": "11.1 Definición de nodos de color\nCada nodo: (posición_normalizada_0_a_1, (R, G, B))\n\nNODOS_PALETA = [\n    (0.00, (165,  47,   4)),   \n    (0.25, (198, 127,  60)),   \n    (0.50, (245, 228, 160)),   \n    (0.75, (120, 200,  60)),   \n    (1.00, ( 10,  77,   8)),   \n]\n\nETIQUETAS_PALETA = [\n    (0.00, \"&lt; 0   Suelo / Agua\"),\n    (0.25, \"0.2  Vegetación escasa\"),\n    (0.50, \"0.4  Crecimiento activo\"),\n    (0.75, \"0.6  Buen estado\"),\n    (1.00, \"&gt; 0.7 Máximo vigor\"),\n]\n\n\ndef interpolar_color(valor_norm: float, opacidad: int = 220) -&gt; list:\n    v = max(0.0, min(1.0, valor_norm))\n    for i in range(len(NODOS_PALETA) - 1):\n        v0, c0 = NODOS_PALETA[i]\n        v1, c1 = NODOS_PALETA[i + 1]\n        if v0 &lt;= v &lt;= v1:\n            t = (v - v0) / (v1 - v0) if v1 &gt; v0 else 0.0\n            return [\n                int(c0[0] + t * (c1[0] - c0[0])),\n                int(c0[1] + t * (c1[1] - c0[1])),\n                int(c0[2] + t * (c1[2] - c0[2])),\n                opacidad,\n            ]\n    return list(NODOS_PALETA[-1][1]) + [opacidad]\n\n\ndf[\"color_rgb\"] = df[\"NDVI_norm\"].apply(interpolar_color)\n\nprint(\"🎨  Paleta interpolada y aplicada.\")\n\n🎨  Paleta interpolada y aplicada.\n\nprint(df[[\"longitude\",\"latitude\",\"NDVI\",\"NDVI_norm\",\"altura_3d\",\"color_rgb\"]].head(3))\n\n   longitude   latitude      NDVI  NDVI_norm  altura_3d          color_rgb\n0 -64.977256 -33.640874  0.195456        0.0        0.0  [165, 47, 4, 220]\n1 -64.977166 -33.640874  0.217082        0.0        0.0  [165, 47, 4, 220]\n2 -64.977076 -33.640874  0.287781        0.0        0.0  [165, 47, 4, 220]"
+  },
+  {
+    "objectID": "proyectos/ndvi-tres-dim/ndvi-tres-dim.html#columnlayer-núcleo-de-la-visualización-3d",
+    "href": "proyectos/ndvi-tres-dim/ndvi-tres-dim.html#columnlayer-núcleo-de-la-visualización-3d",
+    "title": "Visualización 3D del NDVI con PyDeck y Google Earth Engine",
+    "section": "\n12.1 ColumnLayer — núcleo de la visualización 3D",
+    "text": "12.1 ColumnLayer — núcleo de la visualización 3D\n\ncapa_ndvi_3d = pdk.Layer(\n    \"ColumnLayer\",\n    data           = df,\n    get_position   = \"[longitude, latitude]\",\n    get_elevation  = \"altura_3d\",\n    get_fill_color = \"color_rgb\",\n    radius         = RADIO_COLUMNA,\n    extruded       = True,          \n    pickable       = True,          \n    auto_highlight = True,         \n    coverage       = 0.95,         \n    elevation_scale= 1,\n)"
+  },
+  {
+    "objectID": "proyectos/ndvi-tres-dim/ndvi-tres-dim.html#geojsonlayer-contorno-del-aoi",
+    "href": "proyectos/ndvi-tres-dim/ndvi-tres-dim.html#geojsonlayer-contorno-del-aoi",
+    "title": "Visualización 3D del NDVI con PyDeck y Google Earth Engine",
+    "section": "\n12.2 GeoJsonLayer — contorno del AOI",
+    "text": "12.2 GeoJsonLayer — contorno del AOI\n\ngeojson_lote = geometry.getInfo()\n\ncapa_contorno = pdk.Layer(\n    \"GeoJsonLayer\",\n    data                 = geojson_lote,\n    stroked              = True,\n    filled               = False,\n    get_line_color       = [255, 177, 98, 255],   \n    line_width_min_pixels= 2,\n    pickable             = False,\n)"
+  },
+  {
+    "objectID": "proyectos/ndvi-tres-dim/ndvi-tres-dim.html#estado-inicial-de-cámara",
+    "href": "proyectos/ndvi-tres-dim/ndvi-tres-dim.html#estado-inicial-de-cámara",
+    "title": "Visualización 3D del NDVI con PyDeck y Google Earth Engine",
+    "section": "\n12.3 Estado inicial de cámara",
+    "text": "12.3 Estado inicial de cámara\n\nvista_inicial = pdk.ViewState(\n    longitude = df[\"longitude\"].mean(),\n    latitude  = df[\"latitude\"].mean(),\n    zoom      = 14,\n    pitch     = PITCH_CAMARA,\n    bearing   = BEARING_CAMARA,\n)"
+  },
+  {
+    "objectID": "proyectos/ndvi-tres-dim/ndvi-tres-dim.html#tooltip-html-personalizado",
+    "href": "proyectos/ndvi-tres-dim/ndvi-tres-dim.html#tooltip-html-personalizado",
+    "title": "Visualización 3D del NDVI con PyDeck y Google Earth Engine",
+    "section": "\n12.4 Tooltip HTML personalizado",
+    "text": "12.4 Tooltip HTML personalizado\n\ntooltip = {\n    \"html\": (\n        \"&lt;div style=\\\"font-family:'Space Grotesk',sans-serif; padding:8px 12px;\"\n        \"background:#1B2632; border-left:3px solid #ffb162; border-radius:6px;\\\"&gt;\"\n        \"&lt;p style=\\\"color:#ffb162; margin:0 0 4px 0; font-weight:600; font-size:0.82rem;\\\"&gt;\"\n        \"Píxel Sentinel-2&lt;/p&gt;\"\n        \"&lt;p style=\\\"color:#c9d6cc; margin:0; font-size:0.78rem;\\\"&gt;\"\n        \"&lt;b&gt;NDVI crudo:&lt;/b&gt; {NDVI:.4f}&lt;/p&gt;\"\n        \"&lt;p style=\\\"color:#8faf9a; margin:0; font-size:0.74rem;\\\"&gt;\"\n        \"🏔 Altura 3D: {altura_3d:.0f} m&lt;/p&gt;\"\n        \"&lt;p style=\\\"color:#8faf9a; margin:0; font-size:0.72rem;\\\"&gt;\"\n        \"📍 {latitude:.5f}, {longitude:.5f}&lt;/p&gt;\"\n        \"&lt;/div&gt;\"\n    ),\n}"
+  },
+  {
+    "objectID": "proyectos/ndvi-tres-dim/ndvi-tres-dim.html#ensamblado-del-deck",
+    "href": "proyectos/ndvi-tres-dim/ndvi-tres-dim.html#ensamblado-del-deck",
+    "title": "Visualización 3D del NDVI con PyDeck y Google Earth Engine",
+    "section": "\n12.5 Ensamblado del Deck",
+    "text": "12.5 Ensamblado del Deck\n\nmapa_3d = pdk.Deck(\n    layers             = [capa_ndvi_3d, capa_contorno],\n    initial_view_state = vista_inicial,\n    map_style          = \"mapbox://styles/mapbox/satellite-v9\",\n    tooltip            = tooltip,\n)"
+  },
+  {
+    "objectID": "proyectos/ndvi-tres-dim/ndvi-tres-dim.html#mostrar-inline-en-jupyter",
+    "href": "proyectos/ndvi-tres-dim/ndvi-tres-dim.html#mostrar-inline-en-jupyter",
+    "title": "Visualización 3D del NDVI con PyDeck y Google Earth Engine",
+    "section": "\n12.6 Mostrar inline en Jupyter",
+    "text": "12.6 Mostrar inline en Jupyter\n\nmapa_3d.show()"
   },
   {
     "objectID": "proyectos/mapa-rendimiento/mapa-rendimiento.html",
@@ -1075,7 +1236,7 @@
     "href": "proyectos/teledeteccion-gee/teledeteccion-gee.html#agregar-el-mapa-base-satelital",
     "title": "Teledetección e Indices de Vegetación con Google Earth Engine y Python",
     "section": "\n12.5 Agregar el mapa base satelital",
-    "text": "12.5 Agregar el mapa base satelital\nSe incorpora el mapabase de Google mediante folium.TileLayer().\n\nfolium.TileLayer(\n    tiles='https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}',\n    attr='Google Satellite',\n    name='Satélite',\n    overlay=False,\n    control=True\n).add_to(mapa)\n\n&lt;folium.raster_layers.TileLayer object at 0x000001B0B11EA980&gt;"
+    "text": "12.5 Agregar el mapa base satelital\nSe incorpora el mapabase de Google mediante folium.TileLayer().\n\nfolium.TileLayer(\n    tiles='https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}',\n    attr='Google Satellite',\n    name='Satélite',\n    overlay=False,\n    control=True\n).add_to(mapa)\n\n&lt;folium.raster_layers.TileLayer object at 0x00000212E45E95A0&gt;"
   },
   {
     "objectID": "proyectos/teledeteccion-gee/teledeteccion-gee.html#definir-la-función-para-agregar-capas-gee-con-urls-permanentes",
@@ -1096,7 +1257,14 @@
     "href": "proyectos/teledeteccion-gee/teledeteccion-gee.html#agregar-el-control-de-capas-y-guardar",
     "title": "Teledetección e Indices de Vegetación con Google Earth Engine y Python",
     "section": "\n12.8 Agregar el control de capas y guardar",
-    "text": "12.8 Agregar el control de capas y guardar\nfolium.LayerControl() inserta en el mapa el selector interactivo de capas. El parámetro collapsed=False mantiene el panel de capas desplegado al cargar el mapa.\nFinalmente, mapa.save() guarda el mapa completo como un archivo HTML autocontenido.\n\nfolium.LayerControl(collapsed=False).add_to(mapa)\n\n&lt;folium.map.LayerControl object at 0x000001B0B1A202E0&gt;\n\nmapa.save(\"mapa_indices.html\")\n\nEl archivo HTML resultante se embebe en el documento mediante un iframe."
+    "text": "12.8 Agregar el control de capas y guardar\nfolium.LayerControl() inserta en el mapa el selector interactivo de capas. El parámetro collapsed=False mantiene el panel de capas desplegado al cargar el mapa.\nEl método .repr_html() guarda el mapa completo como una cadena de texto en formato HTML. Este texto contiene todo lo necesario para renderizar el mapa: la estructura del documento, los estilos, el código JavaScript de Leaflet y las URLs de tiles de GEE.\n\nfolium.LayerControl(collapsed=False).add_to(mapa)\n\n&lt;folium.map.LayerControl object at 0x00000212E45E95D0&gt;\n\nmapa_html = mapa._repr_html_()"
+  },
+  {
+    "objectID": "proyectos/teledeteccion-gee/teledeteccion-gee.html#visualizar",
+    "href": "proyectos/teledeteccion-gee/teledeteccion-gee.html#visualizar",
+    "title": "Teledetección e Indices de Vegetación con Google Earth Engine y Python",
+    "section": "\n12.9 Visualizar",
+    "text": "12.9 Visualizar\nCon py$mapa_html se accede a la variable generada en el chunk anterior. La función htmltools::HTML() indica a Quarto que esa cadena de texto debe insertarse directamente en el documento como HTML, lo que hace que el mapa quede embebido de forma nativa en el flujo del documento, sin depender de ningún archivo externo.\n\nCódigohtmltools::HTML(py$mapa_html)\n\n\nMake this Notebook Trusted to load map: File -&gt; Trust Notebook"
   },
   {
     "objectID": "proyectos/zonificacion/data/Cuadricula_IP.html",

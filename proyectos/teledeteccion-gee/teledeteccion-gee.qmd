@@ -822,20 +822,24 @@ for imagen, vis_params, nombre in capas:
 
 [folium.LayerControl()]{.func-tecnica} inserta en el mapa el selector interactivo de capas. El parámetro [collapsed=False]{.func-tecnica} mantiene el panel de capas desplegado al cargar el mapa.
 
-Finalmente, [mapa.save()]{.func-tecnica} guarda el mapa completo como un archivo HTML autocontenido. 
+El método [.repr_html()]{.func-tecnica} guarda el mapa completo como una cadena de texto en formato HTML. Este texto contiene todo lo necesario para renderizar el mapa: la estructura del documento, los estilos, el código JavaScript de Leaflet y las URLs de tiles de GEE.
 
 ```{python}
 folium.LayerControl(collapsed=False).add_to(mapa)
-mapa.save("mapa_indices.html")
+mapa_html = mapa._repr_html_()
 ```
 
-El archivo HTML resultante se embebe en el documento mediante un [iframe]{.func-tecnica}.
+## Visualizar
 
-<iframe src="mapa_indices.html" 
-        width="100%" 
-        height="800px"
-        frameborder="0">
-</iframe>
+Con [py$mapa_html]{.func-tecnica} se accede a la variable generada en el chunk anterior. La función [htmltools::HTML()]{.func-tecnica} indica a Quarto que esa cadena de texto debe insertarse directamente en el documento como HTML, lo que hace que el mapa quede embebido de forma nativa en el flujo del documento, sin depender de ningún archivo externo.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Código"
+
+htmltools::HTML(py$mapa_html)
+```
+
 
 # Exportar
 

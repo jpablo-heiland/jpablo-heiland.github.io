@@ -1,0 +1,552 @@
+
+
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,400;0,500;1,400&family=Syne:wght@400;600;700;800&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,600;1,8..60,300;1,8..60,400&display=swap');
+
+:root {
+  --gee-navy:       #0d2137;
+  --gee-teal:       #1a5e6e;
+  --gee-ndvi:       #3d7a4f;
+  --gee-ndvi-lt:    #7ab58a;
+  --gee-accent:     #4ec9b0;
+  --gee-water:      #1f6fa3;
+  --gee-sand:       #c8a86b;
+  --gee-infra:      #b85c38;
+  --gee-cloud:      #e8eff5;
+  --gee-bg:         #f4f7fa;
+  --text-primary:   #0d1f2d;
+  --text-secondary: #4a6278;
+  --border:         #c9d8e4;
+  --border-light:   #e0eaf1;
+  --code-bg:        #0d1f2d;
+}
+
+
+/* BASE — BODY */
+body {
+  font-family: 'Source Serif 4', Georgia, serif;
+  font-size: 0.85rem;
+  line-height: 1.7;
+  color: var(--text-primary);
+  background-color: #f9fbfc;
+  text-align: justify;
+  hyphens: auto;
+  padding-top: 1.5rem;
+  padding-bottom: 5rem;
+}
+
+p {
+  margin-bottom: 1.4rem;
+  text-rendering: optimizeLegibility;
+}
+
+@media (max-width: 768px) {
+  body { text-align: left; }
+}
+
+
+/* Cabecera */
+.quarto-title-block,
+header.quarto-title-block {
+  background: var(--gee-navy);
+  border-bottom: 4px solid var(--gee-accent);
+  padding: 2.5rem 3rem 2rem;
+  margin-bottom: 2.5rem;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Halo decorativo — evoca la interfaz de GEE */
+.quarto-title-block::after {
+  content: '';
+  position: absolute;
+  top: -80px; right: -80px;
+  width: 300px; height: 300px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(78, 201, 176, 0.10) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+/* Etiqueta superior del header — se puede agregar vía custom YAML */
+.quarto-title-meta {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.15em;
+  color: var(--gee-accent);
+  text-transform: uppercase;
+  opacity: 0.85;
+  margin-bottom: 0.5rem;
+}
+
+/* Título principal */
+.title,
+header h1,
+.quarto-title h1 {
+  font-family: 'Syne', sans-serif !important;
+  font-size: 2rem !important;
+  font-weight: 800 !important;
+  color: var(--gee-cloud) !important;
+  line-height: 1.1 !important;
+  letter-spacing: -0.025em !important;
+  border: none !important;
+  margin-bottom: 0.5rem !important;
+  padding-bottom: 0 !important;
+  text-align: left !important;
+}
+
+/* Autor y fecha */
+.quarto-title-author,
+.author,
+.quarto-title-meta-contents {
+  font-family: 'DM Mono', monospace !important;
+  font-size: 0.72rem !important;
+  color: #7fa3bb !important;
+  letter-spacing: 0.08em !important;
+}
+
+
+/* Titulos h1, h2, h3 */
+h1, h2, h3 {
+  font-family: 'Syne', sans-serif;
+  color: var(--gee-navy);
+  text-align: left;
+  line-height: 1.2;
+  margin-top: 2.8rem;
+  margin-bottom: 0.9rem;
+}
+
+h1 {
+  font-size: 1.45rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  padding-bottom: 0.45rem;
+  border-bottom: 2px solid var(--gee-navy);
+}
+
+h2 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  border-left: 5px solid #2c3b4d;
+  padding-left: 14px;
+  margin-top: 2.2rem;
+  color: var(--gee-teal);
+  letter-spacing: -0.01em;
+}
+
+h3 {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.13em;
+  margin-top: 1.8rem;
+  margin-bottom: 0.5rem;
+}
+
+
+/* Etiquetas */
+
+.libreria {
+  font-family: 'DM Mono', monospace;
+  background: var(--gee-teal);
+  color: #ceeaf0;
+  padding: 2px 9px;
+  border-radius: 4px;
+  font-size: 0.82em;
+  font-weight: 500;
+  white-space: nowrap;
+  display: inline-block;
+  letter-spacing: 0.03em;
+  transition: background 0.2s ease;
+}
+
+.libreria:hover {
+  background: var(--gee-ndvi);
+  color: #d4edd9;
+}
+
+.func-tecnica {
+  background-color: #edf2f7;                  
+  color: #1a202c;                             
+  padding: 2px 6px;                           
+  border-radius: 4px;                         
+  border: 1px solid #e2e8f0;                  
+  font-family: 'Fira Code', 'Source Code Pro', 'Courier New', monospace;
+  font-size: 0.9em;                           
+  font-weight: 500;                           
+  white-space: nowrap;                        
+  display: inline-block;
+  line-height: 1.2;                           
+  vertical-align: middle;
+  box-shadow: 0 1px 1px rgba(0,0,0,0.02);    
+}
+
+
+/* Recuadros */
+.premium-callout {
+  background: #f2f8f4;
+  border: 1px solid #b6d5c8;
+  border-left: 5px solid #fbb162;
+  border-radius: 0 6px 6px 0;
+  padding: 0.8rem 1.1rem;
+  margin: 1rem 0;
+  box-shadow: 0 2px 12px rgba(61, 122, 79, 0.06);
+}
+
+.premium-callout-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 0.5rem;
+  padding-bottom: 0.4rem;
+  border-bottom: 1.5px solid #c8e5d0;
+}
+
+.premium-callout-icon {
+  font-size: 0.9em;
+  color: #fbb162;
+}
+
+.premium-callout-title {
+  font-family: 'DM Mono', monospace;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #fbb162;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  margin: 0;
+}
+
+/* Callout alerta */
+.callout-alert {
+  border-left-color: var(--gee-infra);
+  background: #fdf4ef;
+  border-color: #e8c5ad;
+}
+
+.callout-alert .premium-callout-title {
+  color: var(--gee-infra);
+}
+
+/* Callout informativo */
+.callout-info {
+  border-left-color: var(--gee-water);
+  background: #eef5fb;
+  border-color: #b0cfe6;
+}
+
+.callout-info .premium-callout-title {
+  color: var(--gee-water);
+}
+
+
+/* Métricas */
+.premium-metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 14px;
+  margin: 1.5rem 0;
+}
+
+
+.premium-metric {
+  background: white;
+  border: 1px solid var(--border);
+  border-top: 3px solid var(--gee-teal);
+  border-radius: 6px;
+  padding: 1rem 1.1rem;
+  text-align: center;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.premium-metric:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(13, 33, 55, 0.08);
+}
+
+.metric-name {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.68rem;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  margin-bottom: 6px;
+}
+
+.metric-number {
+  font-family: 'Syne', sans-serif;
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--gee-navy);
+  line-height: 1;
+}
+
+.metric-highlight { color: var(--gee-ndvi); }
+.metric-water     { color: var(--gee-water); }
+.metric-sand      { color: var(--gee-sand); }
+
+
+/* Métricas 2 */
+
+.premium-metrics-grid-2 {
+  display: grid;
+  grid-template-columns: 1fr; 
+  gap: 14px;
+  margin: 1.5rem 0;
+}
+
+
+/* Paneles */
+.metodo-comparativo {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin: 1.8rem 0;
+}
+
+.metodo-item {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1.4rem 1.5rem;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.metodo-item:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 24px rgba(13, 33, 55, 0.09);
+}
+
+.metodo-1 {
+  border-top: 1px solid #3d7a4f;
+}
+
+.metodo-2 {
+  border-top: 3px solid  #2c3b4d;
+}
+
+.metodo-3 {
+  border-top: 3px solid #a35139}
+
+.metodo-4 {
+  border-top: 4px solid #fbb162;
+}
+
+.metodo-item h4 {
+  font-family: 'Syne', sans-serif;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--gee-navy);
+  margin-top: 0;
+  margin-bottom: 0.6rem;
+}
+
+
+  font-family: 'Source Serif 4', serif;
+
+/* TOC */
+
+#TOC {
+    font-family: 'Source Serif 4', serif;
+    font-size: 0.75rem !important;
+    border: none;
+    background-color: transparent;
+    padding-left: 0;
+    padding-top: 0.25rem;
+    overflow-y: auto;
+}
+
+#TOC a,
+#TOC li,
+#TOC ul,
+#TOC ul li,
+#TOC ul li a,
+#TOC ul ul li a,
+#TOC .nav-link {
+    font-size: 0.75rem !important;
+}
+
+#TOC .toc-title {
+    font-weight: 600;
+    color: #1b2632;
+    text-transform: none;
+    letter-spacing: 0;
+    font-size: 0.80rem !important;
+    margin-bottom: 0.75rem;
+    padding-bottom: 0.4rem;
+    border-bottom: 1px solid #dee2e6;
+}
+
+#TOC a {
+    color: #495057;
+    text-decoration: none;
+    display: block;
+    padding: 0.18rem 0.5rem;
+    border-left: 2px solid transparent;
+    line-height: 1.4;
+    transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+#TOC ul ul a {
+    padding-left: 1rem;
+    color: #6c757d;
+}
+
+#TOC a:hover {
+    color: #2c3b4d;
+    background-color: transparent;
+    text-decoration: none;
+}
+
+#TOC li > a.active {
+    color: #2c3b4d !important;
+    font-weight: 600;
+    border-left: 2px solid #2c3b4d;
+    background-color: transparent;
+}
+
+#TOC ul ul li > a.active {
+    color: #2c3b4d !important;
+    border-left: 2px solid #2c3b4d;
+    font-weight: 500;
+}
+
+#TOC ul {
+    list-style: none;
+    padding-left: 0;
+    margin: 0;
+}
+
+#TOC ul ul {
+    padding-left: 0.5rem;
+}
+
+/* FIGURAS */
+figure {
+  margin: 2rem 0;
+}
+
+figcaption,
+.figure-caption {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.72rem;
+  color: var(--text-secondary);
+  text-align: center;
+  margin-top: 0.5rem;
+  letter-spacing: 0.04em;
+  border-top: 1px solid var(--border-light);
+  padding-top: 0.4rem;
+}
+
+img {
+  max-width: 100%;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+}
+
+
+/* TABLAS */
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 1.5rem 0 2rem;
+  font-size: 0.88rem;
+  font-family: 'Source Serif 4', serif;
+}
+
+thead th {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.7rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--gee-cloud);
+  background: var(--gee-navy);
+  padding: 10px 14px;
+  text-align: left;
+  border: none;
+}
+
+tbody tr {
+  border-bottom: 1px solid var(--border-light);
+  transition: background 0.15s;
+}
+
+tbody tr:hover {
+  background: #f0f6fa;
+}
+
+tbody td {
+  padding: 8px 14px;
+  color: var(--text-primary);
+  vertical-align: top;
+}
+
+tbody tr:last-child {
+  border-bottom: 2px solid var(--gee-navy);
+}
+
+
+/* CITAS */
+blockquote {
+  margin: 1.8rem 0;
+  padding: 0.8rem 1.4rem;
+  border-left: 4px solid var(--gee-accent);
+  background: #f0f9f6;
+  border-radius: 0 6px 6px 0;
+  font-style: italic;
+  color: #2a4a3e;
+}
+
+.references {
+  font-family: 'Source Serif 4', serif;
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+}
+
+.references p {
+  margin-bottom: 0.6rem;
+}
+
+
+/* SCROLL */
+#TOC::-webkit-scrollbar { width: 5px; }
+#TOC::-webkit-scrollbar-track { background: transparent; }
+#TOC::-webkit-scrollbar-thumb {
+  background: var(--gee-ndvi-lt);
+  border-radius: 10px;
+}
+
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .metodo-comparativo {
+    grid-template-columns: 1fr;
+  }
+  .premium-metrics-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+  .quarto-title-block {
+    padding: 1.5rem 1.2rem;
+  }
+  .title,
+  .quarto-title h1 {
+    font-size: 1.5rem !important;
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
