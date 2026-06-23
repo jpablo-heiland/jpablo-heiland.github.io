@@ -1,9 +1,0 @@
----
-title: "Seguimiento de cultivo con GEE"
-subtitle: "Análisis temporal de un cultivo con Google Earth Engine"
-date: 2026-06
-categories: [Python, Google Earth Engine, Agricultura de precisión, Teledetección]
-css: styles.css
----
-
-# En construccion

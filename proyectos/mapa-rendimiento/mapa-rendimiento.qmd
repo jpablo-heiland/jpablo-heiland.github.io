@@ -1,6 +1,5 @@
 ---
 title: "Limpieza de Mapa de rendimiento"
-subtitle: "Limpieza y análisis de un mapa de rendimiento con R"
 date: 2026-01
 categories: [R, Agricultura de precisión, Mapa de Rendimiento]
 css: styles3.css
@@ -8,7 +7,7 @@ css: styles3.css
 
 # Introducción 
 
-El presente documento describe el flujo de trabajo para la limpieza y visualización de una mapa de rendimiento mediante R. El propósito es eliminar las anomalías y errores de medición de los monitores de la cosechadora, transformando los datos “sucios” en información confiable para la toma de decisiones.
+Este documento presenta el flujo de trabajo desarrollado en R para la limpieza, filtrado y visualización de mapas de rendimiento. El objetivo principal es detectar y remover errores y anomalías de medición generados por el monitor de la cosechadora. De este modo, se transforman los datos "sucios" en una capa de información confiable.
 
 # Librerías Necesarias
 
@@ -23,7 +22,7 @@ library(ggspatial)
 
 # Lectura de Datos
 
-Para la lectura de datos se usó `read_csv()` del paquete `readr` que forma parte del ecosistema `tidyverse`.
+Para la lectura de datos se usó `read_csv()` del paquete [readr]{.func-tecnica} que forma parte del ecosistema [tidyverse]{.func-tecnica}.
 
 ```{r}
 soja11 <- read_csv("data/Soja2011.csv") 
@@ -31,7 +30,7 @@ soja11 <- read_csv("data/Soja2011.csv")
 
 # Exploración de datos
 
-En primer lugar, se visualizan las primeras filas del set de datos original a partir de la librería `kableExtra`.
+En primer lugar, se visualizan las primeras filas del set de datos original a partir de la librería [kableExtra]{.func-tecnica}.
 
 ```{r}
 #| label: tbl-primeros-registros
@@ -113,13 +112,13 @@ resumen_estructura %>%
 
 Como se detalla en la @tbl-exploracion la clase del objeto es un **Tibble**. La función `class()` muestra toda la jerarquía de clases a la que pertenece ese objeto, ordenada desde la más específica hasta la más general (de izquierda a derecha), el significado de cada una es:
 
-* `spec_tbl_df` (*Specification Tibble Data Frame*): Indica que el objeto contiene una "especificación" oculta de las columnas. R guarda el registro de qué tipo de dato asignó automáticamente a cada columna.
+* [spec_tbl_df]{.func-tecnica} (*Specification Tibble Data Frame*): Indica que el objeto contiene una "especificación" oculta de las columnas. R guarda el registro de qué tipo de dato asignó automáticamente a cada columna.
 
-* `tbl_df` (*Tibble Data Frame*): Es la clase central. Confirma que el objeto es un tibble. 
+* [tbl_df]{.func-tecnica} (*Tibble Data Frame*): Es la clase central. Confirma que el objeto es un tibble. 
 
-* `tbl` (*Table*): Es una clase genérica intermedia de la que heredan los tibbles. 
+* [tbl]{.func-tecnica} (*Table*): Es una clase genérica intermedia de la que heredan los tibbles. 
 
-* `data.frame`: Es la estructura de datos base y más antigua de R para tablas. Al estar al final de la lista, significa que el tibble sigue siendo un data frame.
+* [data.frame]{.func-tecnica}: Es la estructura de datos base y más antigua de R para tablas. Al estar al final de la lista, significa que el tibble sigue siendo un data frame.
 
 
 Además, se observa que el set de datos **NO** tiene un **Sistema de Referencia de Coordenadas** definido.
@@ -141,7 +140,7 @@ Se seleccionaron las siguientes columnas:
 * Rendimiento (DryYield (bu/ac))
 
 
-Para ello se usó la funcion `select()` de `dplyr`.
+Para ello se usó la funcion `select()` de [dplyr]{.func-tecnica}.
 
 
 ```{r}
@@ -155,7 +154,7 @@ colnames(soja11) <- c("Lat", "Lon", "Elev11", "Ano", "Record01", "Width", "HG11"
 ```
 
 
-Modificar la columna "Var11" con el genotipo **AX5009**. Se usó la función `mutate()` de la libreria `dplyr`. Sirve para: generar nuevas columnas o para modificar columnas ya existentes.
+Modificar la columna "Var11" con el genotipo **AX5009**. Se usó la función `mutate()` de la libreria [dplyr]{.func-tecnica}. Esta función sirve para generar nuevas columnas o para modificar columnas ya existentes.
 
 ```{r}
 soja11 <- soja11 %>% 
@@ -164,36 +163,30 @@ soja11 <- soja11 %>%
 
 # Conversión de medidas inglesas a métricas
 
-Se convirtieron las medidas de las siguientes variables:
+Se realizó la conversión de unidades para las siguientes variables, estandarizándolas al sistema métrico:
 
-* Rendimiento: de Bushels por Acre a Kilogramos por Hectáreas
-* Altimetría: de Pies (ft) a metros (m)
+* Rendimiento: de bushels por acre (bu/ac) a kilogramos por hectárea (kg/ha), aplicando el factor de $1\text{ bu/ac} = 67.25\text{ kg/ha}$
+
+* Altimetría: de pies (ft) a metros (m), utilizando el factor de $0.3048\text{ m/ft}$.
 
 
-Transformar las medidas de Rendimiento a kg ha^-1^:
+Transformar variables en el conjunto de dato:
 ```{r}
 soja11 <- soja11 %>% 
-  mutate(Rto11 = Rto11 * 67.25) 
+  mutate(
+    Rto11  = Rto11 * 67.25,
+    Elev11 = Elev11 * 0.3048
+  )
 ```
 
-
-Transformar las medidas de la columna Altimetría (Elev11) a metros:
-```{r}
-soja11 <- soja11 %>% 
-  mutate(Elev11 = Elev11 * 0.3048) 
-```
 
 # Graficar datos sin limpiar
 
 Antes de proceder a la limpieza del mapa de rendimiento se visualiza el mapa sin limpiar.
 
-Como se mencionó en @tbl-exploracion, la clase del set de datos inicial se estructuró como tibble. Esta carece de propiedades espaciales. Lo que impide graficarlo mediante `ggplot`.
+Como se mencionó en la @tbl-exploracion, el conjunto de datos inicial se estructuró como un [tibble]{.func-tecnica}. Esta clase carece de propiedades espaciales. Lo que impide graficarlo mediante [ggplot]{.func-tecnica}. Para resolver esto, los datos se transformaron a la clase [Simple Features (sf)]{.func-tecnica} mediante el paquete [sf]{.func-tecnica}, asignándole el Sistema de Referencia de Coordenadas (CRS) WGS 84 (EPSG:4326).
 
-Para resolver esto, se realizó una transformación hacia la clase `Simple Features (SF)` utilizando el paquete `sf`. 
-
->Un objeto de clase `sf` es, esencialmente, un `data.frame` que tiene una columna especial llamada `geometry`, la cual almacena la representación espacial (puntos, líneas o polígonos) que corresponde a cada fila.
-
-Adicionalmente, se le asignó el Sistema de Referencia de Coordenadas (CRS) WGS 84 (EPSG:4326)
+>Un objeto de clase [sf]{.func-tecnica} es, esencialmente, un [data.frame]{.func-tecnica} que tiene una columna especial llamada [geometry]{.func-tecnica}, la cual almacena la representación espacial (puntos, líneas o polígonos) que corresponde a cada fila.
 
 ```{r}
 soja11_sf <- st_as_sf(soja11, coords = c("Lon", "Lat"), crs = 4326)
@@ -210,7 +203,7 @@ soja11_sf <- soja11_sf %>%
 
 ```
 
-Graficar con `ggplot`
+El gráfico se realizó mediante [ggplot]{.func-tecnica}:
 
 ```{r fig.width=8, fig.height=6}
 #| code-fold: true
@@ -253,9 +246,7 @@ ggplot(soja11_sf) +
 
 ## Eliminar de *Inliers*
 
-Se usó la función `filter()` de la libreria `dplyr` (se encuentra dentro de `tidyverse`). 
-
-La función permite utilizar una o más condiciones. De esta forma el resultado obtenido serán aquellas observaciones donde se cumplan las restricciones indicadas. 
+Se usó la función `filter()` de la libreria [dplyr]{.func-tecnica} (se encuentra dentro de [tidyverse]{.func-tecnica}). La función permite utilizar una o más condiciones. De esta forma el resultado obtenido serán aquellas observaciones donde se cumplan las restricciones indicadas.
 
 * Limpiar datos por Altura de plataforma:
 ```{r}
@@ -263,13 +254,11 @@ soja11_sf <- soja11_sf %>%
 filter(Record01 == "Activ.") 
 ```
 
-
 * Limpiar por Ancho de plataforma:
 ```{r}
 soja11_sf <- soja11_sf %>% 
 filter(Width > 20) 
 ```
-
 
 * Limpiar por Distancia:
 ```{r}
@@ -290,19 +279,16 @@ Q1 <- quantile(soja11_sf$Rto11, probs = 0.25, na.rm = TRUE)
 Q3 <- quantile(soja11_sf$Rto11, probs = 0.75, na.rm = TRUE)
 ```
 
-
 Calcular IQR:
 ```{r}
 IQR <- IQR(soja11_sf$Rto11)
 ```
-
 
 Calcular los datos a eliminar:
 ```{r}
 eliminar1 = Q1 - (1.5 * IQR) 
 eliminar2 = Q3 + (1.5 * IQR) 
 ```
-
 
 Eliminar *Outliers*:
 ```{r}
@@ -314,7 +300,7 @@ filter(Rto11 > eliminar1 & Rto11 < eliminar2)
 
 El **Índice de Productividad (IP)** es una medida de rendimiento relativo. Se calcula dividiendo el rendimiento de cada punto individual por el rendimiento promedio de todo el lote.
 
-Permite comparar zonas de un lote con otros lotes que tienen potenciales de rendimiento diferentes.
+Permite comparar zonas de un lote que tienen potenciales de rendimiento diferentes.
 
 **Interpretación**:
 
@@ -327,9 +313,7 @@ soja11_sf <- soja11_sf %>%
 mutate(IP = Rto11 / mean(Rto11)) 
 ```
 
-# Explorar datos limpios
-
-## Visualizar tabla limpia
+# Visualizar tabla "limpia"
 
 ```{r}
 #| label: tbl-primeros-registros2
@@ -394,7 +378,7 @@ Cantidad de Filas
 
 # Proyectar a UTM 20S 
 
-Antes ya se transformó la clase del set de datos a `sf` y se le asignó el CRS WGS 84. En este punto se le asigna el CRS UTM 20S (EPSG:32720), usando la función `st_transform()`:
+Aunque el conjunto de datos se geoespacializó inicialmente en WGS 84 (coordenadas geográficas), en este punto se transformó el CRS al sistema proyectado UTM Zona 20S (EPSG:32720) mediante la función `st_transform()`:
 
 ```{r}
 soja11_sf_20S <- st_transform(soja11_sf, crs = 32720)

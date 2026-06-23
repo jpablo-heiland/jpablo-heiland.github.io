@@ -1,23 +1,21 @@
 ---
 title: "Densidad Variable por Zona de Manejo en Maíz: Análisis Espacial, Optimización y Evaluación Económica con R"
 date: 2026-01
-categories: [R, Agricultura de precisión]
+categories: [R, Agricultura de precisión, Regresión Espacial, Optimización]
 css: styles3.css
 ---
 
 # Introducción
 
-El objetivo de este documento es evaluar el impacto agronómico y económico de la aplicación de dosis variables de insumos mediante el uso de herramientas de agricultura de precisión y análisis espacial de datos. Se procesa la información proveniente de un ensayo de densidad de siembra en maíz con el fin de determinar recomendaciones óptimas para diferentes ambientes productivos.
+El objetivo de este documento es evaluar el impacto agronómico y económico de la aplicación de densidad variable en maíz frente al menejo uniforme tradicional. Se procesan los datos provenientes de un ensayo de densidad de siembra de maíz atravesando zonas de manejo dentro de un lote de producción.
 
-El punto de partida es la carga del ensayo y su exploración estructural. A partir de allí, los datos de cosecha se agregan dentro de una cuadrícula de polígonos. Sobre esa cuadrícula se incorpora la capa de Zonas de Manejo, asignando a cada celda la zona a la que pertenece.
+El punto de partida es la carga del ensayo y su exploración. Los datos de cosecha se agregan dentro de una cuadrícula de polígonos, sobre la cual se incorpora la capa de Zonas de Manejo del lote, asignando a cada celda la zona a la que pertenece.
 
 Con el dataset consolidado se construyen las variables de contraste (*dummy*) que permiten estimar efectos diferenciados por zona.
 
-Se calcula luego la matriz de vecinos bajo criterio *Queen* y se cuantifica la autocorrelación espacial del rendimiento mediante el Índice de Morán.
+Se calcula luego la matriz de vecinos bajo criterio *Queen* y se cuantifica la autocorrelación espacial del rendimiento mediante el Índice de Morán. A partir de este diagnóstico se comparan cuatro modelos: regresión clásica (OLS) y Modelo de Error Espacial (SEM), en versiones con y sin Zonas de Manejo.
 
-Se comparan cuatro modelos: regresión clásica (OLS) y Modelo de Error Espacial (SEM), en versiones con y sin Zonas de Manejo.
-
-De los coeficientes estimados se reconstruyen las tres funciones cuadráticas de respuesta del rendimiento a la densidad: una para el manejo uniforme y una por cada zona (manejo variable). Aplicando la primera derivada de cada función se calculan la **Densidad Óptima Agronómica (DOAS)** y la **Densidad Óptima Económica (DOES)**, incorporando la relación de precios.
+De los coeficientes del modelo seleccionado se reconstruyen las funciones cuadráticas de respuesta del rendimiento a la densidad: una para el manejo uniforme y una por cada zona bajo manejo variable. Aplicando la primera derivada de cada función se calculan la **Densidad Óptima Agronómica (DOAS)** y la **Densidad Óptima Económica (DOES)**, incorporando la relación de precios.
 
 Finalmente, se realizan presupuestos parciales que cuantifican, en USD/ha y a escala de lote, el beneficio diferencial de aplicar densidad variable respecto del manejo uniforme.
 
@@ -34,25 +32,25 @@ library(mapview)
 library(RColorBrewer)
 library(leafpop)
 library(leaflet)
+library(ggspatial)
+library(ggtext)
 
 options(scipen = 999) 
 ```
 
 # Carga y Exploración de Datos
 
-La gestión de las capas geoespaciales se realizó mediante el paquete `Simple Feature (sf)`. El cual utiliza objetos clase `sf`. Un objeto de clase `sf` es, esencialmente, un `data.frame` (estructura de datos más común de R) que tiene una columna especial llamada `geometry`, la cual almacena la representación espacial (puntos, líneas o polígonos) que corresponde a cada fila.
+La gestión de las capas geoespaciales se realizó mediante el paquete [Simple Feature (sf)]{.func-tecnica}. El cual utiliza objetos clase [sf]{.func-tecnica}. Esta clase es, esencialmente, un [data.frame]{.func-tecnica} (estructura de datos más común de R) que tiene una columna especial llamada [geometry]{.func-tecnica}, la cual almacena la representación espacial (puntos, líneas o polígonos) que corresponde a cada fila.
 
 ## Cargar datos
 
-Se empleó la función `st_read()` correspondiente al paquete `sf`. La cual permite leer archivos geoespaciales (como Shapefile, GeoPackage, GeoJSON, KML, etc.) y transformarlos en objetos clase `sf`.
+Se empleó la función `st_read()` correspondiente al paquete [sf]{.func-tecnica}. La cual permite leer archivos geoespaciales (como Shapefile, GeoPackage, GeoJSON, KML, etc.) y transformarlos en objetos clase [sf]{.func-tecnica}.
 
 ```{r message=FALSE, warning=FALSE}
 ensayo <- st_read("data/Ensayo.shp", quiet = TRUE)
 ```
 
 ## Visualizar datos
-
-Se muestra las primeras 5 filas del ensayo:
 
 ```{r}
 #| label: tbl-primeros-registros
@@ -135,7 +133,7 @@ resumen_estructura %>%
   row_spec(nrow(resumen_estructura), extra_css = "border-bottom: 2px solid black;")
 ```
 
-Como se detalla en la @tbl-exploracion, el set de datos original cuenta con una estructura de objeto *Simple Feature* (`sf`). Se constató que la capa se encuentra proyectada bajo el sistema **EPSG: 32720 (UTM zona 20S)**.
+Como se detalla en la @tbl-exploracion, el set de datos original cuenta con una estructura de objeto [sf]{.func-tecnica}. Se constató que la capa se encuentra proyectada bajo el sistema **EPSG: 32720 (UTM zona 20S)**.
 
 # Crear Cuadrícula
 
@@ -167,9 +165,9 @@ st_crs(cuadricula)
 
 ## Alternativa B: Generar Cuadricula con sf
 
-Para llevar a cabo esta opción se utilizó la función `st_make_grid()` del paquete `sf`.
+Para llevar a cabo esta opción se utilizó la función `st_make_grid()` del paquete [sf]{.func-tecnica}.
 
-El argumento `cellsize` refiere al ancho de cada polígono de la grilla. En este caso la siembra fue con 18 surcos a 52,5 cm de entre surco generando un ancho de 9,45 m, se cosechó el total del ancho, por eso se usó un polígono cuadrado de 9,45 m de lado.
+El argumento [cellsize]{.func-tecnica} refiere al ancho de cada polígono de la grilla. En este caso la siembra fue con 18 surcos a 52,5 cm de entre surco generando un ancho de 9,45 m, se cosechó el total del ancho, por eso se usó un polígono cuadrado de 9,45 m de lado.
 
 ```{r}
 cuadricula_sf <- st_make_grid(
@@ -185,7 +183,7 @@ Comprobar la clase de la cuadrícula creada:
 class(cuadricula_sf)
 ```
 
-La función `st_make_grid()` genera de manera nativa un objeto de clase `sfc` (*Simple Feature Column*). Esta estructura consiste en una lista de geometrías puras que carece de la capacidad de almacenar atributos o variables numéricas asociadas. Es por ello que se convierte en un objeto de clase `sf` con la función `st_sf()`. Adicionalmente, a través de `st_set_crs()` se le asigna el CRS UTM 20S.
+La función `st_make_grid()` genera de manera nativa un objeto de clase [sfc]{.func-tecnica} (*Simple Feature Column*). Esta estructura consiste en una lista de geometrías puras que carece de la capacidad de almacenar atributos o variables numéricas asociadas. Es por ello que se convierte en un objeto de clase [sf]{.func-tecnica} con la función `st_sf()`. Adicionalmente, a través de `st_set_crs()` se le asigna el CRS UTM 20S.
 
 ```{r}
 cuadricula_sf <- st_sf(geometry = cuadricula_sf) %>%
@@ -196,13 +194,13 @@ cuadricula_sf <- st_sf(geometry = cuadricula_sf) %>%
 
 En primer lugar, se debe tener un identificador único de la cuadrícula.
 
-La cuadrícula cargada como archivo shape tiene el campo `OBS` que funciona como identificador único:
+La cuadrícula cargada como archivo shape tiene el campo [OBS]{.func-tecnica} que funciona como identificador único:
 
 ```{r}
 colnames(cuadricula)
 ```
 
-En caso de crear la cuadrícula con `sf` se le debe asignar el identificador único (id), mediante la función `mutate()` en combinación con `row_number()`.
+En caso de crear la cuadrícula con [sf]{.func-tecnica} se le debe asignar el identificador único (id), mediante la función `mutate()` en combinación con `row_number()`.
 
 ```{r}
 cuadricula_sf <- cuadricula_sf %>%
@@ -211,9 +209,9 @@ cuadricula_sf <- cuadricula_sf %>%
 
 Posteriormente, se ejecutó la unión de los datos del ensayo dentro de la estructura de la grilla. Este procedimiento se resolvió en cuatro etapas:
 
--   (`st_join`): Sirve para unir dos objetos espaciales (`sf`) basándose en su relación espacial. Se realizó una intersección espacial entre los polígonos de la cuadrícula y la capa de puntos del ensayo. Con el argumento (`left = FALSE`) se asegura que solo se conservaran aquellas celdas de la grilla que contuvieran datos reales de campo.
+-   (`st_join`): Sirve para unir dos objetos espaciales ([sf]{.func-tecnica}) basándose en su relación espacial. Se realizó una intersección espacial entre los polígonos de la cuadrícula y la capa de puntos del ensayo. Con el argumento [left = FALSE]{.func-tecnica} se asegura que solo se conservaran aquellas celdas de la grilla que contuvieran datos reales de campo.
 
--   (`group_by`): Agrega una estructura de agrupamiento a los datos. En este caso, se agruparon los datos mediante la columna `OBS`.
+-   (`group_by`): Agrega una estructura de agrupamiento a los datos. En este caso, se agruparon los datos mediante la columna [OBS]{.func-tecnica}.
 
 -   (`summarise`): Esta función permite reducir múltiples filas de un dataset a valores resumidos, mediante la aplicación de funciones de agregación. Se estimó el valor medio de rendimiento y de densidad para cada polígono mediante la función `mean()`.
 
@@ -282,7 +280,7 @@ m@map %>% addMiniMap(
 )
 ```
 
-# Zonas de Manejo
+# Zonas de Manejo {#sec-zm}
 
 Se cargó la capa ZM.shp, la cual contiene las Zonas de Manejo del lote donde se realizó el ensayo
 
@@ -334,13 +332,13 @@ mapa_zm <- mapview(
 
 ## Unir Zonas de Manejo al Ensayo
 
-Se realizó una unión espacial para identificar a qué zona de manejo pertenece cada polígono de la cuadrícula del ensayo, es decir, se adicionó la Zona de Manejo a la capa Ensayo_D_sf. Este bloque se estructuró en:
+Se realizó una unión espacial para identificar a qué zona de manejo pertenece cada polígono de la cuadrícula del ensayo, es decir, se adicionó la Zona de Manejo a la capa [Ensayo_D_sf.]{.func-tecnica} Este bloque se estructuró en:
 
--   Los polígonos correspondientes a cada celda de la cuadrícula (ensayo_D_sf) fueron transformados temporalmente en entidades de puntos mediante el cálculo de sus centroides mediante la función `st_centroid()`.
+-   Los polígonos correspondientes a cada celda de la cuadrícula ([ensayo_D_sf]{.func-tecnica}) fueron transformados temporalmente en entidades de puntos mediante el cálculo de sus centroides mediante la función `st_centroid()`.
 
--   Los centroides generados se intersectaron con la capa vectorial de las Zonas de Manejo (`zm_sf`) mediante una unión espacial (`st_joint()`). Al operar con geometrías de puntos en lugar de polígonos, se fuerza al sistema a establecer una relación unívoca de tipo 1-a-1 (es decir, cada celda matemática es asignada estrictamente a una única zona de manejo). De esta manera, se evita la duplicación de registros en aquellas celdas ubicadas sobre los límites de transición.
+-   Los centroides generados se intersectaron con la capa vectorial de las Zonas de Manejo ([zm_sf]{.func-tecnica}) mediante una unión espacial (`st_join()`). Al operar con geometrías de puntos en lugar de polígonos, se fuerza al sistema a establecer una relación unívoca de tipo 1-a-1 (es decir, cada celda matemática es asignada estrictamente a una única zona de manejo). De esta manera, se evita la duplicación de registros en aquellas celdas ubicadas sobre los límites de transición.
 
--   Se eliminó el componente espacial, es decir, la columna `geometry` del objeto con `st_drop_geometry()`, para que el algoritmo funcione correctamente.
+-   Se eliminó el componente espacial, es decir, la columna [geometry]{.func-tecnica} del objeto con `st_drop_geometry()`, para que el algoritmo funcione correctamente.
 
 -   Finalmente, se filtraron los datos (`select()`) reteniendo exclusivamente las columnas adecuadas.
 
@@ -354,7 +352,7 @@ celdas_con_zona <- ensayo_D_sf %>%
 
 Luego se realizó la consolidación de la base de datos final mediante los siguientes pasos:
 
--   Se integraron las zona de manejo y superficie (`celdas_con_zona`) a la cuadrícula (`ensayo_D_sf`), utilizando como llave primaria el identificador único de celda (`OBS`), mediante `inner_join()`.
+-   Se integraron las zona de manejo y superficie ([celdas_con_zona]{.func-tecnica}) a la cuadrícula ([ensayo_D_sf]{.func-tecnica}), utilizando como llave primaria el identificador único de celda ([OBS]{.func-tecnica}), mediante `inner_join()`.
 
 -   La columna correspondiente a las zonas de manejo (Zonas) fue transformada a un vector de tipo factor (`as.factor`). Esto le permite a los algoritmos de regresión interpretar la variable como niveles cualitativos discretos en lugar de cadenas de texto ordinarias, posibilitando la estimación diferenciada de interceptos y pendientes (efectos fijos) para cada zona de manejo.
 
@@ -366,11 +364,13 @@ ensayo_D_ZM_sf <- ensayo_D_sf %>%
   )
 ```
 
-# Crear Variables "Dummy"
+# Variables "Dummy"
+
+Las variables dummy son variables binarias (toman el valor 0 o 1) que se usan para incorporar información categórica (en este caso, la pertenencia a una Zona de Manejo) dentro de un modelo de regresión.
 
 ## Preparar Datos
 
-Comprobar las columnas del set de datos `ensayo_D_ZM_sf`
+Comprobar las columnas del set de datos [ensayo_D_ZM_sf]{.func-tecnica}:
 
 ```{r}
 colnames(ensayo_D_ZM_sf)
@@ -475,9 +475,9 @@ primeras_filas_3 %>%
 
 Para el análisis de regresión espacial debemos, en primer lugar, crear la **matriz de vecinos** según la estructura Queen y luego, convertir esa lista en una **matriz de pesos espaciales (W)**. Esto se realizó a de la siguiente forma:
 
--   Se utilizó la función `poly2nb()` para crear la matriz de vecinos, la cual identifica las celdas vecinas bajo el criterio de contigüidad tipo Reina (Queen) (`queen = TRUE`).
+-   Se utilizó la función `poly2nb()` para crear la matriz de vecinos, la cual identifica las celdas vecinas bajo el criterio de contigüidad tipo Reina (Queen) ([queen = TRUE]{.func-tecnica}).
 
--   La lista de vecinos se transformó en una matriz de pesos espaciales mediante la función `nb2listw()`. Para ello se aplicó el estilo de ponderación "W". Asimismo, se activó el argumento `zero.policy = TRUE` para prevenir la interrupción de los cálculos en caso de que existan celdas aisladas en los bordes del lote o zonas de descarte.
+-   La lista de vecinos se transformó en una matriz de pesos espaciales mediante la función `nb2listw()`. Para ello se aplicó el estilo de ponderación "W". Asimismo, se activó el argumento [zero.policy = TRUE]{.func-tecnica} para prevenir la interrupción de los cálculos en caso de que existan celdas aisladas en los bordes del lote o zonas de descarte.
 
 ```{r}
 vecinos_queen <- poly2nb(ensayo_final_sf, queen = TRUE)
@@ -487,7 +487,7 @@ matriz_W_final <- nb2listw(vecinos_queen, style = "W", zero.policy = TRUE)
 
 # Indice de Moran
 
-## Calcular y ver el Indice de Moran
+## Calcular y ver un resumen del Indice de Moran
 
 ```{r}
 test_moran <- moran.test(ensayo_final_sf$R, matriz_W_final, zero.policy = TRUE)
@@ -510,13 +510,13 @@ datos_moran <- moran.plot(
 
 ```
 
-Convertir a `data.frame` para graficar con ggplot
+Convertir a [data.frame]{.func-tecnica} para graficar con [ggplot2]{.func-tecnica}:
 
 ```{r}
 df_moran <- as.data.frame(datos_moran)
 ```
 
-Graficar con `ggplot`
+Graficar:
 
 ```{r}
 #| code-fold: true
@@ -858,7 +858,7 @@ cuadro_simulacion %>%
   row_spec(nrow(cuadro_simulacion), extra_css = "border-bottom: 2px solid black;")
 ```
 
-Graficar con `ggplot`:
+Graficar con [ggplot2]{.func-tecnica}:
 
 ```{r}
 #| code-fold: true
@@ -903,7 +903,7 @@ grafico_curvas <- ggplot(curvas_suaves, aes(x = Densidad_pl_ha, y = Rendimiento,
 grafico_curvas
 ```
 
-# Cálculo DOAS y DOES
+# Cálculo DOAS y DOES {#sec-does}
 
 A partir de las funciones cuadráticas estimadas para cada manejo y zona de manejo, se calcularon dos tipos de densidades óptimas mediante la aplicación de derivadas:
 
@@ -927,29 +927,52 @@ Recordar que para realizar las regresiones se reescaló la densidad a miles de s
 
 ## Manejo Uniforme (Modelo SEM SIN Zonas)
 
+* DOAS
+
 ```{r}
 doas_unif_miles <- -b1_unif / (2 * b2_unif)
-does_unif_miles <- (relacion_precios - b1_unif) / (2 * b2_unif)
-
 ```
+
+* DOES
+
+```{r}
+does_unif_miles <- (relacion_precios - b1_unif) / (2 * b2_unif)
+```
+
 
 ## Manejo Variable (Modelo SEM CON Zonas)
 
-Zona 1 (BP)
+**Zona 1 (BP)**
+
+* DOAS
 
 ```{r}
 doas_z1_miles <- -b1_z1 / (2 * b2_z1)
+```
+
+* DOES
+
+```{r}
 does_z1_miles <- (relacion_precios - b1_z1) / (2 * b2_z1)
 ```
 
-Zona 2 (AP)
+
+**Zona 2 (AP)**
+
+* DOAS
 
 ```{r}
 doas_z2_miles <- -b1_z2 / (2 * b2_z2)
+```
+
+* DOES
+
+```{r}
 does_z2_miles <- (relacion_precios - b1_z2) / (2 * b2_z2)
 ```
 
-## Visualizar en una tabla los Resultados
+
+## Visualizar Resultados en una tabla
 
 Calcular el Rendimiento para la DOES del Manejo Uniforme y Variable
 
@@ -1011,14 +1034,11 @@ resultados_do %>%
 
 # Análisis Económico
 
-Teniendo en cuenta que las zonas de manejo representan:
-
--   AP: 18,54 ha (60%)
--   BP: 12,36 ha (40%)
-
-Se determina la conveniencia de hacer siembra variable por zona de manejo en este lote.
+A partir de las Densidades Óptimas Económicas de Siembra (DOES) obtenidas para cada zona y para el manejo uniforme, se construye un presupuesto parcial que permite cuantificar el beneficio diferencial de adoptar siembra a tasa variable en este lote. El análisis considera únicamente el costo directo de semilla y el ingreso bruto por rendimiento, manteniendo constantes el resto de los costos de producción entre alternativas. 
 
 ## Determinar Precios
+
+Los precios utilizados son USD 0,0023 por semilla y USD 0,10 por kg de maíz.
 
 ```{r}
 precio_semilla_ind <- 0.0023  
@@ -1027,15 +1047,19 @@ precio_kg_maiz     <- 0.1
 
 ## Determinar Superficies
 
+Las zonas de manejo del lote representan superficies diferentes: la Zona de Alto Potencial (AP) ocupa 18,54 ha (60 %) y la Zona de Bajo Potencial (BP) ocupa 12,36 ha (40 %), totalizando 30,9 ha.
+
 ```{r}
 sup_z2 <- 18.5
 sup_z1 <- 12.4
 sup_total <- sup_z1 + sup_z2
 ```
 
-## Construcción de tabla para Manejo Variable
+## Manejo Variable
 
-Preparar datos
+En este manejo cada zona recibe su propia DOES. Los costos directos de semilla y el ingreso bruto se calculan de forma independiente para cada zona. El margen bruto del lote se obtiene como promedio ponderado por superficie.
+
+* Preparar datos
 
 ```{r}
 tabla_economica <- tibble(
@@ -1067,7 +1091,7 @@ tabla_economica <- tabla_economica %>%
   )
 ```
 
-Visualizar Tabla
+* Visualizar Tabla
 
 ```{r}
 #| label: tbl-manejo-variable
@@ -1099,22 +1123,28 @@ tabla_economica %>%
   row_spec(3, bold = TRUE, background = "#f9f9f9", extra_css = "border-bottom: 2px solid black;")
 ```
 
-## Construcción de Tabla para Manejo Uniforme
+## Manejo Uniforme
 
-Calcular los Rendimientos
+Aquí la DOES global se aplica a la totalidad del lote. 
+
+* Calcular los Rendimientos:
+
+Para esto se utilizaron las funciones cuadráticas obtenidas para las zonas AP y BP (@tbl-ecuaciones) y se calculó el rendimiento a través de la DOES obtenida para manejo uniforme (@tbl-doas-does-rto)
 
 ```{r}
 rend_ap_unif <- b0_z2 + (b1_z2 * does_unif_miles) + (b2_z2 * does_unif_miles^2)
 rend_bp_unif <- b0_z1 + (b1_z1 * does_unif_miles) + (b2_z1 * does_unif_miles^2)
 ```
 
-Calcular Costos e Ingresos:
+* Calcular Costos:
 
 ```{r}
 costo_unif_ha   <- does_unif_miles * 1000 * precio_semilla_ind
 ```
 
-Ingreso Bruto Ponderado por hectárea
+* Ingreso Bruto por hectárea
+
+Para este cálculo se realizó una ponderación según el rendimiento de cada zona en manejo unifrome calculado antes y la superficie de cada zona
 
 ```{r}
 ingreso_unif_ha <- (rend_ap_unif * precio_kg_maiz * (sup_z2 / sup_total)) + 
@@ -1123,7 +1153,7 @@ ingreso_unif_ha <- (rend_ap_unif * precio_kg_maiz * (sup_z2 / sup_total)) +
 margen_unif_ha  <- ingreso_unif_ha - costo_unif_ha
 ```
 
-Craer la tabla
+* Craer la tabla
 
 ```{r}
 tabla_economica_2 <- tibble(
@@ -1137,7 +1167,7 @@ tabla_economica_2 <- tibble(
 )
 ```
 
-Visualizar tabla
+* Visualizar tabla
 
 ```{r}
 #| label: tbl-manejo-uniforme
@@ -1163,9 +1193,11 @@ tabla_economica_2 %>%
   row_spec(nrow(tabla_economica_2), extra_css = "border-bottom: 2px solid black;")
 ```
 
+## Comparación entre Estrategias
+
 :::::::::::::::: vr-hero-wrapper
 ::: vr-eyebrow
-Análisis Económico
+Análisis Económico · Comparación entre Manejos
 :::
 
 :::::::::::::: vr-hero-row
@@ -1185,7 +1217,7 @@ Ganancia del manejo variable sobre el manejo uniforme
 ::::::::: vr-breakdown
 ::::: vr-breakdown-row
 ::: vr-breakdown-label
-MB — Manejo Uniforme
+MB Manejo Uniforme
 :::
 
 ::: {.vr-breakdown-value .is-positive}
@@ -1195,7 +1227,7 @@ MB — Manejo Uniforme
 
 ::::: vr-breakdown-row
 ::: vr-breakdown-label
-MB — Manejo Variable
+MB Manejo Variable
 :::
 
 ::: vr-breakdown-value
@@ -1205,3 +1237,244 @@ MB — Manejo Variable
 :::::::::
 ::::::::::::::
 ::::::::::::::::
+
+# Mapa de Prescripción
+
+El mapa de prescripción es un archivo vectorial que integra la geometría de las Zonas de Manejo con la Densidad Óptima Económica de Siembra recomendada para cada zona de manejo.
+
+Para construirlo, se incorpora la DOES calculada en @sec-does como una nueva columna del objeto [sf]{.func-tecnica} de Zonas de Manejo (@sec-zm), asignando a cada polígono el valor correspondiente a su zona mediante `mutate()` y `case_when()`:
+
+```{r}
+ZM <- ZM %>%
+  mutate(
+    DOES_pl_ha = case_when(
+      ZM == "BP" ~ does_z1_miles * 1000,
+      ZM == "AP" ~ does_z2_miles * 1000
+    )
+  )
+```
+
+Antes de exportar el archivo, se verifica el sistema de referencia de coordenadas (CRS):
+
+```{r}
+st_crs(ZM)
+```
+
+La verificación confirma que el archivo se encuentra en WGS 84 (EPSG:4326), que es el sistema de referencia estándar utilizado por los monitores de siembra.
+
+Mostrar resultado en una tabla:
+
+```{r}
+#| code-fold: true
+#| code-summary: "Código"
+
+ZM %>%
+  kable(
+    format = "html",
+    align = "c",
+    digits = 2
+  ) %>%
+  kable_classic(
+    full_width = TRUE, 
+    font_size = 13
+  ) %>%
+  kable_styling(
+    bootstrap_options = c("striped", "hover", "condensed")
+  ) %>%
+  row_spec(0, bold = TRUE, color = "black", extra_css = "border-bottom: 2px solid black;") %>%
+  row_spec(nrow(ZM), extra_css = "border-bottom: 2px solid black;")
+```
+
+## Graficar con **ggplot2**
+
+```{r}
+#| code-fold: true
+#| code-summary: "Código"
+
+
+ZM_proj <- ZM %>% st_transform(crs = 32720)
+
+centroides <- ZM_proj %>%
+  st_centroid() %>%
+  mutate(
+    x = st_coordinates(.)[, 1],
+    y = st_coordinates(.)[, 2],
+    etiqueta = paste0(format(DOES_pl_ha, big.mark = ".", decimal.mark = ","), " pl/ha")
+  )
+
+zona_labels <- c(
+  "AP" = "Alto Potencial (AP)",
+  "BP" = "Bajo Potencial (BP)"
+)
+
+pal_zonas <- c(
+  "AP" = "darkgreen",
+  "BP" = "firebrick"
+)
+
+ggplot() +
+  geom_sf(
+    data        = ZM_proj,
+    aes(fill    = ZM),
+    color       = "#1B2632",
+    linewidth   = 0.4,
+    alpha       = 0.9
+  ) +
+  geom_label(
+    data         = centroides,
+    aes(x = x, y = y, label = etiqueta),
+    size         = 3.2,
+    fontface     = "bold",
+    family       = "Space Grotesk",
+    color        = "#1B2632",
+    fill         = "white",
+    label.size   = 0.3,
+    label.padding = unit(0.35, "lines"),
+    label.r      = unit(0, "lines")
+  ) +
+  scale_fill_manual(
+    values = pal_zonas,
+    labels = zona_labels,
+    name   = "Zona de manejo"
+  ) +
+  annotation_scale(
+    location   = "bl",
+    width_hint = 0.25,
+    text_cex   = 0.65,
+    line_col   = "#1B2632",
+    text_col   = "#1B2632",
+    bar_cols   = c("#1B2632", "white")
+  ) +
+  annotation_north_arrow(
+    location = "br",
+    which_north = "true",
+    height   = unit(0.8, "cm"),
+    width    = unit(0.8, "cm"),
+    style    = north_arrow_fancy_orienteering(
+      fill      = c("white", "#1B2632"),
+      line_col  = "#1B2632",
+      text_col  = "#1B2632",
+      text_size = 7
+    )
+  ) +
+  labs(
+    title    = "Mapa de Prescripción — Densidad Variable de Siembra",
+    subtitle = "Densidad Óptima Económica de Siembra (DOES) por zona de manejo",
+    caption  = "Sistema de referencia: UTM zone 20S (EPSG:32720)"
+  ) +
+  theme_void(base_family = "Space Grotesk") +
+  theme(
+    plot.title         = element_text(
+      size   = 13,
+      face   = "bold",
+      color  = "#1B2632",
+      margin = margin(b = 4)
+    ),
+    plot.subtitle      = element_text(
+      size   = 9.5,
+      color  = "#4a5568",
+      face   = "italic",
+      family = "Libre Baskerville",
+      margin = margin(b = 12)
+    ),
+    plot.caption       = element_text(
+      size   = 7,
+      color  = "#a0aec0",
+      family = "Libre Baskerville",
+      face   = "italic",
+      margin = margin(t = 10)
+    ),
+    plot.margin        = margin(16, 16, 12, 16),
+    legend.position    = "right",
+    legend.title       = element_text(
+      size   = 8,
+      face   = "bold",
+      color  = "#1B2632"
+    ),
+    legend.text        = element_text(
+      size   = 8,
+      color  = "#4a5568"
+    ),
+    legend.key.size    = unit(0.45, "cm"),
+    legend.key         = element_rect(color = "#1B2632", linewidth = 0.3),
+    legend.spacing.y   = unit(0.2, "cm"),
+    panel.background   = element_rect(fill = "white", color = NA),
+    plot.background    = element_rect(fill = "white", color = NA)
+  )
+```
+
+## Visualizar con *mapview*:
+
+```{r}
+#| label: fig-mapa-prescripcion-mapview
+#| fig-cap: "Mapa de prescripción interactivo — Densidad Óptima Económica de Siembra (DOES) por zona de manejo."
+#| code-fold: true
+#| code-summary: "Código"
+
+ZM_wgs <- ZM %>% st_transform(crs = 4326)
+
+pal_zonas <- colorFactor(
+  palette = c("AP" = "darkgreen", "BP" = "firebrick"),
+  domain  = ZM_wgs$ZM
+)
+
+popup_df <- ZM_wgs %>%
+  st_drop_geometry() %>%
+  mutate(DOES_pl_ha = round(DOES_pl_ha, 0)) %>%
+  select(ZM, DOES_pl_ha) %>%
+  rename(
+    `Zona de manejo` = ZM,
+    `DOES (pl/ha)`   = DOES_pl_ha
+  )
+
+
+mapview(
+  ZM_wgs,
+  zcol            = "ZM",
+  col.regions     = c("AP" = "darkgreen", "BP" = "firebrick"),
+  color           = "#1B2632",       
+  lwd             = 1.2,
+  alpha.regions   = 0.85,
+  layer.name      = "Zona de manejo",
+  label = paste0(ZM_wgs$ZM, " — ", format(round(ZM_wgs$DOES_pl_ha, 0), big.mark = ".", decimal.mark = ","), " pl/ha"),
+  popup           = popupTable(
+                      popup_df,
+                      zcol        = c("Zona de manejo", "DOES (pl/ha)"),
+                      row.numbers = FALSE,
+                      feature.id  = FALSE
+                    ),
+  map.types       = c(
+                      "Esri.WorldImagery",        
+                      "CartoDB.Positron",          
+                      "OpenStreetMap"              
+                    )
+)
+```
+
+## Exportar el archivo como shapefile:
+
+```{r}
+#| eval: false
+
+st_write(
+  ZM,
+  "prescripcion_densidad.shp",
+  delete_layer = TRUE
+)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

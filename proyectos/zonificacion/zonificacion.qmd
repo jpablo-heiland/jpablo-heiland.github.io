@@ -7,19 +7,19 @@ css: styles3.css
 
 # Introducción
 
-El presente informe detalla el proceso de **Zonificación** de un lote de producción mediante el análisis de 3 Mapas de Rinde de soja, una imagen NDVI del cultivo de soja y la Altimetría del lote.
+El presente informe detalla el proceso de **Zonificación** de un lote de producción mediante el análisis de tres mapas de rendimiento de soja, una imagen NDVI del cultivo de soja y la altimetría del lote.
 
-El **Rendimiento** es considerado una variable síntesis; es decir, el resultado final donde convergen miles de factores que interactúan entre sí. Si bien por sí solo no explica las causas de la variabilidad, constituye a menudo la fuente de información más accesible y completa para entender qué sucedió en el lote.
+El **rendimiento** es considerado una variable síntesis; es decir, el resultado final donde convergen miles de factores que interactúan entre sí. Si bien por sí solo no explica las causas de la variabilidad, constituye a menudo la fuente de información más accesible y completa para entender qué sucedió en el lote.
 
 El flujo de trabajo propuesto se dividió en:
 
-**I. Carga de Datos**: Se cargan los datos de rendimiento 2009, 2011, 2013 y el NDVI. Los datos de Altimetría se hayan dentro del mapa de rendimiento 2011.
+**I. Carga de Datos**: Se incorporaron los mapas de rendimiento correspondientes a las campañas 2009, 2011 y 2013, junto con el mapa de NDVI. Los datos de altimetría se extrajeron directamente a partir de los registros del mapa de rendimiento 2011.
 
-**II. Creación de Grilla**: En la cosecha la maquina recolecta datos de campo que están mas cercas en la línea que entre líneas. Esto provoca cierta estructura espacial ficticia de los datos. Para evitar esto se procedió a generar una discretización continua del espacio mediante una cuadrícula regular de polígonos. En esta se unieron los datos de Rendimiento, Altimetría y NDVI.
+**II. Creación de Grilla**: En la cosecha la maquina recolecta datos de campo que están mas cercas en la línea que entre líneas. Esto provoca cierta estructura espacial ficticia de los datos. Para evitar esto se procedió a generar una discretización continua del espacio mediante una cuadrícula regular de polígonos. En esta se unieron los datos de rendimiento, altimetría y NDVI.
 
 **III. Cálculo Indice de Productividad**: Para que los datos de diferentes campañas fueran comparables entre sí, los valores absolutos de rendimiento se transformaron en un Índice de Productividad (IP).
 
-**IV. Selección de Variables mediante Análisis de Regresión**: Se realizó un análisis de Regresión Lineal para evaluar la capacidad de las variables de explicar la variabilidad observada en el IP. Este paso es fundamental para asegurar que las variables seleccionadas para el PCA y el posterior Fuzzy k-means posean una relevancia comprobada.
+**IV. Selección de Variables mediante Análisis de Regresión**: Se realizó un análisis de regresión lineal para evaluar la capacidad de las variables de explicar la variabilidad observada en el IP. Este paso es fundamental para asegurar que las variables seleccionadas para el PCA y el posterior Fuzzy k-means posean una relevancia comprobada.
 
 **V. Análisis de Componentes Principales Espaciales (MULTISPATI-PCA)**: Esta técnica permite reducir la dimensionalidad de un conjunto de datos, extrayendo "componentes" que explican la mayor parte de la variabilidad total. A diferencia del PCA clásico, el MULTISPATI-PCA incorpora la autocorrelación espacial mediante el Índice de Moran, asegurando que los datos sean analizados considerando la influencia de sus vecinos directos.
 
@@ -60,11 +60,11 @@ options(scipen = 999)
 
 # Carga de Datos
 
-La lectura de datos se realizó por medio de la función `st_read()` del paquete `sf`. Esta función lee archivos geoespaciales (Shapefile, GeoPackage, GeoJSON, KML, etc.) y los convierte en objetos `Simple Feature (sf)`.
+La lectura de datos se realizó por medio de la función `st_read()` del paquete [sf]{.func-tecnica}. Esta función lee archivos geoespaciales (Shapefile, GeoPackage, GeoJSON, KML, etc.) y los convierte en objetos [Simple Feature (sf)]{.func-tecnica}.
 
-Un objeto de clase `sf` es, esencialmente, un `data.frame` que tiene una columna especial llamada `geometry`, la cual almacena la representación espacial (puntos, líneas o polígonos) que corresponde a cada fila.
+Un objeto de clase [sf]{.func-tecnica} es, esencialmente, un [data.frame]{.func-tecnica} que tiene una columna especial llamada [geometry]{.func-tecnica}`, la cual almacena la representación espacial (puntos, líneas o polígonos) que corresponde a cada fila.
 
-En el siguiente panel se cargan las distintas capas de información. En la capa de NDVI también se le asigna el Sistema de Referencia de Coordenadas UTM 20S.
+A continuación, se presenta la incorporación y visualización de las diferentes capas de información geoespacial. Para garantizar la consistencia en los análisis posteriores, la capa de NDVI se reproyectó al Sistema de Referencia de Coordenadas UTM Zona 20S (EPSG:32720):
 
 ::: {.panel-tabset .tabset-topline}
 ## Soja 2009
@@ -220,7 +220,7 @@ primeras_filas_4 %>%
 
 # Cuadrícula
 
-En este punto se procedió a la creación de la Cuadrícula. Posteriormente se unieron a ella los datos de Rendimiento 2009, 2011, 2013, Altimetría y Elevación.
+En este punto se procedió a la creación de la Cuadrícula. Posteriormente se unieron a ella los datos de rendimiento 2009, 2011, 2013, altimetría y elevación.
 
 ## Cargar la capa del Lote
 
@@ -230,7 +230,7 @@ lote <- st_read("data/Lote14.shp", quiet = TRUE)
 
 ## Crear grilla
 
-Se usó la función `st_make_grid()` de `sf` para crear la grilla. Por medio del parámetro `cellsize` se determina que cada polígono de la grilla tiene una dimensión de 10 x 10 m.
+Se usó la función `st_make_grid()` de [sf]{.func-tecnica} para crear la grilla. Por medio del parámetro [cellsize]{.func-tecnica} se determina que cada polígono de la grilla tiene una dimensión de 10 x 10 m.
 
 ```{r}
 grilla <- st_make_grid(lote, cellsize = c(10, 10), what = "polygons", square = TRUE)
@@ -242,7 +242,7 @@ grilla <- st_make_grid(lote, cellsize = c(10, 10), what = "polygons", square = T
 grilla_sf <- st_as_sf(grilla) 
 ```
 
-> Al convertir la grilla a `sf` cada fila queda vinculada permanentemente a un polígono geométrico que representa una celda en el lote. El paquete `sf` es el estándar para el manejo de datos vectoriales. Al tener los datos en este formato se puede hacer la Unión Espacial de los 3 mapas de rindes a la cuadrícula.
+> Al convertir la grilla a [sf]{.func-tecnica} cada fila queda vinculada permanentemente a un polígono geométrico que representa una celda en el lote. El paquete [sf]{.func-tecnica} es el estándar para el manejo de datos vectoriales. Al tener los datos en este formato se puede hacer la Unión Espacial de los 3 mapas de rindes a la cuadrícula.
 
 ## Crear un ID a la grilla
 
@@ -252,17 +252,15 @@ grilla_sf <- grilla_sf %>% mutate(id_celda = row_number())
 
 ## Unir Rendimientos a la Grilla
 
-Para integrar la información de los 3 Mapas de Rendimiento, Altimetría y NDVI a la Grilla, se aplicó el siguiente flujo:
+Para integrar la información de los 3 mapas de rendimiento, altimetría y NDVI a la grilla, se aplicó el siguiente flujo:
 
 -   Se realizó una unión espacial por medio de la función `st_join()` con el predicado `st_intersects` para identificar qué puntos de rendimiento caen dentro de cada celda de la grilla.
 
--   Dado que una sola celda de la grilla suele contener múltiples puntos registrados, se procedió a agrupar los datos en función del `id_celda`, mediante `group_by`.
+-   Dado que una sola celda de la grilla suele contener múltiples puntos registrados, se procedió a agrupar los datos en función del [id_celda]{.func-tecnica}, mediante `group_by()`.
 
--   Finalmente, se calculó el valor medio de rendimiento para cada unidad de la Grilla (`RTO_09 = mean`).
+-   Finalmente, se calculó el valor medio de rendimiento para cada unidad de la grilla ([RTO_09 = mean]{.func-tecnica}) con `summarise()`.
 
 Los datos de Altimetría proceden del set de datos de Soja 2011, tal como se observa en la @tbl-primeros-registros_2 (Elev11).
-
-A continuación se unen los diferentes datos a la grilla:
 
 ::: {.panel-tabset .tabset-topline}
 ## Unir Rendimiento 2009
@@ -337,7 +335,7 @@ grilla_NDVI <- grilla_NDVI %>%
 
 ## Unir las 4 grillas
 
-Se unieron las capas de información en un único set de datos (`grilla_rto`). El procedimiento se realizó mediante uniones relacionales por la izquierda (`left_join`) tomando como base la `grilla_09`. Con el propósito evitar conflictos de redundancia, se removió la columna `geometry` de las capas secundarias (grilla_11, grilla_13 y grilla_NDVI) mediante la función `st_drop_geometry()`, logrando así la unión de todos los datos a través del identificador común (`id_celda`).
+Se unieron las capas de información en un único set de datos ([grilla_rto]{.func-tecnica}). El procedimiento se realizó mediante uniones relacionales por la izquierda (`left_join`) tomando como base la [grilla_09]{.func-tecnica}. Con el propósito evitar conflictos de redundancia, se removió la columna [geometry]{.func-tecnica} de las capas secundarias ([grilla_11]{.func-tecnica}, [grilla_13]{.func-tecnica} y [grilla_NDVI]{.func-tecnica}) mediante la función `st_drop_geometry()`, logrando así la unión de todos los datos a través del identificador común ([id_celda]{.func-tecnica}`.
 
 ```{r}
 grilla_rto <- grilla_09 %>% 
@@ -346,7 +344,7 @@ grilla_rto <- grilla_09 %>%
   left_join(st_drop_geometry(grilla_NDVI), by = "id_celda")
 ```
 
-Eliminar los polígonos de la grilla con valores `NA`, que complican los resultados posteriores:
+Eliminar los polígonos de la grilla con valores [NA]{.func-tecnica}, que complican los resultados posteriores:
 
 ```{r}
 grilla_rto <- grilla_rto %>% 
@@ -425,7 +423,7 @@ ggplot(grilla_IP) +
 
 # Selección de Variables mediante Análisis de Regresión
 
-Se trabaja con la grilla antes creada (llamada `grilla_IP`, @sec-ip).
+Para el desarrollo de esta sección, se tomó como base la grilla generada previamente ([grilla_IP]{.func-tecnica}, @sec-ip).
 
 Comprobar las columnas de dicha grilla:
 
@@ -442,9 +440,9 @@ grilla_IP <- grilla_IP %>%
 
 Para realizar las regresiones se usó la función `lm` (linear mode).
 
-En el siguiente panel se realizaron las regresiones entre las diferentes variables y el IP, se identificaron los parámetros más importantes y se generaron los gráficos de dispersión.
+En el siguiente panel se realizaron las regresiones entre las diferentes variables y el IP, se identificaron los parámetros más importantes y se generaron los gráficos de dispersión:
 
-::::::::::::::::::::::::::::::::::::::::::::::::::::: {.panel-tabset .tabset-topline}
+:::::::::::::::::::::::::::::::::::::::::::::::::::::{.panel-tabset .tabset-topline}
 ## IP x NDVI
 
 **Regresión**:
@@ -910,15 +908,15 @@ Primero se realiza el Análisis de Componentes Principales (PCA) clásico y post
 
 ## Preparación de datos
 
-Se utiliza el objeto `grilla_IP` antes creado (@sec-ip).
+Se utiliza el objeto [grilla_IP]{.func-tecnica} antes creado (@sec-ip).
 
--   Generar los centroides de cada polígono de la cuadrícula. Dado que la grilla está compuesta por polígonos, es necesario simplificar su posición a un punto único para el análisis estadístico. Se utilizó la función `st_centroid()` de `sf`:
+Generar los centroides de cada polígono de la cuadrícula. Dado que la grilla está compuesta por polígonos, es necesario simplificar su posición a un punto único para el análisis estadístico. Se utilizó la función `st_centroid()` de [sf]{.func-tecnica}:
 
 ```{r}
 centroides <- st_centroid(grilla_IP)
 ```
 
--   Agregar columnas con las geometrías X e Y. Se extrajeron las coordenadas cartesianas X e Y con `st_coordinates`, permitiendo que la ubicación espacial sea tratada como una variable numérica más dentro del modelo.
+Agregar columnas con las geometrías X e Y. Se extrajeron las coordenadas cartesianas X e Y con `st_coordinates`, permitiendo que la ubicación espacial sea tratada como una variable numérica más dentro del modelo.
 
 ```{r}
 coords1 <- st_coordinates(centroides)
@@ -927,20 +925,20 @@ centroides <- centroides %>%
   mutate(X = coords1[,1], Y = coords1[,2])
 ```
 
--   Convertir la clase de centroides (`sf`) a `data.frame` para realizar el PCA. Este paso consiste en eliminar la columna de geometría, por lo que, a partir de aquí se usan las columnas de coordenadas antes creadas.
+Convertir la clase de centroides de [sf]{.func-tecnica} a [data.frame]{.func-tecnica} para realizar el PCA. Este paso consiste en eliminar la columna de geometría, por lo que, a partir de aquí se usan las columnas de coordenadas antes creadas:
 
 ```{r}
 df_centroides <- st_drop_geometry(centroides) 
 ```
 
--   Seleccionar las columnas adecuadas para hacer el PCA:
+Seleccionar las columnas adecuadas para hacer el PCA:
 
 ```{r}
 df_centroides <- df_centroides %>% 
   select(X, Y, Rto09, RTO11, Rto13)
 ```
 
--   Visualizar las primeras filas del set de datos creado:
+Visualizar las primeras filas del set de datos creado:
 
 ```{r}
 #| label: tbl-primeros-registros_5
@@ -972,7 +970,7 @@ primeras_filas_5 %>%
 
 ## PCA
 
-Para realizar el PCA se usa la función `dudi.pca()` del paquete `ade4`:
+Para realizar el PCA se usa la función `dudi.pca()` del paquete [ade4]{.func-tecnica}:
 
 ```{r}
 pca <- dudi.pca( 
@@ -995,22 +993,21 @@ El resultado (pca) es un objeto con toda la información del PCA:
 
 Para poder ejecutar el MULTISPATI-PCA, es un requisito estructurar el espacio, definiendo cómo interactúan las celdas de la grilla entre sí. Esto se construye en dos etapas sucesivas:
 
-**1. Identificación de Vecinos**: El primer paso es crear una lista de vecindad basada en distancias euclidianas. A partir de las coordenadas de los centroides de la grilla, la función `dnearneigh` (paquete `spdep`) evalúa qué puntos se encuentran dentro de un radio de distancia específico, en este caso de 35 metros. Todas las celdas que caigan dentro de esa distancia umbral son catalogadas formalmente como "vecinas".
+**1. Identificación de Vecinos**: El primer paso es crear una lista de vecindad basada en distancias euclidianas. A partir de las coordenadas de los centroides de la grilla, la función `dnearneigh` (paquete [spdep]{.func-tecnica}) evalúa qué puntos se encuentran dentro de un radio de distancia específico, en este caso de 35 metros. Todas las celdas que caigan dentro de esa distancia umbral son catalogadas formalmente como "vecinas".
 
 **2. Ponderación de Influencia Espacial**: Una vez definido quiénes son los vecinos, es necesario determinar cuánta influencia ejercen. La función `nb2listw` transforma la lista de vecindades en una matriz de pesos espaciales.
 
 ## Identificación de Vecinos
 
--   En primer lugar, se extraen las coordenadas:
+En primer lugar, se extraen las coordenadas:
 
 ```{r}
 cord2 <- coordinates(df_centroides[, 1:2]) 
 ```
 
-> `cord2`es una matriz de coordenadas (dos columnas: X e Y), que se usará para definir los vecindarios espaciales.
+> [cord2]{.func-tecnica} es una matriz de coordenadas (dos columnas: X e Y), que se usará para definir los vecindarios espaciales.
 
--   Crear la matriz de vecinos. Como se mencionó, se indica que dos puntos son vecinos si están entre 0 y 35 unidades de distancia.
-
+Crear la matriz de vecinos. Como se mencionó, se indica que dos puntos son vecinos si están entre 0 y 35 unidades de distancia:
 ```{r}
 vecindarios <- dnearneigh(cord2, 0, 35)
 ```
@@ -1025,7 +1022,7 @@ pesos_esp <- nb2listw(vecindarios,
 
 ## Multispati-PCA
 
-Se usó la función `multispati()` del paquete `adespatial`. Su propósito es incorporar la autocorrelación espacial (es decir, la semejanza entre puntos cercanos) dentro de un análisis de componentes principales.
+Se usó la función `multispati()` del paquete [adespatial]{.func-tecnica}. Su propósito es incorporar la autocorrelación espacial (es decir, la semejanza entre puntos cercanos) dentro de un análisis de componentes principales.
 
 ```{r}
 pca_esp <- adespatial::multispati(pca, pesos_esp, scannf = F, nfposi = 5)
@@ -1033,13 +1030,13 @@ pca_esp <- adespatial::multispati(pca, pesos_esp, scannf = F, nfposi = 5)
 
 ## Resultado
 
-Se guarda un objeto “multispati” llamado `pca_esp`, con varios elementos:
+Se guarda un objeto “multispati” llamado [pca_esp]{.func-tecnica}, con varios elementos:
 
--   `eig`: Son los Autovalores espaciales, explica cuánta varianza espacial explica cada componente.
--   `var`: Varianza explicada por cada componente del PCA clásico, representa cuánta variabilidad original capta cada eje
--   `cum`: Varianza acumulada
--   `ratio`: Porcentaje acumulado (normalizado entre 0 y 1)\
--   `moran`: índice de Moran de cada componente
+-   [eig]{.func-tecnica}: Son los Autovalores espaciales, explica cuánta varianza espacial explica cada componente.
+-   [var]{.func-tecnica}: Varianza explicada por cada componente del PCA clásico, representa cuánta variabilidad original capta cada eje
+-   [cum]{.func-tecnica}: Varianza acumulada
+-   [ratio]{.func-tecnica}: Porcentaje acumulado (normalizado entre 0 y 1)\
+-   [moran]{.func-tecnica}: índice de Moran de cada componente
 
 Visualizar un resumen del resultado:
 
@@ -1051,7 +1048,7 @@ summary(pca_esp)
 
 Una vez ejecutado el algoritmo **MULTISPATI-PCA**, el modelo genera una serie de componentes o "ejes" espaciales (CS1, CS2, etc.). Para determinar cuántos de estos componentes poseen información útil para la delimitación de los ambientes, se extrajeron sus métricas principales y se estructuraron en una tabla resumen.
 
--   Crear el data frame con los datos de Descomposición:
+Crear el data frame con los datos de Descomposición:
 
 ```{r}
 multispati_data <- data.frame(
@@ -1062,31 +1059,31 @@ multispati_data <- data.frame(
 )
 ```
 
--   Calcular la suma total del Valor Propio (eig) para calcular el porcentaje:
+Calcular la suma total del Valor Propio (eig) para calcular el porcentaje:
 
 ```{r}
 suma_total_vp <- sum(multispati_data$Valor_Propio)
 ```
 
--   Calcular la columna `% Varianza Explicada`:
+Calcular la columna [% Varianza Explicada]{.func-tecnica}:
 
 ```{r}
 multispati_data$Porcentaje_Varianza <- (multispati_data$Valor_Propio / suma_total_vp) * 100
 ```
 
--   Calcular la columna `Varianza Acumulada`:
+Calcular la columna [Varianza Acumulada]{.func-tecnica}:
 
 ```{r}
 multispati_data$Varianza_Acumulada <- cumsum(multispati_data$Porcentaje_Varianza)
 ```
 
--   Seleccionar y reordenar las columnas para la presentación:
+Seleccionar y reordenar las columnas para la presentación:
 
 ```{r}
 tabla_final <- multispati_data[c("Componente", "Valor_Propio", "Porcentaje_Varianza", "Varianza_Acumulada", "Varianza_Explicada", "Indice_Moran")]
 ```
 
--   Presentar los datos:
+Presentar los datos:
 
 ```{r}
 #| label: tbl-multispati-pca
@@ -1127,7 +1124,7 @@ tabla_final %>%
 
 ## Resultados en Gráficos
 
-Se exploran dos librerías a la hora de graficar: `adegraphics` y `ggplot2`:
+Se exploran dos librerías a la hora de graficar: [adegraphics]{.func-tecnica} y [ggplot2]{.func-tecnica}:
 
 ::: {.panel-tabset .tabset-topline}
 ### adegraphics
@@ -1143,7 +1140,7 @@ s.corcircle(pca_esp$c1,
 
 ### ggplot2
 
-Convertir a `data.frame`:
+Convertir a [data.frame]{.func-tecnica}:
 
 ```{r}
 df_arrows <- as.data.frame(pca_esp$c1) 
@@ -1264,9 +1261,9 @@ Los scores parciales derivados del **MULTISPATI-PCA** son el insumo directo para
 
 ## Preparación de los datos
 
--   A partir del objeto `pca_esp` (salida del MULTISPATI-PCA), se extraen los valores de los primeros tres componentes espaciales (CS1, CS2 Y CS3) mediante `pca_esp$li[, 1:3]`. Estos componentes acumulan el **97 %** de la varianza total del lote.
+A partir del objeto [pca_esp]{.func-tecnica} (salida del MULTISPATI-PCA), se extraen los valores de los primeros tres componentes espaciales (CS1, CS2 Y CS3) mediante [pca_esp$li[, 1:3]]{.func-tecnica}. Estos componentes acumulan el **97 %** de la varianza total del lote.
 
-Además, se vinculan las coordenadas geográficas extraídas del objeto `centroides` anteriormente creado (@sec-pca) para preservar la referencia espacial y permitir la posterior espacialización de las zonas clasificadas.
+Además, se vinculan las coordenadas geográficas extraídas del objeto [centroides]{.func-tecnica} anteriormente creado (@sec-pca) para preservar la referencia espacial y permitir la posterior espacialización de las zonas clasificadas.
 
 ```{r}
 cs <- pca_esp$li[, 1:3] 
@@ -1274,17 +1271,17 @@ cs <- pca_esp$li[, 1:3]
 pred_am <-cbind(centroides[,c("X","Y")], cs) 
 ```
 
--   Dado que `pred_am` hereda la clase `sf`, se elimina la columna de geometría con `st_drop_geometry()`.
+Dado que [pred_am]{.func-tecnica} hereda la clase [sf]{.func-tecnica}, se elimina la columna de geometría con `st_drop_geometry()`.
 
-> Los objetos `sf` llevan una columna geometry implícita que el algoritmo `cmeans()` no puede manejar. `st_drop_geometry()` la elimina y convierte el objeto en un `data.frame` estándar, operación necesaria antes de cualquier análisis matricial.
+> Los objetos [sf]{.func-tecnica} llevan una columna geometry implícita que el algoritmo `cmeans()` no puede manejar. `st_drop_geometry()` la elimina y convierte el objeto en un [data.frame]{.func-tecnica} estándar, operación necesaria antes de cualquier análisis matricial.
 
 ```{r}
 pred_am_clean <- st_drop_geometry(pred_am) 
 ```
 
--   Luego se selecciona el componente CS1, el cual se usará en el clustering, y se convierte a matriz númerica.
+Luego se selecciona el componente [CS1]{.func-tecnica}, el cual se usará en el clustering, y se convierte a matriz númerica.
 
-La decisión de trabajar exclusivamente con `CS1` (77,6 % de varianza, Moran = 0,90) responde a que este eje combina alta variabilidad y la mayor autocorrelación espacial
+La decisión de trabajar exclusivamente con [CS1]{.func-tecnica} (77,6 % de varianza, Moran = 0,90) responde a que este eje combina alta variabilidad y la mayor autocorrelación espacial
 
 ```{r}
 datos_cluster <- as.matrix(pred_am_clean[, 3])
@@ -1292,9 +1289,9 @@ datos_cluster <- as.matrix(pred_am_clean[, 3])
 
 ## Cálculo Fuzzy K-Means y sus Índices
 
-Para realizar el análisis de Cluster Fuzzy K-Means se utiliza la función `cmeans()` del paquete `e1071`.
+Para realizar el análisis de Cluster Fuzzy K-Means se utiliza la función `cmeans()` del paquete [e1071]{.func-tecnica}.
 
-El parámetro `m` (exponente de difusividad, *fuzziness exponent*) controla el grado de solapamiento entre clases: valores cercanos a 1 producen una clasificación prácticamente rígida, mientras que valores elevados generan pertenencias uniformemente difusas. En este análisis se adopta `m = 1,3`, valor conservador que permite fronteras suaves sin sacrificar la definición de las zonas centrales.
+El parámetro [m]{.func-tecnica} (exponente de difusividad, *fuzziness exponent*) controla el grado de solapamiento entre clases: valores cercanos a 1 producen una clasificación prácticamente rígida, mientras que valores elevados generan pertenencias uniformemente difusas. En este análisis se adopta [m = 1,3]{.func-tecnica}, valor conservador que permite fronteras suaves sin sacrificar la definición de las zonas centrales.
 
 Se evaluaron tres alternativas (2, 3 y 4 clases). La selección del número óptimo de zonas se realiza *a posteriori* mediante índices de validez de clustering.
 
@@ -1334,7 +1331,7 @@ set.seed(123); clases4 <- e1071::cmeans(x = datos_cluster,
 :::
 
 ::: callout-note
-Para garantizar la reproducibilidad del análisis, se fijó una semilla aleatoria (`set.seed(123)`) antes de cada llamada a `cmeans()`. La inicialización aleatoria de los centroides es inherente al algoritmo; sin semilla fija, las etiquetas de clase pueden permutar entre ejecuciones aunque la geometría de las zonas sea estable.
+Para garantizar la reproducibilidad del análisis, se fijó una semilla aleatoria ([set.seed(123)]{.func-tecnica}) antes de cada llamada a `cmeans()`. La inicialización aleatoria de los centroides es inherente al algoritmo; sin semilla fija, las etiquetas de clase pueden permutar entre ejecuciones aunque la geometría de las zonas sea estable.
 :::
 
 ## Índices de Validación del Clustering {#sec-indices}
@@ -1442,7 +1439,7 @@ indices4_l <- data.frame(
 
 ## Visualizar los índices en una tabla
 
--   Primero unir los índices con la función `cbind()`:
+Primero unir los índices con la función `cbind()`:
 
 ```{r}
 indices_todos <- cbind( 
@@ -1452,20 +1449,20 @@ indices_todos <- cbind(
   indices4_l)
 ```
 
--   Cambiar nombres de las columnas:
+Cambiar nombres de las columnas:
 
 ```{r}
 colnames(indices_todos) <- c("Indice_", "Indice", "Clase2", "Ind", "Clase3", "in", "Clase4")
 ```
 
--   Seleccionar las columnas adecuadas:
+Seleccionar las columnas adecuadas:
 
 ```{r}
 indices_todos <- indices_todos %>% 
   select(Indice, Clase2, Clase3, Clase4) 
 ```
 
--   Visualizar:
+Visualizar:
 
 ```{r}
 #| label: tbl-indices
@@ -1494,7 +1491,7 @@ indices_todos %>%
 
 Para determinar el número óptimo de zonas de manejo ($k = 2, 3, 4$), se calculó un **índice resumen** para cada clasificación, esto unifica el comportamiento de los cuatro índices de validación difusa ($XB$, $PC$, $PE$, $FS$). El procedimiento siguió los siguientes pasos:
 
--   El primer paso fue extraer las respuestas numéricas de cada índice para las diferentes clasificaciones de clústeres analizadas a partir del objeto `indices_todos`, convirtiéndolas en vectores continuos mediante `as.numeric()`:
+El primer paso fue extraer las respuestas numéricas de cada índice para las diferentes clasificaciones de clústeres analizadas a partir del objeto [indices_todos]{.func-tecnica}, convirtiéndolas en vectores continuos mediante `as.numeric()`:
 
 ```{r}
 xb <- as.numeric(indices_todos[1, 2:4])
@@ -1505,7 +1502,7 @@ fs <- as.numeric(indices_todos[4, 2:4])
 
 > Cada vector contiene tres valores, uno por número de clases, representando el comportamiento de ese índice a lo largo de las particiones evaluadas.
 
--   Dado que los índices tienen distintas escalas y unidades, no son comparables directamente. Se aplica una normalización Min-Max que proyecta cada vector al intervalo \[0,1\]\[0, 1\] \[0,1\], reorientada de modo que el valor 0 siempre corresponda al comportamiento ideal de cada índice
+Dado que los índices tienen distintas escalas y unidades, no son comparables directamente. Se aplica una normalización Min-Max que proyecta cada vector al intervalo \[0,1\]\[0, 1\] \[0,1\], reorientada de modo que el valor 0 siempre corresponda al comportamiento ideal de cada índice
 
 Para *XB*, *PE* y *FS*, donde el criterio de optimalidad es minimizar, la normalización se realiza de la siguiente manera:
 
@@ -1527,14 +1524,14 @@ CoefPartN <- (max(pc) - pc) / (max(pc) - min(pc))
 
 Tras esta transformación, los cuatro vectores normalizados comparten la misma semántica: valores más cercanos a 0 indican mejor desempeño.
 
--   Los cuatro vectores normalizados se consolidan en un `data.frame` de dimensión 4 x 3 (cuatro índices, tres particiones), cuyos valores se elevan al cuadrado como paso intermedio del cálculo de la distancia euclídea:
+Los cuatro vectores normalizados se consolidan en un [data.frame]{.func-tecnica} de dimensión 4 x 3 (cuatro índices, tres particiones), cuyos valores se elevan al cuadrado como paso intermedio del cálculo de la distancia euclídea:
 
 ```{r}
 indicesN <- data.frame(rbind(XieBeniN, CoefPartN, EntrPartN, FukSugN))
 indicesN_2 <- indicesN^2
 ```
 
--   Finalmente, se calcula el **Índice Resumen (IR)** para cada nivel de partición ($k$) mediante la aplicación de la norma Euclídea ($L_2$). Geométricamente, el algoritmo proyecta las puntuaciones de los cuatro índices estandarizados como coordenadas dentro de un espacio tetradimensional ($\mathbb{R}^4$).
+Finalmente, se calcula el **Índice Resumen (IR)** para cada nivel de partición ($k$) mediante la aplicación de la norma Euclídea ($L_2$). Geométricamente, el algoritmo proyecta las puntuaciones de los cuatro índices estandarizados como coordenadas dentro de un espacio tetradimensional ($\mathbb{R}^4$).
 
 El "Punto Ideal" está definido por el vector $(0, 0, 0, 0)$, donde todos los índices alcanzarían simultáneamente su mejor rendimiento posible. El Índice Resumen para cada clase $k$ se calcula formalmente como:
 
@@ -1584,7 +1581,7 @@ La partición de [3 Clases]{.destacado} registra el menor valor de **Indice Resu
 
 ## Reetiquetado de las Clases
 
-La asignación de etiquetas numéricas por parte de `cmeans()` es arbitraria: el algoritmo no garantiza que la Clase 1 corresponda siempre a la misma zona entre distintas ejecuciones. Para asegurar que la interpretación agronómica sea estable y reproducible, se reordenan las etiquetas de `clases3` según el valor ascendente del centroide sobre `CS1`: la clase con el centroide más bajo queda asignada como Clase 1 (Baja Productividad) y la de centroide más alto como Clase 3 (Alta Productividad).
+La asignación de etiquetas numéricas por parte de `cmeans()` es arbitraria: el algoritmo no garantiza que la Clase 1 corresponda siempre a la misma zona entre distintas ejecuciones. Para asegurar que la interpretación agronómica sea estable y reproducible, se reordenan las etiquetas de [clases3]{.func-tecnica} según el valor ascendente del centroide sobre [CS1]{.func-tecnica}: la clase con el centroide más bajo queda asignada como Clase 1 (Baja Productividad) y la de centroide más alto como Clase 3 (Alta Productividad).
 
 ```{r}
 orden <- order(clases3$centers[, 1])          
@@ -1603,7 +1600,7 @@ base_am <- cbind(pred_am[,1:2],
                  "4clases"= clases4$cluster)
 ```
 
-El `data.frame` resultante se convierte a objeto `sf` especificando las columnas de coordenadas y el sistema de referencia **WGS 84 / UTM zona 20S** (`EPSG:32720`):
+El [data.frame]{.func-tecnica} resultante se convierte a objeto [sf]{.func-tecnica} especificando las columnas de coordenadas y el sistema de referencia **WGS 84 / UTM zona 20S** (`EPSG:32720`):
 
 ```{r}
 base_am <-st_as_sf(base_am, 
@@ -1708,28 +1705,28 @@ Se llevaron a cabo 2 alternativas:
 
 ## Interpolación IDW
 
--   Se aisla únicamente la variable a interpolar (`Clase`) junto con la geometría de puntos.
+Se aisla únicamente la variable a interpolar ([X3clases]{.func-tecnica}) junto con la geometría de puntos:
 
 ```{r}
 datos_3Clases <- base_am %>% 
   select(X3clases, geometry) 
 ```
 
--   Cambiar el nombre de las columnas por un nombre genérico que simplifica esa referencia:
+Cambiar el nombre de las columnas por un nombre genérico que simplifica esa referencia:
 
 ```{r}
 colnames(datos_3Clases) <- c("Clase", "geometry") 
 ```
 
--   Convertir a objeto `sp`, La conversión es obligatoria porque `gstat` no acepta objetos `sf` directamente como argumento locations. El objeto resultante es un `SpatialPointsDataFrame`.
+Convertir a objeto [sp]{.func-tecnica}, La conversión es obligatoria porque [gstat]{.func-tecnica} no acepta objetos [sf]{.func-tecnica} directamente como argumento locations. El objeto resultante es un [SpatialPointsDataFrame]{.func-tecnica}:
 
 ```{r}
 datos_sp <- as(datos_3Clases, "Spatial")
 ```
 
--   Crear grilla. Este es el destino de la interpolación: una grilla regular de celdas de 10 × 10 m que cubre la extensión del lote. Cada celda recibirá un valor interpolado de `Clase`. El tamaño de celda determina la resolución espacial del resultado final (celdas más pequeñas producen polígonos más detallados pero mayor costo computacional).
+Crear grilla. Este es el destino de la interpolación: una grilla regular de celdas de 10 × 10 m que cubre la extensión del lote. Cada celda recibirá un valor interpolado de [X3clases]{.func-tecnica}. El tamaño de celda determina la resolución espacial del resultado final (celdas más pequeñas producen polígonos más detallados pero mayor costo computacional).
 
-El objeto pasa por tres estados: `sfc` (geometría pura de `st_make_grid`) → `sf` (para agregar el campo id_celda) → `sp` (requerido por `gstat`).
+El objeto pasa por tres estados: [sfc]{.func-tecnica} (geometría pura de `st_make_grid`) → [sf]{.func-tecnica} (para agregar el campo [id_celda]{.func-tecnica}) → [sp]{.func-tecnica} (requerido por [gstat]{.func-tecnica}).
 
 ```{r}
 grilla_2 <- st_make_grid(datos_sp, cellsize = c(10, 10), what = "polygons", square = TRUE)
@@ -1741,22 +1738,22 @@ grilla_sf <- grilla_sf %>% mutate(id_celda = row_number())
 grilla_sp <- as(grilla_sf, "Spatial") 
 ```
 
--   Interpolación IDW.
+Interpolación IDW.
 
 ```{r}
 idw_model <- gstat::idw(formula = Clase ~ 1, locations = datos_sp, newdata = grilla_sp, idp = 2) 
 ```
 
-El resultado es un `SpatialPixelsDataFrame`\] con una columna `var1.pred` que contiene el valor interpolado en cada celda —un número continuo entre 1 y 3.
+El resultado es un [SpatialPixelsDataFrame]{.func-tecnica} con una columna [var1.pred]{.func-tecnica} que contiene el valor interpolado en cada celda —un número continuo entre 1 y 3.
 
--   Se extrae el resultado a un `data.frame` con columnas `x`, `y` y `var1.pred`, y se reconstruye como un ráster con `terra::rast()`. El argumento `type = "xyz"` indica que las dos primeras columnas son coordenadas y la tercera es el valor de celda. Este paso es necesario porque las operaciones siguientes (reclasificación y vectorización) pertenecen al ecosistema `terra`, no a `gstat`.
+Se extrae el resultado a un [data.frame]{.func-tecnica} con columnas [x]{.func-tecnica}, [y]{.func-tecnica} y [var1.pred]{.func-tecnica}, y se reconstruye como un ráster con `terra::rast()`. El argumento [type = "xyz"]{.func-tecnica} indica que las dos primeras columnas son coordenadas y la tercera es el valor de celda. Este paso es necesario porque las operaciones siguientes (reclasificación y vectorización) pertenecen al ecosistema [terra]{.func-tecnica}, no a [gstat]{.func-tecnica}.
 
 ```{r}
 idw_df <- as.data.frame(idw_model) 
 r_pred <- terra::rast(idw_df[, c("x", "y", "var1.pred")], type = "xyz")
 ```
 
--   Reclasificar: La IDW es un interpolador de valores continuos. A los input de puntos con valores 1, 2 y 3 los trata como si fueran una variable cuantitativa cualquiera. El resultado es una superficie donde cada celda puede tomar cualquier valor real dentro del rango observado: una celda ubicada en la transición entre la zona 1 y la zona 2 puede tener un valor interpolado de 1.3, 1.7 o 2.1, dependiendo de qué tan cerca esté de cada grupo de puntos. Por eso es que se realiza un **reclasificado**.
+Reclasificar: La IDW es un interpolador de valores continuos. A los input de puntos con valores 1, 2 y 3 los trata como si fueran una variable cuantitativa cualquiera. El resultado es una superficie donde cada celda puede tomar cualquier valor real dentro del rango observado: una celda ubicada en la transición entre la zona 1 y la zona 2 puede tener un valor interpolado de 1.3, 1.7 o 2.1, dependiendo de qué tan cerca esté de cada grupo de puntos. Por eso es que se realiza un **reclasificado**.
 
 La superficie continua se convierte de vuelta a clases enteras mediante umbrales equidistantes entre los valores de clase (1, 2, 3): el punto medio entre clase 1 y clase 2 es 1.5, y entre clase 2 y clase 3 es 2.5. Cualquier celda con valor interpolado por debajo de 1.5 queda asignada a la Clase 1, entre 1.5 y 2.5 a la Clase 2, y por encima de 2.5 a la Clase 3. La conversión con `as.factor()` explicita que el ráster resultante es categórico.
 
@@ -1769,7 +1766,7 @@ rcl <- matrix(c(-Inf, 1.5, 1,
 reclasificado <- classify(r_pred, rcl = rcl) %>% as.factor()
 ```
 
--   Vectorización y conversión final: `as.polygons()` con `dissolve = TRUE` agrupa todas las celdas contiguas de la misma clase y las fusiona en un único polígono por zona, eliminando los bordes internos de la grilla. El resultado es un `SpatVector` con tres campos (uno por zona). La conversión a `sf` y la asignación del CRS (EPSG:32720, WGS 84 / UTM zona 20S) devuelven el objeto estándar para realizar su gráfico:
+Vectorización y conversión final: `as.polygons()` con [dissolve = TRUE]{.func-tecnica} agrupa todas las celdas contiguas de la misma clase y las fusiona en un único polígono por zona, eliminando los bordes internos de la grilla. El resultado es un [SpatVector]{.func-tecnica} con tres campos (uno por zona). La conversión a [sf]{.func-tecnica} y la asignación del CRS (EPSG:32720, WGS 84 / UTM zona 20S) devuelven el objeto estándar para realizar su gráfico:
 
 ```{r}
 poligonos <- as.polygons(reclasificado, dissolve = TRUE)
@@ -1810,53 +1807,53 @@ ggplot(data = poligonos_sf) +
 
 ## Rasterizar con Terra
 
--   Filtrar los datos `base_am` de manera que queden: la clasificación de las 3 zonas (`X3clases`) y la información de la posición geográfica de cada punto (`geometry`).
+Filtrar los datos [base_am]{.func-tecnica} de manera que queden: la clasificación de las 3 zonas ([X3clases]{.func-tecnica}) y la información de la posición geográfica de cada punto ([geometry]{.func-tecnica}).
 
 ```{r}
 datos_3Clases <- base_am %>% 
   select(X3clases, geometry) 
 ```
 
--   Convertir el objeto `sf` a `SpatVector`.
+Convertir el objeto [sf]{.func-tecnica} a [SpatVector]{.func-tecnica}.
 
-> `SpatVector` es la estructura nativa que utiliza el paquete `terra` para manejar datos vectoriales (puntos, líneas o polígonos). Aunque `sf` es excelente para manejar bases de datos geográficas, `terra` es mucho más rápido para operaciones de rasterización.
+> [SpatVector]{.func-tecnica} es la estructura nativa que utiliza el paquete [terra]{.func-tecnica} para manejar datos vectoriales (puntos, líneas o polígonos). Aunque [sf]{.func-tecnica} es excelente para manejar bases de datos geográficas, [terra]{.func-tecnica} es mucho más rápido para operaciones de rasterización.
 
 ```{r}
 puntos_terra <- vect(datos_3Clases)
 ```
 
--   Crear un mapa cuadriculado (raster) completamente vacío mediante `rast`, que cubre exactamente el mismo tamaño que el lote de puntos. El parámetro `resolution = 10` define que cada píxel de esa grilla medirá 10 x 10 metros en el terreno:
+Crear un mapa cuadriculado (raster) completamente vacío mediante `rast`, que cubre exactamente el mismo tamaño que el lote de puntos. El parámetro [resolution = 10]{.func-tecnica} define que cada píxel de esa grilla medirá 10 x 10 metros en el terreno:
 
 ```{r}
 raster_base <- rast(puntos_terra, resolution = 10)
 ```
 
--   Rasterizar los puntos indicando que el valor de cada pixel será el del clúster:
+Rasterizar los puntos indicando que el valor de cada pixel será el del clúster:
 
 ```{r}
 raster_zonas <- rasterize(puntos_terra, raster_base, field = "X3clases")
 ```
 
--   Crear Polígonos mediante `as.polygons`: agrupa todos los píxeles vecinos que pertenecen a la misma clase y traza un vector (un polígono) alrededor de ellos. El argumento `dissolve = TRUE` indica que si hay parches contiguos de la misma clase, los funda en un único polígono en lugar de dejar miles de cuadraditos de 10x10 metros separados.
+Crear Polígonos mediante `as.polygons`: agrupa todos los píxeles vecinos que pertenecen a la misma clase y traza un vector (un polígono) alrededor de ellos. El argumento [dissolve = TRUE]{.func-tecnica} indica que si hay parches contiguos de la misma clase, los funda en un único polígono en lugar de dejar miles de cuadraditos de 10x10 metros separados.
 
 ```{r}
 poligonos_terra <- as.polygons(raster_zonas, dissolve = TRUE)
 ```
 
--   Volver al formato `sf`:
+Volver al formato [sf]{.func-tecnica}:
 
 ```{r}
 poligonos_finales <- st_as_sf(poligonos_terra)
 ```
 
--   Calcular el área de cada zona:
+Calcular el área de cada zona:
 
 ```{r}
 poligonos_finales <- poligonos_finales %>%
   mutate(area_ha = as.numeric(st_area(geometry)) / 10000)
 ```
 
--   Graficar:
+Graficar:
 
 ```{r}
 #| code-fold: true
@@ -1887,7 +1884,7 @@ ggplot(data = poligonos_finales) +
 
 # MapView
 
-Otra opción es realizar un gráfico interactivo con `mapview` y `leaflet`:
+Otra opción es realizar un gráfico interactivo con [mapview]{.func-tecnica} y [leaflet]{.func-tecnica}:
 
 ```{r}
 #| code-fold: true
@@ -1952,19 +1949,19 @@ mapa_unificado@map %>% addMiniMap(
 
 En el mapa con las zonas creadas no sabemos cuál es la zona más productiva y/o el orden de productividad de las mismas. Para poder caracterizar cada zona vamos a unir al mapa de zonas el mapa de puntos con los valores de rendimiento y elevación.
 
--   Cargar capa que contiene los datos:
+Cargar capa que contiene los datos:
 
 ```{r}
 datos <- st_read("data/Centroides.shp", quiet = TRUE)
 ```
 
--   Unir por atributos los puntos de datos a los polígonos de `polígonos_sf`:
+Unir por atributos los puntos de datos a los polígonos de [polígonos_sf]{.func-tecnica}:
 
 ```{r}
 union <- st_join(poligonos_sf, datos, join = st_intersects) 
 ```
 
--   Resumen Estadístico por Zona:
+Resumen Estadístico por Zona:
 
 ```{r}
 resumen <- union %>% 
@@ -1978,26 +1975,26 @@ resumen <- union %>%
   ) 
 ```
 
--   Volver a unir los resultados estadisticos al objeto espacial original, le sumamos el campo geometría:
+Volver a unir los resultados estadisticos al objeto espacial original, le sumamos el campo geometría:
 
 ```{r}
 poligonos_resumen <- left_join(poligonos_sf, resumen, by = "var1.pred")
 ```
 
--   Renombrar las columnas:
+Renombrar las columnas:
 
 ```{r}
 colnames(poligonos_resumen) <- c("Clase", "Rto09", "Rto11", "Rto13", "Alt", "geometry")
 ```
 
--   Calcular el área de cada polígono:
+Calcular el área de cada polígono:
 
 ```{r}
 Zonas_Manejo_R_Final <- poligonos_resumen %>% 
   mutate(Sup_ha = as.numeric(st_area(geometry))/10000)
 ```
 
--   Presentar los resultados en una tabla:
+Presentar los resultados en una tabla:
 
 ```{r}
 #| label: tbl-zonas-de-manejo

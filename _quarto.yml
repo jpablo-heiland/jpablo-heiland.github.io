@@ -1,6 +1,11 @@
 project:
   type: website
   output-dir: docs
+  resources:
+    - "proyectos/ndvi-tres-dim/mapa_3d.html"
+    - "proyectos/ndvi-tres-dim/data/"
+    - "proyectos/ndvi-tres-dim/NDVI_3D_files/"
+    - "proyectos/ndvi-tres-dim/threejs/"
 
 website:
   title: "Juan Pablo Heiland"
@@ -31,6 +36,8 @@ website:
             text: "Teledetección con GEE"
           - href: proyectos/anova/anova.qmd
             text: "Análisis de varianza con R"
+          - href: proyectos/ndvi-tres-dim/ndvi-tres-dim.qmd
+            text: "NDVI en 3D"
     right:
       - icon: github
         href: https://github.com/jpablo-heiland

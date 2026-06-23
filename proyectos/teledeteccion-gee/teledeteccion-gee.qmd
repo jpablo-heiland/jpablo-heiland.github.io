@@ -1,9 +1,869 @@
 ---
-title: "Teledetección con Google Earth Engine"
-subtitle: "Procesamiento de imagenes satelitales y cálculo de índices de vegetación con Google Earth Engine"
+title: "Teledetección e Indices de Vegetación con Google Earth Engine y Python"
 date: 2026-06
 categories: [Python, Google Earth Engine, Agricultura de precisión, Teledetección, Indices de Vegetación]
 css: styles.css
 ---
  
-# En construcción
+# Introducción
+
+El presente documento desarrolla el flujo de trabajo para el cálculo de Indices de Vegetación sobre un lote agrícola del sudoeste de Córdoba, utilizando la **API de Python de Google Earth Engine (GEE)**, junto con la librería [folium]{.func-tecnica} para la creación de mapas interactivos.
+
+El satélite usado es **Sentinel-2**, específicamente la colección `COPERNICUS/S2_SR_HARMONIZED` que provee imágenes de **reflectancia de superficie** corregidas atmosféricamente, con una resolución espacial de hasta **10 metros**. Las bandas espectrales que proporciona este satélite son:
+
+```{r}
+#| label: tbl-sentinel2
+#| tbl-cap: "Bandas Espectrales de la colección"
+#| echo: false
+#| message: false
+#| warning: false
+
+library(knitr)
+library(kableExtra)
+
+# Crear dataframe 
+datos_sentinel2 <- data.frame(
+  Item = 1:13,
+  Banda = c(
+    "B1 - Aerosols", 
+    "B2 - Blue", 
+    "B3 - Green", 
+    "B4 - Red", 
+    "B5 - Red Edge 1", 
+    "B6 - Red Edge 2", 
+    "B7 - Red Edge 3",
+    "B8 - NIR",
+    "B8A - Red Edge 4",
+    "B9 - Water vapor",
+    "B10 - Cirrus",
+    "B11 - SWIR 1",
+    "B12 - SWIR 2"
+  ),
+  Longitud = c(
+    "443.9 (S2A) / 442.3 (S2B)", 
+    "496.6 (S2A) / 492.1 (S2B)", 
+    "560.0 (S2A) / 559.0 (S2B)", 
+    "664.5 (S2A) / 665.0 (S2B)", 
+    "703.9 (S2A) / 703.8 (S2B)", 
+    "740.2 (S2A) / 739.1 (S2B)", 
+    "782.5 (S2A) / 779.7 (S2B)",
+    "835.1 (S2A) / 833.0 (S2B)",
+    "864.8 (S2A) / 864.0 (S2B)",
+    "945.0 (S2A) / 943.2 (S2B)",
+    "1375.0 (S2A) / 1373.5 (S2B)", 
+    "1613.7 (S2A) / 1610.4 (S2B)",
+    "2202.4 (S2A) / 2185.7 (S2B)"
+  ),
+  Resolucion = c(60, 10, 10, 10, 20, 20, 20, 10, 20, 60, 60, 20, 20)
+)
+
+# Renombrar columnas
+colnames(datos_sentinel2) <- c("#", "Banda", "Longitud de Onda Central (nm)", "Resolución Espacial (m)")
+
+# Crear tabla con kableExtra
+kbl(datos_sentinel2, booktabs = TRUE, align = c("c", "l", "c", "c")) %>%
+  kable_styling(
+    bootstrap_options = c("striped", "hover", "condensed", "responsive"),
+    full_width = FALSE,
+    position = "center"
+  ) %>%
+  row_spec(0, bold = TRUE, color = "white", background = "#1A365D") %>% 
+  column_spec(1, bold = TRUE) %>%                                     
+  column_spec(2, bold = TRUE, width = "14em") %>% 
+  column_spec(3, width = "16em") %>% 
+  column_spec(4, width = "14em")  
+```
+
+Los índices calculados fueron:
+
+```{r}
+#| label: tbl-indices
+#| tbl-cap: "Índices espectrales calculados"
+#| echo: false
+
+
+library(knitr)
+library(kableExtra)
+
+indices <- data.frame(
+  Indice = c("NDVI", "NDRE","EVI", "GNDVI", "GLI", "SAVI", "NDWI", "ARVI", "NBRI"),
+  Nombre = c(
+    "Normalized Difference Vegetation Index",
+    "Normalized Difference Red Edge Index",
+    "Enhanced Vegetation Index",
+    "Green Normalized Difference Vegetation Index",
+    "Green Leaf Index",
+    "Soil Adjusted Vegetation Index",
+    "Normalized Difference Water Index",
+    "Atmospherically Resistant Vegetation Index",
+    "Normalized Burned Ratio Index"
+  ),
+  Aplicacion = c(
+    "Monitoreo y seguimiento de vegetación",
+    "Monitoreo de vegetación en etapas tardías", 
+    "Biomasa densa, zonas con alta clorofila",
+    "Concentración de clorofila, canopias densas",
+    "Detección de vegetación verde activa (visible)",
+    "Vegetación escasa, suelo expuesto, zonas áridas",
+    "Contenido de agua, estrés hídrico",
+    "Corrección por aerosoles atmosféricos",
+    "Detección de áreas quemadas, severidad del fuego"
+  ),
+  Bandas = c(
+    "B8, B4",
+    "B5, B8",
+    "B2, B4, B8",
+    "B3, B8",
+    "B2, B3, B4",
+    "B4, B8",
+    "B3, B8",
+    "B2, B4, B8",
+    "B8, B12"
+  )
+)
+
+colnames(indices) <- c("Índice", "Nombre completo", "Aplicación principal", "Bandas Sentinel-2")
+
+kbl(indices, booktabs = TRUE, align = c("c", "l", "l", "c")) %>%
+  kable_styling(
+    bootstrap_options = c("striped", "hover", "condensed", "responsive"),
+    full_width = TRUE,
+    position = "center"
+  ) %>%
+  row_spec(0, bold = TRUE, color = "white", background = "#1A365D") %>%
+  column_spec(1, bold = TRUE, width = "5em") %>%
+  column_spec(2, width = "20em") %>%
+  column_spec(3, width = "22em") %>%
+  column_spec(4, width = "10em")
+```
+
+
+```{r include=FALSE}
+library(reticulate)
+```
+
+
+# Librerías Necesarias
+
+```{python}
+#| warning: false
+#| message: false
+
+import ee
+import folium
+import geemap
+import pandas as pd
+```
+
+::: {.metodo-comparativo}
+
+::: {.metodo-item .metodo-2}
+
+La librería [ee]{.func-tecnica} es la interfaz oficial de Python para conectarse con los servidores de Google Earth Engine (GEE).
+:::
+
+::: {.metodo-item .metodo-2}
+[Folium]{.func-tecnica} es una librería de Python que permite construir mapas interactivos basados en [Leaflet.js]{.func-tecnica}.
+:::
+
+::: {.metodo-item .metodo-2}
+
+La función de [geemap]{.func-tecnica} es la visualización interactiva de los objetos de Earth Engine. Sin embargo, en este documento se usa para leer el archivo shapefile local.
+:::
+
+::: {.metodo-item .metodo-2}
+
+[Pandas]{.func-tecnica} es la librería más popular y fundamental para la manipulación, limpieza y análisis de datos en el ecosistema Python.
+:::
+
+:::
+
+# Inicialización de la API
+
+Para interactuar con Google Earth Engine (GEE) desde Python, es necesario importar y autenticar la librería [earthengine-api]{.func-tecnica}. La inicialización establece la conexión con los servidores de GEE y habilita el uso de sus colecciones de imágenes satelitales y herramientas de análisis geoespacial, esto se hace con [ee.Initialize()]{.func-tecnica}.
+
+```{python}
+ee.Initialize(project='ee-jpablo-heiland')
+```
+
+
+# Importación del Área de Estudio {#sec-import}
+
+En este punto, se adecúa el archivo shapefile (vectorial) del área de estudio hacia el entorno de Google Earth Engine utilizando herramientas de [geemap]{.func-tecnica}.
+
+## Definir la ruta del área de estudio
+
+La variable [ruta_shapefile]{.func-tecnica} apunta al archivo principal .shp en el disco local.
+
+```{python}
+ruta_shapefile = "data/lote_14.shp"
+```
+
+>Es recomendable que el archivo .shp se encuentre en un Sistema de Coordenadas Geográficas (típicamente WGS 84 / EPSG:4326), ya que GEE opera nativamente utilizando estos Sistemas de Referencia.
+
+
+## Conversión a Objeto de Servidor
+
+La función [.shp_to_ee()]{.func-tecnica} lee el Shapefile local (junto con sus archivos asociados .shx, .dbf y .prj), lee la tabla de atributos y empaqueta la información geométrica en un formato JSON estructurado. Envía dichos datos hacia la nube de Google, transformando el vector en un objeto del tipo [ee.FeatureCollection]{.func-tecnica}, listo para usar en GEE.
+
+Finalmente, el método [.geometry()]{.func-tecnica} se aplica sobre la colección de objetos espaciales para aislar estrictamente las coordenadas y los límites vectoriales del lote. Remueve la tabla de atributos (datos alfanuméricos como nombres de lote, dueño o hectáreas) y conserva únicamente el polígono puro como un objeto [ee.Geometry]{.func-tecnica}.
+
+```{python}
+lote_ee = geemap.shp_to_ee(ruta_shapefile)
+
+geometry = lote_ee.geometry()
+```
+
+
+# Buscar imágenes SENTINEL 2
+
+Se consulta el catálogo de imágenes de Sentinel-2 Surface Reflectance Harmonized (`COPERNICUS/S2_SR_HARMONIZED`) aplicando tres filtros encadenados:
+
+* [.filterDate()]{.func-tecnica}: restringe la búsqueda al período diciembre 2025 – febrero 2026.
+* [.filterBounds()]{.func-tecnica}: limita los resultados a las imágenes que intersectan con el área de estudio.
+* [.filterMetadata()]{.func-tecnica}: excluye imágenes con más del 10% de cobertura de nubes según el metadato `CLOUDY_PIXEL_PERCENTAGE`.
+
+```{python}
+imgs_s2 = (ee.ImageCollection('COPERNICUS/S2_SR_HARMONIZED')
+           .filterDate('2025-12-01', '2026-02-28')
+           .filterBounds(geometry)
+           .filterMetadata('CLOUDY_PIXEL_PERCENTAGE', 'less_than', 10))
+```
+
+```{python}
+#| include: false
+
+cantidad_imagenes = imgs_s2.size().getInfo()
+promedio_nubes = imgs_s2.aggregate_mean('CLOUDY_PIXEL_PERCENTAGE').getInfo()
+
+```
+
+```{r}
+#| include: false
+
+cantidad_imagenes_r <- py$cantidad_imagenes
+promedio_nubes_r <- py$promedio_nubes
+
+```
+
+A partir de los filtros aplicados, el servidor devolvió lo siguiente:
+
+::: {.premium-metrics-grid}
+
+::: {.premium-metric}
+::: {.metric-name}
+Imágenes Disponibles
+:::
+
+::: {.metric-number .metric-highlight}
+`r cantidad_imagenes_r`
+:::
+:::
+
+::: {.premium-metric}
+::: {.metric-name}
+Nubosidad Promedio
+:::
+
+::: {.metric-number}
+`r round(promedio_nubes_r, 1)`[ %]{.metric-sand}
+:::
+:::
+
+
+:::
+
+
+# Seleccionar imagen 
+
+De las imágenes que superaron los filtros anteriores, se ordena la colección de forma ascendente según el porcentaje de nubosidad ([.sort('CLOUDY_PIXEL_PERCENTAGE')]{.func-tecnica}) y se selecciona la primera, es decir, la que tiene menor porcentaje de nubes ([.first()]{.func-tecnica}).
+
+```{python}
+img = ee.Image(imgs_s2.sort('CLOUDY_PIXEL_PERCENTAGE').first())
+```
+
+```{python}
+#| include: false
+
+milisegundos = img.get('system:time_start').getInfo()
+timestamp = pd.to_datetime(milisegundos, unit='ms')
+fecha_imagen = timestamp.strftime('%d/%m/%Y')
+hora_imagen = timestamp.strftime('%H:%M')
+porcentaje_nubes = round(img.get('CLOUDY_PIXEL_PERCENTAGE').getInfo(), 2)
+
+
+```
+
+```{r}
+#| include: false
+
+fecha_imagen_r <- py$fecha_imagen
+hora_imagen_r <- py$hora_imagen
+porcentaje_nubes_r <- py$porcentaje_nubes
+
+
+```
+
+Las condiciones de captura de la imagen seleccionada fue:
+
+::: {.premium-metrics-grid-2}
+
+::: {.premium-metric}
+::: {.metric-name}
+Fecha de Adquisición
+:::
+
+::: {.metric-number .metric-highlight}
+`r fecha_imagen_r`
+:::
+:::
+
+:::
+
+::: {.premium-metrics-grid}
+
+::: {.premium-metric}
+::: {.metric-name}
+Hora de Adquisición
+:::
+
+::: {.metric-number .metric-highlight}
+`r hora_imagen_r`
+:::
+:::
+
+::: {.premium-metric}
+::: {.metric-name}
+Porcentaje de Nubes
+:::
+
+::: {.metric-number}
+`r round(porcentaje_nubes_r, 4)`[ %]{.metric-sand}
+:::
+:::
+
+:::
+
+# Cortar imagen 
+
+La imagen Sentinel-2 seleccionada cubre un área de aproximadamente 100 × 100 km. El método [.clip(geometry)]{.func-tecnica} recorta la imagen según el área de estudio.
+
+```{python}
+s2_clip = img.clip(geometry)
+```
+
+
+# Escalar la imagen 
+
+Los valores almacenados en la colección `S2_SR_HARMONIZED` son números enteros en el rango 0–10000. Este formato optimiza el almacenamiento en los servidores de Google, pero no representa directamente la reflectancia de superficie.
+
+Al dividir por 10000 ([.divide(10000)]{.func-tecnica}), se convierte cada píxel a su valor real de reflectancia en el rango 0.0–1.0. Este paso es **obligatorio** antes de calcular cualquier índice espectral, ya que las fórmulas están definidas sobre valores de reflectancia normalizada. 
+
+```{python}
+s2_escalada = s2_clip.divide(10000)
+```
+
+# Cálculo de Indices de Vegetación
+
+## NDVI (*Normalized Difference Vegetation Index*)
+
+Es el índice  más utilizado a nivel global para la estimación de la cantidad, calidad y desarrollo de la vegetación. 
+
+Fórmula:
+
+$$NDVI = \frac{{NIR} - {Red}}{{NIR} + {Red}}$$
+Cálculo:
+
+```{python}
+NDVI = s2_escalada.expression(
+    '(NIR - RED) / (NIR + RED)', {
+        'NIR': s2_escalada.select('B8'),  
+        'RED': s2_escalada.select('B4')
+    }
+)
+```
+
+## NDRE (*Normalized Difference Red Edge Index*)
+
+Es un índice diseñado para evaluar la salud, el vigor y el contenido de clorofila en los cultivos, especialmente útil en etapas medias y tardías del ciclo agrícola o en doseles de vegetación muy densos.
+
+A diferencia del NDVI tradicional (que se satura rápidamente cuando el cultivo alcanza una gran cobertura foliar), el NDRE logra penetrar las capas superiores de las hojas gracias a las propiedades ópticas de la banda del Borde Rojo (Red Edge).
+
+Fórmula:
+
+$$NDRE = \frac{{NIR} - {RedEdge}}{{NIR} + {RedEdge}}$$
+
+Cálculo:
+
+```{python}
+NDRE = s2_escalada.normalizedDifference(['B8', 'B5']).rename('NDRE')
+```
+
+
+## EVI (*Enhanced Vegetation Index*) 
+
+Fue desarrollado como una evolución del NDVI. Permite monitorear el estado de la vegetación en caso de altas densidades de biomasa. Útil para analizar áreas con grandes cantidades de clorofila (como los bosques tropicales), y preferiblemente con efectos topográficos mínimos (regiones no montañosas).
+
+Fórmula:
+
+$$EVI = G \times \frac{{NIR} - {Red}}{{NIR} + C_1 \times {Red} - C_2 \times {Blue} + L}$$
+
+Cálculo:
+
+```{python}
+EVI = s2_escalada.expression(
+    '2.5 * ((NIR - RED) / (NIR + (6 * RED) - (7.5 * BLUE) + 1))', {
+        'NIR': s2_escalada.select('B8'),  
+        'RED': s2_escalada.select('B4'),
+        'BLUE': s2_escalada.select('B2')
+    }
+)
+```
+
+
+## GNDVI (*Green Normalized Difference Vegetation Index*) 
+
+Es una modificación del NDVI tradicional. La innovación de este índice radica en la sustitución de la banda del rojo por la banda del verde.
+
+Este índice es más sensible a la variación de la clorofila en el cultivo que el índice NDVI y presenta un punto de saturación más alto. 
+
+Puede ser utilizado en cultivos con canopias densas o en etapas más avanzadas de desarrollo.
+
+Fórmula:
+
+$$GNDVI = \frac{{NIR} - {Green}}{{NIR} + {Green}}$$
+
+Cálculo:
+
+```{python}
+GNDVI = s2_escalada.normalizedDifference(['B8', 'B3']).rename('GNDVI')
+```
+
+## GLI (*Green Leaf Index*) 
+
+Fue desarrollado específicamente para trabajar con cámaras digitales convencionales y sensores que capturan únicamente el espectro visible (RGB).
+
+Incorpora las tres bandas del visible y presenta gran sensibilidad a la hora de identificar todos aquellos elementos verdes y oscuros. Útil para trabajar con drones.
+
+Fórmula:
+
+$$GLI = \frac{2 \times {Green} - {Red} - {Blue}}{2 \times {Green} + {Red} + {Blue}}$$
+
+Cálculo:
+
+```{python}
+GLI = s2_escalada.expression(
+    '((GREEN - RED) + (GREEN - BLUE)) / ((2 * GREEN) + RED + BLUE)', {
+        'GREEN': s2_escalada.select('B3'),   
+        'RED': s2_escalada.select('B4'),
+        'BLUE': s2_escalada.select('B2')
+    }
+)
+```
+
+## SAVI (*Soil Adjusted Vegetation Index*)
+
+Corrige los efectos del ruido del suelo (color del suelo, humedad del suelo, etc.), que tienden a afectar a los resultados. 
+
+Util para análisis de cultivos jóvenes, para regiones áridas con vegetación escasa (menos del 15% del área total) y superficies expuestas del suelo. 
+
+La ecuación del SAVI modifica la estructura de la diferencia normalizada añadiendo el factor de corrección $L$
+
+Fórmula:
+
+$$SAVI = \frac{{NIR} - {Red}}{{NIR} + {Red} + L} \times (1 + L)$$
+
+Cálculo:
+
+```{python}
+SAVI = s2_escalada.expression(
+    '((NIR - RED) / (NIR + RED + L)) * (1 + L)', {
+        'L': 0.5,  
+        'NIR': s2_escalada.select('B8'), 
+        'RED': s2_escalada.select('B4')
+    }
+)
+```
+
+## NDWI (*Normalized Difference Water Index*) 
+
+Su objetivo principal es delimitar cuerpos de agua superficiales y monitorear el contenido de humedad tanto en la cubierta vegetal como en los suelos.
+
+Dependiendo del objetivo del estudio, se utilizan dos ecuaciones diferentes para el NDWI:
+
+* **Variante de McFeeters (Detección de Cuerpos de Agua)**. Se utiliza para cartografiar lagos, ríos, humedales y zonas inundadas. Maximiza la reflectancia del agua en el verde y minimiza la del NIR.
+
+$$NDWI_{McFeeters} = \frac{{Green} - {NIR}}{{Green} + {NIR}}$$
+
+* **Variante de Gao (Humedad en la Vegetación / Estrés Hídrico)**: Se utiliza para medir el contenido de agua de las hojas de los cultivos. Cambia la banda verde por la banda SWIR.
+
+$$NDWI_{Gao} = \frac{{NIR} - {SWIR}}{{NIR} + {SWIR}}$$
+
+En este documento se utilizó la Variante GAO.
+
+Cálculo:
+
+```{python}
+NDWI = s2_escalada.normalizedDifference(['B8', 'B11']).rename('NDWI')
+```
+
+## ARVI (*Atmospherically Resistant Vegetation Index*)
+
+Es un índice usado para corregir la influencia de la atmósfera.
+
+Su uso suele enfocarse sobre regiones con alto contenido de aerosol atmosférico (por ejemplo, lluvia, niebla, polvo, humo, contaminación del aire). 
+
+Fórmula:
+
+$$ARVI = \frac{{NIR} - ({Red} - \gamma \times ({Blue} - {Red}))}{{NIR} + ({Red} - \gamma \times ({Blue} - {Red}))}$$
+
+* $\gamma$ (Gamma): Coeficiente de tamaño de partícula atmosférica. El valor estándar universalmente aceptado y recomendado es $\gamma = 1$, a menos que se conozca con extrema precisión el tipo de aerosol dominante en la zona.
+
+Cálculo:
+
+```{python}
+ARVI = s2_escalada.expression(
+    '((NIR - (2 * RED) + BLUE) / (NIR + (2 * RED) + BLUE))', {
+        'NIR': s2_escalada.select('B8'), 
+        'BLUE': s2_escalada.select('B2'),  
+        'RED': s2_escalada.select('B4')
+    }
+)
+```
+
+
+## NBRI (*Normalized Burned Ratio Index*) 
+
+Es la herramienta estándar internacional utilizada en teledetección para la identificación de áreas quemadas y la evaluación de la severidad del fuego en ecosistemas forestales y agrícolas.
+
+Fórmula:
+
+$$NBRI = \frac{{NIR} - {SWIR2}}{{NIR} + {SWIR2}}$$
+Cálculo:
+
+```{python}
+NBRI = s2_escalada.expression(
+    '(NIR - SWIR) / (NIR + SWIR)', {
+        'NIR': s2_escalada.select('B8'),   
+        'SWIR': s2_escalada.select('B12')
+    }
+)
+```
+
+
+
+# Estadística de los índices calculados
+
+Una vez obtenidos los índices espectrales, es fundamental analizar la distribución estadística de sus valores antes de proceder a la visualización. Este paso permite verificar que los cálculos son correctos, calibrar los rangos de las paletas de color y obtener una primera caracterización del estado del cultivo dentro del área de estudio.
+
+Para ello se utiliza [ee.Reducer]{.func-tecnica}, que aplica una función estadística sobre todos los píxeles de la imagen. Se calculan:
+
+- Mínimo y Máximo: definen el rango variación del índice, necesario para ajustar las paletas de visualización.
+- Media.
+- Desviación estándar.
+- Mediana.
+
+```{python}
+#| echo: true
+#| label: stats-indices
+
+def calcular_stats(imagen, nombre_banda, geometry, scale=10):
+    stats = imagen.rename(nombre_banda).reduceRegion(
+        reducer=ee.Reducer.min()
+                  .combine(ee.Reducer.max(), sharedInputs=True)
+                  .combine(ee.Reducer.mean(), sharedInputs=True)
+                  .combine(ee.Reducer.stdDev(), sharedInputs=True)
+                  .combine(ee.Reducer.median(), sharedInputs=True),
+        geometry=geometry,
+        scale=scale,
+        maxPixels=1e9
+    )
+    result = stats.getInfo()
+    return {
+        'Mínimo':             round(result.get(f'{nombre_banda}_min',  None), 4),
+        'Máximo':             round(result.get(f'{nombre_banda}_max',  None), 4),
+        'Media':              round(result.get(f'{nombre_banda}_mean', None), 4),
+        'Desv. Estándar':     round(result.get(f'{nombre_banda}_stdDev', None), 4),
+        'Mediana':            round(result.get(f'{nombre_banda}_median', None), 4)
+    }
+
+
+indices_stats = {
+    'NDVI':  calcular_stats(NDVI, 'NDVI',  geometry),
+    'NDRE':  calcular_stats(NDRE, 'NDRE',  geometry),
+    'EVI':  calcular_stats(EVI,  'EVI',  geometry),
+    'GNDVI':calcular_stats(GNDVI,'GNDVI',geometry),
+    'GLI':  calcular_stats(GLI,  'GLI',  geometry),
+    'SAVI': calcular_stats(SAVI, 'SAVI', geometry),
+    'NDWI': calcular_stats(NDWI, 'NDWI', geometry),
+    'ARVI': calcular_stats(ARVI, 'ARVI', geometry),
+    'NBRI': calcular_stats(NBRI, 'NBRI', geometry)
+}
+
+
+df_stats = pd.DataFrame(indices_stats).T
+df_stats.index.name = 'Índice'
+df_stats.reset_index(inplace=True)
+df_stats.to_csv('stats_indices.csv', index=False)
+```
+
+Se muestran los resultados usando la libreria [kableExtra]{.func-tecnica} de [R]{.func-tecnica}:
+
+```{r}
+#| echo: true
+#| code-fold: true
+#| code-summary: "Código"
+#| label: tbl-stats-indices
+#| tbl-cap: "Estadísticos descriptivos de los índices espectrales calculados sobre el área de estudio"
+
+library(knitr)
+library(kableExtra)
+
+df <- read.csv('stats_indices.csv', check.names = FALSE)
+
+kbl(df,
+    booktabs  = TRUE,
+    digits    = 4,
+    align     = c("l", "r", "r", "r", "r", "r")) %>%
+  kable_styling(
+    bootstrap_options = c("striped", "hover", "condensed", "responsive"),
+    full_width  = TRUE,
+    position    = "center"
+  ) %>%
+  row_spec(0, bold = TRUE, color = "white", background = "#1A365D") %>%
+  column_spec(1, bold = TRUE, width = "6em") %>%
+  column_spec(2:6, width = "8em")
+```
+
+
+# Exportar los Indices a Asset {#sec-exp}
+
+Para asegurar que las capas del mapa permanezcan accesibles de forma indefinida y no expiren por la caducidad de los tokens de Google Earth Engine, se procedió a exportar los resultados a los servidores de almacenamiento de GEE (Assets).
+
+## Juntar las bandas en una sola imagen 
+
+Se utilizó la función [ee.Image.cat()]{.func-tecnica} para fusionar las capas individuales en una única estructura multibanda. Además, con [.select()]{.func-tecnica}, se renombró la primera banda de cada objeto ([[0]]{.func-tecnica}) con las siglas del índice correspondiente ('NDVI', 'NDRE', etc.).
+
+```{python}
+#| eval: false
+
+indices_multibanda = ee.Image.cat([
+    NDVI.select([0], ['NDVI']),
+    NDRE.select([0], ['NDRE']),
+    EVI.select([0], ['EVI']),
+    GNDVI.select([0], ['GNDVI']),
+    GLI.select([0], ['GLI']),
+    SAVI.select([0], ['SAVI']),
+    NDWI.select([0], ['NDWI']),
+    ARVI.select([0], ['ARVI']),
+    NBRI.select([0], ['NBRI'])
+])
+```
+
+## Definir la región de interés (ROI) y la escala para la exportación
+
+Antes de exportar, es necesario delimitar la geometría y la resolución de salida. Como geometría se usó el área de interés antes cargada (@sec-import) y como escala un valor 10, que corresponde con la resolución espacial de las bandas visibles e infrarrojo cercano (NIR) de las imágenes Sentinel-2.
+
+```{python}
+#| eval: false
+
+roi = NDVI.geometry() 
+escala = 10
+```
+
+## Configurar y lanzar la tarea de exportación a tus Assets
+
+Se configuró la exportación mediante [ee.batch.Export.image.toAsset()]{.func-tecnica}. Esto define las propiedades del archivo final en la nube:
+
+* [image]{.func-tecnica}: La imagen multibanda con los 9 índices integrados.
+* [description]{.func-tecnica}: El nombre identificador de la tarea dentro de la consola de GEE.
+* [assetId]{.func-tecnica}: La ruta  dentro del repositorio del proyecto del usuario.
+* [region]{.func-tecnica} y [scale]{.func-tecnica}: Los límites geográficos y la resolución definidos en el paso previo.
+* [maxPixels]{.func-tecnica}: Un umbral de seguridad elevado a un billón de píxeles ($10^{13}$) para prevenir interrupciones en caso de que el área de estudio abarque extensiones agrícolas muy amplias.
+
+```{python}
+#| eval: false
+
+tarea = ee.batch.Export.image.toAsset(
+    image=indices_multibanda,
+    description='Exportar_Indices_Vegetacion',
+    assetId='projects/ee-jpablo-heiland/assets/indices_resultado', 
+    region=roi,
+    scale=escala,
+    maxPixels=1e13
+)
+```
+
+## Iniciar la tarea en los servidores de Google
+
+```{python}
+#| eval: false
+
+tarea.start()
+```
+
+# Visualizar los Indices en un Mapa
+
+## Crear paletas de colores
+
+Se crean las paletas para visualizar los índices teniendo en cuenta los valores mínimos y máximos de cada índice visto antes (@tbl-stats-indices). Teniendo en cuenta esto se creó una paleta particular para GNDVI y NDWI.
+
+```{python}
+vis = {
+    'max': 0.8, 
+    'min': -0.1,
+    'palette': [
+        'FFFFFF', 'CE7E45', 'DF923D', 'F1B555', 'FCD163', '99B718', '74A901',
+        '66A000', '529400', '3E8601', '207401', '056201', '004C00', '023B01',
+        '012E01', '011D01', '011301'
+    ]
+}
+    
+    
+vis_gndvi = {
+    'min': 0.42,
+    'max': 0.81,
+    'palette': [
+        'FFFFFF', 'CE7E45', 'DF923D', 'F1B555', 'FCD163', '99B718', '74A901',
+        '66A000', '529400', '3E8601', '207401', '056201', '004C00', '023B01',
+        '012E01', '011D01', '011301'
+    ]
+}
+
+vis_ndwi = {
+    'min': -0.1,
+    'max': 0.35,
+    'palette': ["9b971e", "b3f591", "82d0f5", "100cff"]
+}  
+    
+```
+
+## Cargar el Asset permanente desde GEE
+
+Se recupera la imagen multibanda previamente exportada al Asset de GEE (@sec-exp) mediante [ee.Image()]{.func-tecnica}.
+
+```{python}
+indices_guardados = ee.Image('projects/ee-jpablo-heiland/assets/indices_resultado')
+```
+
+## Calcular el centro del área de estudio
+
+Para posicionar correctamente la vista inicial del mapa, se obtiene el centroide del área de estudio con [.centroid()]{.func-tecnica}. El método [.getInfo()]{.func-tecnica} descarga el resultado desde los servidores de GEE al entorno local como un diccionario Python. Las coordenadas en GEE se ordenan como [[longitud, latitud]]{.func-tecnica}, por lo que se invierten para obtener el formato [[latitud, longitud]]{.func-tecnica} que espera [folium]{.func-tecnica}.
+
+```{python}
+centroid = geometry.centroid(maxError=1).getInfo()['coordinates']
+centro = [centroid[1], centroid[0]]
+```
+
+## Inicializar el mapa base con Folium
+
+Se crea el objeto mapa con [folium.Map()]{.func-tecnica}. Los parámetros [location]{.func-tecnica} y [zoom_start]{.func-tecnica} definen la posición y el nivel de zoom inicial. El argumento [tiles=None]{.func-tecnica} quita el mapa base por defecto de Folium, ya que a continuación se agrega un mapa satelital de mayor calidad.
+
+```{python}
+mapa = folium.Map(location=centro, zoom_start=15, tiles=None)
+```
+
+## Agregar el mapa base satelital
+
+Se incorpora el mapabase de Google mediante [folium.TileLayer()]{.func-tecnica}.
+
+```{python}
+folium.TileLayer(
+    tiles='https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}',
+    attr='Google Satellite',
+    name='Satélite',
+    overlay=False,
+    control=True
+).add_to(mapa)
+```
+
+## Definir la función para agregar capas GEE con URLs permanentes
+
+Se creó la función [agregar_capa_gee()]{.func-tecnica} que agrega una capa de GEE al mapa de [folium]{.func-tecnica}.
+
+La función recibe una imagen de GEE, le solicita a los servidores de Google una URL de tiles con [.getMapId()]{.func-tecnica} aplicando los parámetros de visualización indicados, y agrega esa capa al mapa de [folium]{.func-tecnica} con el nombre y la opacidad definidos.
+
+```{python}
+def agregar_capa_gee(imagen, vis_params, nombre, mapa_folium):
+    map_id   = imagen.getMapId(vis_params)
+    tile_url = map_id['tile_fetcher'].url_format
+    folium.TileLayer(
+        tiles=tile_url,
+        attr='Google Earth Engine',
+        name=nombre,
+        overlay=True,
+        control=True,
+        opacity=0.85
+    ).add_to(mapa_folium)
+```
+
+## Añadir los índices al mapa
+
+Se define una lista de tuplas con la imagen de cada índice (extraída del Asset con [.select()]{.func-tecnica}), su paleta de visualización y su nombre de capa. Luego se itera sobre la lista llamando a [agregar_capa_gee()]{.func-tecnica} para cada índice. 
+
+```{python}
+capas = [
+    (indices_guardados.select('NDVI'),  vis,       'NDVI'),
+    (indices_guardados.select('NDRE'),  vis,       'NDRE'),
+    (indices_guardados.select('EVI'),   vis,       'EVI'),
+    (indices_guardados.select('GNDVI'), vis_gndvi, 'GNDVI'),
+    (indices_guardados.select('GLI'),   vis,       'GLI'),
+    (indices_guardados.select('SAVI'),  vis,       'SAVI'),
+    (indices_guardados.select('NDWI'),  vis_ndwi,  'NDWI'),
+    (indices_guardados.select('ARVI'),  vis,       'ARVI'),
+    (indices_guardados.select('NBRI'),  vis,       'NBRI'),
+]
+
+for imagen, vis_params, nombre in capas:
+    agregar_capa_gee(imagen, vis_params, nombre, mapa)
+```
+
+## Agregar el control de capas y guardar
+
+[folium.LayerControl()]{.func-tecnica} inserta en el mapa el selector interactivo de capas. El parámetro [collapsed=False]{.func-tecnica} mantiene el panel de capas desplegado al cargar el mapa.
+
+Finalmente, [mapa.save()]{.func-tecnica} guarda el mapa completo como un archivo HTML autocontenido. 
+
+```{python}
+folium.LayerControl(collapsed=False).add_to(mapa)
+mapa.save("mapa_indices.html")
+```
+
+El archivo HTML resultante se embebe en el documento mediante un [iframe]{.func-tecnica}.
+
+<iframe src="mapa_indices.html" 
+        width="100%" 
+        height="800px"
+        frameborder="0">
+</iframe>
+
+# Exportar
+
+Además del almacenamiento en los Assets de GEE, es posible exportar los resultados en formato ráster (.tif). Para exportar imágenes desde Google Earth Engine directamente a Google Drive se utiliza el módulo [ee.batch.Export.image.toDrive()]{.func-tecnica}. Sus argumentos son:
+
+* [image]{.func-tecnica}: Especifica el objeto ráster o la banda a exportar.
+* [description]{.func-tecnica}: Asigna un nombre de identificación interna.
+* [scale]{.func-tecnica}: Define la resolución espacial en metros.
+* [region]{.func-tecnica}: Delimita el área geográfica de exportación.
+* [fileNamePrefix]{.func-tecnica}: Define el nombre que tendrá el archivo final almacenado.
+* [folder]{.func-tecnica}: Nombre de la carpeta dentro de Google Drive donde se alojará el archivo.
+* [crs]{.func-tecnica}: Determina el Sistema de Referencia de Coordenadas de salida.
+* [maxPixels]{.func-tecnica}: Modifica el límite máximo de píxeles permitidos en la exportación.
+
+```{python}
+#| eval: false
+
+exportar_drive = ee.batch.Export.image.toDrive(
+    image=NDVI, 
+    description="NDVI_Sentinel2", 
+    scale=10, 
+    region=geometry, 
+    fileNamePrefix="ndvi_s2_export", 
+    folder="GEE_exp", 
+    maxPixels=1e13, 
+    crs="EPSG:32720" 
+)
+
+exportar_drive.start()
+```
+

@@ -1,0 +1,601 @@
+---
+title: "Monitoreo Satelital de Cultivos con Google Earth Engine y Python: Composición Temporal de NDVI con Sentinel-2"
+date: 2026-06
+categories: [Python, Google Earth Engine, Agricultura de precisión, Teledetección]
+css: styles.css
+---
+
+# Introducción
+
+Este documento presenta el flujo de trabajo para el monitoreo satelital de un cultivo a lo largo de su ciclo, integrando la **API de Python de Google Earth Engine** con el entorno de análisis R/Quarto mediante [reticulate]{.func-tecnica}.
+
+El flujo parte de la definición del área de estudio a través de un shapefile local, que se convierte en un objeto espacial compatible con GEE. Sobre esa geometría se construye y filtra una colección de imágenes Sentinel-2 (`COPERNICUS/S2_SR_HARMONIZED`), aplicando tres criterios: ventana temporal que cubre el ciclo completo del cultivo, intersección espacial con el lote, y umbral de cobertura de nubes. A cada imagen que supera ese filtrado se le aplican dos transformaciones: una máscara de píxeles basada en la banda SCL (que elimina nubes, sombras y artefactos de forma precisa a nivel de píxel) y el cálculo del NDVI.
+
+Con la colección procesada, se construye una serie de composiciones temporales de 14 días. Para cada ventana se seleccionan las imágenes disponibles, se calcula su mediana, y el resultado se recorta al contorno del lote. Esta composición es la base de las tres salidas del análisis:
+
+* Un mapa interactivo del NDVI mediano del ciclo completo, generado con [folium]{.func-tecnica}, exportado como Asset en GEE y embebido en el documento como HTML autocontenido.
+* Un GIF animado que recorre las composiciones temporales frame a frame, renderizado directamente en los servidores de GEE mediante [getVideoThumbURL()]{.func-tecnica}.
+* Una curva temporal de NDVI, construida mediante [reduceRegion]{.func-tecnica} con un reductor de media espacial, graficada con matplotlib.
+
+# Configuración Python
+
+Este bloque inicializa la conexión entre R y Python ([reticulate]{.func-tecnica}), fuerza al sistema a usar el entorno virtual de trabajo donde están las librerías y configura las variables de entorno `PROJ` para garantizar que no haya conflictos al procesar y proyectar datos de mapas o capas de Earh Engine.
+
+```{r}
+library(reticulate)
+
+proj_data <- "C:/Users/UsuarioX/miniconda3/envs/agro_science/Library/share/proj"
+Sys.setenv(PROJ_DATA = proj_data)
+Sys.setenv(PROJ_LIB  = proj_data)
+
+use_python(
+  "C:/Users/UsuarioX/miniconda3/envs/agro_science/python.exe",
+  required = TRUE
+)
+```
+
+## Librerías Necesarias
+
+```{python}
+import ee
+import geemap
+import geemap.colormaps as cm
+import folium
+import matplotlib.pyplot as plt
+import matplotlib.dates as mdates
+import matplotlib.ticker as ticker
+import numpy as np
+from datetime import datetime, timedelta
+import requests
+import os
+```
+
+
+# Inicialización de la API
+
+Para interactuar con Google Earth Engine (GEE) desde Python, es necesario importar y autenticar la librería [earthengine-api]{.func-tecnica}. La inicialización establece la conexión con los servidores de GEE y habilita el uso de sus colecciones de imágenes satelitales y herramientas de análisis geoespacial, esto se hace con [ee.Initialize()]{.func-tecnica}.
+
+```{python}
+ee.Initialize(project='ee-jpablo-heiland')
+```
+
+# Importación del Área de Estudio
+
+En este punto, se adecúa el archivo shapefile (vectorial) del área de estudio hacia el entorno de Google Earth Engine utilizando herramientas de [geemap]{.func-tecnica}.
+
+## Definir la ruta del área de estudio
+
+La variable [ruta_shapefile]{.func-tecnica} apunta al archivo principal .shp en el disco local.
+
+```{python}
+ruta_shapefile = "data/lote_14.shp"
+```
+
+## Conversión a Objeto de Servidor
+
+La función [.shp_to_ee()]{.func-tecnica} lee el Shapefile local (junto con sus archivos asociados .shx, .dbf y .prj), lee la tabla de atributos y empaqueta la información geométrica en un formato JSON estructurado. Envía dichos datos hacia la nube de Google, transformando el vector en un objeto del tipo [ee.FeatureCollection]{.func-tecnica}, listo para usar en GEE.
+
+Finalmente, el método [.geometry()]{.func-tecnica} se aplica sobre la colección de objetos espaciales para aislar estrictamente las coordenadas y los límites vectoriales del lote. Remueve la tabla de atributos (datos alfanuméricos como nombres de lote, dueño o hectáreas) y conserva únicamente el polígono puro como un objeto [ee.Geometry]{.func-tecnica}.
+
+```{python}
+lote_ee = geemap.shp_to_ee(ruta_shapefile)
+
+geometry = lote_ee.geometry()
+```
+
+# Parámetros Generales {#sec-para}
+
+Se definen  los parámetros que controlan el comportamiento del flujo. Esto evita valores dispersos a lo largo del código y facilita la reproducibilidad del análisis ante cambios en el período, la frecuencia temporal o los umbrales de calidad (cantidad de nubes). Aquí se define:
+
+* `FECHA_INI` y `FECHA_FIN` delimitan la ventana temporal de análisis, abarcando el ciclo completo del cultivo.
+
+* `PASO_DIAS` define la amplitud de cada ventana de composición temporal. Un valor de 14 días representa un equilibrio entre el comportamiento del cultivo y la disponibilidad de imágenes libres de nubes, dado que Sentinel-2 tiene una frecuencia de aproximadamente 5 días.
+
+* `MAX_NUBES` establece el umbral máximo de cobertura nubosa, expresado como porcentaje, por encima del cual una imagen es descartada antes del enmascaramiento por píxel.
+
+* `PALETA` y `VIS_NDVI` definen los parámetros de visualización del NDVI.
+
+```{python}
+FECHA_INI  = '2025-10-01'
+FECHA_FIN  = '2026-04-15'   
+PASO_DIAS  = 14
+MAX_NUBES  = 20
+
+
+PALETA = [
+    'a52f04', 'c67f3c', 'e8b96a', 'f5e4a0',
+    'c8e06a', '78c83c', '3da62a', '1a7a14', '0a4d08'
+]
+
+VIS_NDVI = {'min': -0.1, 'max': 0.85, 'palette': PALETA}
+```
+
+# Filtrar Imágenes Sentinel-2 {#sec-imag}
+
+En este bloque se filtra la colección de imágenes disponibles, según los parámetros generales antes visto, de la colección `COPERNICUS/S2_SR_HARMONIZED`. Se divide en 3 etapas:
+
+* Enmascaramiento de píxeles no válidos.
+* Cálculo del NDVI.
+* Filtrado de la colección.
+
+
+## Enmascaramiento de píxeles no válidos
+
+Se crea la función [mask_s2_scl]{.func-tecnica} la cual entra a la imagen de Sentinel-2 y selecciona la banda llamada SCL (*Scene Classification Layer*). Esta banda es un mapa precalculado donde cada píxel tiene un número del 0 al 11 que representa qué hay en ese punto del suelo.
+
+Luego se define el filtro de calidad. La función genera una "máscara binaria" (un mapa de unos y ceros) donde solo se seleccionan los píxeles que cumplan con los códigos numéricos indicados:
+
+* eq(4): Píxeles clasificados como Vegetación.
+
+* eq(5): Píxeles clasificados como Suelo desnudo / No vegetado.
+
+* eq(6): Píxeles clasificados como Agua.
+
+* eq(11): Píxeles clasificados como Nieve o Hielo.
+
+Cualquier píxel que tenga un código diferente (como el 3 que son sombras de nubes, o el 8, 9, 10 que son nubes de distinta densidad) queda afuera de esta selección.
+
+```{python}
+def mask_s2_scl(image):
+    scl = image.select('SCL')
+    mascara = (scl.eq(4)   
+               .Or(scl.eq(5))
+               .Or(scl.eq(6))   
+               .Or(scl.eq(11))) 
+    return image.updateMask(mascara)
+```
+
+
+## Cálculo de NDVI
+
+Se crea una la función [calcular_ndvi]{.func-tecnica} que, justamente, realiza el cálculo del índice NDVI. 
+
+La función [normalizedDifference]{.func-tecnica} toma las dos bandas indicadas y aplica la fórmula estandarizada:
+
+$$\text{Diferencia Normalizada} = \frac{\text{Banda 1} - \text{Banda 2}}{\text{Banda 1} + \text{Banda 2}}$$
+En este caso, se indica la Banda 8 (Infrarrojo Cercano) y la Banda 4 (Rojo), ejecutando la ecuación clásica del NDVI:
+
+$$NDVI = \frac{{B8} - {B4}}{{B8} + {B4}}$$
+
+
+El resultado se añade como banda adicional mediante [addBands]{.func-tecnica}, preservando las bandas espectrales originales.
+
+La propiedad [system:time_start]{.func-tecnica} sirve para mantener la referencia temporal de cada imagen, es decir, recupera la fecha y hora de captura de la imagen original y se la vuelve a estampar a la imagen resultante. Esto es necesario para la correcta construcción de la serie temporal.
+
+```{python}
+def calcular_ndvi(image):
+    ndvi = image.normalizedDifference(['B8', 'B4']).rename('NDVI')
+    return (image.addBands(ndvi)
+                 .set('system:time_start', image.get('system:time_start')))
+```
+
+
+## Filtrado de la colección 
+
+Se aplican tres filtros: 
+
+* [filterDate]{.func-tecnica}: restringe la consulta a la ventana temporal definida, 
+* [filterBounds]{.func-tecnica} limita la búsqueda a escenas que intersectan el lote, y 
+* [filterMetadata]{.func-tecnica} sobre el metadato `CLOUDY_PIXEL_PERCENTAGE` descarta imágenes con cobertura nubosa superior al umbral `MAX_NUBES`.
+
+Mediante el comando [.map()]{.func-tecnica} se ejecutan las dos funciones antes creada: máscara y cálculo de NDVI para cada una de las imagenes de la colección que pasaron los filtros anteriores.
+
+```{python}
+s2 = (ee.ImageCollection('COPERNICUS/S2_SR_HARMONIZED')
+      .filterDate(FECHA_INI, FECHA_FIN)
+      .filterBounds(geometry)
+      .filterMetadata('CLOUDY_PIXEL_PERCENTAGE', 'less_than', MAX_NUBES)
+      .map(mask_s2_scl)
+      .map(calcular_ndvi))
+
+```
+
+La cantidad de imágenes disponibles luego del filtrado es:
+
+```{python}
+#| include: false
+cantidad_imagenes = s2.size().getInfo()
+```
+
+```{r}
+#| include: false
+cantidad_imagenes_r <- py$cantidad_imagenes
+```
+
+
+::: {.premium-metrics-grid}
+
+::: {.premium-metric}
+::: {.metric-name}
+Imágenes Disponibles
+:::
+
+::: {.metric-number .metric-highlight}
+`r cantidad_imagenes_r`
+:::
+:::
+
+:::
+
+# Composición Temporal {#sec-comp}
+
+En este punto se agrupan las imágenes por "bloques de días" y se calcula la mediana.
+
+El proceso funciona en dos etapas simples:
+
+* El bucle [while]{.func-tecnica} genera una lista de fechas de inicio separadas entre sí por el parámetro general `PASO_DIAS` (@sec-para), abarcando todo el período de análisis. Son las "ventanas" en las que se divide el ciclo del cultivo: 01-oct, 15-oct, 29-oct, y así sucesivamente hasta llegar a la fecha final.
+
+
+* Segundo, para cada una de esas ventanas se buscan las imágenes de Sentinel-2 disponibles dentro de ese intervalo de 14 días. El chequeo se hace con un [if]{.func-tecnica} simple. Si [n > 0]{.func-tecnica} hay imágenes, se calcula la mediana y se guarda la composición; si no hay ninguna, el período se descarta sin generar errores.
+
+La mediana es el estadístico elegido para combinar las imágenes de cada ventana porque es robusta frente a valores extremos.
+
+Por medio de [.clip()]{.func-tecnica} se recorta el resultado según el contorno del lote y le vuelve a agregar la fecha de inicio del período para que no pierda su identidad temporal.
+
+Al terminar el loop, se guardan todas las imágenes que generó en una lista y las transforma de nuevo en una colección oficial de Earth Engine (`ee.ImageCollection(compositas)`).
+
+```{python}
+fecha_ini = datetime.strptime(FECHA_INI, '%Y-%m-%d')
+fecha_fin = datetime.strptime(FECHA_FIN, '%Y-%m-%d')
+
+
+fechas = []
+f = fecha_ini
+while f < fecha_fin:
+    fechas.append(f)
+    f += timedelta(days=PASO_DIAS)
+
+compositas = []
+fechas_validas = []
+
+for fecha in fechas:
+    f_str     = fecha.strftime('%Y-%m-%d')
+    f_fin_str = (fecha + timedelta(days=PASO_DIAS)).strftime('%Y-%m-%d')
+    
+    sub = s2.filterDate(f_str, f_fin_str)
+    
+    n = sub.size().getInfo()
+    
+    if n > 0:
+        comp = (sub.select('NDVI')
+                   .median()
+                   .clip(geometry)
+                   .set('system:time_start', ee.Date(f_str).millis())
+                   .set('fecha_str', f_str))
+        compositas.append(comp)
+        fechas_validas.append(fecha)
+        print(f'  ✓ {f_str} — {n} imagen/es')
+    else:
+        print(f'  ✗ {f_str} — sin imágenes')
+
+col_composita = ee.ImageCollection(compositas)
+```
+
+```{python}
+#| include: false
+cantidad_imagenes_comp = col_composita.size().getInfo()
+```
+
+```{r}
+#| include: false
+cantidad_imagenes_comp_r <- py$cantidad_imagenes_comp
+```
+
+El objeto [col_composita]{.func-tecnica} es una [ee.ImageCollection]{.func-tecnica} que contiene `r cantidad_imagenes_comp_r` imágenes, donde cada imagen representa la mediana espacial de su ventana de 14 días.
+
+
+# Visualización en un Mapa
+
+En esta sección se detalla el procedimiento para la generación del mapa interactivo con [folium]{.func-tecnica}.
+
+## NDVI Mediano
+
+La variable [col_composita]{.func-tecnica} almacena una secuencia de imágenes compuestas, donde cada una representa el NDVI para un período de 14 días del cultivo. Para obtener un mapa que resuma el comportamiento general del lote a lo largo de todo su ciclo, se aisló la banda espectral mediante el método [select('NDVI')]{.func-tecnica} y se aplicó el reductor estadístico [.median()]{.func-tecnica}.
+
+```{python}
+#| eval: false
+
+ndvi_ciclo_completo = col_composita.select('NDVI').median()
+```
+
+## Exportar a Asset
+
+Una vez obtenido el [ndvi_ciclo_completo]{.func-tecnica}, se configuró su exportación a Asset mediante [ee.batch.Export.image.toAsset()]{.func-tecnica} donde se fijaron sus propiedades (resolución de 10 metros y recorte al lote). El método [.start()]{.func-tecnica} envió la tarea a la nube.
+
+```{python}
+#| eval: false
+
+tarea_mediana = ee.batch.Export.image.toAsset(
+    image=ndvi_ciclo_completo,
+    description='Exportar_NDVI_Mediano_Ciclo',
+    assetId='projects/ee-jpablo-heiland/assets/ndvi_mediano_ciclo', 
+    region=geometry,
+    scale=10,
+    maxPixels=1e13
+)
+
+tarea_mediana.start()
+```
+
+## Cargar el Asset permanente desde GEE
+
+Se recupera el NDVI mediano previamente exportado al Asset de GEE mediante [ee.Image()]{.func-tecnica}.
+
+```{python}
+ndvi_mediano_asset = ee.Image('projects/ee-jpablo-heiland/assets/ndvi_mediano_ciclo')
+```
+
+## Calcular el centro del área de estudio
+
+Para posicionar correctamente la vista inicial del mapa, se obtiene el centroide del área de estudio con [.centroid()]{.func-tecnica}. El parámetro [maxError=1]{.func-tecnica} indica que GEE puede aproximar el centroide con un error máximo de 1 metro. El método [.getInfo()]{.func-tecnica} descarga el resultado como un diccionario Python. Las coordenadas en GEE se ordenan como [[longitud, latitud]]{.func-tecnica}, por lo que se invierten al formato [[latitud, longitud]]{.func-tecnica} que espera [folium]{.func-tecnica}.
+
+```{python}
+centroid = geometry.centroid(maxError=1).getInfo()['coordinates']
+centro = [centroid[1], centroid[0]]
+```
+
+## Inicializar el mapa base con Folium
+
+Se crea el objeto mapa con [folium.Map()]{.func-tecnica}. El argumento [tiles=None]{.func-tecnica} suprime el mapa base por defecto de Folium, ya que se agrega un mapa satelital de mayor calidad.
+
+```{python}
+mapa = folium.Map(location=centro, zoom_start=14, tiles=None)
+```
+
+## Agregar el mapa base satelital
+
+Se incorpora el mapa base de Google mediante [folium.TileLayer()]{.func-tecnica}. El parámetro [overlay=False]{.func-tecnica} la define como capa base (no superpuesta), y [control=True]{.func-tecnica} la hace visible en el selector de capas.
+
+```{python}
+folium.TileLayer(
+    tiles='https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}',
+    attr='Google Satellite',
+    name='Satélite',
+    overlay=False,
+    control=True
+).add_to(mapa)
+```
+
+## Agregar la capa de NDVI con URL permanente
+
+[.getMapId()]{.func-tecnica} le pide a GEE que prepare la imagen para ser visualizada con la paleta y los rangos definidos en [VIS_NDVI]{.func-tecnica}, y devuelve una dirección web (URL) que apunta permanentemente a esa imagen en los servidores de Google. Esa dirección se le entrega a [folium.TileLayer()]{.func-tecnica}, que la usa para cargar y mostrar la imagen en el mapa como una capa con nombre, opacidad y control de visibilidad.
+
+```{python}
+map_id   = ndvi_mediano_asset.getMapId(VIS_NDVI)
+tile_url = map_id['tile_fetcher'].url_format
+
+folium.TileLayer(
+    tiles=tile_url,
+    attr='Google Earth Engine',
+    name='NDVI Mediano del Ciclo',
+    overlay=True,
+    control=True,
+    opacity=0.85
+).add_to(mapa)
+```
+
+## Control de capas y guardado
+
+[folium.LayerControl()]{.func-tecnica} inserta el selector interactivo de capas en el mapa. Finalmente, [mapa.save()]{.func-tecnica} guarda el mapa como un archivo HTML autocontenido con URLs de tiles permanentes, que luego se embebe en el documento mediante un [iframe]{.func-tecnica}.
+
+```{python}
+folium.LayerControl(collapsed=False).add_to(mapa)
+mapa.save("mapa_ndvi_ciclo.html")
+```
+
+## Mostrar Mapa
+
+<iframe src="mapa_ndvi_ciclo.html" 
+        width="100%" 
+        height="800px"
+        frameborder="0">
+</iframe>
+
+# Generación del GIF
+
+El objetivo es transformar la secuencia de mapas de NDVI en una animación fluida que muestre la evolución del cultivo a lo largo del tiempo.
+
+## Creación y Descarga del GIF
+
+Cada imagen de [col_composita]{.func-tecnica} (@sec-comp) contiene una banda NDVI con valores entre -1 y 1, que no son directamente representables como imagen RGB. La función [visualizar_frame]{.func-tecnica} aplica los parámetros de `VIS_NDVI` (@sec-para) para convertir cada composite en una imagen de tres bandas RGB lista para ser renderizada. El resultado es [col_para_gif]{.func-tecnica}, una colección donde cada elemento es ya un frame con colores interpretables.
+
+En [gif_params]{.func-tecnica} definen los parámetros del GIF.
+
+[getVideoThumbURL()]{.func-tecnica} solicita al servidor de GEE que genere el GIF a partir de la colección visualizada y devuelve una URL de descarga temporal. 
+```{python}
+#| output: false
+#| warning: false
+
+region = geometry.bounds()
+
+def visualizar_frame(image):
+    return image.visualize(**VIS_NDVI)
+
+col_para_gif = col_composita.map(visualizar_frame)
+
+out_gif = 'ndvi_ciclo_cultivo.gif'
+
+
+gif_params = {
+    'region':          region,
+    'dimensions':      600,      #
+    'framesPerSecond': 1.5,
+    'format':          'gif'
+}
+
+
+url = col_para_gif.getVideoThumbURL(gif_params)
+
+response = requests.get(url, stream=True)
+with open(out_gif, 'wb') as f:
+    for chunk in response.iter_content(chunk_size=8192):
+        f.write(chunk)
+
+```
+
+## Renderizado
+
+La visualización del GIF se realiza con R. [base64enc]{.func-tecnica} lee el archivo GIF y lo codifica en [base64]{.func-tecnica}, un formato que permite incrustar archivos binarios directamente dentro del HTML como una cadena de texto. [htmltools]{.func-tecnica} construye la etiqueta <img> con esa cadena como fuente, lo que garantiza que el GIF quede autocontenido en el documento final sin depender de rutas externas.
+
+
+```{r}
+library(htmltools)
+library(base64enc)
+
+gif_path <- "ndvi_ciclo_cultivo.gif"
+
+gif_b64 <- base64enc::base64encode(gif_path)
+
+html_gif <- tags$div(
+  style = "text-align: center; margin: 1rem 0;",
+  tags$img(
+    src   = paste0("data:image/gif;base64,", gif_b64),
+    style = "width: 600px; border-radius: 8px;"
+  ),
+  tags$p(
+    style = "font-size: 0.85rem; color: #666; margin-top: 0.5rem;",
+    "NDVI Sentinel-2 — ciclo de cultivo"
+  )
+)
+
+html_gif
+```
+
+
+# Gráfico NDVI temporal 
+
+Este paso muestrea gráficamente la evolución del NDVI medio  del lote a lo largo del ciclo del cultivo. Se presentan dos enfoques: 
+
+* Uno basado en las **composiciones temporales de 14 días**. La curva de composiciones utiliza las 13 imágenes medianas de [col_composita]{.func-tecnica} (@sec-comp). 
+
+* Otro basado sobre la **totalidad de imágenes Sentinel-2** que superaron el filtrado. Esta curva de imágenes individuales opera directamente sobre [s2]{.func-tecnica} (@sec-imag), aprovechando resolución temporal de Sentinel-2 (5 días) y aportando mayor densidad de observaciones.
+
+## Extracción de datos
+
+**Composiciones temporales**
+
+Para cada imagen de [col_composita]{.func-tecnica} se aplica [reduceRegion]{.func-tecnica} con el reductor [mean]{.func-tecnica}, que promedia todos los píxeles válidos dentro de la geometría del lote a una resolución de 20 m. El resultado es un diccionario con el valor medio de NDVI para ese período, que se recupera con [.getInfo()]{.func-tecnica} y se almacena en [ndvi_valores]{.func-tecnica}.
+
+```{python}
+ndvi_valores = []
+
+for i, (comp, fecha) in enumerate(zip(compositas, fechas_validas)):
+    stats = comp.reduceRegion(
+        reducer  = ee.Reducer.mean(),
+        geometry = geometry,
+        scale    = 20,
+        maxPixels= 1e8
+    ).getInfo()
+    ndvi_valores.append(stats.get('NDVI', np.nan))
+```
+
+**Imágenes Sentinel-2 individuales**
+
+Para cada imagen de [s2]{.func-tecnica} se recupera la fecha de captura a partir de la propiedad [system:time_start]{.func-tecnica} mediante [.date().format()]{.func-tecnica}, y se aplica [reduceRegion]{.func-tecnica} con el mismo reductor. Ambos valores se adjuntan como propiedades de cada imagen mediante [.map()]{.func-tecnica} del lado del servidor y se traen con un único [.getInfo()]{.func-tecnica}, evitando una llamada por imagen.
+
+```{python}
+info_list = s2.map(lambda img: img.set({
+    'fecha_str': img.date().format('YYYY-MM-dd'),
+    'ndvi_medio': img.select('NDVI').reduceRegion(
+        reducer  = ee.Reducer.mean(),
+        geometry = geometry,
+        scale    = 20,
+        maxPixels= 1e8
+    ).get('NDVI')
+})).select(['NDVI']).getInfo()
+
+fechas_s2 = []
+ndvi_s2   = []
+
+for feat in info_list['features']:
+    props     = feat['properties']
+    fecha_str = props.get('fecha_str')
+    ndvi_val  = props.get('ndvi_medio')
+    if fecha_str is not None and ndvi_val is not None:
+        fechas_s2.append(datetime.strptime(fecha_str, '%Y-%m-%d'))
+        ndvi_s2.append(ndvi_val)
+
+pares      = sorted(zip(fechas_s2, ndvi_s2))
+fechas_s2, ndvi_s2 = zip(*pares)
+```
+
+## Graficar
+
+::: {.panel-tabset}
+
+## Composiciones temporales
+
+```{python}
+#| code-fold: true
+#| code-summary: "Código"
+#| results: hide
+
+fig, ax = plt.subplots(figsize=(10, 5))
+
+ax.plot(fechas_validas, ndvi_valores,
+        color='#1f5e63', linewidth=2, marker='o',
+        markersize=5, markerfacecolor='white', markeredgewidth=1.5)
+
+ax.fill_between(fechas_validas, ndvi_valores,
+                alpha=0.15, color='#1f5e63')
+
+ax.set_title(f'NDVI medio del lote — composiciones de 14 días (n={len(fechas_validas)})',
+             fontsize=13, pad=12)
+
+ax.set_xlabel('Fecha')
+ax.set_ylabel('NDVI')
+
+ax.set_ylim(-0.1, 1.0)
+ax.yaxis.set_major_locator(ticker.MultipleLocator(0.1))
+
+ax.xaxis.set_major_formatter(mdates.DateFormatter('%b %y'))
+ax.xaxis.set_major_locator(mdates.MonthLocator())
+
+ax.grid(True, alpha=0.3, linestyle='--')
+ax.tick_params(axis='x', rotation=45)
+
+plt.tight_layout()
+plt.show()
+```
+
+## Imágenes S2 individuales
+
+```{python}
+#| code-fold: true
+#| code-summary: "Código"
+#| results: hide
+
+fig, ax = plt.subplots(figsize=(10, 5))
+
+ax.plot(fechas_s2, ndvi_s2,
+        color='#2c3b4d', linewidth=1.5, marker='o',
+        markersize=4, markerfacecolor='white', markeredgewidth=1.5)
+
+ax.fill_between(fechas_s2, ndvi_s2,
+                alpha=0.12, color='#2c3b4d')
+
+ax.set_title(f'NDVI medio del lote — imágenes S2 individuales (n={len(fechas_s2)})',
+             fontsize=13, pad=12)
+
+ax.set_xlabel('Fecha')
+ax.set_ylabel('NDVI')
+
+ax.set_ylim(-0.1, 1.0)
+ax.yaxis.set_major_locator(ticker.MultipleLocator(0.1))
+
+ax.xaxis.set_major_formatter(mdates.DateFormatter('%b %y'))
+ax.xaxis.set_major_locator(mdates.MonthLocator())
+
+ax.grid(True, alpha=0.3, linestyle='--')
+ax.tick_params(axis='x', rotation=45)
+
+plt.tight_layout()
+plt.show()
+```
+
+:::
+
+
+
+
+

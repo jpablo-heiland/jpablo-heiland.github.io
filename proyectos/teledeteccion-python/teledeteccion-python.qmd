@@ -1,9 +1,8 @@
 ---
 title: "Teledetección con Python"
-subtitle: "Procesamiento de Imagenes Satelitales con Python"
 date: 2026-06
 categories: [Python, Agricultura de precisión, Teledetección]
-css: styles3.css
+css: styles2.css
 ---
 
 # Introducción
@@ -12,17 +11,17 @@ css: styles3.css
 library(reticulate)
 ```
 
-El presente documento tiene como objetivo procesar y analizar una imagen satelital proveniente del satélite Landsat 9 a través de Python.
+El presente documento tiene como objetivo procesar y analizar una imagen satelital proveniente de [Landsat 9]{.sensor} a través de Python.
 
-Características de Landsat 9:
+Características de [Landsat 9]{.sensor}:
 
--   Resolución Temporal: Individualmente, es de 16 días. No obstante, al operar en órbita combinada con Landsat 8, la frecuencia baja a solo 8 días.
+* Resolución Temporal: Individualmente, es de 16 días. No obstante, al operar en órbita combinada con Landsat 8, la frecuencia baja a solo 8 días.
 
--   Resolución Espacial: 30 metros para las bandas ópticas (Azul, Verde, Rojo), el Infrarrojo Cercano (NIR) y el Infrarrojo de Onda Corta (SWIR).
+* Resolución Espacial: 30 metros para las bandas ópticas (Azul, Verde, Rojo), el Infrarrojo Cercano (NIR) y el Infrarrojo de Onda Corta (SWIR).
 
--   Resolución Radiométrica: Cuenta con una cuantización de 14 bits. Significa que cada píxel puede almacenar hasta 16.384 niveles de gris diferentes.
+* Resolución Radiométrica: Cuenta con una cuantización de 14 bits. Significa que cada píxel puede almacenar hasta 16.384 niveles de gris diferentes.
 
-El satélite **Landsat 9** cuenta con un total de 11 bandas espectrales. Se muestra información de estas bandas a través de una tabla creada con el paquete [kableExtra]{.func-tecnica}:
+Dicho satélite cuenta con un total de 11 bandas espectrales:
 
 ```{r}
 #| label: tbl-landsat9
@@ -96,6 +95,9 @@ kbl(datos_landsat, booktabs = TRUE, align = c("c", "l", "c", "c", "l")) %>%
   column_spec(5, width = "32em")   
 ```
 
+
+
+
 # Librerías Necesarias
 
 ```{python}
@@ -105,7 +107,7 @@ import numpy as np
 import matplotlib.pyplot as plt 
 ```
 
-# Cargamos la Imagen Satelital
+# Cargar Imagen Satelital
 
 Se usa la función [open()]{.func-tecnica} de [Rasterio]{.func-tecnica}. Es el equivalente al [open()]{.func-tecnica} nativo de Python, pero diseñado específicamente para archivos geoespaciales.
 
@@ -125,11 +127,11 @@ imagen_satelital.count
 
 Es una imagen que se obtuvo con **Google Earth Engine**, estas bandas corresponden a:
 
--   Banda Azul (B2)
--   Banda Verde (B3)
--   Banda Rojo (B4)
--   Infarrojo cercano "NIR" (B5)
--   SWIR (Infrarrojo de onda corta) 1 Y 2 (B6 Y B7)
+* Banda Azul (B2)
+* Banda Verde (B3)
+* Banda Rojo (B4)
+* Infarrojo cercano "NIR" (B5)
+* SWIR (Infrarrojo de onda corta) 1 Y 2 (B6 Y B7)
 
 ## Dimensión
 
@@ -140,28 +142,40 @@ imagen_satelital.width
 imagen_satelital.height
 ```
 
-A partir de esto y sabiendo que la resolución espacial es de 30 m, se puede determinar que:
+A partir de esto y sabiendo que la resolución espacial es de 30 m, se puede determinar que, la superficie de la imagen es:
 
 ```{python}
 #| echo: false
 #| message: false
 #| warning: false
 
-
 columnas = imagen_satelital.width
 filas = imagen_satelital.height
 
-
-ancho_metros = columnas * 30
-alto_metros = filas * 30
-
-
 total_pixeles = columnas * filas
 area_hectareas = (total_pixeles * 900) / 10000
-
-print(f"La imagen cubre un área aproximada de {ancho_metros/1000:.2f} km de ancho por {alto_metros/1000:.2f} km de alto.")
-print(f"Superficie total analizada: {area_hectareas:.2f} Hectáreas.")
 ```
+
+```{r}
+#| echo: false
+area_hectareas_r <- py$area_hectareas
+```
+
+::: {.premium-metrics-grid}
+
+::: {.premium-metric}
+::: {.metric-name}
+Superficie
+:::
+
+::: {.metric-number .metric-highlight}
+`r area_hectareas_r` [ ha]{.metric-unit}
+:::
+:::
+
+:::
+
+
 
 ## Sistema de Referencia de Coordenadas
 
@@ -173,17 +187,17 @@ imagen_satelital.crs
 
 # Seleccionar las bandas a usar
 
-Se seleccionan las bandas indicadas en el punto 5:
+Se seleccionan las bandas indicadas:
 
--   Banda Azul
--   Banda Verde
--   Banda Rojo
--   Banda Infrarrojo Cercano (NIR)
--   Banda SWIR (Infrarrojo de onda corta) 1 y 2
+* Banda Azul
+* Banda Verde
+* Banda Rojo
+* Banda Infrarrojo Cercano (NIR)
+* Banda SWIR (Infrarrojo de onda corta) 1 y 2
 
 La información de cada banda se observa en @tbl-landsat9.
 
-Adicionalmente se produce la normalización de cada banda. Debido a que matplotlib visualiza la información en un rango especifico de valores, y ese rango nos dice que es de 0 a 255 en enteros. Debemos normalizar la imagen para que no tengamos de 0 a 10 mil valores si no valores reducidos entre 0-1:
+Adicionalmente se produce la normalización de cada banda. Debido a que [matplotlib]{.func-tecnica}  visualiza la información en un rango especifico de valores, y ese rango nos dice que es de 0 a 255 en enteros. Debemos normalizar la imagen para que no tengamos de 0 a 10 mil valores si no valores reducidos entre 0-1:
 
 ```{python}
 banda_azul = imagen_satelital.read(1) 
@@ -207,11 +221,11 @@ banda_swir2_norm = banda_swir2 / banda_swir2.max()
 
 # Histogramas
 
-A continuación, se generan los histogramas de frecuencias para cada una de las seis bandas espectrales utilizando la función [hist()]{.func-tecnica} de la librería [matplotlib.pyplot]{.func-tecnica} (aplicada sobre el arreglo unidimensional obtenido con [flatten()]{.func-tecnica}). Esto sirve para:
+A continuación, se generan los histogramas de frecuencias para cada una de las seis bandas espectrales utilizando la función [hist()]{.func-tecnica} de la librería [matplotlib]{.func-tecnica} (aplicada sobre el arreglo unidimensional obtenido con [flatten()]{.func-tecnica}). Esto sirve para:
 
--   Comprobar la ausencia de anomalías radiométricas, ruidos atmosféricos extremos o errores de lectura que puedan distorsionar los datos.
+* Comprobar la ausencia de anomalías radiométricas, ruidos atmosféricos extremos o errores de lectura que puedan distorsionar los datos.
 
--   Permite interpretar el comportamiento físico de las coberturas del lote, identificando visualmente las zonas de absorción (como el canal Rojo) y de alta reflexión (como el Infrarrojo Cercano).
+* Permite interpretar el comportamiento físico de las coberturas del lote, identificando visualmente las zonas de absorción (como el canal Rojo) y de alta reflexión (como el Infrarrojo Cercano).
 
 ```{python}
 fig, axs = plt.subplots(2, 3, figsize=(18, 10))
@@ -219,32 +233,26 @@ fig, axs = plt.subplots(2, 3, figsize=(18, 10))
 
 axs = axs.flatten()
 
-# Azul 
 axs[0].hist(banda_azul.flatten(), bins=50, color='blue', alpha=0.7)
 axs[0].set_title('Distribución - Banda Azul (B2)')
 axs[0].set_xlabel('Valor de Reflectancia')
 
-# Verde 
 axs[1].hist(banda_verde.flatten(), bins=50, color='green', alpha=0.7)
 axs[1].set_title('Distribución - Banda Verde (B3)')
 axs[1].set_xlabel('Valor de Reflectancia')
 
-# Rojo 
 axs[2].hist(banda_rojo.flatten(), bins=50, color='red', alpha=0.7)
 axs[2].set_title('Distribución - Banda Rojo (B4)')
 axs[2].set_xlabel('Valor de Reflectancia')
 
-# NIR 
 axs[3].hist(banda_infrarrojo.flatten(), bins=50, color='orange', alpha=0.7) 
 axs[3].set_title('Distribución - Banda NIR (B5)')
 axs[3].set_xlabel('Valor de Reflectancia')
 
-# SWIR 1 
 axs[4].hist(banda_swir1.flatten(), bins=50, color='brown', alpha=0.7)
 axs[4].set_title('Distribución - Banda SWIR 1 (B6)')
 axs[4].set_xlabel('Valor de Reflectancia')
 
-# SWIR 2
 axs[5].hist(banda_swir2.flatten(), bins=50, color='gray', alpha=0.7)
 axs[5].set_title('Distribución - Banda SWIR 2 (B7)')
 axs[5].set_xlabel('Valor de Reflectancia')
@@ -257,7 +265,7 @@ plt.show()
 
 La función usada es [dstack()]{.func-tecnica} de la librería [NumPy]{.func-tecnica}.
 
-Las imágenes de reflectancia provenientes de plataformas satelitales como Landsat 9 capturan datos en un rango dinámico lineal muy amplio. Sin embargo, los componentes principales de un entorno agrícola (suelo, rastrojo y cultivos) suelen concentrar sus valores en una porción muy estrecha de ese espectro. Si se visualizan estas combinaciones de bandas de forma directa, las imágenes tienden a verse oscuras, opacas o con muy poco contraste, dificultando la identificación visual de la variabilidad interna de los lotes.
+Las imágenes de reflectancia provenientes de plataformas satelitales como [Landsat 9]{.sensor} capturan datos en un rango dinámico lineal muy amplio. Sin embargo, los componentes principales de un entorno agrícola (suelo, rastrojo y cultivos) suelen concentrar sus valores en una porción muy estrecha de ese espectro. Si se visualizan estas combinaciones de bandas de forma directa, las imágenes tienden a verse oscuras, opacas o con muy poco contraste, dificultando la identificación visual de la variabilidad interna de los lotes.
 
 Para resolver esta limitación radiométrica, se implementó una función de Estiramiento de Contraste Lineal basado en Percentiles (*Percentile Linear Contrast Stretch*). Esta técnica remueve los valores extremos de ruido y redistribuye de manera óptima los datos en el rango visible (0 a 1). La función es:
 
@@ -268,330 +276,350 @@ def estirar_contraste(imagen, p_min=2, p_max=98):
     return imagen_estirada
 ```
 
+
 ## Color Verdadero
 
 Esta combinación involucra a las tres bandas visibles y se asigna cada una de ellas a la región del espectro visible que el ojo humano puede percibir. El resultado es una combinación que se aproxima a los colores naturales de la escena:
 
--   Canal Rojo (R): Se asigna a la Banda 4 (Rojo).\
--   Canal Verde (G): Se asigna a la Banda 3 (Verde).\
--   Canal Azul (B): Se asigna a la Banda 2 (Azul).
+* Canal Rojo (R): Se asigna a la Banda 4 (Rojo).  
+* Canal Verde (G): Se asigna a la Banda 3 (Verde).  
+* Canal Azul (B): Se asigna a la Banda 2 (Azul). 
+
+Calcular:
 
 ```{python}
 color_verdadero = np.dstack((banda_rojo_norm, banda_verde_norm, banda_azul_norm))
 ```
 
-Visualizar:
+Aplicar función [estirar_contraste]{.func-tecnica}:
 
 ```{python}
-# Aplicar función
 color_verdadero_p = estirar_contraste(color_verdadero)
-
-# Graficar
-fig, ax = plt.subplots(figsize=(12, 7), facecolor='white')
-
-ax.imshow(color_verdadero_p)
-
-ax.set_title("Color Verdadero (B4-B3-B2) - Landsat 9", 
-             fontsize=14, pad=15, fontweight='bold', color='#1A365D')
-ax.axis('off')  
-
-plt.tight_layout()
-plt.show()
 ```
-
-Es la combinación que se conoce como color natural, su principal utilidad radica en la identificación inicial y el reconocimiento general del área de estudio, permitiendo discriminar de forma intuitiva coberturas básicas.
 
 ## Falso Color Estándar
 
 Se genera sustituyendo el canal del azul (que aporta mucha dispersión atmosférica y poca información sobre el vigor vegetal) e incorporando la banda del infrarrojo cercano (NIR). Se realiza de la siguiente manera:
 
--   Canal Rojo (R): Se asigna a la Banda 5 (Infrarrojo Cercano - NIR).
--   Canal Verde (G): Se asigna a la Banda 4 (Rojo).
--   Canal Azul (B): Se asigna a la Banda 3 (Verde).
-
-```{python}
-falso_color = np.dstack((banda_infrarrojo_norm, banda_rojo_norm, banda_verde_norm)) 
-```
-
-Visualizar:
-
-```{python}
-# Aplicar función
-falso_color_p = estirar_contraste(falso_color)
-
-# Graficar
-fig, ax = plt.subplots(figsize=(12, 7), facecolor='white')
-
-ax.imshow(falso_color_p)
-
-ax.set_title("Falso Color Estandar (B5-B4-B3) - Landsat 9", 
-             fontsize=14, pad=15, fontweight='bold', color='#1A365D')
-ax.axis('off')  
-
-plt.tight_layout()
-plt.show()
-```
+* Canal Rojo (R): Se asigna a la Banda 5 (Infrarrojo Cercano - NIR).
+* Canal Verde (G): Se asigna a la Banda 4 (Rojo).
+* Canal Azul (B): Se asigna a la Banda 3 (Verde).
 
 La vegetación refleja mucho en el NIR, por lo que, al ponerlo en el canal rojo, la vegetación sana aparece en tonos rojos brillantes, lo que la hace muy fácil de disinguir de otros elementos.
 
-## Agricultura
+Calcular:
+
+```{python}
+falso_color = np.dstack((banda_infrarrojo_norm, banda_rojo_norm, banda_verde_norm))
+```
+
+Aplicar función [estirar_contraste]{.func-tecnica}:
+
+```{python}
+falso_color_p = estirar_contraste(falso_color)
+```
+
+
+## Agricultura 
 
 Una combinación, muy utilizada en agricultura es:
 
--   Canal Rojo (R): Se asigna a la Banda 6 (SWIR 1 - Infrarrojo de onda corta).\
--   Canal Verde (G): Se asigna a la Banda 5 (NIR - Infrarrojo cercano).\
--   Canal Azul (B): Se asigna a la Banda 2 (Azul).
+* Canal Rojo (R): Se asigna a la Banda 6 (SWIR 1 - Infrarrojo de onda corta).  
+* Canal Verde (G): Se asigna a la Banda 5 (NIR - Infrarrojo cercano).  
+* Canal Azul (B): Se asigna a la Banda 2 (Azul).  
 
 Para entender esta imagen es importante la interacción de la Banda 5 (NIR) y la Banda 6 (SWIR 1) con el cultivo:
 
--   La Banda 5 (NIR) está en el canal Verde: El tejido celular de las plantas sanas refleja mucho en el infrarrojo cercano. Al colocar esta información en el canal verde de la pantalla, todo lo que tenga alta biomasa va a tender a un color verde muy llamativo.
+* La Banda 5 (NIR) está en el canal Verde: El tejido celular de las plantas sanas refleja mucho en el infrarrojo cercano. Al colocar esta información en el canal verde, todo lo que tenga alta biomasa va a tender a un color verde muy llamativo.  
 
--   La Banda 6 (SWIR 1) está en el canal Rojo: Esta banda es extremadamente sensible a la humedad. El agua absorbe la radiación SWIR; por lo tanto, una planta bien hidratada absorberá esa energía y reflejará muy poco hacia el satélite. Si la planta sufre estrés hídrico o el suelo está seco, reflejará más SWIR (más color rojo en la pantalla).
+* La Banda 6 (SWIR 1) está en el canal Rojo: Esta banda es extremadamente sensible a la humedad. El agua absorbe la radiación SWIR; por lo tanto, una planta bien hidratada absorberá esa energía y reflejará muy poco hacia el satélite. Si la planta sufre estrés hídrico o el suelo está seco, reflejará más SWIR (más color rojo en la pantalla).  
+
+Gracias a este cruce espectral, las coberturas del suelo adoptan una firma cromática muy clara:  
+
+* Vegetación vigorosa y densa: Se visualiza en tonalidades de verde brillante o fosforescente.  
+
+* Vegetación sana pero perenne o más madura: Tiende a verse en verdes más oscuros e intensos (como los montes o bosques). 
+* Vegetación estresada, rala o en senescencia: Al perder humedad y biomasa, disminuye el verde (NIR) y aumenta el rojo (SWIR), lo que da como resultado tonalidades de verde opaco, amarillento o de tonalidades pardas.  
+
+* Suelo desnudo y áreas urbanas: Dependiendo de su composición y textura, aparecen en una gama que va desde los tonos marrón, magenta hasta el ocre. Los suelos labrados o secos brillan más en el SWIR, tirando a colores rojizos o marrones claros.
+
+* Cuerpos de agua: Al absorber la radiación en el NIR y absorber de forma casi absoluta en el SWIR, se ven en tonos oscuros o negros profundos, lo que permite contrastarlos perfectamente con el suelo desnudo.  
+
+Calcular:
 
 ```{python}
 agricultura = np.dstack((banda_swir1_norm, banda_infrarrojo_norm, banda_azul_norm)) 
 ```
 
-Visualizar:
+Aplicar función [estirar_contraste]{.func-tecnica}:
 
 ```{python}
-# Aplicar función
 agricultura_p = estirar_contraste(agricultura)
-
-# Graficar
-fig, ax = plt.subplots(figsize=(12, 7), facecolor='white')
-
-ax.imshow(agricultura_p)
-
-ax.set_title("Agricultura (B6-B5-B2) - Landsat 9", 
-             fontsize=14, pad=15, fontweight='bold', color='#1A365D')
-ax.axis('off')  
-
-plt.tight_layout()
-plt.show()
 ```
 
-Gracias a este cruce espectral, las coberturas del suelo adoptan una firma cromática muy clara:
-
--   Vegetación vigorosa y densa: Se visualiza en tonalidades de verde brillante o fosforescente.
-
--   Vegetación sana pero perenne o más madura: Tiende a verse en verdes más oscuros e intensos (como los montes o bosques).
-
--   Vegetación estresada, rala o en senescencia: Al perder humedad y biomasa, disminuye el verde (NIR) y aumenta el rojo (SWIR), lo que da como resultado tonalidades de verde opaco, amarillento o de tonalidades pardas.
-
--   Suelo desnudo y áreas urbanas: Dependiendo de su composición y textura, aparecen en una gama que va desde los tonos marrón, magenta hasta el ocre. Los suelos labrados o secos brillan más en el SWIR, tirando a colores rojizos o marrones claros.
-
--   Cuerpos de agua: Al absorber la radiación en el NIR y absorber de forma casi absoluta en el SWIR, se ven en tonos oscuros o negros profundos, lo que permite contrastarlos perfectamente con el suelo desnudo.
 
 ## Delimitar Agua
 
 La combinación que nos permite delimitar un poco mejor el agua con tierra es:
 
--   Canal Rojo (R): Se asigna a la Banda 5 (Infrarrojo Cercano - NIR).
--   Canal Verde (G): Se asigna a la Banda 6 (SWIR 1 - Infrarrojo de onda corta).\
--   Canal Azul (B): Se asigna a la Banda 4 (Rojo).
+* Canal Rojo (R): Se asigna a la Banda 5 (Infrarrojo Cercano - NIR).
+* Canal Verde (G): Se asigna a la Banda 6 (SWIR 1 - Infrarrojo de onda corta).  
+* Canal Azul (B): Se asigna a la Banda 4 (Rojo).
 
 El agua absorbe de forma casi total las longitudes de onda del infrarrojo cercano (NIR) y del infrarrojo de onda corta (SWIR 1). Por lo que, en un cuerpo de agua el valor de reflectancia para las bandas 5 y 6 son cercanos a cero.
+
+Interpretación:
+
+* Cuerpos de Agua: Se visualizan en tonos negros profundos o azules muy oscuros.
+
+* Suelo Desnudo: Aparece en una gama que va desde el magenta, rosa viejo, hasta el ocre o marrón. Esto se debe a que el suelo refleja fuertemente tanto el NIR como el SWIR, activando los canales rojo y verde de la pantalla.  
+
+* Vegetación Activa: Se observa en tonalidades que van del naranja al marrón rojizo o pardo, dependiendo de la densidad del follaje.  
+
+* Zonas con Humedad en el Suelo: Los suelos saturados o con napas muy altas absorben más energía espectral que los suelos secos, manifestándose en tonalidades azules grisáceas o púrpuras oscuras, lo que te permite identificar zonas anegadas o bajos hidromórficos.
+
+Calcular:
 
 ```{python}
 delimitar_agua = np.dstack((banda_infrarrojo_norm, banda_swir1_norm, banda_rojo_norm)) 
 ```
 
-Visualizar:
+Aplicar función [estirar_contraste]{.func-tecnica}:
 
 ```{python}
-# Aplicar función
 delimitar_agua_p = estirar_contraste(delimitar_agua)
-
-# Graficar
-fig, ax = plt.subplots(figsize=(12, 7), facecolor='white')
-
-ax.imshow(delimitar_agua)
-
-ax.set_title("Delimitar Agua (B5-B6-B4) - Landsat 9", 
-             fontsize=14, pad=15, fontweight='bold', color='#1A365D')
-ax.axis('off')  
-
-plt.tight_layout()
-plt.show()
 ```
-
-Interpretación Visual:
-
--   Cuerpos de Agua: Se visualizan en tonos negros profundos o azules muy oscuros.
-
--   Suelo Desnudo: Aparece en una gama que va desde el magenta, rosa viejo, hasta el ocre o marrón. Esto se debe a que el suelo refleja fuertemente tanto el NIR como el SWIR, activando los canales rojo y verde de la pantalla.
-
--   Vegetación Activa: Se observa en tonalidades que van del naranja al marrón rojizo o pardo, dependiendo de la densidad del follaje.
-
--   Zonas con Humedad en el Suelo: Los suelos saturados o con napas muy altas absorben más energía espectral que los suelos secos, manifestándose en tonalidades azules grisáceas o púrpuras oscuras, lo que te permite identificar zonas anegadas o bajos hidromórficos.
 
 ## Analisis de vegetación
 
 Se realiza de la siguiente manera:
 
--   Canal Rojo (R): Se asigna a la Banda 6 (SWIR 1 - Infrarrojo de onda corta).
--   Canal Verde (G): Se asigna a la Banda 5 (NIR - Infrarrojo cercano).
--   Canal Azul (B): Se asigna a la Banda 4 (Rojo).
+* Canal Rojo (R): Se asigna a la Banda 6 (SWIR 1 - Infrarrojo de onda corta).
+* Canal Verde (G): Se asigna a la Banda 5 (NIR - Infrarrojo cercano).
+* Canal Azul (B): Se asigna a la Banda 4 (Rojo).
 
-Esta combinación es una evolución de la combinación clásica de "Agricultura" (6, 5, 2). Al reemplazar la banda azul por la Banda del Rojo (B4) en el canal azul de la pantalla, se logran dos ventajas:
+Esta combinación es una evolución de la combinación clásica de "Agricultura" (6, 5, 2). Al reemplazar la banda azul por la Banda del Rojo (B4) en el canal azul de la pantalla, se logran dos ventajas:  
 
--   Las ondas cortas (SWIR) y medias (NIR) no se ven afectadas por las partículas de polvo o humedad de la atmósfera. Al quitar el azul (que es la banda más ruidosa), la imagen adquiere mayor nitidez.
+* Las ondas cortas (SWIR) y medias (NIR) no se ven afectadas por las partículas de polvo o humedad de la atmósfera. Al quitar el azul (que es la banda más ruidosa), la imagen adquiere mayor nitidez.
 
--   Se usa la banda donde la clorofila absorbe más energía (Rojo) , la banda donde la estructura celular refleja más (NIR) , y la banda sensible a la humedad del tejido (SWIR 1).
-
-```{python}
-vegetacion = np.dstack((banda_swir1_norm, banda_infrarrojo_norm, banda_rojo_norm)) 
-```
-
-Visualizar:
-
-```{python}
-# Aplicar función
-vegetacion_p = estirar_contraste(vegetacion)
-
-# Graficar
-fig, ax = plt.subplots(figsize=(12, 7), facecolor='white')
-
-ax.imshow(vegetacion_p)
-
-ax.set_title("Análisis de Vegetación (B6-B5-B4) - Landsat 9", 
-             fontsize=14, pad=15, fontweight='bold', color='#1A365D')
-ax.axis('off')  
-
-plt.tight_layout()
-plt.show()
-```
+* Se usa la banda donde la clorofila absorbe más energía (Rojo) , la banda donde la estructura celular refleja más (NIR) , y la banda sensible a la humedad del tejido (SWIR 1). 
 
 Interpretación Visual:
 
--   Vegetación densa, activa y bien hidratada: Se manifiesta en tonos verdes intensos y brillantes (debido a la altísima reflectancia en el NIR que satura el canal verde).
+* Vegetación densa, activa y bien hidratada: Se manifiesta en tonos verdes intensos y brillantes (debido a la altísima reflectancia en el NIR que satura el canal verde).
 
--   Vegetación en transición, madura o con menor densidad foliar: Adquiere tonalidades verdes oliva, pardas o ligeramente amarillentas.
+* Vegetación en transición, madura o con menor densidad foliar: Adquiere tonalidades verdes oliva, pardas o ligeramente amarillentas. 
 
--   Suelo desnudo: Dependiendo de su composición orgánica y humedad, tonos marrón rojizo, ocre (provocado por la fuerte respuesta del suelo en la banda SWIR 1, que activa el canal rojo).
+* Suelo desnudo: Dependiendo de su composición orgánica y humedad, tonos marrón rojizo, ocre (provocado por la fuerte respuesta del suelo en la banda SWIR 1, que activa el canal rojo).
 
--   Rastrojo: El rastrojo suele reflejar de manera distinta el SWIR y el Rojo, apareciendo en tonos amarillos claros o dorados, lo que ayuda a evaluar los niveles de cobertura muerta sobre el lote.
+* Rastrojo: El rastrojo suele reflejar de manera distinta el SWIR y el Rojo, apareciendo en tonos amarillos claros o dorados, lo que ayuda a evaluar los niveles de cobertura muerta sobre el lote.
 
--   Cuerpos de agua: Se mantienen en un negro profundo y limpio, ya que absorben de forma absoluta las tres longitudes de onda utilizadas.
+* Cuerpos de agua: Se mantienen en un negro profundo y limpio, ya que absorben de forma absoluta las tres longitudes de onda utilizadas.
+
+Calcular
+
+```{python}
+vegetacion = np.dstack((banda_swir1_norm, banda_infrarrojo_norm, banda_rojo_norm)) 
+vegetacion_p = estirar_contraste(vegetacion)
+```
+
+Aplicar función [estirar_contraste]{.func-tecnica}:
+
+```{python}
+delimitar_agua_p = estirar_contraste(delimitar_agua)
+```
+
+
+## Gráfico
+
+```{python}
+#| message: false
+#| warning: false
+#| results: hide
+
+fig, axs = plt.subplots(2, 3, figsize=(18, 12), facecolor='white')
+
+estilo_titulo = {'fontsize': 12, 'fontweight': 'bold', 'pad': 12, 'color': '#1A365D'}
+
+axs[0, 0].imshow(color_verdadero_p)
+axs[0, 0].set_title("Color Verdadero (B4-B3-B2) - Landsat 9", **estilo_titulo)
+axs[0, 0].axis('off')
+
+axs[0, 1].imshow(falso_color_p)
+axs[0, 1].set_title("Falso Color Estandar (B5-B4-B3) - Landsat 9", **estilo_titulo)
+axs[0, 1].axis('off')
+
+axs[0, 2].imshow(agricultura_p)
+axs[0, 2].set_title("Agricultura (B6-B5-B2) - Landsat 9", **estilo_titulo)
+axs[0, 2].axis('off')
+
+axs[1, 0].imshow(delimitar_agua)
+axs[1, 0].set_title("Delimitar Agua (B5-B6-B4) - Landsat 9", **estilo_titulo)
+axs[1, 0].axis('off')
+
+axs[1, 1].imshow(vegetacion_p)
+axs[1, 1].set_title("Análisis de Vegetación (B6-B5-B4) - Landsat 9", **estilo_titulo)
+axs[1, 1].axis('off')
+
+axs[1, 2].axis('off')
+
+plt.tight_layout(pad=3.0)
+plt.show()
+```
 
 # Indices de Vegetación
 
 En primer lugar, se realiza el cálculo y una breve explicación de los siguientes Indices:
 
--   NDVI
--   NDWI
--   SAVI
--   EVI
--   NDTI
+* NDVI
+* NDWI
+* SAVI
+* EVI
+* NDTI
 
 Y luego, se visualizan de manera conjunta.
 
 ## NDVI
 
-Es un índice usado para medir la diferencia normalizada entre las reflectancias del rojo y del infrarrojo cercano, proporcionando una medida sobre la cantidad, calidad y desarrollo de la cobertura vegetal y vigorosidad en áreas extensas. Su cálculo es:
+Es un índice usado para medir la diferencia normalizada entre las reflectancias del rojo y del infrarrojo cercano, proporcionando una medida sobre la cantidad, calidad y desarrollo de la cobertura vegetal y vigorosidad en áreas extensas.
+
+Fórmula:
 
 $$NDVI = \frac{NIR - Rojo}{NIR + Rojo}$$
 
+Cálculo:
 ```{python}
 NDVI = (banda_infrarrojo_norm - banda_rojo_norm) / (banda_infrarrojo_norm + banda_rojo_norm) 
 ```
 
-## NDWI
+Gráfico:
 
-El Índice de Agua de Diferencia Normalizada (NDWI) es un indicador espectral diseñado para estimar el contenido de agua líquido en los tejidos de la vegetación y monitorear el estado de estrés hídrico en los cultivos. El NDWI se fundamenta en la combinación de dos regiones del infrarrojo: la banda del Infrarrojo Cercano (NIR), donde la estructura celular de las hojas sanas refleja la luz de manera máxima, y la banda del Infrarrojo de Onda Corta (SWIR), una región donde el agua líquida presente en las células vegetales absorbe fuertemente la energía solar. Su cálculo es:
+```{python}
+#| results: hide
+
+fig, ax = plt.subplots(figsize=(10, 7), facecolor='white')
+
+im_ndvi = ax.imshow(NDVI, cmap='RdYlGn')
+ax.set_title('NDVI', fontsize=12, fontweight='bold', pad=10)
+ax.axis('off')
+
+fig.colorbar(im_ndvi, ax=ax, shrink=0.7, label='Valor del Índice')
+
+plt.tight_layout()
+plt.show()
+```
+
+
+## NDWI 
+
+El Índice de Agua de Diferencia Normalizada (NDWI) es un indicador espectral diseñado para estimar el contenido de agua líquido en los tejidos de la vegetación y monitorear el estado de estrés hídrico en los cultivos. El NDWI se fundamenta en la combinación de dos regiones del infrarrojo: la banda del Infrarrojo Cercano (NIR), donde la estructura celular de las hojas sanas refleja la luz de manera máxima, y la banda del Infrarrojo de Onda Corta (SWIR), una región donde el agua líquida presente en las células vegetales absorbe fuertemente la energía solar.
+
+Fórmula
 
 $$NDWI = \frac{NIR - SWIR}{NIR + SWIR}$$
 
 Interpretación, oscila de -1 a 1:
 
--   Valores altos y positivos (0.3 a 0.8): Indican un dosel vegetal con un óptimo contenido de humedad, tejidos completamente turgentes y nula presencia de estrés hídrico.
+* Valores altos y positivos (0.3 a 0.8): Indican un dosel vegetal con un óptimo contenido de humedad, tejidos completamente turgentes y nula presencia de estrés hídrico.
 
--   Valores cercanos a cero o ligeramente negativos (-0.1 a 0.2): Se asocian a vegetación con bajo contenido de agua, cultivos bajo estrés por sequía o áreas con presencia de rastrojo y suelo desnudo.
+* Valores cercanos a cero o ligeramente negativos (-0.1 a 0.2): Se asocian a vegetación con bajo contenido de agua, cultivos bajo estrés por sequía o áreas con presencia de rastrojo y suelo desnudo.
 
--   Valores muy bajos o negativos cercanos a -1: Corresponden a superficies inertes o estructuras donde la absorción en el SWIR es drásticamente superior a la reflexión en el NIR.
+* Valores muy bajos o negativos cercanos a -1: Corresponden a superficies inertes o estructuras donde la absorción en el SWIR es drásticamente superior a la reflexión en el NIR.
+
+Cálculo:
 
 ```{python}
 NDWI = (banda_infrarrojo_norm - banda_swir1_norm) / (banda_infrarrojo_norm + banda_swir1_norm)
 ```
 
-## SAVI
-
-El Índice de Vegetación Ajustado al Suelo (SAVI) es un indice que atenua y corrige los efectos del brillo del suelo de fondo en zonas donde la cobertura vegetal es escasa o fragmentaria. En áreas con baja densidad de cultivo o durante las primeras etapas fenológicas, la reflectancia del suelo desnudo se mezcla con la de las plantas, induciendo a errores y subestimaciones en el NDVI tradicional. El SAVI resuelve esta limitación introduciendo un factor de ajuste constante ($L$) que equilibra las firmas espectrales de ambas superficies.
-
-Es un índice muy adecuado para trabajos en zonas semiáridas, donde la contribución del suelo es muy importante.
-
-Su cálculo es:
-
-$$SAVI = \frac{NIR - Rojo}{NIR + Rojo + L} \times (1 + L)$$
+Gráfico:
 
 ```{python}
-L = 0.5 
+#| results: hide
 
-SAVI = ((banda_infrarrojo - banda_rojo) / (banda_infrarrojo + banda_rojo + L)) * (1 + L)
+fig, ax = plt.subplots(figsize=(10, 7), facecolor='white')
+
+im_ndwi = ax.imshow(NDWI, cmap='YlGnBu') 
+ax.set_title('NDWI', fontsize=12, fontweight='bold', pad=10)
+ax.axis('off')
+
+fig.colorbar(im_ndwi, ax=ax, shrink=0.7, label='Valor del Índice')
+
+plt.tight_layout()
+plt.show()
+
 ```
 
-## EVI
 
-El Indice de Vegetación Mejorada (EVI) se optimizó a partir del NDVI aumentando la sensibilidad en las regiones de alta biomasa y mejoró el monitoreo de la vegetación mediante la disociación de la señal del fondo del dosel y una reducción de la influencia atmosférica. La ecuación utilizada para su obtención se indica a continuación:
+## GNDVI 
 
-$$EVI = G \times \frac{NIR - Rojo}{NIR + C_1 \times Rojo - C_2 \times Azul + L}$$
+El GNDVI (*Green Normalized Difference Vegetation Index*) es una modificación del NDVI tradicional. La innovación de este índice radica en la sustitución de la banda del rojo por la banda del verde.
+
+Este índice es más sensible a la variación de la clorofila en el cultivo que el índice NDVI y presenta un punto de saturación más alto.
+
+Puede ser utilizado en cultivos con canopias densas o en etapas más avanzadas de desarrollo.
+
+Fórmula:
+
+$$NDRE = \frac{NIR - Green}{NIR + Green}$$
+
+Cálculo:
 
 ```{python}
-EVI = 2.5 * ((banda_infrarrojo_norm - banda_rojo_norm) / (banda_infrarrojo_norm + 6 * banda_rojo_norm - 7.5 * banda_azul_norm + 1))
+GNDVI = (banda_infrarrojo_norm - banda_verde_norm) / (banda_infrarrojo_norm + banda_verde_norm)
 ```
 
-## NDTI
+Gráfico:
+
+```{python}
+#| results: hide
+
+fig, ax = plt.subplots(figsize=(10, 7), facecolor='white')
+
+im_gndvi = ax.imshow(GNDVI, cmap='RdYlGn') 
+ax.set_title('GNDVI', fontsize=12, fontweight='bold', pad=10)
+ax.axis('off')
+
+fig.colorbar(im_gndvi, ax=ax, shrink=0.7, label='Valor del Índice')
+
+plt.tight_layout()
+plt.show()
+```
+
+
+## NDTI 
 
 El Índice de Tolerancia a la Sequía Normalizado (NDTI), es un indicador espectral utilizado para dos objetivos: la estimación de la cobertura de rastrojo en el suelo y el monitoreo del estrés por sequía severa en la vegetación.
 
-A diferencia de los índices basados en la clorofila (NDVI) o en la humedad del dosel vivo (NDWI), el NDTI aprovecha de forma pura la firma espectral del suelo y de la materia orgánica muerta. Se fundamenta en el contraste entre las dos bandas del infrarrojo de onda corta (SWIR): mientras que los rastrojos secos y los suelos bajo un severo déficit hídrico incrementan su reflectancia en la banda SWIR 1, muestran variaciones analíticas muy claras al cruzar los datos con la banda SWIR 2, permitiendo separar el suelo labrado del suelo con cobertura protectora. Su cálculo es:
+A diferencia de los índices basados en la clorofila (NDVI) o en la humedad del dosel vivo (NDWI), el NDTI aprovecha la firma espectral del suelo y de la materia orgánica muerta. Se fundamenta en el contraste entre las dos bandas del infrarrojo de onda corta (SWIR): mientras que los rastrojos secos y los suelos bajo un severo déficit hídrico incrementan su reflectancia en la banda SWIR 1, muestran variaciones analíticas muy claras al cruzar los datos con la banda SWIR 2, permitiendo separar el suelo labrado del suelo con cobertura 
+
+Fórmula:
 
 $$NDTI = \frac{SWIR 1 - SWIR 2}{SWIR 1 + SWIR 2}$$
+
+Cálculo:
 
 ```{python}
 NDTI = (banda_swir1_norm - banda_swir2_norm) / (banda_swir1_norm + banda_swir2_norm)
 ```
 
-## Visualizar Indices
+Gráfico:
 
 ```{python}
+#| results: hide
 
-fig, axs = plt.subplots(2, 3, figsize=(18, 12), facecolor='white')
+fig, ax = plt.subplots(figsize=(10, 7), facecolor='white')
 
-# NDVI 
-im1 = axs[0, 0].imshow(NDVI, cmap='RdYlGn')
-axs[0, 0].set_title('NDVI', fontsize=12, fontweight='bold')
-axs[0, 0].axis('off')
-fig.colorbar(im1, ax=axs[0, 0], shrink=0.7, label='Valor del Índice')
+im_ndti = ax.imshow(NDTI, cmap='copper')
+ax.set_title('NDTI', fontsize=12, fontweight='bold', pad=10)
+ax.axis('off')
 
-# NDWI 
-im4 = axs[1, 0].imshow(NDWI, cmap='YlGnBu') 
-axs[0, 1].set_title('NDWI', fontsize=12, fontweight='bold')
-axs[0, 1].axis('off')
-fig.colorbar(im4, ax=axs[1, 0], shrink=0.7, label='Valor del Índice')
-
-# SAVI
-im2 = axs[0, 1].imshow(SAVI, cmap='RdYlGn', vmin=0, vmax=1)
-axs[0, 2].set_title('SAVI', fontsize=12, fontweight='bold')
-axs[0, 2].axis('off')
-fig.colorbar(im2, ax=axs[0, 1], shrink=0.7, label='Valor del Índice')
-
-# EVI 
-im3 = axs[0, 2].imshow(EVI, cmap='RdYlGn')
-axs[1, 0].set_title('EVI', fontsize=12, fontweight='bold')
-axs[1, 0].axis('off')
-fig.colorbar(im3, ax=axs[0, 2], shrink=0.7, label='Valor del Índice')
-
-# NDTI 
-im5 = axs[1, 1].imshow(NDTI, cmap='copper')
-axs[1, 1].set_title('NDTI', fontsize=12, fontweight='bold')
-axs[1, 1].axis('off')
-fig.colorbar(im5, ax=axs[1, 1], shrink=0.7, label='Valor del Índice')
-
-
-axs[1, 2].axis('off')
+fig.colorbar(im_ndti, ax=ax, shrink=0.7, label='Valor del Índice')
 
 plt.tight_layout()
 plt.show()
 ```
+
+
+
+

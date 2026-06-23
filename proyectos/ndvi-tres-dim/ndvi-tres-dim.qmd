@@ -1,0 +1,10 @@
+---
+title: "NDVI 3D"
+date: 2026-06
+categories: [Python, Google Earth Engine, Agricultura de precisión, Teledetección, Indices de Vegetación]
+css: styles.css
+---
+
+# Mapa
+
+<iframe src="mapa_3d.html" width="100%" height="600px" style="border: none; border-radius: 8px;"></iframe>

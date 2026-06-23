@@ -1,0 +1,464 @@
+---
+title: "Limpieza de Mapa de Rendimiento con Python"
+date: 2026-01
+categories: [Python, Agricultura de precisión, Mapa de Rendimiento]
+css: styles2.css
+---
+
+# Introducción
+
+El presente documento detalla el proceso de limpieza, filtrado y visualización de un mapa de rendimiento utilizando Python. El objetivo principal es eliminar las anomalías y errores de medición de los monitores de la cosechadora, transformando los datos "sucios" en información confiable para la toma de decisiones.
+
+# Configuración de Python
+
+El procesamiento espacial se realizó con la librería [GeoPandas]{.func-tecnica} en Python, ejecutada desde RStudio mediante el paquete [reticulate]{.func-tecnica}. Dado que el entorno de Python utilizado corresponde a un ambiente Conda, fue necesario configurar manualmente la variable de entorno [PROJ_DATA]{.func-tecnica} antes de la inicialización de [pyproj]{.func-tecnica}, indicando la ruta local de la base de datos de proyecciones cartográficas PROJ. 
+
+```{r}
+library(reticulate)
+
+
+proj_data <- "C:/Users/UsuarioX/miniconda3/envs/agro_science/Library/share/proj"
+Sys.setenv(PROJ_DATA = proj_data)
+Sys.setenv(PROJ_LIB  = proj_data)
+
+use_python(
+  "C:/Users/UsuarioX/miniconda3/envs/agro_science/python.exe",
+  required = TRUE
+)
+```
+
+## Librerías Necesarias
+
+```{python}
+import os
+import pyproj
+import geopandas as gpd
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+import itables
+
+```
+
+# Cargar Datos
+
+Se usó la función [pd.read_csv()]{.func-tecnica} del paquete [Pandas]{.func-tecnica}, la cual lee archivos de texto delimitados (por defecto por comas ,) y devuelve un DataFrame. 
+
+```{python}
+soja2011 = pd.read_csv(r"data/Soja2011.csv")
+```
+
+# Exploración de datos
+
+La función [.info()]{.func-tecnica} de [Pandas]{.func-tecnica} devuelve un reporte estructurado en 5 partes:
+
+* [class]{.func-tecnica}: Marca el tipo de objeto. 
+
+* [RangeIndex]{.func-tecnica}. Indica el rango de filas y el total de registros. 
+
+* [Data columns]{.func-tecnica}: Listado y Conteo de Columnas. Muestra el total de columnas y luego desglosa una tabla con tres datos por cada una:
+
+  * [Index]{.func-tecnica}: El número índice de la columna.
+  * [Column]{.func-tecnica}: El nombre exacto de la columna 
+  * [Non-Null Count]{.func-tecnica}: Cuántos registros tienen (datos reales, no vacíos).
+
+* [Dtype]{.func-tecnica}: Tipo de dato de cada columna.
+
+* [memory usage]{.func-tecnica}: Uso de Memoria, indica cuánta memoria RAM está consumiendo el dataset.
+
+```{python}
+soja2011.info()
+```
+
+Los valores de rendimiento medio y cantidad de filas (puntos) fueron los siguientes:
+
+```{python}
+#| include: false
+
+filas_limpias_2 = soja2011.shape[0]
+
+rendimiento_medio_2 = soja2011[' DryYield (bu/ac)'].mean()
+
+
+```
+
+```{r}
+#| include: false
+
+filas_limpias_r_2 <- py$filas_limpias_2
+rendimiento_medio_r_2 <- py$rendimiento_medio_2
+
+```
+
+
+::: {.premium-metrics-grid}
+
+::: {.premium-metric}
+::: {.metric-name}
+Rendimiento Medio (kg/ha)
+:::
+
+::: {.metric-number .metric-highlight}
+`r round(rendimiento_medio_r_2 * 67.25, 0)`
+:::
+:::
+
+::: {.premium-metric}
+::: {.metric-name}
+Cantidad de Filas
+:::
+
+::: {.metric-number .metric-highlight}
+`r filas_limpias_r_2`
+:::
+:::
+
+:::
+
+# Eliminar y Seleccionar Columnas
+
+Comprobar el nombre correcto de las columnas:
+
+```{python}
+soja2011.columns.tolist()
+```
+
+Seleccionar las columnas adecuadas:
+
+```{python}
+soja2011 = soja2011[[
+    'Latitude',
+    ' Longitude', 
+    ' Distance (ft)', 
+    ' Elevatio (ft)', 
+    ' Width (ft)', 
+    ' Record01', 
+    ' HarvestM (%)', 
+    ' DryYield (bu/ac)', 
+    ' Machine', 
+    ' Field', 
+    ' ProcYear ']]
+```
+
+Cambiar el nombre de las columnas:
+
+```{python}
+soja2011.columns = [ 
+    "Lat", 
+    "Lon", 
+    "Distance", 
+    "Elev11", 
+    "Width", 
+    "Record01", 
+    "HG11", 
+    "Rto11", 
+    "Var11", 
+    "Lote", 
+    "Ano" 
+]
+```
+
+Modificar la columna “Var11” con el genotipo **AX5009**:
+
+```{python}
+soja2011["Var11"] = "AX5009" 
+```
+
+# Convertir de medidas inglesas a métricas:
+
+Se realizó la conversión de unidades para las siguientes variables, estandarizándolas al sistema métrico:
+
+* Rendimiento: de bushels por acre (bu/ac) a kilogramos por hectárea (kg/ha), aplicando el factor de $1\text{ bu/ac} = 67.25\text{ kg/ha}$
+
+* Altimetría: de pies (ft) a metros (m), utilizando el factor de $0.3048\text{ m/ft}$.
+
+Transformar Rendimiento (Rto11):
+
+```{python}
+soja2011["Rto11"] = soja2011["Rto11"] * 67.25
+```
+
+Transformar Altimetría (Elev11):
+
+```{python}
+soja2011["Elev11"] = soja2011["Elev11"] * 0.3048 
+```
+
+
+# Proyectar en UTM_20S
+
+## Convertir a objeto GeoDataFrame.  
+
+Un [GeoDataFrame]{.func-tecnica} es la estructura de datos de [GeoPandas]{.func-tecnica}: una tabla (un [pandas.DataFrame]{.func-tecnica}) que tiene una columna de geometría (un [GeoSeries]{.func-tecnica}). Esa columna contiene objetos geométricos (por ejemplo Point, LineString, Polygon) que representan entidades espaciales. 
+
+```{python}
+soja2011_gdf = gpd.GeoDataFrame(
+    soja2011,
+    geometry=gpd.points_from_xy(soja2011["Lon"], soja2011["Lat"]),
+    crs="EPSG:4326"
+)
+```
+
+Comprobar el **Sistema de Referencia de Coordenadas (CRS)**:
+
+```{python}
+soja2011_gdf.crs
+```
+
+Proyectar a **UTM 20S (EPSG: 32720)** a través de [.to_crs]{.func-tecnica} de [GeoPandas]{.func-tecnica}:
+
+```{python}
+soja2011_gdf = soja2011_gdf.to_crs("EPSG:32720") 
+```
+
+# Graficar Rendimiento antes de Limpiar
+
+El gráfico se realizó mediante la librería [matplotlib]{.func-tecnica}.
+
+```{python}
+#| code-fold: true
+#| code-summary: "Código"
+
+fig, ax = plt.subplots(figsize=(10, 8)) 
+
+soja2011_gdf.plot( 
+  column="Rto11", 
+  cmap="RdYlGn", 
+  scheme="quantiles",    
+  k=4,
+  markersize=5,   
+  legend=True, 
+  ax=ax,
+  legend_kwds={
+    'title': 'Rendimiento (kg/ha)',
+    'title_fontsize': 11,
+    'fontsize': 10,
+    'frameon': True,
+    'fancybox': True,
+    'shadow': True,
+    'loc': 'lower right'
+    })
+    
+ 
+ax.set_title( 
+  "Mapa de Rendimiento sin limpiar", 
+  fontsize=16, 
+  fontweight="bold", 
+  loc="center" 
+  ) 
+ 
+ax.set_axis_off() 
+ 
+plt.tight_layout() 
+plt.show()
+```
+
+# Limpiar Datos
+
+## Limpiar *Inliers*
+
+* Limpiar datos por Altura de plataforma:
+
+Comprobar los valores únicos de la columna Record01:
+
+```{python}
+soja2011_gdf["Record01"].unique()
+```
+
+Eliminar datos 'Desactivado'
+
+```{python}
+soja2011_gdf_l = soja2011_gdf[soja2011_gdf["Record01"] == ' Activ.']
+```
+
+* Limpiar por Ancho de Plataforma:
+
+```{python}
+soja2011_gdf_l = soja2011_gdf_l[soja2011_gdf["Width"] > 20]
+```
+
+* Limpiar por Distancia entre puntos:
+
+```{python}
+soja2011_gdf_l = soja2011_gdf_l[soja2011_gdf["Distance"] > 1.5]
+```
+
+## Limpiar *Outliers* por Rango Intercuartílico (IQR)
+
+Se considerarán valores atípicos (outliers) aquellos valores que cumplan una de las siguientes condiciones:
+
+* El valor es menor que el primer cuartil menos 1,5 veces el rango intercuartílico = $q < Q1 – 1,5 * IQR$
+* El valor es mayor que el tercer cuartil más 1,5 veces el rango intercuartílico = $q > Q3 + 1,5 * IQR$
+
+Calcular Cuantiles e IQR:
+
+```{python}
+Q1 = soja2011_gdf_l["Rto11"].quantile(0.25) 
+Q2 = soja2011_gdf_l["Rto11"].quantile(0.50)    
+Q3 = soja2011_gdf_l["Rto11"].quantile(0.75) 
+IQR = Q3 - Q1
+```
+
+Calcular los valores a eliminar:
+
+```{python}
+eliminar1 = Q1 - (1.5 * IQR) 
+eliminar2 = Q3 + (1.5 * IQR)
+
+```
+
+Eliminarlos:
+
+```{python}
+soja2011_gdf_l = soja2011_gdf_l.loc[ 
+  (soja2011_gdf_l["Rto11"] > eliminar1) & 
+  (soja2011_gdf_l["Rto11"] < eliminar2)]
+```
+
+# Calcular Indice de Productividad (IP)
+
+El **Índice de Productividad** es una medida de rendimiento relativo. Se calcula dividiendo el rendimiento de cada punto individual por el rendimiento promedio de todo el lote.
+
+Permite comparar zonas de un lote con otros lotes que tienen potenciales de rendimiento diferentes.
+
+Interpretación:
+
+* IP > 1: La unidad rinde por encima del promedio. Un IP de 1.15 significa que rinde un 15% más que la media.
+* IP = 1: La unidad rinde lo mismo que el promedio.
+* IP < 1: La nidad rinde por debajo del promedio. Un IP de 0.85 significa que rinde un 15% menos que la media.
+
+```{python}
+soja2011_gdf_l["IP"] = soja2011_gdf_l["Rto11"] / soja2011_gdf_l["Rto11"].mean()
+```
+
+# Explorar datos Limpios
+
+```{python}
+#| include: false
+
+filas_limpias = soja2011_gdf_l.shape[0]
+
+rendimiento_medio = soja2011_gdf_l['Rto11'].mean()
+
+
+```
+
+```{r}
+#| include: false
+
+filas_limpias_r <- py$filas_limpias
+rendimiento_medio_r <- py$rendimiento_medio
+
+```
+
+Rendimiento Medio y Cantidad de Datos luego de la limpieza: 
+
+::: {.premium-metrics-grid}
+
+::: {.premium-metric}
+::: {.metric-name}
+Rendimiento Medio (kg/ha)
+:::
+
+::: {.metric-number .metric-highlight}
+`r round(rendimiento_medio_r, 0)`
+:::
+:::
+
+::: {.premium-metric}
+::: {.metric-name}
+Cantidad de Filas
+:::
+
+::: {.metric-number .metric-highlight}
+`r filas_limpias_r`
+:::
+:::
+
+
+:::
+
+
+## Visualizar Tabla Limpia
+
+```{python}
+#| output: asis
+
+print(soja2011_gdf_l.head(5).to_html(
+    classes='table table-striped table-hover', 
+    index=False, 
+    float_format='%.2f'
+))
+```
+
+## Boxplots
+
+Se graficaron dos boxplots para la variable Rendimiento: antes y después de realizar la limpieza de datos. Se utilizó, en conjunto, las librerías [seaborn]{.func-tecnica} y [matplotlib]{.func-tecnica}.
+
+```{python}
+#| code-fold: true
+#| code-summary: "Código"
+
+fig, axes = plt.subplots(1, 2, figsize=(12, 5))
+
+
+sns.boxplot(ax=axes[0], y=soja2011_gdf["Rto11"], color="#ff7675")
+axes[0].set_title("A. Rendimiento Original (Con Outliers)")
+axes[0].set_ylabel("Rendimiento (kg/ha o qq/ha)")
+axes[0].set_xlabel("Datos Crudos")
+
+
+sns.boxplot(ax=axes[1], y=soja2011_gdf_l["Rto11"], color="#55efc4")
+axes[1].set_title("B. Rendimiento Limpio (Método IQR)")
+axes[1].set_ylabel("") 
+axes[1].set_xlabel("Datos Limpios")
+
+
+plt.tight_layout()
+plt.show()
+```
+
+# Graficar
+
+Por último, se generó el gráfico del Rendimiento después de la limpieza de datos.
+
+```{python}
+#| code-fold: true
+#| code-summary: "Código"
+
+fig, ax = plt.subplots(figsize=(10, 8)) 
+ 
+soja2011_gdf_l.plot( 
+    column="Rto11", 
+    cmap="RdYlGn", 
+    scheme="quantiles",    
+    k=4, 
+    markersize=5,   
+    legend=True, 
+    ax=ax,
+    legend_kwds={
+        'title': 'Rendimiento (kg/ha)',
+        'title_fontsize': 11,
+        'fontsize': 10,
+        'frameon': True,
+        'fancybox': True,
+        'shadow': True,
+        'loc': 'lower right'
+    }
+)
+    
+ 
+ax.set_title( 
+  "Mapa de Rendimiento Limpio\n 2011", 
+  fontsize=16, 
+  fontweight="bold", 
+  loc="center" 
+  ) 
+ 
+ax.set_axis_off() 
+ 
+plt.tight_layout() 
+plt.show()
+```
+
+

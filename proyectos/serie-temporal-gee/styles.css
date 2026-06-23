@@ -1,23 +1,7 @@
-/* ============================================================
-   GEE QUARTO THEME — Juan Pablo Heiland
-   Diseño para documentos académicos de teledetección AgTech
-   Inspirado en Google Earth Engine · Sentinel-2 · Landsat
-   ============================================================ */
+
 
 @import url('https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,400;0,500;1,400&family=Syne:wght@400;600;700;800&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,600;1,8..60,300;1,8..60,400&display=swap');
 
-
-/* ============================================================
-   VARIABLES DE COLOR — Paleta satelital
-   navy    → fondo institucional oscuro
-   teal    → color institucional medio
-   ndvi    → verde vegetación activa
-   ndvi-lt → verde vegetación moderada
-   accent  → cian GEE (highlight interactivo)
-   water   → azul cuerpos de agua
-   sand    → ocre suelo desnudo / infrarrojo
-   infra   → naranja quemado / zona de interés
-   ============================================================ */
 :root {
   --gee-navy:       #0d2137;
   --gee-teal:       #1a5e6e;
@@ -37,13 +21,11 @@
 }
 
 
-/* ============================================================
-   BASE — BODY
-   ============================================================ */
+/* BASE — BODY */
 body {
   font-family: 'Source Serif 4', Georgia, serif;
-  font-size: 1rem;
-  line-height: 1.80;
+  font-size: 0.85rem;
+  line-height: 1.7;
   color: var(--text-primary);
   background-color: #f9fbfc;
   text-align: justify;
@@ -62,10 +44,7 @@ p {
 }
 
 
-/* ============================================================
-   CABECERA DEL DOCUMENTO — Header / Title block
-   (aplica al bloque YAML title/subtitle/author en Quarto)
-   ============================================================ */
+/* Cabecera */
 .quarto-title-block,
 header.quarto-title-block {
   background: var(--gee-navy);
@@ -114,18 +93,6 @@ header h1,
   text-align: left !important;
 }
 
-/* Subtítulo */
-.subtitle,
-.quarto-title .subtitle {
-  font-family: 'Source Serif 4', serif !important;
-  font-size: 1.05rem !important;
-  font-style: italic !important;
-  font-weight: 300 !important;
-  color: #7fa3bb !important;
-  margin-top: 0.4rem !important;
-  margin-bottom: 1rem !important;
-}
-
 /* Autor y fecha */
 .quarto-title-author,
 .author,
@@ -137,9 +104,7 @@ header h1,
 }
 
 
-/* ============================================================
-   ENCABEZADOS H1 / H2 / H3
-   ============================================================ */
+/* Titulos h1, h2, h3 */
 h1, h2, h3 {
   font-family: 'Syne', sans-serif;
   color: var(--gee-navy);
@@ -149,7 +114,6 @@ h1, h2, h3 {
   margin-bottom: 0.9rem;
 }
 
-/* H1 — Sección principal con línea bajo */
 h1 {
   font-size: 1.45rem;
   font-weight: 700;
@@ -158,18 +122,16 @@ h1 {
   border-bottom: 2px solid var(--gee-navy);
 }
 
-/* H2 — Subsección con acento lateral verde NDVI */
 h2 {
   font-size: 1.2rem;
   font-weight: 600;
-  border-left: 5px solid var(--gee-ndvi-lt);
+  border-left: 5px solid #2c3b4d;
   padding-left: 14px;
   margin-top: 2.2rem;
   color: var(--gee-teal);
   letter-spacing: -0.01em;
 }
 
-/* H3 — Nivel terciario en DM Mono, estilo telemetría */
 h3 {
   font-family: 'DM Mono', monospace;
   font-size: 0.82rem;
@@ -182,76 +144,8 @@ h3 {
 }
 
 
-/* ============================================================
-   ETIQUETAS INLINE — Clases para marcar términos en el texto
-   ============================================================ */
+/* Etiquetas */
 
-/* Concepto clave / término importante */
-.destacado {
-  font-family: 'Syne', sans-serif;
-  background: var(--gee-ndvi);
-  color: #d4edd9;
-  padding: 2px 9px;
-  border-radius: 4px;
-  font-size: 0.875em;
-  font-weight: 700;
-  white-space: nowrap;
-  display: inline-block;
-  transition: background 0.25s ease, transform 0.2s ease;
-  cursor: default;
-}
-
-.destacado:hover {
-  background: var(--gee-ndvi-lt);
-  color: var(--gee-navy);
-  transform: translateY(-1px);
-}
-
-/* Índice espectral / variable cuantitativa */
-.destacado2 {
-  font-family: 'Syne', sans-serif;
-  background: var(--gee-water);
-  color: #cfe6f5;
-  padding: 2px 9px;
-  border-radius: 4px;
-  font-size: 0.875em;
-  font-weight: 700;
-  white-space: nowrap;
-  display: inline-block;
-}
-
-/* Satélite / sensor / misión */
-.sensor {
-  font-family: 'DM Mono', monospace;
-  background: var(--gee-navy);
-  color: var(--gee-accent);
-  padding: 2px 8px;
-  border-radius: 4px;
-  font-size: 0.82em;
-  font-weight: 500;
-  white-space: nowrap;
-  display: inline-block;
-  border: 1px solid rgba(78, 201, 176, 0.3);
-}
-
-/* Valor numérico / resultado métrico */
-.metrica {
-  font-family: 'DM Mono', monospace;
-  background: #e8f4ec;
-  color: var(--gee-ndvi);
-  padding: 2px 8px;
-  border-radius: 4px;
-  font-size: 0.85em;
-  font-weight: 500;
-  white-space: nowrap;
-  display: inline-block;
-  border: 1px solid #b6d5c0;
-}
-
-
-/* ============================================================
-   LIBRERÍAS Y PAQUETES — .libreria
-   ============================================================ */
 .libreria {
   font-family: 'DM Mono', monospace;
   background: var(--gee-teal);
@@ -271,10 +165,6 @@ h3 {
   color: #d4edd9;
 }
 
-
-/* ============================================================
-   FUNCIONES Y COMANDOS TÉCNICOS — .func-tecnica
-   ============================================================ */
 .func-tecnica {
   background-color: #edf2f7;                  
   color: #1a202c;                             
@@ -292,44 +182,42 @@ h3 {
 }
 
 
-/* ============================================================
-   CALLOUTS / RECUADROS INFORMATIVOS
-   ============================================================ */
+/* Recuadros */
 .premium-callout {
   background: #f2f8f4;
   border: 1px solid #b6d5c8;
-  border-left: 5px solid var(--gee-ndvi);
-  border-radius: 0 8px 8px 0;
-  padding: 1.3rem 1.6rem;
-  margin: 1.8rem 0;
+  border-left: 5px solid #fbb162;
+  border-radius: 0 6px 6px 0;
+  padding: 0.8rem 1.1rem;
+  margin: 1rem 0;
   box-shadow: 0 2px 12px rgba(61, 122, 79, 0.06);
 }
 
 .premium-callout-header {
   display: flex;
   align-items: center;
-  gap: 10px;
-  margin-bottom: 0.9rem;
-  padding-bottom: 0.6rem;
+  gap: 6px;
+  margin-bottom: 0.5rem;
+  padding-bottom: 0.4rem;
   border-bottom: 1.5px solid #c8e5d0;
 }
 
 .premium-callout-icon {
-  font-size: 1.3em;
-  color: var(--gee-ndvi);
+  font-size: 0.9em;
+  color: #fbb162;
 }
 
 .premium-callout-title {
   font-family: 'DM Mono', monospace;
   font-size: 1rem;
   font-weight: 500;
-  color: var(--gee-ndvi);
+  color: #fbb162;
   text-transform: uppercase;
   letter-spacing: 0.12em;
   margin: 0;
 }
 
-/* Callout estilo alerta — uso con borde naranja */
+/* Callout alerta */
 .callout-alert {
   border-left-color: var(--gee-infra);
   background: #fdf4ef;
@@ -340,7 +228,7 @@ h3 {
   color: var(--gee-infra);
 }
 
-/* Callout estilo informativo — borde agua */
+/* Callout informativo */
 .callout-info {
   border-left-color: var(--gee-water);
   background: #eef5fb;
@@ -352,9 +240,7 @@ h3 {
 }
 
 
-/* ============================================================
-   TARJETAS DE MÉTRICAS 1
-   ============================================================ */
+/* Métricas */
 .premium-metrics-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
@@ -400,9 +286,7 @@ h3 {
 .metric-sand      { color: var(--gee-sand); }
 
 
-/* ============================================================
-   TARJETAS DE MÉTRICAS 2
-   ============================================================ */
+/* Métricas 2 */
 
 .premium-metrics-grid-2 {
   display: grid;
@@ -412,11 +296,7 @@ h3 {
 }
 
 
-
-
-/* ============================================================
-   PANELES COMPARATIVOS — Métodos / Algoritmos
-   ============================================================ */
+/* Paneles */
 .metodo-comparativo {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -437,20 +317,19 @@ h3 {
   box-shadow: 0 10px 24px rgba(13, 33, 55, 0.09);
 }
 
-.metodo-kriging {
-  border-top: 5px solid var(--gee-navy);
+.metodo-1 {
+  border-top: 1px solid #3d7a4f;
 }
 
-.metodo-idw {
-  border-top: 5px solid var(--gee-sand);
+.metodo-2 {
+  border-top: 3px solid  #2c3b4d;
 }
 
-.metodo-ml {
-  border-top: 5px solid var(--gee-ndvi);
-}
+.metodo-3 {
+  border-top: 3px solid #a35139}
 
-.metodo-rf {
-  border-top: 5px solid var(--gee-water);
+.metodo-4 {
+  border-top: 4px solid #fbb162;
 }
 
 .metodo-item h4 {
@@ -463,63 +342,86 @@ h3 {
 }
 
 
-/* ============================================================
-   TABLA DE CONTENIDOS — TOC sidebar
-   ============================================================ */
-#TOC {
   font-family: 'Source Serif 4', serif;
-  font-size: 0.78rem;
-  border: 1px solid var(--border);
-  border-top: 3px solid var(--gee-teal);
-  border-radius: 0 0 8px 8px;
-  background: #f7fafb;
-  padding: 1rem 0.9rem;
-  margin-top: 1rem;
-  max-height: 80vh;
-  overflow-y: auto;
+
+/* TOC */
+
+#TOC {
+    font-family: 'Source Serif 4', serif;
+    font-size: 0.75rem !important;
+    border: none;
+    background-color: transparent;
+    padding-left: 0;
+    padding-top: 0.25rem;
+    overflow-y: auto;
 }
 
-#TOC .toc-title,
-#TOC > ul::before {
-  font-family: 'DM Mono', monospace;
-  font-size: 0.65rem;
-  font-weight: 500;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--gee-teal);
-  display: block;
-  margin-bottom: 0.6rem;
+#TOC a,
+#TOC li,
+#TOC ul,
+#TOC ul li,
+#TOC ul li a,
+#TOC ul ul li a,
+#TOC .nav-link {
+    font-size: 0.75rem !important;
+}
+
+#TOC .toc-title {
+    font-weight: 600;
+    color: #1b2632;
+    text-transform: none;
+    letter-spacing: 0;
+    font-size: 0.80rem !important;
+    margin-bottom: 0.75rem;
+    padding-bottom: 0.4rem;
+    border-bottom: 1px solid #dee2e6;
 }
 
 #TOC a {
-  color: var(--text-secondary);
-  border-left: 2px solid transparent;
-  padding-left: 8px;
-  transition: all 0.18s ease;
-  text-decoration: none;
-  display: block;
-  padding-top: 2px;
-  padding-bottom: 2px;
+    color: #495057;
+    text-decoration: none;
+    display: block;
+    padding: 0.18rem 0.5rem;
+    border-left: 2px solid transparent;
+    line-height: 1.4;
+    transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+#TOC ul ul a {
+    padding-left: 1rem;
+    color: #6c757d;
 }
 
 #TOC a:hover {
-  color: var(--gee-teal);
-  background: #edf3f7;
-  border-left-color: var(--gee-ndvi-lt);
-  text-decoration: none;
+    color: #2c3b4d;
+    background-color: transparent;
+    text-decoration: none;
 }
 
 #TOC li > a.active {
-  color: var(--gee-ndvi) !important;
-  font-weight: 600;
-  border-left: 2px solid var(--gee-ndvi-lt);
-  background: #eaf4ee;
+    color: #2c3b4d !important;
+    font-weight: 600;
+    border-left: 2px solid #2c3b4d;
+    background-color: transparent;
 }
 
+#TOC ul ul li > a.active {
+    color: #2c3b4d !important;
+    border-left: 2px solid #2c3b4d;
+    font-weight: 500;
+}
 
-/* ============================================================
-   FIGURAS Y MAPAS
-   ============================================================ */
+#TOC ul {
+    list-style: none;
+    padding-left: 0;
+    margin: 0;
+}
+
+#TOC ul ul {
+    padding-left: 0.5rem;
+}
+
+/* FIGURAS */
 figure {
   margin: 2rem 0;
 }
@@ -543,9 +445,7 @@ img {
 }
 
 
-/* ============================================================
-   TABLAS
-   ============================================================ */
+/* TABLAS */
 table {
   border-collapse: collapse;
   width: 100%;
@@ -587,9 +487,7 @@ tbody tr:last-child {
 }
 
 
-/* ============================================================
-   CITAS Y REFERENCIAS
-   ============================================================ */
+/* CITAS */
 blockquote {
   margin: 1.8rem 0;
   padding: 0.8rem 1.4rem;
@@ -611,9 +509,7 @@ blockquote {
 }
 
 
-/* ============================================================
-   SCROLLBAR — Estilo minimalista para el TOC
-   ============================================================ */
+/* SCROLL */
 #TOC::-webkit-scrollbar { width: 5px; }
 #TOC::-webkit-scrollbar-track { background: transparent; }
 #TOC::-webkit-scrollbar-thumb {
@@ -622,9 +518,7 @@ blockquote {
 }
 
 
-/* ============================================================
-   RESPONSIVE
-   ============================================================ */
+/* RESPONSIVE */
 @media (max-width: 768px) {
   .metodo-comparativo {
     grid-template-columns: 1fr;
@@ -638,6 +532,113 @@ blockquote {
   .title,
   .quarto-title h1 {
     font-size: 1.5rem !important;
+  }
+}
+
+
+
+/* ── PANEL TABSET ────────────────────────────────────────────────────────── */
+
+/* Contenedor general */
+.panel-tabset {
+  margin: 1.8rem 0 2.2rem;
+  border: 1px solid var(--border);
+  border-radius: 0 6px 6px 6px;
+  background: white;
+  box-shadow: 0 2px 12px rgba(13, 33, 55, 0.05);
+  overflow: hidden;
+}
+
+/* Barra de pestañas */
+.panel-tabset .nav-tabs {
+  display: flex;
+  gap: 0;
+  border-bottom: 2px solid var(--gee-navy);
+  background: var(--gee-bg);
+  padding: 0 1rem;
+  margin: 0;
+  list-style: none;
+}
+
+/* Cada pestaña */
+.panel-tabset .nav-tabs .nav-item {
+  margin-bottom: -2px;
+}
+
+.panel-tabset .nav-tabs .nav-link {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.72rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--text-secondary);
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  border-radius: 0;
+  padding: 0.65rem 1.1rem;
+  display: block;
+  text-decoration: none;
+  transition: color 0.18s ease, border-color 0.18s ease;
+  white-space: nowrap;
+}
+
+/* Hover */
+.panel-tabset .nav-tabs .nav-link:hover {
+  color: var(--gee-teal);
+  border-bottom-color: var(--gee-ndvi-lt);
+  background: transparent;
+}
+
+/* Pestaña activa */
+.panel-tabset .nav-tabs .nav-link.active {
+  color: var(--gee-navy);
+  font-weight: 500;
+  border-bottom: 2px solid var(--gee-teal);
+  background: white;
+  position: relative;
+}
+
+/* Línea de color en la pestaña activa — acento teal igual que h2 */
+.panel-tabset .nav-tabs .nav-link.active::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--gee-teal);
+  border-radius: 0;
+}
+
+/* Contenido del panel */
+.panel-tabset .tab-content {
+  padding: 1.6rem 1.8rem;
+  background: white;
+}
+
+.panel-tabset .tab-pane {
+  animation: fadeTab 0.2s ease;
+}
+
+@keyframes fadeTab {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0);   }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .panel-tabset .nav-tabs {
+    padding: 0 0.5rem;
+    overflow-x: auto;
+    flex-wrap: nowrap;
+  }
+  .panel-tabset .nav-tabs .nav-link {
+    font-size: 0.68rem;
+    padding: 0.55rem 0.75rem;
+  }
+  .panel-tabset .tab-content {
+    padding: 1.2rem 1rem;
   }
 }
 
