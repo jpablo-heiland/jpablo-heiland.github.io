@@ -20,6 +20,7 @@ donde $NIR$ y $Red$ son las reflectancias superficiales en el infrarrojo cercano
 | 0.15 – 0.35 | Vegetación escasa o cultivo en estadios tempranos |
 | 0.35 – 0.60 | Vegetación moderada, cultivo en activo crecimiento |
 | > 0.60 | Vegetación densa y vigorosa, alta biomasa verde |
+: {.tbl-minimal}
 
 La visualización tridimensional ofrece ventajas:
 
@@ -41,12 +42,22 @@ import pandas as pd
 import numpy as np
 import json, textwrap, warnings
 from pathlib import Path
-from IPython.display import display, HTML, IFrame
+from IPython.display import display, HTML, IFrame, Markdown
 ```
 
-# Parámetros Generales
+# Parámetros Generales {#sec-para}
+
+En esta sección se configuran las variables globales que controlarán todo el flujo de trabajo. Esto facilita la reutilización del informe para diferentes análisis espacio-temporales.
 
 ## Del Proyecto
+
+Se establecen las rutas de acceso a los datos y la vinculación con la plataforma de la nube:
+
+* [PROJECT_ID]{.func-tecnica}: Es el ID del proyecto en la nube deGoogle.
+
+* [ASSET_NDVI]{.func-tecnica}: Define la ubicación dentro del almacenamiento de Earth Engine donde se guardará o desde donde se leerá la imagen NDVI. Utilizar assets permite la persistencia de los datos procesados.
+
+* [SHAPEFILE]{.func-tecnica}: Especifica la ruta local al archivo vectorial que delimita el área de estudio. 
 
 ```{python}
 PROJECT_ID   = "ee-jpablo-heiland"
@@ -54,7 +65,13 @@ ASSET_NDVI   = f"projects/{PROJECT_ID}/assets/NDVI_Py12"
 SHAPEFILE    = "datos/lote_14.shp"
 ```
 
-## Del Filtro de Imágenes S2
+## Del Filtro de Imágenes S2 {#sec-para-ima}
+
+Se definen los filtros de búsqueda en la colección de Sentinel-2:
+
+* La [FECHA_INICIO]{.func-tecnica} y [FECHA_FIN]{.func-tecnica} definen la ventana temporal para la búsqueda de imágenes.
+
+* [MAX_NUBOSIDAD]{.func-tecnica} es un filtro de calidad, establece un umbral (10%) para descartar escenas con alta cobertura de nubes. 
 
 ```{python}
 FECHA_INICIO  = "2026-01-15"
@@ -63,6 +80,8 @@ MAX_NUBOSIDAD = 10
 ```
 
 ## De la Visualización 2D
+
+Los parámetros de esta sección controlan la estética de la visualización del mapa 2D.
 
 ```{python}
 PALETA_2D = [
@@ -73,6 +92,14 @@ VIS_NDVI = {"min": -0.1, "max": 0.85, "palette": PALETA_2D}
 ```
 
 ## De la Visualización 3D
+
+La modificación de variables bidimensionales a un entorno tridimensional requiere ajustar la escala y la perspectiva geométrica del entorno virtual:
+
+* [FACTOR_ESCALA_3D]{.func-tecnica} es la exageración vertical. Los valores de NDVI varían en una escala muy pequeña, si se graficara de forma directa la altura sería imperceptible. Un factor de 900 multiplica el valor del NDVI para convertirlo en una "coordenada Z" (altura) visible.
+
+* [RADIO_COLUMNA]{.func-tecnica}: Controla el tamaño de la celda o cilindro en PyDeck (expresado en metros).
+
+* [PITCH_CAMARA]{.func-tecnica} y [BEARING_CAMARA]{.func-tecnica} configuran el punto de vista inicial al renderizar el mapa El Pitch (52°) inclina la cámara respecto al plano zenital y el Bearing (20°) la rota respecto al Norte.
 
 ```{python}
 FACTOR_ESCALA_3D = 900    
@@ -94,6 +121,12 @@ ee.Initialize(project=PROJECT_ID)
 
 # Area de Interés
 
+Se realiza la transición de los datos vectoriales locales hacia objetos nativos del servidor de Earth Engine, definiendo así el Área de Interés.
+
+[geemap.shp_to_ee()]{.func-tecnica} lee el archivo local extrae sus atributos y geometrías, y los serializa (generalmente transformándolos internamente a formato GeoJSON) para enviarlos a los servidores de Google. Como resultado, la variable [lote_ee]{.func-tecnica} se convierte en un objeto de tipo [ee.FeatureCollection]{.func-tecnica}, esto equivale a una capa vectorial completa que contiene tanto la geometría como su tabla de atributos asociada.
+
+El método [geometry()]{.func-tecnica} extrae el polígono puro a partir de la colección de elementos.
+
 ```{python}
 lote_ee  = geemap.shp_to_ee(SHAPEFILE)
 geometry = lote_ee.geometry()
@@ -101,7 +134,9 @@ geometry = lote_ee.geometry()
 
 ## Calcular el centro del área de estudio
 
-Para posicionar correctamente la vista inicial del mapa, se obtiene el centroide del área de estudio con [.centroid()]{.func-tecnica}. El método [.getInfo()]{.func-tecnica} descarga el resultado desde los servidores de GEE al entorno local como un diccionario Python. Las coordenadas en GEE se ordenan como [[longitud, latitud]]{.func-tecnica}, por lo que se invierten para obtener el formato [[latitud, longitud]]{.func-tecnica} que espera [folium]{.func-tecnica}.
+Para posicionar correctamente la vista inicial del mapa, se obtiene el centroide del área de estudio con [.centroid()]{.func-tecnica}. El método [.getInfo()]{.func-tecnica} descarga el resultado desde los servidores de GEE al entorno local como un diccionario Python. 
+
+Las coordenadas en GEE se ordenan como [[longitud, latitud]]{.func-tecnica}, por lo que se invierten para obtener el formato [[latitud, longitud]]{.func-tecnica} que espera [folium]{.func-tecnica}.
 
 ```{python}
 centroid = geometry.centroid(maxError=1).getInfo()['coordinates']
@@ -110,7 +145,17 @@ centro = [centroid[1], centroid[0]]
 
 # Selección Imagen Sentinel-2 SR Harmonized
 
+Se consulta el catálogo de imágenes de Sentinel-2 Surface Reflectance Harmonized (`COPERNICUS/S2_SR_HARMONIZED`)-
+
+
 ## Colección Sentinel-2
+Se aplican 3 filtros al catálogo de Sentine-2:
+
+* [.filterDate()]{.func-tecnica}: Restringe la búsqueda exclusivamente a las imágenes capturadas dentro de la ventana temporal antes definida (@sec-para-ima).
+
+* [.filterBounds()]{.func-tecnica}: Solo se conservan los píxeles que intersecan la geometría del lote.
+
+* [.filterMetadata(...)]{.func-tecnica}: Descarta cualquier imagen donde el porcentaje de nubes sea mayor o igual al parámetro [MAX_NUBOSIDAD]{.func-tecnica} (10%).
 
 ```{python}
 imgs_s2 = (
@@ -121,34 +166,131 @@ imgs_s2 = (
 )
 ```
 
+```{python}
+#| include: false
+
+cantidad_imagenes = imgs_s2.size().getInfo()
+promedio_nubes = imgs_s2.aggregate_mean('CLOUDY_PIXEL_PERCENTAGE').getInfo()
+
+```
+
+```{r}
+#| include: false
+
+cantidad_imagenes_r <- py$cantidad_imagenes
+promedio_nubes_r <- py$promedio_nubes
+
+```
+
+A partir de los filtros aplicados, el servidor devolvió lo siguiente:
+
+::: {.premium-metrics-grid}
+
+::: {.premium-metric}
+::: {.metric-name}
+Imágenes Disponibles
+:::
+
+::: {.metric-number .metric-highlight}
+`r cantidad_imagenes_r`
+:::
+:::
+
+
+:::
+
 ## Selección de la imagen menos nubosa
+
+De la totalidad de imágenes antes filtradas se selecciona aquella que tenga menor cantidad de nubosidad:
 
 ```{python}
 imagen_seleccionada = imgs_s2.sort("CLOUDY_PIXEL_PERCENTAGE").first()
-
-props      = imagen_seleccionada.getInfo()["properties"]
-fecha_img  = props.get("DATATAKE_IDENTIFIER", "N/A")[:15]
-nubosidad  = props.get("CLOUDY_PIXEL_PERCENTAGE", "N/A")
-
-print(f"📅  Imagen seleccionada : {fecha_img}")
-print(f"☁️   Nubosidad          : {nubosidad}%")
 ```
+
+
+```{python}
+#| include: false
+
+milisegundos = imagen_seleccionada.get('system:time_start').getInfo()
+timestamp = pd.to_datetime(milisegundos, unit='ms')
+fecha_imagen = timestamp.strftime('%d/%m/%Y')
+hora_imagen = timestamp.strftime('%H:%M')
+porcentaje_nubes = round(imagen_seleccionada.get('CLOUDY_PIXEL_PERCENTAGE').getInfo(), 2)
+
+
+```
+
+```{r}
+#| include: false
+
+fecha_imagen_r <- py$fecha_imagen
+hora_imagen_r <- py$hora_imagen
+porcentaje_nubes_r <- py$porcentaje_nubes
+
+
+```
+
+Las condiciones de captura de la imagen seleccionada fue:
+
+::: {.premium-metrics-grid-2}
+
+::: {.premium-metric}
+::: {.metric-name}
+Fecha de Adquisición
+:::
+
+::: {.metric-number .metric-highlight}
+`r fecha_imagen_r`
+:::
+:::
+
+:::
+
+::: {.premium-metrics-grid}
+
+::: {.premium-metric}
+::: {.metric-name}
+Hora de Adquisición
+:::
+
+::: {.metric-number .metric-highlight}
+`r hora_imagen_r`
+:::
+:::
+
+::: {.premium-metric}
+::: {.metric-name}
+Porcentaje de Nubes
+:::
+
+::: {.metric-number}
+`r round(porcentaje_nubes_r, 4)`[ %]{.metric-sand}
+:::
+:::
+
+:::
 
 # Cálculo NDVI
 
-Recorte 
+## Recorte 
+
+El método [.clip]{.func-tecnica} recorta la imagen según el polígono del área de interés.
 
 ```{python}
 imagen_clip   = imagen_seleccionada.clip(geometry)
 ```
 
-Correción de reflectancia
+## Correción de reflectancia
+
+Los datos de Sentinel-2 SR se almacenan en los servidores de Google como números enteros de 16 bits (valores de 0 a 10,000). Sin embargo, físicamente la reflectancia es una proporción que oscila entre 0.0 y 1.0. Es por esto que se divide la imagen por 10000.
 
 ```{python}
 imagen_escala = imagen_clip.divide(10000)
 ```
 
-Cálculo
+## Cálculo del NDVI
+
+Para el cáluclo del NDVI se utiliza el método [.expression]{.func-tecnica}:
 
 ```{python}
 NDVI = imagen_escala.expression(
@@ -160,27 +302,56 @@ NDVI = imagen_escala.expression(
 ).rename("NDVI")
 ```
 
-Estadisticas
+## Estadísticas
+
+Se calcularon las estadísticas más importante del NDVI antes calculado y se visualizan en una tabla:
 
 ```{python}
+#| code-fold: true
+#| code-summary: "Código"
+
 stats = NDVI.reduceRegion(
-    reducer   = (ee.Reducer.mean()
-                 .combine(ee.Reducer.min(),    sharedInputs=True)
-                 .combine(ee.Reducer.max(),    sharedInputs=True)
-                 .combine(ee.Reducer.stdDev(), sharedInputs=True)),
-    geometry  = geometry,
-    scale     = 10,
-    maxPixels = 1e13,
+    reducer=(
+        ee.Reducer.mean()
+        .combine(ee.Reducer.min(), sharedInputs=True)
+        .combine(ee.Reducer.max(), sharedInputs=True)
+        .combine(ee.Reducer.stdDev(), sharedInputs=True)
+    ),
+    geometry=geometry,
+    scale=10,
+    maxPixels=1e13,
 ).getInfo()
 
-print("📊  Estadísticas zonales del NDVI:")
-print(f"    Media          : {stats.get('NDVI_mean',   0):.4f}")
-print(f"    Mínimo         : {stats.get('NDVI_min',    0):.4f}")
-print(f"    Máximo         : {stats.get('NDVI_max',    0):.4f}")
-print(f"    Desv. estándar : {stats.get('NDVI_stdDev', 0):.4f}")
+df_stats = pd.DataFrame(
+    {
+        "Métrica Agronómica": [
+            "Media",
+            "Mínimo",
+            "Máximo",
+            "Desviación Estándar",
+        ],
+        "Valor": [
+            stats.get("NDVI_mean", 0),
+            stats.get("NDVI_min", 0),
+            stats.get("NDVI_max", 0),
+            stats.get("NDVI_stdDev", 0),
+        ],
+    }
+)
+
+tabla_md = df_stats.to_markdown(index=False, floatfmt=".4f")
+tabla_md += "\n\n: Estadísticas zonales del NDVI en el lote. {.tbl-minimal}"
+
+Markdown(tabla_md)
 ```
 
 # Exportar NDVI como Asset GEE
+
+Para asegurar que las capas del mapa permanezcan accesibles de forma indefinida y no expiren por la caducidad de los tokens de Google Earth Engine, se procedió a exportar los resultados a los servidores de almacenamiento de GEE (Assets).
+
+Se configuró la exportación mediante [ee.batch.Export.image.toAsset()]{.func-tecnica}. Esto define las propiedades del archivo final en la nube.
+
+El método [.start()]{.func-tecnica} inicia la ejecución de la tarea en los servidores de Google.
 
 ```{python}
 tarea = ee.batch.Export.image.toAsset(
@@ -197,6 +368,8 @@ tarea.start()
 ```
 
 ## Cargar Asset 
+
+Se recupera la imagen exportada al Asset de GEE mediante [ee.Image()]{.func-tecnica}.
 
 ```{python}
 NDVI_asset = ee.Image(ASSET_NDVI)
@@ -266,6 +439,16 @@ htmltools::HTML(py$mapa_html)
 
 # Extracción de píxeles y preparación del DataFrame
 
+Para poder renderizar el lote en tres dimensiones utilizando [PyDeck]{.func-tecnica}, debemos transformar la estructura del raster en una estructura tabular (filas y columnas). En esta sección se descargan los valores numéricos de cada píxel del lote junto con sus coordenadas geográficas exactas, se realiza un proceso de limpieza de datos para eliminar valores nulos o atípicos (outliers), y se calcula la variable de altura para la representación en altura del NDVI.
+
+## Descarga y Conversión de Raster a Tabla
+
+[.getRegion()]{.func-tecnica} toma los píxeles de la imagen que caen dentro de la geometry del lote y los convierte en una lista de listas donde cada fila representa un píxel individual. Cada fila contiene el ID de la imagen, la marca de tiempo, la longitud, la latitud y el valor de NDVI correspondiente a ese punto exacto del espacio.
+
+[scale=10]{.func-tecnica} garantiza que se extraiga un dato por cada píxel real de 10x10 metros de Sentinel-2.
+
+La respuesta de [.getInfo()]{.func-tecnica} llega como una lista nativa de Python donde el primer elemento ([datos_raw[0]]{.func-tecnica}) contiene los nombres de las columnas (la cabecera) y el resto ([datos_raw[1:]]{.func-tecnica}) contiene los datos. Con estos componentes se inicializa un [pandas.DataFrame]{.func-tecnica}.
+
 ```{python}
 datos_raw = (
     ee.ImageCollection([NDVI_asset])
@@ -279,6 +462,13 @@ df       = pd.DataFrame(filas, columns=cabecera)
 ```
 
 ## Limpieza, tipado y normalización
+
+En primer lugar, se realiza un renombrado a través de [ndvi_col]{.func-tecnica}.
+
+[.dropna(subset=["NDVI"])]{.func-tecnica} al extraer datos mediante una geometría, los píxeles periféricos que caen parcialmente fuera del polígono o áreas sin información (NoData) se descargan con valores nulos (NaN). Por lo tanto, se eliminan.
+
+[Pandas]{.func-tecnica} puede interpretar las coordenadas y los índices como string, con [.astype()]{.func-tecnica} se fuerza al tipo float.
+
 
 ```{python}
 ndvi_col = [c for c in df.columns if c not in ("id","time","longitude","latitude")][0]
@@ -294,31 +484,36 @@ df = (df
 )
 ```
 
-## Normalización robusta (percentil 2–98 para descartar outliers extremos)
+## Normalización
+
+Pueden existir píxeles con valores extremos que no representan la realidad del cultivo. Si se utilizara una normalización clásica basada en el mínimo y máximo absoluto, estos outliers comprimirían la escala del cultivo.
+
+[quantile(0.02)]{.func-tecnica} y [quantile(0.98)]{.func-tecnica} recortan el 2% de los datos más bajos y el 2% de los más altos. 
+
+Se aplica la ecuación de normalización lineal. El método [.clip(0, 1)]{.func-tecnica} asegura que cualquier valor que haya quedado por fuera de los percentiles calculados sea forzado a mantenerse estrictamente en los límites de 0 (mínimo) y 1 (máximo)
 
 ```{python}
 ndvi_min = df["NDVI"].quantile(0.02)
 ndvi_max = df["NDVI"].quantile(0.98)
 df["NDVI_norm"] = ((df["NDVI"] - ndvi_min) / (ndvi_max - ndvi_min)).clip(0, 1)
-
-print(f"📐  Rango NDVI (p2–p98): [{ndvi_min:.4f}, {ndvi_max:.4f}]")
-print(f"📊  Píxeles válidos    : {len(df):,}")
 ```
 
 ## Tercera dimensión: altura proporcional al NDVI normalizado
 
-```{python}
+Se transforma el índice en un relieve topográfico con el NDVI.
 
+```{python}
 df["altura_3d"]    = df["NDVI_norm"] * FACTOR_ESCALA_3D
 df["NDVI_positivo"]= df["NDVI"].clip(lower=0)
-
-print(f"📏  Alturas 3D — mín: {df['altura_3d'].min():.1f} m, "
-      f"máx: {df['altura_3d'].max():.1f} m")
 ```
 
 # Paleta de color científica para 3D
 
-Cinco nodos de color con interpolación lineal suave, diseñados para contexto agronómico. La misma paleta se reutiliza en las columnas PyDeck, la leyenda SVG y el panel estadístico Matplotlib.
+En una visualización tridimensional en [PyDeck]{.func-tecnica}, los saltos abruptos de color generan un "efecto escalera" artificial que dificulta la percepción visual del relieve.
+
+En esta sección se define una paleta de color continua basada en cinco nodos de control espectral.
+
+Mediante un algoritmo de interpolación lineal, cada píxel del lote recibe un color exacto y proporcional a su nivel de vigor.
 
 ## Definición de nodos de color
 Cada nodo: (posición_normalizada_0_a_1, (R, G, B))
@@ -359,21 +554,21 @@ def interpolar_color(valor_norm: float, opacidad: int = 220) -> list:
 
 
 df["color_rgb"] = df["NDVI_norm"].apply(interpolar_color)
-
-print("🎨  Paleta interpolada y aplicada.")
-print(df[["longitude","latitude","NDVI","NDVI_norm","altura_3d","color_rgb"]].head(3))
 ```
 
 # Visualización 3D con PyDeck
 
-**Capas**:
+## ColumnLayer 
 
-| Capa | Tipo | Descripción |
-|:---|:---|:---|
-| `capa_ndvi_3d` | `ColumnLayer` | Columnas extruidas con altura ∝ NDVI |
-| `capa_contorno` | `GeoJsonLayer` | Límite del lote (#ffb162) |
+La capa [ColumnLayer]{.func-tecnica} toma cada una de las filas del [DataFrame]{.func-tecnica} y las proyecta como prismas o columnas en un espacio tridimensional.
 
-## ColumnLayer — núcleo de la visualización 3D
+  * Las propiedades [get_position]{.func-tecnica}, [get_elevation]{.func-tecnica} y [get_fill_color]{.func-tecnica} leen directamente los nombres de las columnas del [DataFrame]{.func-tecnica} local (longitude, latitude, altura_3d, color_rgb).
+
+* [radius=RADIO_COLUMNA]{.func-tecnica}: Define el ancho del cilindro/columna.
+
+* [coverage=0.95]{.func-tecnica}: Al fijarlo en 0.95, se deja un espacio del 5% entre columnas. Esto genera una cuadrícula donde la luz del entorno proyecta sombras entre las columnas.
+
+* [pickable]{.func-tecnica} y [auto_highlight]{.func-tecnica} habilitan el picking, es decir, que reconozca cuándo el usuario posiciona el cursor sobre una columna específica, iluminándola.
 
 ```{python}
 capa_ndvi_3d = pdk.Layer(
@@ -391,7 +586,9 @@ capa_ndvi_3d = pdk.Layer(
 )
 ```
 
-## GeoJsonLayer — contorno del AOI
+## GeoJsonLayer 
+
+[GeoJsonLayer]{.func-tecnica} superpone los límites físicos reales del lote.
 
 ```{python}
 geojson_lote = geometry.getInfo()
@@ -409,6 +606,8 @@ capa_contorno = pdk.Layer(
 
 ## Estado inicial de cámara
 
+Las propiedades [longitude]{.func-tecnica} y [latitude]{.func-tecnica} calculan la media ([.mean()]{.func-tecnica}) de las coordenadas del [DataFrame]{.func-tecnica}. Esto garantiza que la cámara siempre se posicione de manera exacta en el centro  del lote.
+
 ```{python}
 vista_inicial = pdk.ViewState(
     longitude = df["longitude"].mean(),
@@ -420,6 +619,8 @@ vista_inicial = pdk.ViewState(
 ```
 
 ## Tooltip HTML personalizado
+
+Se definen tarjeta flotante.
 
 ```{python}
 tooltip = {
@@ -440,6 +641,7 @@ tooltip = {
 ```
 
 ## Ensamblado del Deck
+El objeto [pdk.Deck]{.func-tecnica} aglutina todos los elementos constructivos anteriores:
 
 ```{python}
 mapa_3d = pdk.Deck(
@@ -456,142 +658,12 @@ mapa_3d = pdk.Deck(
 mapa_3d.show()
 ```
 
-# Panel estadístico del NDVI
-
-Histograma, boxplot y barra de paleta para contextualizar la distribución espacial de los valores mostrados en 3D.
-
-```{python}
-import matplotlib.pyplot as plt
-import numpy as np
-from matplotlib.colors import LinearSegmentedColormap
-
-# ── Paleta matplotlib a partir de los nodos definidos ─────────────────────────
-cmap_ndvi = LinearSegmentedColormap.from_list(
-    "ndvi_agro",
-    [(pos, tuple(c/255 for c in rgb)) for pos, rgb in NODOS_PALETA]
-)
-
-# ── Configuración de la figura (Ajustada a 2 columnas para estilo académico) ──
-fig, axes = plt.subplots(1, 2, figsize=(11, 4.5))
-fig.patch.set_facecolor("white")
-
-# Paleta tipográfica y estructural académica
-text_color = "#111111"    # Negro de alto contraste para textos y títulos
-line_color = "#444444"    # Gris oscuro para líneas de referencia
-spine_color = "#333333"   # Color estructural de los ejes
-
-# ── (a) Histograma coloreado ──────────────────────────────────────────────────
-ax = axes[0]
-ax.set_facecolor("white")
-n, bins, patches = ax.hist(df["NDVI"], bins=50, edgecolor="none")
-
-# Mantenemos el mapeo de color NDVI en las barras sobre el fondo blanco
-for patch, left in zip(patches, bins[:-1]):
-    v = (left - ndvi_min) / max(ndvi_max - ndvi_min, 1e-9)
-    patch.set_facecolor(cmap_ndvi(np.clip(v, 0, 1)))
-
-# Indicadores de tendencia central en estilo formal (Negro y Gris discontinuo)
-ax.axvline(df["NDVI"].mean(), color="black", lw=1.5, ls="--",
-           label=f"Media: {df['NDVI'].mean():.3f}")
-ax.axvline(df["NDVI"].median(), color="#555555", lw=1.5, ls=":",
-           label=f"Mediana: {df['NDVI'].median():.3f}")
-
-ax.set_title("Distribución del NDVI", color=text_color, fontsize=12, fontweight="bold", pad=12)
-ax.set_xlabel("NDVI", color=text_color, fontsize=10)
-ax.set_ylabel("Frecuencia", color=text_color, fontsize=10)
-ax.tick_params(colors=text_color, labelsize=9)
-
-# Estilo de ejes académico (Remoción de bordes superior y derecho)
-ax.spines['top'].set_visible(False)
-ax.spines['right'].set_visible(False)
-ax.spines['left'].set_color(spine_color)
-ax.spines['bottom'].set_color(spine_color)
-ax.legend(fontsize=9, facecolor="white", edgecolor="#cccccc", labelcolor=text_color, loc="upper left")
-
-# ── (b) Boxplot ───────────────────────────────────────────────────────────────
-ax2 = axes[1]
-ax2.set_facecolor("white")
-ax2.boxplot(
-    df["NDVI"], vert=True, patch_artist=True,
-    medianprops  = dict(color="black", lw=2),
-    boxprops     = dict(facecolor="#f2f2f2", edgecolor="black", lw=1.2), # Gris neutro académico
-    whiskerprops = dict(color="black", lw=1),
-    capprops     = dict(color="black", lw=1),
-    flierprops   = dict(marker="o", markeredgecolor="black", markerfacecolor="none", markersize=3, alpha=0.5),
-)
-
-# Líneas de percentiles en gris sutil institucional
-for pct in [10, 25, 75, 90]:
-    val = df["NDVI"].quantile(pct/100)
-    ax2.axhline(val, color=line_color, lw=0.8, ls=":", alpha=0.5)
-    ax2.text(1.08, val, f"P{pct}: {val:.3f}", va="center", fontsize=8, color=text_color, fontweight="medium")
-
-ax2.set_title("Boxplot del NDVI", color=text_color, fontsize=12, fontweight="bold", pad=12)
-ax2.set_ylabel("NDVI", color=text_color, fontsize=10)
-ax2.set_xticks([])
-ax2.tick_params(colors=text_color, labelsize=9)
-
-# Estilo de ejes para el diagrama de caja
-ax2.spines['top'].set_visible(False)
-ax2.spines['right'].set_visible(False)
-ax2.spines['left'].set_color(spine_color)
-ax2.spines['bottom'].set_visible(False) # Eje X estéril sin categorías
-
-# ── Título General del Panel ──────────────────────────────────────────────────
-plt.suptitle("Panel de análisis estadístico — NDVI Sentinel-2",
-             color=text_color, fontsize=13, fontweight="bold", y=1.02)
-
-plt.tight_layout()
-plt.show()
-```
 
 # Mapa
 
 <iframe src="index.html" width="100%" height="600px" style="border: none; border-radius: 8px;"></iframe>
 
-# Opcion A
 
-Se reliazó con [base64]{.func-tecnica}
-
-```{r embed-qgis, echo=FALSE, results='asis'}
-library(base64enc)
-library(htmltools)
-
-
-html_qgis <- paste(readLines("index.html", encoding="UTF-8"), collapse="\\n")
-
-b64_qgis <- base64enc::base64encode(charToRaw(html_qgis))
-
-cat(sprintf(
-  '<iframe src="data:text/html;base64,%s" width="100%%" height="600px" style="border: none; border-radius:8px;" allowfullscreen></iframe>', b64_qgis
-))
-
-```
-
-
-```{r echo=FALSE, results='asis'}
-library(base64enc)
-library(htmltools)
-
-# Codificamos el archivo index.html directamente a base64
-b64_qgis <- base64enc::base64encode("index.html")
-
-# Lo pintamos en el iframe
-cat(sprintf(
-  '<iframe src="data:text/html;base64,%s" width="100%%" height="600px" style="border: none; border-radius:8px;" allowfullscreen></iframe>', b64_qgis
-))
-```
-
-
-# Opcion C
-
-```{r}
-html_qgis_esc <- gsub('"', "&quot;", html_qgis)
-
-cat(sprintf(
-  '<iframe srcdoc="%s" width="100%%" height="600px" style="border: none; border-radius:8px;" allowfullscreen></iframe>', html_qgis_esc
-))
-```
 
 
 

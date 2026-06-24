@@ -445,56 +445,84 @@
     "href": "proyectos/ndvi-tres-dim/ndvi-tres-dim.html#del-proyecto",
     "title": "Visualización 3D del NDVI con PyDeck y Google Earth Engine",
     "section": "\n3.1 Del Proyecto",
-    "text": "3.1 Del Proyecto\n\nPROJECT_ID   = \"ee-jpablo-heiland\"\nASSET_NDVI   = f\"projects/{PROJECT_ID}/assets/NDVI_Py12\"\nSHAPEFILE    = \"datos/lote_14.shp\""
+    "text": "3.1 Del Proyecto\nSe establecen las rutas de acceso a los datos y la vinculación con la plataforma de la nube:\n\nPROJECT_ID: Es el ID del proyecto en la nube deGoogle.\nASSET_NDVI: Define la ubicación dentro del almacenamiento de Earth Engine donde se guardará o desde donde se leerá la imagen NDVI. Utilizar assets permite la persistencia de los datos procesados.\nSHAPEFILE: Especifica la ruta local al archivo vectorial que delimita el área de estudio.\n\n\nPROJECT_ID   = \"ee-jpablo-heiland\"\nASSET_NDVI   = f\"projects/{PROJECT_ID}/assets/NDVI_Py12\"\nSHAPEFILE    = \"datos/lote_14.shp\""
   },
   {
-    "objectID": "proyectos/ndvi-tres-dim/ndvi-tres-dim.html#del-filtro-de-imágenes-s2",
-    "href": "proyectos/ndvi-tres-dim/ndvi-tres-dim.html#del-filtro-de-imágenes-s2",
+    "objectID": "proyectos/ndvi-tres-dim/ndvi-tres-dim.html#sec-para-ima",
+    "href": "proyectos/ndvi-tres-dim/ndvi-tres-dim.html#sec-para-ima",
     "title": "Visualización 3D del NDVI con PyDeck y Google Earth Engine",
     "section": "\n3.2 Del Filtro de Imágenes S2",
-    "text": "3.2 Del Filtro de Imágenes S2\n\nFECHA_INICIO  = \"2026-01-15\"\nFECHA_FIN     = \"2026-02-15\"\nMAX_NUBOSIDAD = 10"
+    "text": "3.2 Del Filtro de Imágenes S2\nSe definen los filtros de búsqueda en la colección de Sentinel-2:\n\nLa FECHA_INICIO y FECHA_FIN definen la ventana temporal para la búsqueda de imágenes.\nMAX_NUBOSIDAD es un filtro de calidad, establece un umbral (10%) para descartar escenas con alta cobertura de nubes.\n\n\nFECHA_INICIO  = \"2026-01-15\"\nFECHA_FIN     = \"2026-02-15\"\nMAX_NUBOSIDAD = 10"
   },
   {
     "objectID": "proyectos/ndvi-tres-dim/ndvi-tres-dim.html#de-la-visualización-2d",
     "href": "proyectos/ndvi-tres-dim/ndvi-tres-dim.html#de-la-visualización-2d",
     "title": "Visualización 3D del NDVI con PyDeck y Google Earth Engine",
     "section": "\n3.3 De la Visualización 2D",
-    "text": "3.3 De la Visualización 2D\n\nPALETA_2D = [\n    \"a52f04\", \"c67f3c\", \"e8b96a\", \"f5e4a0\",\n    \"c8e06a\", \"78c83c\", \"3da62a\", \"1a7a14\", \"0a4d08\"\n]\nVIS_NDVI = {\"min\": -0.1, \"max\": 0.85, \"palette\": PALETA_2D}"
+    "text": "3.3 De la Visualización 2D\nLos parámetros de esta sección controlan la estética de la visualización del mapa 2D.\n\nPALETA_2D = [\n    \"a52f04\", \"c67f3c\", \"e8b96a\", \"f5e4a0\",\n    \"c8e06a\", \"78c83c\", \"3da62a\", \"1a7a14\", \"0a4d08\"\n]\nVIS_NDVI = {\"min\": -0.1, \"max\": 0.85, \"palette\": PALETA_2D}"
   },
   {
     "objectID": "proyectos/ndvi-tres-dim/ndvi-tres-dim.html#de-la-visualización-3d",
     "href": "proyectos/ndvi-tres-dim/ndvi-tres-dim.html#de-la-visualización-3d",
     "title": "Visualización 3D del NDVI con PyDeck y Google Earth Engine",
     "section": "\n3.4 De la Visualización 3D",
-    "text": "3.4 De la Visualización 3D\n\nFACTOR_ESCALA_3D = 900    \nRADIO_COLUMNA    = 8       \nPITCH_CAMARA     = 52      \nBEARING_CAMARA   = 20"
+    "text": "3.4 De la Visualización 3D\nLa modificación de variables bidimensionales a un entorno tridimensional requiere ajustar la escala y la perspectiva geométrica del entorno virtual:\n\nFACTOR_ESCALA_3D es la exageración vertical. Los valores de NDVI varían en una escala muy pequeña, si se graficara de forma directa la altura sería imperceptible. Un factor de 900 multiplica el valor del NDVI para convertirlo en una “coordenada Z” (altura) visible.\nRADIO_COLUMNA: Controla el tamaño de la celda o cilindro en PyDeck (expresado en metros).\nPITCH_CAMARA y BEARING_CAMARA configuran el punto de vista inicial al renderizar el mapa El Pitch (52°) inclina la cámara respecto al plano zenital y el Bearing (20°) la rota respecto al Norte.\n\n\nFACTOR_ESCALA_3D = 900    \nRADIO_COLUMNA    = 8       \nPITCH_CAMARA     = 52      \nBEARING_CAMARA   = 20"
   },
   {
     "objectID": "proyectos/ndvi-tres-dim/ndvi-tres-dim.html#calcular-el-centro-del-área-de-estudio",
     "href": "proyectos/ndvi-tres-dim/ndvi-tres-dim.html#calcular-el-centro-del-área-de-estudio",
     "title": "Visualización 3D del NDVI con PyDeck y Google Earth Engine",
     "section": "\n5.1 Calcular el centro del área de estudio",
-    "text": "5.1 Calcular el centro del área de estudio\nPara posicionar correctamente la vista inicial del mapa, se obtiene el centroide del área de estudio con .centroid(). El método .getInfo() descarga el resultado desde los servidores de GEE al entorno local como un diccionario Python. Las coordenadas en GEE se ordenan como [longitud, latitud], por lo que se invierten para obtener el formato [latitud, longitud] que espera folium.\n\ncentroid = geometry.centroid(maxError=1).getInfo()['coordinates']\ncentro = [centroid[1], centroid[0]]"
+    "text": "5.1 Calcular el centro del área de estudio\nPara posicionar correctamente la vista inicial del mapa, se obtiene el centroide del área de estudio con .centroid(). El método .getInfo() descarga el resultado desde los servidores de GEE al entorno local como un diccionario Python.\nLas coordenadas en GEE se ordenan como [longitud, latitud], por lo que se invierten para obtener el formato [latitud, longitud] que espera folium.\n\ncentroid = geometry.centroid(maxError=1).getInfo()['coordinates']\ncentro = [centroid[1], centroid[0]]"
   },
   {
     "objectID": "proyectos/ndvi-tres-dim/ndvi-tres-dim.html#colección-sentinel-2",
     "href": "proyectos/ndvi-tres-dim/ndvi-tres-dim.html#colección-sentinel-2",
     "title": "Visualización 3D del NDVI con PyDeck y Google Earth Engine",
     "section": "\n6.1 Colección Sentinel-2",
-    "text": "6.1 Colección Sentinel-2\n\nimgs_s2 = (\n    ee.ImageCollection(\"COPERNICUS/S2_SR_HARMONIZED\")\n    .filterDate(FECHA_INICIO, FECHA_FIN)\n    .filterBounds(geometry)\n    .filterMetadata(\"CLOUDY_PIXEL_PERCENTAGE\", \"less_than\", MAX_NUBOSIDAD)\n)"
+    "text": "6.1 Colección Sentinel-2\nSe aplican 3 filtros al catálogo de Sentine-2:\n\n.filterDate(): Restringe la búsqueda exclusivamente a las imágenes capturadas dentro de la ventana temporal antes definida (Sección 3.2).\n.filterBounds(): Solo se conservan los píxeles que intersecan la geometría del lote.\n.filterMetadata(…): Descarta cualquier imagen donde el porcentaje de nubes sea mayor o igual al parámetro MAX_NUBOSIDAD (10%).\n\n\nimgs_s2 = (\n    ee.ImageCollection(\"COPERNICUS/S2_SR_HARMONIZED\")\n    .filterDate(FECHA_INICIO, FECHA_FIN)\n    .filterBounds(geometry)\n    .filterMetadata(\"CLOUDY_PIXEL_PERCENTAGE\", \"less_than\", MAX_NUBOSIDAD)\n)\n\nA partir de los filtros aplicados, el servidor devolvió lo siguiente:\n\n\n\nImágenes Disponibles\n\n\n6"
   },
   {
     "objectID": "proyectos/ndvi-tres-dim/ndvi-tres-dim.html#selección-de-la-imagen-menos-nubosa",
     "href": "proyectos/ndvi-tres-dim/ndvi-tres-dim.html#selección-de-la-imagen-menos-nubosa",
     "title": "Visualización 3D del NDVI con PyDeck y Google Earth Engine",
     "section": "\n6.2 Selección de la imagen menos nubosa",
-    "text": "6.2 Selección de la imagen menos nubosa\n\nimagen_seleccionada = imgs_s2.sort(\"CLOUDY_PIXEL_PERCENTAGE\").first()\n\nprops      = imagen_seleccionada.getInfo()[\"properties\"]\nfecha_img  = props.get(\"DATATAKE_IDENTIFIER\", \"N/A\")[:15]\nnubosidad  = props.get(\"CLOUDY_PIXEL_PERCENTAGE\", \"N/A\")\n\nprint(f\"📅  Imagen seleccionada : {fecha_img}\")\n\n📅  Imagen seleccionada : GS2C_20260116T1\n\nprint(f\"☁️   Nubosidad          : {nubosidad}%\")\n\n☁️   Nubosidad          : 0.000819%"
+    "text": "6.2 Selección de la imagen menos nubosa\nDe la totalidad de imágenes antes filtradas se selecciona aquella que tenga menor cantidad de nubosidad:\n\nimagen_seleccionada = imgs_s2.sort(\"CLOUDY_PIXEL_PERCENTAGE\").first()\n\nLas condiciones de captura de la imagen seleccionada fue:\n\n\n\nFecha de Adquisición\n\n\n16/01/2026\n\n\n\n\n\n\nHora de Adquisición\n\n\n14:32\n\n\n\n\nPorcentaje de Nubes\n\n\n0%"
+  },
+  {
+    "objectID": "proyectos/ndvi-tres-dim/ndvi-tres-dim.html#recorte",
+    "href": "proyectos/ndvi-tres-dim/ndvi-tres-dim.html#recorte",
+    "title": "Visualización 3D del NDVI con PyDeck y Google Earth Engine",
+    "section": "\n7.1 Recorte",
+    "text": "7.1 Recorte\nEl método .clip recorta la imagen según el polígono del área de interés.\n\nimagen_clip   = imagen_seleccionada.clip(geometry)"
+  },
+  {
+    "objectID": "proyectos/ndvi-tres-dim/ndvi-tres-dim.html#correción-de-reflectancia",
+    "href": "proyectos/ndvi-tres-dim/ndvi-tres-dim.html#correción-de-reflectancia",
+    "title": "Visualización 3D del NDVI con PyDeck y Google Earth Engine",
+    "section": "\n7.2 Correción de reflectancia",
+    "text": "7.2 Correción de reflectancia\nLos datos de Sentinel-2 SR se almacenan en los servidores de Google como números enteros de 16 bits (valores de 0 a 10,000). Sin embargo, físicamente la reflectancia es una proporción que oscila entre 0.0 y 1.0. Es por esto que se divide la imagen por 10000.\n\nimagen_escala = imagen_clip.divide(10000)"
+  },
+  {
+    "objectID": "proyectos/ndvi-tres-dim/ndvi-tres-dim.html#cálculo-del-ndvi",
+    "href": "proyectos/ndvi-tres-dim/ndvi-tres-dim.html#cálculo-del-ndvi",
+    "title": "Visualización 3D del NDVI con PyDeck y Google Earth Engine",
+    "section": "\n7.3 Cálculo del NDVI",
+    "text": "7.3 Cálculo del NDVI\nPara el cáluclo del NDVI se utiliza el método .expression:\n\nNDVI = imagen_escala.expression(\n    \"(NIR - RED) / (NIR + RED)\",\n    {\n        \"NIR\": imagen_escala.select(\"B8\"),\n        \"RED\": imagen_escala.select(\"B4\"),\n    }\n).rename(\"NDVI\")"
+  },
+  {
+    "objectID": "proyectos/ndvi-tres-dim/ndvi-tres-dim.html#estadísticas",
+    "href": "proyectos/ndvi-tres-dim/ndvi-tres-dim.html#estadísticas",
+    "title": "Visualización 3D del NDVI con PyDeck y Google Earth Engine",
+    "section": "\n7.4 Estadísticas",
+    "text": "7.4 Estadísticas\nSe calcularon las estadísticas más importante del NDVI antes calculado y se visualizan en una tabla:\n\nCódigostats = NDVI.reduceRegion(\n    reducer=(\n        ee.Reducer.mean()\n        .combine(ee.Reducer.min(), sharedInputs=True)\n        .combine(ee.Reducer.max(), sharedInputs=True)\n        .combine(ee.Reducer.stdDev(), sharedInputs=True)\n    ),\n    geometry=geometry,\n    scale=10,\n    maxPixels=1e13,\n).getInfo()\n\ndf_stats = pd.DataFrame(\n    {\n        \"Métrica Agronómica\": [\n            \"Media\",\n            \"Mínimo\",\n            \"Máximo\",\n            \"Desviación Estándar\",\n        ],\n        \"Valor\": [\n            stats.get(\"NDVI_mean\", 0),\n            stats.get(\"NDVI_min\", 0),\n            stats.get(\"NDVI_max\", 0),\n            stats.get(\"NDVI_stdDev\", 0),\n        ],\n    }\n)\n\ntabla_md = df_stats.to_markdown(index=False, floatfmt=\".4f\")\ntabla_md += \"\\n\\n: Estadísticas zonales del NDVI en el lote. {.tbl-minimal}\"\n\nMarkdown(tabla_md)\n\n\nEstadísticas zonales del NDVI en el lote.\n\nMétrica Agronómica\nValor\n\n\n\nMedia\n0.7487\n\n\nMínimo\n0.1955\n\n\nMáximo\n0.9156\n\n\nDesviación Estándar\n0.0821"
   },
   {
     "objectID": "proyectos/ndvi-tres-dim/ndvi-tres-dim.html#cargar-asset",
     "href": "proyectos/ndvi-tres-dim/ndvi-tres-dim.html#cargar-asset",
     "title": "Visualización 3D del NDVI con PyDeck y Google Earth Engine",
     "section": "\n8.1 Cargar Asset",
-    "text": "8.1 Cargar Asset\n\nNDVI_asset = ee.Image(ASSET_NDVI)"
+    "text": "8.1 Cargar Asset\nSe recupera la imagen exportada al Asset de GEE mediante ee.Image().\n\nNDVI_asset = ee.Image(ASSET_NDVI)"
   },
   {
     "objectID": "proyectos/ndvi-tres-dim/ndvi-tres-dim.html#inicializar-el-mapa-base-con-folium",
@@ -508,21 +536,21 @@
     "href": "proyectos/ndvi-tres-dim/ndvi-tres-dim.html#agregar-el-mapa-base-satelital",
     "title": "Visualización 3D del NDVI con PyDeck y Google Earth Engine",
     "section": "\n9.2 Agregar el mapa base satelital",
-    "text": "9.2 Agregar el mapa base satelital\nSe incorpora el mapa base de Google mediante folium.TileLayer(). El parámetro overlay=False la define como capa base (no superpuesta), y control=True la hace visible en el selector de capas.\n\nfolium.TileLayer(\n    tiles='https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}',\n    attr='Google Satellite',\n    name='Satélite',\n    overlay=False,\n    control=True\n).add_to(mapa)\n\n&lt;folium.raster_layers.TileLayer object at 0x0000018D7DC07280&gt;"
+    "text": "9.2 Agregar el mapa base satelital\nSe incorpora el mapa base de Google mediante folium.TileLayer(). El parámetro overlay=False la define como capa base (no superpuesta), y control=True la hace visible en el selector de capas.\n\nfolium.TileLayer(\n    tiles='https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}',\n    attr='Google Satellite',\n    name='Satélite',\n    overlay=False,\n    control=True\n).add_to(mapa)\n\n&lt;folium.raster_layers.TileLayer object at 0x000002925346ED10&gt;"
   },
   {
     "objectID": "proyectos/ndvi-tres-dim/ndvi-tres-dim.html#agregar-la-capa-de-ndvi-con-url-permanente",
     "href": "proyectos/ndvi-tres-dim/ndvi-tres-dim.html#agregar-la-capa-de-ndvi-con-url-permanente",
     "title": "Visualización 3D del NDVI con PyDeck y Google Earth Engine",
     "section": "\n9.3 Agregar la capa de NDVI con URL permanente",
-    "text": "9.3 Agregar la capa de NDVI con URL permanente\n.getMapId() le pide a GEE que prepare la imagen para ser visualizada con la paleta y los rangos definidos en VIS_NDVI, y devuelve una dirección web (URL) que apunta permanentemente a esa imagen en los servidores de Google. Esa dirección se le entrega a folium.TileLayer(), que la usa para cargar y mostrar la imagen en el mapa como una capa con nombre, opacidad y control de visibilidad.\n\nmap_id   = NDVI_asset.getMapId(VIS_NDVI)\ntile_url = map_id['tile_fetcher'].url_format\n\nfolium.TileLayer(\n    tiles=tile_url,\n    attr='Google Earth Engine',\n    name='NDVI',\n    overlay=True,\n    control=True,\n    opacity=0.85\n).add_to(mapa)\n\n&lt;folium.raster_layers.TileLayer object at 0x0000018D7DC421A0&gt;"
+    "text": "9.3 Agregar la capa de NDVI con URL permanente\n.getMapId() le pide a GEE que prepare la imagen para ser visualizada con la paleta y los rangos definidos en VIS_NDVI, y devuelve una dirección web (URL) que apunta permanentemente a esa imagen en los servidores de Google. Esa dirección se le entrega a folium.TileLayer(), que la usa para cargar y mostrar la imagen en el mapa como una capa con nombre, opacidad y control de visibilidad.\n\nmap_id   = NDVI_asset.getMapId(VIS_NDVI)\ntile_url = map_id['tile_fetcher'].url_format\n\nfolium.TileLayer(\n    tiles=tile_url,\n    attr='Google Earth Engine',\n    name='NDVI',\n    overlay=True,\n    control=True,\n    opacity=0.85\n).add_to(mapa)\n\n&lt;folium.raster_layers.TileLayer object at 0x0000029253407070&gt;"
   },
   {
     "objectID": "proyectos/ndvi-tres-dim/ndvi-tres-dim.html#control-de-capas-y-guardado",
     "href": "proyectos/ndvi-tres-dim/ndvi-tres-dim.html#control-de-capas-y-guardado",
     "title": "Visualización 3D del NDVI con PyDeck y Google Earth Engine",
     "section": "\n9.4 Control de capas y guardado",
-    "text": "9.4 Control de capas y guardado\nfolium.LayerControl() inserta el selector interactivo de capas en el mapa. Finalmente, mapa.save() guarda el mapa como un archivo HTML autocontenido con URLs de tiles permanentes, que luego se embebe en el documento mediante un iframe.\n\nfolium.LayerControl(collapsed=False).add_to(mapa)\n\n&lt;folium.map.LayerControl object at 0x0000018D7DC5C280&gt;\n\nmapa_html = mapa._repr_html_()"
+    "text": "9.4 Control de capas y guardado\nfolium.LayerControl() inserta el selector interactivo de capas en el mapa. Finalmente, mapa.save() guarda el mapa como un archivo HTML autocontenido con URLs de tiles permanentes, que luego se embebe en el documento mediante un iframe.\n\nfolium.LayerControl(collapsed=False).add_to(mapa)\n\n&lt;folium.map.LayerControl object at 0x000002925346C190&gt;\n\nmapa_html = mapa._repr_html_()"
   },
   {
     "objectID": "proyectos/ndvi-tres-dim/ndvi-tres-dim.html#visualizar",
@@ -532,25 +560,32 @@
     "text": "9.5 Visualizar\nCon py$mapa_html se accede a la variable generada en el chunk anterior. La función htmltools::HTML() indica a Quarto que esa cadena de texto debe insertarse directamente en el documento como HTML, lo que hace que el mapa quede embebido de forma nativa en el flujo del documento, sin depender de ningún archivo externo.\n\nCódigohtmltools::HTML(py$mapa_html)\n\n\nMake this Notebook Trusted to load map: File -&gt; Trust Notebook"
   },
   {
+    "objectID": "proyectos/ndvi-tres-dim/ndvi-tres-dim.html#descarga-y-conversión-de-raster-a-tabla",
+    "href": "proyectos/ndvi-tres-dim/ndvi-tres-dim.html#descarga-y-conversión-de-raster-a-tabla",
+    "title": "Visualización 3D del NDVI con PyDeck y Google Earth Engine",
+    "section": "\n10.1 Descarga y Conversión de Raster a Tabla",
+    "text": "10.1 Descarga y Conversión de Raster a Tabla\n.getRegion() toma los píxeles de la imagen que caen dentro de la geometry del lote y los convierte en una lista de listas donde cada fila representa un píxel individual. Cada fila contiene el ID de la imagen, la marca de tiempo, la longitud, la latitud y el valor de NDVI correspondiente a ese punto exacto del espacio.\nscale=10 garantiza que se extraiga un dato por cada píxel real de 10x10 metros de Sentinel-2.\nLa respuesta de .getInfo() llega como una lista nativa de Python donde el primer elemento (datos_raw[0]) contiene los nombres de las columnas (la cabecera) y el resto (datos_raw[1:]) contiene los datos. Con estos componentes se inicializa un pandas.DataFrame.\n\ndatos_raw = (\n    ee.ImageCollection([NDVI_asset])\n    .getRegion(geometry=geometry, scale=10)\n    .getInfo()\n)\n\ncabecera = datos_raw[0]\nfilas    = datos_raw[1:]\ndf       = pd.DataFrame(filas, columns=cabecera)"
+  },
+  {
     "objectID": "proyectos/ndvi-tres-dim/ndvi-tres-dim.html#limpieza-tipado-y-normalización",
     "href": "proyectos/ndvi-tres-dim/ndvi-tres-dim.html#limpieza-tipado-y-normalización",
     "title": "Visualización 3D del NDVI con PyDeck y Google Earth Engine",
-    "section": "\n10.1 Limpieza, tipado y normalización",
-    "text": "10.1 Limpieza, tipado y normalización\n\nndvi_col = [c for c in df.columns if c not in (\"id\",\"time\",\"longitude\",\"latitude\")][0]\ndf = df.rename(columns={ndvi_col: \"NDVI\"})\n\ndf = (df\n      .dropna(subset=[\"NDVI\"])\n      .assign(\n          longitude = lambda d: d[\"longitude\"].astype(float),\n          latitude  = lambda d: d[\"latitude\"].astype(float),\n          NDVI      = lambda d: d[\"NDVI\"].astype(float),\n      )\n)"
+    "section": "\n10.2 Limpieza, tipado y normalización",
+    "text": "10.2 Limpieza, tipado y normalización\nEn primer lugar, se realiza un renombrado a través de ndvi_col.\n.dropna(subset=[“NDVI”]) al extraer datos mediante una geometría, los píxeles periféricos que caen parcialmente fuera del polígono o áreas sin información (NoData) se descargan con valores nulos (NaN). Por lo tanto, se eliminan.\nPandas puede interpretar las coordenadas y los índices como string, con .astype() se fuerza al tipo float.\n\nndvi_col = [c for c in df.columns if c not in (\"id\",\"time\",\"longitude\",\"latitude\")][0]\ndf = df.rename(columns={ndvi_col: \"NDVI\"})\n\ndf = (df\n      .dropna(subset=[\"NDVI\"])\n      .assign(\n          longitude = lambda d: d[\"longitude\"].astype(float),\n          latitude  = lambda d: d[\"latitude\"].astype(float),\n          NDVI      = lambda d: d[\"NDVI\"].astype(float),\n      )\n)"
   },
   {
     "objectID": "proyectos/ndvi-tres-dim/ndvi-tres-dim.html#normalización-robusta-percentil-298-para-descartar-outliers-extremos",
     "href": "proyectos/ndvi-tres-dim/ndvi-tres-dim.html#normalización-robusta-percentil-298-para-descartar-outliers-extremos",
     "title": "Visualización 3D del NDVI con PyDeck y Google Earth Engine",
-    "section": "\n10.2 Normalización robusta (percentil 2–98 para descartar outliers extremos)",
-    "text": "10.2 Normalización robusta (percentil 2–98 para descartar outliers extremos)\n\nndvi_min = df[\"NDVI\"].quantile(0.02)\nndvi_max = df[\"NDVI\"].quantile(0.98)\ndf[\"NDVI_norm\"] = ((df[\"NDVI\"] - ndvi_min) / (ndvi_max - ndvi_min)).clip(0, 1)\n\nprint(f\"📐  Rango NDVI (p2–p98): [{ndvi_min:.4f}, {ndvi_max:.4f}]\")\n\n📐  Rango NDVI (p2–p98): [0.5374, 0.8804]\n\nprint(f\"📊  Píxeles válidos    : {len(df):,}\")\n\n📊  Píxeles válidos    : 11,607"
+    "section": "\n10.3 Normalización robusta (percentil 2–98 para descartar outliers extremos)",
+    "text": "10.3 Normalización robusta (percentil 2–98 para descartar outliers extremos)\n\nndvi_min = df[\"NDVI\"].quantile(0.02)\nndvi_max = df[\"NDVI\"].quantile(0.98)\ndf[\"NDVI_norm\"] = ((df[\"NDVI\"] - ndvi_min) / (ndvi_max - ndvi_min)).clip(0, 1)"
   },
   {
     "objectID": "proyectos/ndvi-tres-dim/ndvi-tres-dim.html#tercera-dimensión-altura-proporcional-al-ndvi-normalizado",
     "href": "proyectos/ndvi-tres-dim/ndvi-tres-dim.html#tercera-dimensión-altura-proporcional-al-ndvi-normalizado",
     "title": "Visualización 3D del NDVI con PyDeck y Google Earth Engine",
-    "section": "\n10.3 Tercera dimensión: altura proporcional al NDVI normalizado",
-    "text": "10.3 Tercera dimensión: altura proporcional al NDVI normalizado\n\ndf[\"altura_3d\"]    = df[\"NDVI_norm\"] * FACTOR_ESCALA_3D\ndf[\"NDVI_positivo\"]= df[\"NDVI\"].clip(lower=0)\n\nprint(f\"📏  Alturas 3D — mín: {df['altura_3d'].min():.1f} m, \"\n      f\"máx: {df['altura_3d'].max():.1f} m\")\n\n📏  Alturas 3D — mín: 0.0 m, máx: 900.0 m"
+    "section": "\n10.4 Tercera dimensión: altura proporcional al NDVI normalizado",
+    "text": "10.4 Tercera dimensión: altura proporcional al NDVI normalizado\n\ndf[\"altura_3d\"]    = df[\"NDVI_norm\"] * FACTOR_ESCALA_3D\ndf[\"NDVI_positivo\"]= df[\"NDVI\"].clip(lower=0)"
   },
   {
     "objectID": "proyectos/ndvi-tres-dim/ndvi-tres-dim.html#definición-de-nodos-de-color",
@@ -606,42 +641,140 @@
     "href": "proyectos/mapa-rendimiento/mapa-rendimiento.html",
     "title": "Limpieza de Mapa de rendimiento",
     "section": "",
-    "text": "Este documento presenta el flujo de trabajo desarrollado en R para la limpieza, filtrado y visualización de mapas de rendimiento. El objetivo principal es detectar y remover errores y anomalías de medición generados por el monitor de la cosechadora. De este modo, se transforman los datos “sucios” en una capa de información confiable."
+    "text": "Este documento presenta el flujo de trabajo desarrollado en R para la limpieza, filtrado y visualización de un mapa de rendimiento de soja. El objetivo principal es detectar y remover errores y anomalías de medición generados por el monitor de la cosechadora. De este modo, se transforman los datos “sucios” en una capa de información confiable."
   },
   {
-    "objectID": "proyectos/mapa-rendimiento/mapa-rendimiento.html#parámetros-del-set-de-datos",
-    "href": "proyectos/mapa-rendimiento/mapa-rendimiento.html#parámetros-del-set-de-datos",
+    "objectID": "proyectos/mapa-rendimiento/mapa-rendimiento.html#primeros-registros",
+    "href": "proyectos/mapa-rendimiento/mapa-rendimiento.html#primeros-registros",
     "title": "Limpieza de Mapa de rendimiento",
-    "section": "\n4.1 Parámetros del set de datos",
-    "text": "4.1 Parámetros del set de datos\nSe creó una tabla para comprobar los Parámetros más importante del set de datos. Estos son:\n\nClase del objeto usando class().\nCantidad de filas y columnas a través de dim().\nSistema de Referencia de Coordenadas a través de st_crs().\n\n\nCódigoresumen_estructura &lt;- tibble(\n  Métrica = c(\n    \"Clase del objeto\",\n    \"Cantidad de registros (filas)\",\n    \"Cantidad de variables (columnas)\",\n    \"Sistema de Referencia de Coordenadas (CRS)\"\n  ),\n  Valor = c(\n    paste(class(soja11), collapse = \", \"),\n    as.character(dim(soja11)[1]),\n    as.character(dim(soja11)[2]),\n    if(!is.null(st_crs(soja11)$epsg)) as.character(st_crs(soja11)$epsg) else \"No definido\"\n  )\n)\n\n\nresumen_estructura %&gt;%\n  kable(\n    format = \"html\",\n    col.names = c(\"Parámetro\", \"Valor /Propiedad\"),\n    align = c(\"l\", \"c\")\n  ) %&gt;%\n  kable_minimal(\n    full_width = FALSE,\n    font_size = 14\n  ) %&gt;%\n  kable_styling(\n    bootstrap_options = c(\"striped\", \"hover\", \"condensed\"),\n    position = \"left\"\n  ) %&gt;%\n  row_spec(0, bold = TRUE, color = \"black\", extra_css = \"border-bottom: 2px solid black;\") %&gt;%\n  row_spec(nrow(resumen_estructura), extra_css = \"border-bottom: 2px solid black;\")\n\n\nTabla 2: Parámetros más importantes del set de datos.\n\n\n\n\nParámetro\nValor /Propiedad\n\n\n\nClase del objeto\nspec_tbl_df, tbl_df, tbl, data.frame\n\n\nCantidad de registros (filas)\n62716\n\n\nCantidad de variables (columnas)\n31\n\n\nSistema de Referencia de Coordenadas (CRS)\nNA\n\n\n\n\n\n\n\n\nComo se detalla en la Tabla 2 la clase del objeto es un Tibble. La función class() muestra toda la jerarquía de clases a la que pertenece ese objeto, ordenada desde la más específica hasta la más general (de izquierda a derecha), el significado de cada una es:\n\nspec_tbl_df (Specification Tibble Data Frame): Indica que el objeto contiene una “especificación” oculta de las columnas. R guarda el registro de qué tipo de dato asignó automáticamente a cada columna.\ntbl_df (Tibble Data Frame): Es la clase central. Confirma que el objeto es un tibble.\ntbl (Table): Es una clase genérica intermedia de la que heredan los tibbles.\ndata.frame: Es la estructura de datos base y más antigua de R para tablas. Al estar al final de la lista, significa que el tibble sigue siendo un data frame.\n\nAdemás, se observa que el set de datos NO tiene un Sistema de Referencia de Coordenadas definido."
+    "section": "\n4.1 Primeros Registros",
+    "text": "4.1 Primeros Registros\n\nCódigosoja11 %&gt;%\n  head(5) %&gt;%\n  kable(format = \"html\", align = \"c\") %&gt;%\n  kable_classic(full_width = FALSE, font_size = 11) %&gt;%\n  kable_styling(bootstrap_options = c(\"striped\", \"hover\", \"condensed\")) %&gt;%\n  row_spec(0, bold = TRUE, color = \"black\",\n           extra_css = \"border-bottom: 2px solid black; white-space: nowrap;\") %&gt;%\n  row_spec(5, extra_css = \"border-bottom: 2px solid black;\") %&gt;%\n  scroll_box(width = \"100%\")\n\n\nTabla 1: Primeros registros del dataset original.\n\n\n\n\n\nLatitude\nLongitude\nHeading (deg)\nDistance (ft)\nElevatio (ft)\nTime\nWidth (ft)\nDelStatus\nRelative (%)\nAirTempe (°F)\nWindSpee (mi/h)\nSoilTemp (°F)\nWindDire\nSkyCondi\nSoilMois\nProduct0\nRecord01\nHarvestM (%)\nYieldMas (lb)\nYieldWet (lb)\nDryYield (bu/ac)\nLoadNumber\nOperator\nMachine\nImplement1\nClient\nFarm\nField\nTask\nOperType\nProcYear\n\n\n\n-33.63863\n-64.96410\n273.5078\n0.0328084\n1565.844\n4/25/2011 11:09:19 AM\n29.85\nFALSE\n45\n66.2\n6.213712\n59\nSudeste\nCielo soleado\nIdeal\n§\nActiv.\n0\n0\n0\n0\n232\nAriel\n9650 STS\nDesconoc.\nSanguitti\nMaria Teresa\n14\nCosecha\nCosecha\n2011\n\n\n-33.63863\n-64.96410\n273.5078\n0.0328084\n1565.834\n4/25/2011 11:09:20 AM\n29.85\nFALSE\n45\n66.2\n6.213712\n59\nSudeste\nCielo soleado\nIdeal\n§\nActiv.\n0\n0\n0\n0\n232\nAriel\n9650 STS\nDesconoc.\nSanguitti\nMaria Teresa\n14\nCosecha\nCosecha\n2011\n\n\n-33.63863\n-64.96410\n273.5078\n0.0328084\n1565.867\n4/25/2011 11:09:21 AM\n29.85\nFALSE\n45\n66.2\n6.213712\n59\nSudeste\nCielo soleado\nIdeal\n§\nActiv.\n0\n0\n0\n0\n232\nAriel\n9650 STS\nDesconoc.\nSanguitti\nMaria Teresa\n14\nCosecha\nCosecha\n2011\n\n\n-33.63863\n-64.96410\n273.5078\n0.0328084\n1565.834\n4/25/2011 11:09:22 AM\n29.85\nFALSE\n45\n66.2\n6.213712\n59\nSudeste\nCielo soleado\nIdeal\n§\nActiv.\n0\n0\n0\n0\n232\nAriel\n9650 STS\nDesconoc.\nSanguitti\nMaria Teresa\n14\nCosecha\nCosecha\n2011\n\n\n-33.63863\n-64.96411\n274.9578\n0.4029665\n1565.887\n4/25/2011 11:09:23 AM\n29.85\nFALSE\n45\n66.2\n6.213712\n59\nSudeste\nCielo soleado\nIdeal\n§\nActiv.\n0\n0\n0\n0\n232\nAriel\n9650 STS\nDesconoc.\nSanguitti\nMaria Teresa\n14\nCosecha\nCosecha\n2011"
   },
   {
-    "objectID": "proyectos/mapa-rendimiento/mapa-rendimiento.html#eliminar-de-inliers",
-    "href": "proyectos/mapa-rendimiento/mapa-rendimiento.html#eliminar-de-inliers",
+    "objectID": "proyectos/mapa-rendimiento/mapa-rendimiento.html#estructura-del-dataset",
+    "href": "proyectos/mapa-rendimiento/mapa-rendimiento.html#estructura-del-dataset",
     "title": "Limpieza de Mapa de rendimiento",
-    "section": "\n8.1 Eliminar de Inliers\n",
-    "text": "8.1 Eliminar de Inliers\n\nSe usó la función filter() de la libreria dplyr (se encuentra dentro de tidyverse). La función permite utilizar una o más condiciones. De esta forma el resultado obtenido serán aquellas observaciones donde se cumplan las restricciones indicadas.\n\nLimpiar datos por Altura de plataforma:\n\n\nsoja11_sf &lt;- soja11_sf %&gt;% \nfilter(Record01 == \"Activ.\") \n\n\nLimpiar por Ancho de plataforma:\n\n\nsoja11_sf &lt;- soja11_sf %&gt;% \nfilter(Width &gt; 20) \n\n\nLimpiar por Distancia:\n\n\nsoja11_sf &lt;- soja11_sf %&gt;% \nfilter(Distance &gt; 1.5)"
+    "section": "\n4.2 Estructura del Dataset",
+    "text": "4.2 Estructura del Dataset\nglimpse() de dplyr muestra el tipo de cada columna y los primeros valores, permitiendo detectar columnas con espacios en el nombre, tipos incorrectos o valores inesperados.\n\nglimpse(soja11)\n\nRows: 62,716\nColumns: 31\n$ Latitude           &lt;dbl&gt; -33.63863, -33.63863, -33.63863, -33.63863, -33.638…\n$ Longitude          &lt;dbl&gt; -64.96410, -64.96410, -64.96410, -64.96410, -64.964…\n$ `Heading (deg)`    &lt;dbl&gt; 273.5078, 273.5078, 273.5078, 273.5078, 274.9578, 2…\n$ `Distance (ft)`    &lt;dbl&gt; 0.03280839, 0.03280839, 0.03280839, 0.03280839, 0.4…\n$ `Elevatio (ft)`    &lt;dbl&gt; 1565.844, 1565.834, 1565.867, 1565.834, 1565.887, 1…\n$ Time               &lt;chr&gt; \"4/25/2011 11:09:19 AM\", \"4/25/2011 11:09:20 AM\", \"…\n$ `Width (ft)`       &lt;dbl&gt; 29.85, 29.85, 29.85, 29.85, 29.85, 29.85, 29.85, 29…\n$ DelStatus          &lt;lgl&gt; FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FA…\n$ `Relative (%)`     &lt;dbl&gt; 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45,…\n$ `AirTempe (°F)`    &lt;dbl&gt; 66.2, 66.2, 66.2, 66.2, 66.2, 66.2, 66.2, 66.2, 66.…\n$ `WindSpee (mi/h)`  &lt;dbl&gt; 6.213712, 6.213712, 6.213712, 6.213712, 6.213712, 6…\n$ `SoilTemp (°F)`    &lt;dbl&gt; 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59,…\n$ WindDire           &lt;chr&gt; \"Sudeste\", \"Sudeste\", \"Sudeste\", \"Sudeste\", \"Sudest…\n$ SkyCondi           &lt;chr&gt; \"Cielo soleado\", \"Cielo soleado\", \"Cielo soleado\", …\n$ SoilMois           &lt;chr&gt; \"Ideal\", \"Ideal\", \"Ideal\", \"Ideal\", \"Ideal\", \"Ideal…\n$ Product0           &lt;chr&gt; \"§\", \"§\", \"§\", \"§\", \"§\", \"§\", \"§\", \"§\", \"§\", \"§\", \"…\n$ Record01           &lt;chr&gt; \"Activ.\", \"Activ.\", \"Activ.\", \"Activ.\", \"Activ.\", \"…\n$ `HarvestM (%)`     &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, …\n$ `YieldMas (lb)`    &lt;dbl&gt; 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0…\n$ `YieldWet (lb)`    &lt;dbl&gt; 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0…\n$ `DryYield (bu/ac)` &lt;dbl&gt; 0.00000, 0.00000, 0.00000, 0.00000, 0.00000, 0.0000…\n$ LoadNumber         &lt;dbl&gt; 232, 232, 232, 232, 232, 232, 232, 232, 232, 232, 2…\n$ Operator           &lt;chr&gt; \"Ariel\", \"Ariel\", \"Ariel\", \"Ariel\", \"Ariel\", \"Ariel…\n$ Machine            &lt;chr&gt; \"9650 STS\", \"9650 STS\", \"9650 STS\", \"9650 STS\", \"96…\n$ Implement1         &lt;chr&gt; \"Desconoc.\", \"Desconoc.\", \"Desconoc.\", \"Desconoc.\",…\n$ Client             &lt;chr&gt; \"Sanguitti\", \"Sanguitti\", \"Sanguitti\", \"Sanguitti\",…\n$ Farm               &lt;chr&gt; \"Maria Teresa\", \"Maria Teresa\", \"Maria Teresa\", \"Ma…\n$ Field              &lt;dbl&gt; 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14,…\n$ Task               &lt;chr&gt; \"Cosecha\", \"Cosecha\", \"Cosecha\", \"Cosecha\", \"Cosech…\n$ OperType           &lt;chr&gt; \"Cosecha\", \"Cosecha\", \"Cosecha\", \"Cosecha\", \"Cosech…\n$ ProcYear           &lt;dbl&gt; 2011, 2011, 2011, 2011, 2011, 2011, 2011, 2011, 201…"
   },
   {
-    "objectID": "proyectos/mapa-rendimiento/mapa-rendimiento.html#eliminar-outliers-por-cuantiles",
-    "href": "proyectos/mapa-rendimiento/mapa-rendimiento.html#eliminar-outliers-por-cuantiles",
+    "objectID": "proyectos/mapa-rendimiento/mapa-rendimiento.html#parámetros-generales",
+    "href": "proyectos/mapa-rendimiento/mapa-rendimiento.html#parámetros-generales",
     "title": "Limpieza de Mapa de rendimiento",
-    "section": "\n8.2 Eliminar Outliers por Cuantiles",
-    "text": "8.2 Eliminar Outliers por Cuantiles\nSe considerarán valores atípicos (outliers) aquellos valores que cumplan una de las siguientes condiciones:\n\nEl valor es menor que el primer cuartil menos 1,5 veces el rango intercuartílico = \\(q &lt; Q1 – 1,5 * IQR\\)\n\nEl valor es mayor que el tercer cuartil más 1,5 veces el rango intercuartílico = \\(q &gt; Q3 + 1,5 * IQR\\)\n\n\nCalcular los cuantiles Q1 y Q3:\n\nQ1 &lt;- quantile(soja11_sf$Rto11, probs = 0.25, na.rm = TRUE)\nQ3 &lt;- quantile(soja11_sf$Rto11, probs = 0.75, na.rm = TRUE)\n\nCalcular IQR:\n\nIQR &lt;- IQR(soja11_sf$Rto11)\n\nCalcular los datos a eliminar:\n\neliminar1 = Q1 - (1.5 * IQR) \neliminar2 = Q3 + (1.5 * IQR) \n\nEliminar Outliers:\n\nsoja11_sf &lt;- soja11_sf %&gt;% \nfilter(Rto11 &gt; eliminar1 & Rto11 &lt; eliminar2)"
+    "section": "\n4.3 Parámetros Generales",
+    "text": "4.3 Parámetros Generales\n\nCódigotibble(\n  Parámetro = c(\n    \"Clase del objeto\",\n    \"Registros (filas)\",\n    \"Variables (columnas)\",\n    \"Sistema de Referencia de Coordenadas (CRS)\"\n  ),\n  Valor = c(\n    paste(class(soja11), collapse = \", \"),\n    format(nrow(soja11), big.mark = \".\"),\n    as.character(ncol(soja11)),\n    \"No definido (datos tabulares)\"\n  )\n) %&gt;%\n  kable(format = \"html\", col.names = c(\"Parámetro\", \"Valor\"), align = c(\"l\", \"c\")) %&gt;%\n  kable_minimal(full_width = FALSE, font_size = 14) %&gt;%\n  kable_styling(bootstrap_options = c(\"striped\", \"hover\", \"condensed\"), position = \"left\") %&gt;%\n  row_spec(0, bold = TRUE, color = \"black\", extra_css = \"border-bottom: 2px solid black;\") %&gt;%\n  row_spec(4, extra_css = \"border-bottom: 2px solid black;\")\n\n\nTabla 2: Parámetros estructurales del dataset original.\n\n\n\n\nParámetro\nValor\n\n\n\nClase del objeto\nspec_tbl_df, tbl_df, tbl, data.frame\n\n\nRegistros (filas)\n62.716\n\n\nVariables (columnas)\n31\n\n\nSistema de Referencia de Coordenadas (CRS)\nNo definido (datos tabulares)\n\n\n\n\n\n\n\n\nLa función class() muestra toda la jerarquía de clases del objeto, ordenada de la más específica a la más general:\n\n\nspec_tbl_df: indica que el objeto guarda una especificación de las columnas inferidas por read_csv().\n\ntbl_df: confirma que es un tibble propiamente dicho.\n\ntbl: clase genérica intermedia de la que heredan los tibbles.\n\ndata.frame: estructura base de R.\n\nEl dataset NO tiene CRS porque aún es una tabla con columnas de latitud y longitud como números simples. La espacialización se realiza más adelante con el paquete sf."
   },
   {
-    "objectID": "proyectos/mapa-rendimiento/mapa-rendimiento.html#crear-cuantiles",
-    "href": "proyectos/mapa-rendimiento/mapa-rendimiento.html#crear-cuantiles",
+    "objectID": "proyectos/mapa-rendimiento/mapa-rendimiento.html#selección-de-columnas",
+    "href": "proyectos/mapa-rendimiento/mapa-rendimiento.html#selección-de-columnas",
     "title": "Limpieza de Mapa de rendimiento",
-    "section": "\n12.1 Crear cuantiles",
-    "text": "12.1 Crear cuantiles\n\nbreaks &lt;- quantile(soja11_sf_20S$Rto11, probs = seq(0, 1, 0.25), na.rm = TRUE) \n\nsoja11_sf_20S &lt;- soja11_sf_20S %&gt;% \n  mutate( \n    RTO11_q = cut(Rto11, breaks = breaks, include.lowest = TRUE, labels = paste0(round(breaks[-5],1), \"–\", round(breaks[-1],1))))"
+    "section": "\n5.1 Selección de Columnas",
+    "text": "5.1 Selección de Columnas\nSe seleccionaron las siguientes columnas:\n\nLatitud (Latitude)\nLongitud (Longitude)\nAltimetría (Elevatio (ft))\nAño (ProcYear)\nAltura de Plataforma (Record01)\nAncho de Plataforma (Width (ft))\nHumedad (HarvestM (%))\nLote (Field)\nGenotipo (Machine)\nDistancia (Distance (ft))\nRendimiento (DryYield (bu/ac))\n\nSe usó la funcion select() de dplyr para seleccionarlas:\n\nsoja11 &lt;- select(soja11, Latitude, Longitude, 'Elevatio (ft)', ProcYear, Record01, 'Width (ft)', 'HarvestM (%)', Field, Machine, 'Distance (ft)', 'DryYield (bu/ac)')"
   },
   {
-    "objectID": "proyectos/mapa-rendimiento/mapa-rendimiento.html#graficar",
-    "href": "proyectos/mapa-rendimiento/mapa-rendimiento.html#graficar",
+    "objectID": "proyectos/mapa-rendimiento/mapa-rendimiento.html#renombrar-columnas",
+    "href": "proyectos/mapa-rendimiento/mapa-rendimiento.html#renombrar-columnas",
     "title": "Limpieza de Mapa de rendimiento",
-    "section": "\n12.2 Graficar",
-    "text": "12.2 Graficar\n\nCódigoggplot(soja11_sf_20S) +\n  geom_sf(aes(color = RTO11_q), size = 1.3, alpha = 1, stroke = 0) +\n  scale_color_brewer(\n    palette = \"RdYlGn\",\n    direction = 1,\n    name = \"Rendimiento (kg/ha)\") +\n  labs(\n    title = \"Mapa de Rendimiento Limpio\",\n    subtitle = \"Visualización post al proceso de limpieza de datos\"\n  ) +\n  theme_void() + \n  theme(\n    text = element_text(family = \"sans\"), \n    plot.title = element_text(\n      face = \"bold\",\n      size = 18,\n      color = \"grey10\",\n      margin = margin(b = 4, t = 10)\n    ),\n    plot.subtitle = element_text(\n      size = 13,\n      color = \"grey40\",\n      margin = margin(b = 15)\n    ),\n    legend.position = \"bottom\",\n    legend.title = element_text(size = 10, face = \"bold\", color = \"grey20\"),\n    legend.text = element_text(size = 9, color = \"grey30\"),\n    legend.key = element_blank(), \n    plot.margin = margin(15, 15, 15, 15)\n  )"
+    "section": "\n5.2 Renombrar Columnas:",
+    "text": "5.2 Renombrar Columnas:\n\ncolnames(soja11) &lt;- c(\"Lat\", \"Lon\", \"Elev11\", \"Ano\", \"Record01\", \"Width\", \"HG11\", \"Lote\", \"Var11\",  \"Distance\",\"Rto11\")"
+  },
+  {
+    "objectID": "proyectos/mapa-rendimiento/mapa-rendimiento.html#asignar-genotipo",
+    "href": "proyectos/mapa-rendimiento/mapa-rendimiento.html#asignar-genotipo",
+    "title": "Limpieza de Mapa de rendimiento",
+    "section": "\n5.3 Asignar Genotipo",
+    "text": "5.3 Asignar Genotipo\nModificar la columna “Var11” con el genotipo AX5009. Se usó la función mutate() de la libreria dplyr. Esta función sirve para generar nuevas columnas o para modificar columnas ya existentes.\n\nsoja11 &lt;- soja11 %&gt;% \n  mutate(Var11 = \"AX5009\")"
+  },
+  {
+    "objectID": "proyectos/mapa-rendimiento/mapa-rendimiento.html#crear-objeto-sf",
+    "href": "proyectos/mapa-rendimiento/mapa-rendimiento.html#crear-objeto-sf",
+    "title": "Limpieza de Mapa de rendimiento",
+    "section": "\n7.1 Crear Objeto sf",
+    "text": "7.1 Crear Objeto sf\nComo se mencionó en la Tabla 2, el conjunto de datos inicial se estructuró como un tibble. Esta clase carece de propiedades espaciales. Para resolver esto, los datos se transformaron a la clase Simple Features (sf) mediante el paquete sf.\nUn objeto de clase sf es un data.frame con una columna especial llamada geometry, que almacena la representación espacial (punto, línea o polígono) correspondiente a cada fila. Se convierte el tibble usando st_as_sf(), asignando las coordenadas en WGS 84 (EPSG:4326).\n\nsoja11_sf &lt;- st_as_sf(\n  soja11,\n  coords = c(\"Lon\", \"Lat\"),\n  crs    = 4326\n)"
+  },
+  {
+    "objectID": "proyectos/mapa-rendimiento/mapa-rendimiento.html#reproyectar-a-utm-20s",
+    "href": "proyectos/mapa-rendimiento/mapa-rendimiento.html#reproyectar-a-utm-20s",
+    "title": "Limpieza de Mapa de rendimiento",
+    "section": "\n7.2 Reproyectar a UTM 20S",
+    "text": "7.2 Reproyectar a UTM 20S\nSe reproyecta a UTM Zona 20 Sur (EPSG:32720), sistema proyectado en metros adecuado para el centro-sur de Argentina.\n\nsoja11_sf &lt;- st_transform(soja11_sf, crs = 32720)"
+  },
+  {
+    "objectID": "proyectos/mapa-rendimiento/mapa-rendimiento.html#paso-1-filtro-por-estado-de-registro-record01",
+    "href": "proyectos/mapa-rendimiento/mapa-rendimiento.html#paso-1-filtro-por-estado-de-registro-record01",
+    "title": "Limpieza de Mapa de rendimiento",
+    "section": "\n9.1 Paso 1 — Filtro por Estado de Registro (Record01)",
+    "text": "9.1 Paso 1 — Filtro por Estado de Registro (Record01)\nEl campo Record01 indica si la plataforma estaba activa en el momento del registro. Los puntos con estado desactivado corresponden a maniobras, cabeceras o traslados donde la cosechadora no estaba cosechando.\nPrimero se comprobaron los valores únicos de Record01:\n\nsoja11_sf %&gt;%\n  st_drop_geometry() %&gt;%\n  count(Record01, name = \"n_registros\") %&gt;%\n  mutate(porcentaje = percent(n_registros / sum(n_registros), accuracy = 0.1))\n\n# A tibble: 2 × 3\n  Record01    n_registros porcentaje\n  &lt;chr&gt;             &lt;int&gt; &lt;chr&gt;     \n1 Activ.            59626 95.1%     \n2 Desactivado        3090 4.9%      \n\n\nEliminar datos ‘Desactivado’:\n\nsoja11_sf  &lt;- soja11_sf %&gt;% filter(Record01 == \"Activ.\")\n\n\n\n  Registros eliminados: 3.090 (4.9%)\n\n\n  Registros restantes:  59.626"
+  },
+  {
+    "objectID": "proyectos/mapa-rendimiento/mapa-rendimiento.html#paso-2-filtro-por-ancho-de-plataforma-width",
+    "href": "proyectos/mapa-rendimiento/mapa-rendimiento.html#paso-2-filtro-por-ancho-de-plataforma-width",
+    "title": "Limpieza de Mapa de rendimiento",
+    "section": "\n9.2 Paso 2 — Filtro por Ancho de Plataforma (Width)",
+    "text": "9.2 Paso 2 — Filtro por Ancho de Plataforma (Width)\nEn cabeceras o pasadas parciales, la plataforma opera a un ancho efectivo menor. Registros con anchos reducidos corresponden a zonas de solapamiento donde el rendimiento se distorsiona.\n\nEl umbral &gt; 20 (pies) elimina pasadas donde la plataforma operaba a menos del ~30% de su ancho nominal.\n\n\nsoja11_sf &lt;- soja11_sf %&gt;% filter(Width &gt; 20)\n\n\n\n  Registros eliminados: 365 (0.6%)\n\n\n  Registros restantes:  59.261"
+  },
+  {
+    "objectID": "proyectos/mapa-rendimiento/mapa-rendimiento.html#paso-3-filtro-por-distancia-entre-puntos-distance",
+    "href": "proyectos/mapa-rendimiento/mapa-rendimiento.html#paso-3-filtro-por-distancia-entre-puntos-distance",
+    "title": "Limpieza de Mapa de rendimiento",
+    "section": "\n9.3 Paso 3 — Filtro por Distancia entre Puntos (Distance)",
+    "text": "9.3 Paso 3 — Filtro por Distancia entre Puntos (Distance)\nLa distancia entre registros consecutivos es proporcional a la velocidad de avance. Valores muy bajos indican que la cosechadora estaba casi detenida, produciendo acumulaciones de puntos.\n\nsoja11_sf &lt;- soja11_sf %&gt;% filter(Distance &gt; 1.5)\n\n\n\n  Registros eliminados: 556 (0.9%)\n\n\n  Registros restantes:  58.705"
+  },
+  {
+    "objectID": "proyectos/mapa-rendimiento/mapa-rendimiento.html#paso-4-eliminación-de-outliers-por-iqr",
+    "href": "proyectos/mapa-rendimiento/mapa-rendimiento.html#paso-4-eliminación-de-outliers-por-iqr",
+    "title": "Limpieza de Mapa de rendimiento",
+    "section": "\n9.4 Paso 4 — Eliminación de Outliers por IQR",
+    "text": "9.4 Paso 4 — Eliminación de Outliers por IQR\nEl método IQR detecta valores estadísticamente extremos. Se define el rango intercuartílico como la diferencia entre el tercer y primer cuartil, y se consideran outliers aquellos valores que caen afuera de las siguientes barreras:\n\\[\n\\text{Límite inferior} = Q_1 - 1.5 \\times IQR\n\\] \\[\n\\text{Límite superior} = Q_3 + 1.5 \\times IQR\n\\] Calcular Cuantiles, IQR, Limite Inferior y Superior:\n\nQ1  &lt;- quantile(soja11_sf$Rto11, probs = 0.25, na.rm = TRUE)\nQ2  &lt;- quantile(soja11_sf$Rto11, probs = 0.50, na.rm = TRUE)\nQ3  &lt;- quantile(soja11_sf$Rto11, probs = 0.75, na.rm = TRUE)\nIQR_val  &lt;- IQR(soja11_sf$Rto11, na.rm = TRUE)\n\nlim_inf &lt;- Q1 - 1.5 * IQR_val\nlim_sup &lt;- Q3 + 1.5 * IQR_val\n\nVisualizarlos en una Tabla:\n\nCódigotibble(\n  Estadístico = c(\"Q1\", \"Q2\", \"Q3\",\n                  \"IQR\", \"Límite inferior\", \"Límite superior\"),\n  `Valor (kg/ha)` = round(c(Q1, Q2, Q3, IQR_val, lim_inf, lim_sup), 1)\n) %&gt;%\n  kable(format = \"html\", align = c(\"l\", \"r\")) %&gt;%\n  kable_minimal(full_width = FALSE, font_size = 13) %&gt;%\n  kable_styling(bootstrap_options = c(\"striped\", \"hover\"), position = \"left\") %&gt;%\n  row_spec(0, bold = TRUE, extra_css = \"border-bottom: 2px solid black;\") %&gt;%\n  row_spec(4, extra_css = \"border-top: 1px solid #ccc;\") %&gt;%\n  row_spec(5, bold = TRUE, color = \"#c0392b\") %&gt;%\n  row_spec(6, bold = TRUE, color = \"#c0392b\")\n\n\n\nEstadístico\nValor (kg/ha)\n\n\n\nQ1\n2970.0\n\n\nQ2\n3353.4\n\n\nQ3\n3745.2\n\n\nIQR\n775.3\n\n\nLímite inferior\n1807.1\n\n\nLímite superior\n4908.1\n\n\n\n\n\nEliminar Outliers:\n\nsoja11_sf &lt;- soja11_sf %&gt;% filter(Rto11 &gt; lim_inf & Rto11 &lt; lim_sup)\n\n\n\n  Registros eliminados: 3.181 (5.4%)\n\n\n  Registros restantes:  55.524"
+  },
+  {
+    "objectID": "proyectos/mapa-rendimiento/mapa-rendimiento.html#resumen-del-proceso-de-limpieza",
+    "href": "proyectos/mapa-rendimiento/mapa-rendimiento.html#resumen-del-proceso-de-limpieza",
+    "title": "Limpieza de Mapa de rendimiento",
+    "section": "\n9.5 Resumen del Proceso de Limpieza",
+    "text": "9.5 Resumen del Proceso de Limpieza\n\n\n\nRegistros Originales\n\n\n62.716\n\n\n\n\nRegistros Eliminados\n\n\n7.192\n\n\n\n\nRegistros Finales\n\n\n55.524\n\n\n\n\nDatos Retenidos (%)\n\n\n88.5%"
+  },
+  {
+    "objectID": "proyectos/mapa-rendimiento/mapa-rendimiento.html#estadísticas-descriptivas-post-limpieza",
+    "href": "proyectos/mapa-rendimiento/mapa-rendimiento.html#estadísticas-descriptivas-post-limpieza",
+    "title": "Limpieza de Mapa de rendimiento",
+    "section": "\n11.1 Estadísticas Descriptivas Post-Limpieza",
+    "text": "11.1 Estadísticas Descriptivas Post-Limpieza\n\nsoja11_sf %&gt;%\n  st_drop_geometry() %&gt;%\n  select(Rto11, HG11, Elev11, IP) %&gt;%\n  summary()\n\n     Rto11           HG11            Elev11            IP        \n Min.   :1807   Min.   : 0.000   Min.   :472.3   Min.   :0.5337  \n 1st Qu.:3022   1st Qu.: 7.160   1st Qu.:477.5   1st Qu.:0.8924  \n Median :3374   Median : 7.600   Median :479.1   Median :0.9963  \n Mean   :3386   Mean   : 7.729   Mean   :478.9   Mean   :1.0000  \n 3rd Qu.:3746   3rd Qu.: 8.120   3rd Qu.:480.2   3rd Qu.:1.1061  \n Max.   :4908   Max.   :14.740   Max.   :487.7   Max.   :1.4492  \n\n\n\n\n\nRendimiento Medio (kg/ha)\n\n\n3386\n\n\n\n\nRendimiento Máximo (kg/ha)\n\n\n4908\n\n\n\n\nRendimiento Mínimo (kg/ha)\n\n\n1807"
+  },
+  {
+    "objectID": "proyectos/mapa-rendimiento/mapa-rendimiento.html#vista-de-la-tabla-limpia",
+    "href": "proyectos/mapa-rendimiento/mapa-rendimiento.html#vista-de-la-tabla-limpia",
+    "title": "Limpieza de Mapa de rendimiento",
+    "section": "\n11.2 Vista de la Tabla Limpia",
+    "text": "11.2 Vista de la Tabla Limpia\n\nCódigosoja11_sf %&gt;%\n  st_drop_geometry() %&gt;%\n  select(Rto11, HG11, Elev11, IP, Var11, Lote) %&gt;%\n  head(8) %&gt;%\n  mutate(across(where(is.numeric), \\(x) round(x, 2))) %&gt;%\n  kable(format = \"html\", align = \"c\") %&gt;%\n  kable_classic(full_width = TRUE, font_size = 13) %&gt;%\n  kable_styling(bootstrap_options = c(\"striped\", \"hover\", \"condensed\")) %&gt;%\n  row_spec(0, bold = TRUE, color = \"black\",\n           extra_css = \"border-bottom: 2px solid black;\") %&gt;%\n  row_spec(8, extra_css = \"border-bottom: 2px solid black;\")\n\n\nTabla 3: Primeros registros de la base de datos limpia.\n\n\n\n\nRto11\nHG11\nElev11\nIP\nVar11\nLote\n\n\n\n4593.62\n0\n477.27\n1.36\nAX5009\n14\n\n\n4176.49\n0\n477.33\n1.23\nAX5009\n14\n\n\n3737.20\n0\n477.33\n1.10\nAX5009\n14\n\n\n3017.71\n0\n477.32\n0.89\nAX5009\n14\n\n\n3275.73\n0\n477.32\n0.97\nAX5009\n14\n\n\n3593.86\n0\n477.36\n1.06\nAX5009\n14\n\n\n3202.89\n0\n477.37\n0.95\nAX5009\n14\n\n\n3885.38\n0\n477.40\n1.15\nAX5009\n14"
+  },
+  {
+    "objectID": "proyectos/mapa-rendimiento/mapa-rendimiento.html#boxplots-de-rendimiento",
+    "href": "proyectos/mapa-rendimiento/mapa-rendimiento.html#boxplots-de-rendimiento",
+    "title": "Limpieza de Mapa de rendimiento",
+    "section": "\n12.1 Boxplots de Rendimiento",
+    "text": "12.1 Boxplots de Rendimiento\n\nCódigop1_box &lt;- ggplot(soja11, aes(y = Rto11)) +\n  geom_boxplot(fill = \"#ff7675\", outlier.size = 0.8, outlier.alpha = 0.2, width = 0.5) +\n  scale_y_continuous(labels = scales::label_number(big.mark = \".\")) +\n  labs(title = \"A. Rendimiento Original\", y = \"Rendimiento (kg/ha)\", x = \"Datos Crudos\") +\n  theme_minimal(base_size = 12) +\n  theme(panel.grid.major.x = element_blank(), axis.text.x = element_blank())\n\n\np2_box &lt;- soja11_sf %&gt;% \n  st_drop_geometry() %&gt;% \n  ggplot(aes(y = Rto11)) +\n  geom_boxplot(fill = \"#55efc4\", outlier.size = 0.8, outlier.alpha = 0.2, width = 0.5) +\n  scale_y_continuous(labels = scales::label_number(big.mark = \".\")) +\n  labs(title = \"B. Rendimiento Limpio\", y = \"\", x = \"Datos Limpios\") +\n  theme_minimal(base_size = 12) +\n  theme(panel.grid.major.x = element_blank(), axis.text.x = element_blank())\n\np1_box + p2_box"
+  },
+  {
+    "objectID": "proyectos/mapa-rendimiento/mapa-rendimiento.html#histogramas-de-distribución",
+    "href": "proyectos/mapa-rendimiento/mapa-rendimiento.html#histogramas-de-distribución",
+    "title": "Limpieza de Mapa de rendimiento",
+    "section": "\n12.2 Histogramas de Distribución",
+    "text": "12.2 Histogramas de Distribución\nEl histograma revela la forma de la distribución. Se espera que tras la limpieza se aproxime a la normalidad, eliminando las colas largas producidas por los errores del monitor.\n\nCódigorto_sucio &lt;- soja11$Rto11\nQ1  &lt;- quantile(rto_sucio, 0.25, na.rm = TRUE)\nQ3  &lt;- quantile(rto_sucio, 0.75, na.rm = TRUE)\nIQR &lt;- Q3 - Q1\nlim_inf &lt;- Q1 - 1.5 * IQR\nlim_sup &lt;- Q3 + 1.5 * IQR\n\n\np1_hist &lt;- ggplot(soja11, aes(x = Rto11)) +\n  geom_histogram(bins = 60, fill = \"#ff7675\", color = NA, alpha = 0.8) +\n  geom_vline(xintercept = mean(rto_sucio, na.rm = TRUE), color = \"#2d3436\", linetype = \"dashed\", linewidth = 0.8) +\n  scale_x_continuous(labels = scales::label_number(big.mark = \".\")) +\n  scale_y_continuous(labels = scales::label_number(big.mark = \".\")) +\n  labs(title = \"A. Distribución Original\", x = \"Rendimiento (kg/ha)\", y = \"Frecuencia\") +\n  theme_minimal(base_size = 12)\n\n\np2_hist &lt;- soja11_sf %&gt;% \n  st_drop_geometry() %&gt;% \n  ggplot(aes(x = Rto11)) +\n  geom_histogram(bins = 60, fill = \"#55efc4\", color = NA, alpha = 0.8) +\n  geom_vline(xintercept = mean(soja11_sf$Rto11, na.rm = TRUE), color = \"#2d3436\", linetype = \"dashed\", linewidth = 0.8) +\n  geom_vline(xintercept = lim_inf, color = \"#e17055\", linetype = \"dotted\", linewidth = 0.9) +\n  geom_vline(xintercept = lim_sup, color = \"#e17055\", linetype = \"dotted\", linewidth = 0.9) +\n  scale_x_continuous(labels = scales::label_number(big.mark = \".\")) +\n  scale_y_continuous(labels = scales::label_number(big.mark = \".\")) +\n  labs(title = \"B. Distribución Limpia\", x = \"Rendimiento (kg/ha)\", y = \"\") +\n  theme_minimal(base_size = 12)\n\np1_hist + p2_hist"
+  },
+  {
+    "objectID": "proyectos/mapa-rendimiento/mapa-rendimiento.html#crear-cuantiles-para-los-mapas-limpios",
+    "href": "proyectos/mapa-rendimiento/mapa-rendimiento.html#crear-cuantiles-para-los-mapas-limpios",
+    "title": "Limpieza de Mapa de rendimiento",
+    "section": "\n13.1 Crear Cuantiles para los Mapas Limpios",
+    "text": "13.1 Crear Cuantiles para los Mapas Limpios\n\nbreaks_l &lt;- quantile(soja11_sf$Rto11, probs = seq(0, 1, 0.25), na.rm = TRUE)\n\nsoja11_sf &lt;- soja11_sf %&gt;%\n  mutate(\n    RTO11_q = cut(\n      Rto11,\n      breaks         = breaks_l,\n      include.lowest = TRUE,\n      labels         = paste0(\n        format(round(breaks_l[-5], 0), big.mark = \".\"), \" – \",\n        format(round(breaks_l[-1],  0), big.mark = \".\")\n      )\n    )\n  )"
+  },
+  {
+    "objectID": "proyectos/mapa-rendimiento/mapa-rendimiento.html#mapa-de-rendimiento-datos-limpios",
+    "href": "proyectos/mapa-rendimiento/mapa-rendimiento.html#mapa-de-rendimiento-datos-limpios",
+    "title": "Limpieza de Mapa de rendimiento",
+    "section": "\n13.2 Mapa de Rendimiento — Datos Limpios",
+    "text": "13.2 Mapa de Rendimiento — Datos Limpios\n\nCódigoggplot(soja11_sf) +\n  geom_sf(aes(color = RTO11_q), size = 1.3, alpha = 1, stroke = 0) +\n  scale_color_brewer(\n    palette   = \"RdYlGn\",\n    direction = 1,\n    name      = \"Rendimiento (kg/ha)\"\n  ) +\n  labs(\n    title    = \"Mapa de Rendimiento — Soja 2011\",\n    subtitle = \"Datos limpios — UTM Zona 20 Sur (EPSG:32720)\"\n  ) +\n  theme_void() +\n  theme(\n    plot.title         = element_text(face = \"bold\", size = 16, color = \"grey10\",\n                                      margin = margin(b = 4, t = 10)),\n    plot.subtitle      = element_text(size = 12, color = \"grey40\",\n                                      margin = margin(b = 12)),\n    legend.position    = \"bottom\",\n    legend.title       = element_text(size = 10, face = \"bold\", color = \"grey20\"),\n    legend.text        = element_text(size = 9,  color = \"grey30\"),\n    legend.key         = element_blank(),\n    plot.margin        = margin(15, 15, 15, 15)\n  )"
   },
   {
     "objectID": "proyectos/anova/anova.html",
@@ -858,49 +991,133 @@
     "href": "proyectos/mapa-rendimiento-py/mapa-rendimiento-py.html",
     "title": "Limpieza de Mapa de Rendimiento con Python",
     "section": "",
-    "text": "El presente documento detalla el proceso de limpieza, filtrado y visualización de un mapa de rendimiento utilizando Python. El objetivo principal es eliminar las anomalías y errores de medición de los monitores de la cosechadora, transformando los datos “sucios” en información confiable para la toma de decisiones."
+    "text": "El presente documento detalla el proceso de limpieza, filtrado y visualización de un mapa de rendimiento de soja utilizando Python. El objetivo principal es eliminar las anomalías y errores de medición de los monitores de la cosechadora, transformando los datos “sucios” en información confiable para la toma de decisiones."
   },
   {
     "objectID": "proyectos/mapa-rendimiento-py/mapa-rendimiento-py.html#librerías-necesarias",
     "href": "proyectos/mapa-rendimiento-py/mapa-rendimiento-py.html#librerías-necesarias",
     "title": "Limpieza de Mapa de Rendimiento con Python",
     "section": "\n2.1 Librerías Necesarias",
-    "text": "2.1 Librerías Necesarias\n\nimport os\nimport pyproj\nimport geopandas as gpd\nimport pandas as pd\nimport matplotlib.pyplot as plt\nimport seaborn as sns\nimport itables"
+    "text": "2.1 Librerías Necesarias\n\nimport os\nimport warnings\nimport pyproj\nimport geopandas as gpd\nimport pandas as pd\nimport matplotlib.pyplot as plt\nimport matplotlib.patches as mpatches\nimport seaborn as sns\nimport itables"
   },
   {
-    "objectID": "proyectos/mapa-rendimiento-py/mapa-rendimiento-py.html#convertir-a-objeto-geodataframe.",
-    "href": "proyectos/mapa-rendimiento-py/mapa-rendimiento-py.html#convertir-a-objeto-geodataframe.",
+    "objectID": "proyectos/mapa-rendimiento-py/mapa-rendimiento-py.html#verificar-nombres-de-columnas",
+    "href": "proyectos/mapa-rendimiento-py/mapa-rendimiento-py.html#verificar-nombres-de-columnas",
     "title": "Limpieza de Mapa de Rendimiento con Python",
-    "section": "\n7.1 Convertir a objeto GeoDataFrame.",
-    "text": "7.1 Convertir a objeto GeoDataFrame.\nUn GeoDataFrame es la estructura de datos de GeoPandas: una tabla (un pandas.DataFrame) que tiene una columna de geometría (un GeoSeries). Esa columna contiene objetos geométricos (por ejemplo Point, LineString, Polygon) que representan entidades espaciales.\n\nsoja2011_gdf = gpd.GeoDataFrame(\n    soja2011,\n    geometry=gpd.points_from_xy(soja2011[\"Lon\"], soja2011[\"Lat\"]),\n    crs=\"EPSG:4326\"\n)\n\nComprobar el Sistema de Referencia de Coordenadas (CRS):\n\nsoja2011_gdf.crs\n\n&lt;Geographic 2D CRS: EPSG:4326&gt;\nName: WGS 84\nAxis Info [ellipsoidal]:\n- Lat[north]: Geodetic latitude (degree)\n- Lon[east]: Geodetic longitude (degree)\nArea of Use:\n- name: World.\n- bounds: (-180.0, -90.0, 180.0, 90.0)\nDatum: World Geodetic System 1984 ensemble\n- Ellipsoid: WGS 84\n- Prime Meridian: Greenwich\n\n\nProyectar a UTM 20S (EPSG: 32720) a través de .to_crs de GeoPandas:\n\nsoja2011_gdf = soja2011_gdf.to_crs(\"EPSG:32720\")"
+    "section": "\n5.1 Verificar Nombres de Columnas",
+    "text": "5.1 Verificar Nombres de Columnas\nAntes de seleccionar columnas, es buena práctica verificar los nombres exactos de las mismas. Cabe recalcar que muchas columnas incluyen un espacio inicial.\n\nsoja2011.columns.tolist()\n\n['Latitude', ' Longitude', ' Heading (deg)', ' Distance (ft)', ' Elevatio (ft)', ' Time', ' Width (ft)', ' DelStatus', ' Relative (%)', ' AirTempe (°F)', ' WindSpee (mi/h)', ' SoilTemp (°F)', ' WindDire', ' SkyCondi', ' SoilMois', ' Product0', ' Record01', ' HarvestM (%)', ' YieldMas (lb)', ' YieldWet (lb)', ' DryYield (bu/ac)', ' LoadNumber', ' Operator', ' Machine', ' Implement1', ' Client', ' Farm', ' Field', ' Task', ' OperType', ' ProcYear ']"
   },
   {
-    "objectID": "proyectos/mapa-rendimiento-py/mapa-rendimiento-py.html#limpiar-inliers",
-    "href": "proyectos/mapa-rendimiento-py/mapa-rendimiento-py.html#limpiar-inliers",
+    "objectID": "proyectos/mapa-rendimiento-py/mapa-rendimiento-py.html#selección-de-columnas-relevantes",
+    "href": "proyectos/mapa-rendimiento-py/mapa-rendimiento-py.html#selección-de-columnas-relevantes",
     "title": "Limpieza de Mapa de Rendimiento con Python",
-    "section": "\n9.1 Limpiar Inliers\n",
-    "text": "9.1 Limpiar Inliers\n\n\nLimpiar datos por Altura de plataforma:\n\nComprobar los valores únicos de la columna Record01:\n\nsoja2011_gdf[\"Record01\"].unique()\n\narray([' Activ.', ' Desactivado'], dtype=object)\n\n\nEliminar datos ‘Desactivado’\n\nsoja2011_gdf_l = soja2011_gdf[soja2011_gdf[\"Record01\"] == ' Activ.']\n\n\nLimpiar por Ancho de Plataforma:\n\n\nsoja2011_gdf_l = soja2011_gdf_l[soja2011_gdf[\"Width\"] &gt; 20]\n\n\nLimpiar por Distancia entre puntos:\n\n\nsoja2011_gdf_l = soja2011_gdf_l[soja2011_gdf[\"Distance\"] &gt; 1.5]"
+    "section": "\n5.2 Selección de Columnas Relevantes",
+    "text": "5.2 Selección de Columnas Relevantes\nSe conservan únicamente las variables necesarias para el análisis, descartando metadatos de la máquina que no aportan información útil.\n\nsoja2011 = soja2011[[\n    'Latitude',\n    ' Longitude', \n    ' Distance (ft)', \n    ' Elevatio (ft)', \n    ' Width (ft)', \n    ' Record01', \n    ' HarvestM (%)', \n    ' DryYield (bu/ac)', \n    ' Machine', \n    ' Field', \n    ' ProcYear ']]"
   },
   {
-    "objectID": "proyectos/mapa-rendimiento-py/mapa-rendimiento-py.html#limpiar-outliers-por-rango-intercuartílico-iqr",
-    "href": "proyectos/mapa-rendimiento-py/mapa-rendimiento-py.html#limpiar-outliers-por-rango-intercuartílico-iqr",
+    "objectID": "proyectos/mapa-rendimiento-py/mapa-rendimiento-py.html#renombrar-columnas",
+    "href": "proyectos/mapa-rendimiento-py/mapa-rendimiento-py.html#renombrar-columnas",
     "title": "Limpieza de Mapa de Rendimiento con Python",
-    "section": "\n9.2 Limpiar Outliers por Rango Intercuartílico (IQR)",
-    "text": "9.2 Limpiar Outliers por Rango Intercuartílico (IQR)\nSe considerarán valores atípicos (outliers) aquellos valores que cumplan una de las siguientes condiciones:\n\nEl valor es menor que el primer cuartil menos 1,5 veces el rango intercuartílico = \\(q &lt; Q1 – 1,5 * IQR\\)\n\nEl valor es mayor que el tercer cuartil más 1,5 veces el rango intercuartílico = \\(q &gt; Q3 + 1,5 * IQR\\)\n\n\nCalcular Cuantiles e IQR:\n\nQ1 = soja2011_gdf_l[\"Rto11\"].quantile(0.25) \nQ2 = soja2011_gdf_l[\"Rto11\"].quantile(0.50)    \nQ3 = soja2011_gdf_l[\"Rto11\"].quantile(0.75) \nIQR = Q3 - Q1\n\nCalcular los valores a eliminar:\n\neliminar1 = Q1 - (1.5 * IQR) \neliminar2 = Q3 + (1.5 * IQR)\n\nEliminarlos:\n\nsoja2011_gdf_l = soja2011_gdf_l.loc[ \n  (soja2011_gdf_l[\"Rto11\"] &gt; eliminar1) & \n  (soja2011_gdf_l[\"Rto11\"] &lt; eliminar2)]"
+    "section": "\n5.3 Renombrar Columnas",
+    "text": "5.3 Renombrar Columnas\nSe aplican nombres cortos y sin espacios para facilitar el trabajo posterior.\n\nsoja2011.columns = [ \n    \"Lat\", \n    \"Lon\", \n    \"Distance\", \n    \"Elev11\", \n    \"Width\", \n    \"Record01\", \n    \"HG11\", \n    \"Rto11\", \n    \"Var11\", \n    \"Lote\", \n    \"Ano\" \n]"
   },
   {
-    "objectID": "proyectos/mapa-rendimiento-py/mapa-rendimiento-py.html#visualizar-tabla-limpia",
-    "href": "proyectos/mapa-rendimiento-py/mapa-rendimiento-py.html#visualizar-tabla-limpia",
+    "objectID": "proyectos/mapa-rendimiento-py/mapa-rendimiento-py.html#completar-genotipo",
+    "href": "proyectos/mapa-rendimiento-py/mapa-rendimiento-py.html#completar-genotipo",
     "title": "Limpieza de Mapa de Rendimiento con Python",
-    "section": "\n11.1 Visualizar Tabla Limpia",
-    "text": "11.1 Visualizar Tabla Limpia\nprint(soja2011_gdf_l.head(5).to_html(\n    classes='table table-striped table-hover', \n    index=False, \n    float_format='%.2f'\n))\n\n\n\nLat\n\n\nLon\n\n\nDistance\n\n\nElev11\n\n\nWidth\n\n\nRecord01\n\n\nHG11\n\n\nRto11\n\n\nVar11\n\n\nLote\n\n\nAno\n\n\ngeometry\n\n\nIP\n\n\n\n\n\n-33.64\n\n\n-64.96\n\n\n1.72\n\n\n477.27\n\n\n29.85\n\n\nActiv.\n\n\n0.00\n\n\n4593.62\n\n\nAX5009\n\n\n14\n\n\n2011\n\n\nPOINT (317830.687 6276179.694)\n\n\n1.36\n\n\n\n\n-33.64\n\n\n-64.96\n\n\n3.87\n\n\n477.33\n\n\n29.85\n\n\nActiv.\n\n\n0.00\n\n\n4176.49\n\n\nAX5009\n\n\n14\n\n\n2011\n\n\nPOINT (317826.529 6276179.522)\n\n\n1.23\n\n\n\n\n-33.64\n\n\n-64.96\n\n\n4.83\n\n\n477.33\n\n\n29.85\n\n\nActiv.\n\n\n0.00\n\n\n3737.20\n\n\nAX5009\n\n\n14\n\n\n2011\n\n\nPOINT (317825.054 6276179.477)\n\n\n1.10\n\n\n\n\n-33.64\n\n\n-64.96\n\n\n4.99\n\n\n477.32\n\n\n29.85\n\n\nActiv.\n\n\n0.00\n\n\n3017.71\n\n\nAX5009\n\n\n14\n\n\n2011\n\n\nPOINT (317823.531 6276179.415)\n\n\n0.89\n\n\n\n\n-33.64\n\n\n-64.96\n\n\n4.93\n\n\n477.32\n\n\n29.85\n\n\nActiv.\n\n\n0.00\n\n\n3275.73\n\n\nAX5009\n\n\n14\n\n\n2011\n\n\nPOINT (317822.026 6276179.389)\n\n\n0.97"
+    "section": "\n5.4 Completar Genotipo",
+    "text": "5.4 Completar Genotipo\nSe asigna el nombre del genotipo utilizado en la campaña 2011 (AX5009).\n\nsoja2011[\"Var11\"] = \"AX5009\""
   },
   {
-    "objectID": "proyectos/mapa-rendimiento-py/mapa-rendimiento-py.html#boxplots",
-    "href": "proyectos/mapa-rendimiento-py/mapa-rendimiento-py.html#boxplots",
+    "objectID": "proyectos/mapa-rendimiento-py/mapa-rendimiento-py.html#crear-geodataframe",
+    "href": "proyectos/mapa-rendimiento-py/mapa-rendimiento-py.html#crear-geodataframe",
     "title": "Limpieza de Mapa de Rendimiento con Python",
-    "section": "\n11.2 Boxplots",
-    "text": "11.2 Boxplots\nSe graficaron dos boxplots para la variable Rendimiento: antes y después de realizar la limpieza de datos. Se utilizó, en conjunto, las librerías seaborn y matplotlib.\n\nCódigofig, axes = plt.subplots(1, 2, figsize=(12, 5))\n\n\nsns.boxplot(ax=axes[0], y=soja2011_gdf[\"Rto11\"], color=\"#ff7675\")\naxes[0].set_title(\"A. Rendimiento Original (Con Outliers)\")\naxes[0].set_ylabel(\"Rendimiento (kg/ha o qq/ha)\")\naxes[0].set_xlabel(\"Datos Crudos\")\n\n\nsns.boxplot(ax=axes[1], y=soja2011_gdf_l[\"Rto11\"], color=\"#55efc4\")\naxes[1].set_title(\"B. Rendimiento Limpio (Método IQR)\")\naxes[1].set_ylabel(\"\") \naxes[1].set_xlabel(\"Datos Limpios\")\n\n\nplt.tight_layout()\nplt.show()"
+    "section": "\n7.1 Crear GeoDataFrame",
+    "text": "7.1 Crear GeoDataFrame\nUn GeoDataFrame es la estructura de datos de GeoPandas: una tabla (un pandas.DataFrame) que tiene una columna de geometría (un GeoSeries). Esa columna contiene objetos geométricos (por ejemplo Point, LineString, Polygon) que representan entidades espaciales.\n\nsoja2011_gdf = gpd.GeoDataFrame(\n    soja2011,\n    geometry=gpd.points_from_xy(soja2011[\"Lon\"], soja2011[\"Lat\"]),\n    crs=\"EPSG:4326\"\n)"
+  },
+  {
+    "objectID": "proyectos/mapa-rendimiento-py/mapa-rendimiento-py.html#comprobar-el-crs",
+    "href": "proyectos/mapa-rendimiento-py/mapa-rendimiento-py.html#comprobar-el-crs",
+    "title": "Limpieza de Mapa de Rendimiento con Python",
+    "section": "\n7.2 Comprobar el CRS",
+    "text": "7.2 Comprobar el CRS\nA través del atributo crs de GeoPandas se consultó el Sistema de Referencia de Coordenadas (CRS) del objeto.\n\nsoja2011_gdf.crs\n\n&lt;Geographic 2D CRS: EPSG:4326&gt;\nName: WGS 84\nAxis Info [ellipsoidal]:\n- Lat[north]: Geodetic latitude (degree)\n- Lon[east]: Geodetic longitude (degree)\nArea of Use:\n- name: World.\n- bounds: (-180.0, -90.0, 180.0, 90.0)\nDatum: World Geodetic System 1984 ensemble\n- Ellipsoid: WGS 84\n- Prime Meridian: Greenwich"
+  },
+  {
+    "objectID": "proyectos/mapa-rendimiento-py/mapa-rendimiento-py.html#reproyectar-a-utm-20s",
+    "href": "proyectos/mapa-rendimiento-py/mapa-rendimiento-py.html#reproyectar-a-utm-20s",
+    "title": "Limpieza de Mapa de Rendimiento con Python",
+    "section": "\n7.3 Reproyectar a UTM 20S",
+    "text": "7.3 Reproyectar a UTM 20S\nSe reproyecta a UTM 20S (EPSG: 32720) a través del método to_crs de GeoPandas.\n\nsoja2011_gdf = soja2011_gdf.to_crs(\"EPSG:32720\")"
+  },
+  {
+    "objectID": "proyectos/mapa-rendimiento-py/mapa-rendimiento-py.html#paso-1-filtro-por-estado-de-registro-record01",
+    "href": "proyectos/mapa-rendimiento-py/mapa-rendimiento-py.html#paso-1-filtro-por-estado-de-registro-record01",
+    "title": "Limpieza de Mapa de Rendimiento con Python",
+    "section": "\n9.1 Paso 1 — Filtro por Estado de Registro (Record01)",
+    "text": "9.1 Paso 1 — Filtro por Estado de Registro (Record01)\nEl campo Record01 indica si la plataforma estaba activa en el momento del registro. Los puntos con estado “Desactivado” corresponden a momentos en que la cosechadora no estaba cosechando (maniobras, cabeceras, traslados).\nSe comprobaron los valores únicos en Record01:\n\nprint(soja2011_gdf[\"Record01\"].value_counts())\n\nRecord01\nActiv.         59626\nDesactivado     3090\nName: count, dtype: int64\n\n\nEliminar datos ‘Desactivado’:\n\nsoja2011_gdf_l = soja2011_gdf[soja2011_gdf[\"Record01\"] == ' Activ.']\n\n\n\n  Registros eliminados: 3,090 (4.9%)\n\n\n  Registros restantes:  59,626"
+  },
+  {
+    "objectID": "proyectos/mapa-rendimiento-py/mapa-rendimiento-py.html#paso-2-filtro-por-ancho-de-plataforma-width",
+    "href": "proyectos/mapa-rendimiento-py/mapa-rendimiento-py.html#paso-2-filtro-por-ancho-de-plataforma-width",
+    "title": "Limpieza de Mapa de Rendimiento con Python",
+    "section": "\n9.2 Paso 2 — Filtro por Ancho de Plataforma (Width)",
+    "text": "9.2 Paso 2 — Filtro por Ancho de Plataforma (Width)\nLos registros con anchos muy reducidos corresponden a zonas de solapamiento donde el rendimiento se distorsiona.\n\nEl umbral de &gt; 20 (en pies) elimina pasadas donde la plataforma estaba operando a menos del ~30% de su ancho nominal.\n\n\nsoja2011_gdf_l = soja2011_gdf_l[soja2011_gdf[\"Width\"] &gt; 20]\n\n\n\n  Registros eliminados: 365 (0.6%)\n\n\n  Registros restantes:  59,261"
+  },
+  {
+    "objectID": "proyectos/mapa-rendimiento-py/mapa-rendimiento-py.html#paso-3-filtro-por-distancia-entre-puntos-distance",
+    "href": "proyectos/mapa-rendimiento-py/mapa-rendimiento-py.html#paso-3-filtro-por-distancia-entre-puntos-distance",
+    "title": "Limpieza de Mapa de Rendimiento con Python",
+    "section": "\n9.3 Paso 3 — Filtro por Distancia entre Puntos (Distance)",
+    "text": "9.3 Paso 3 — Filtro por Distancia entre Puntos (Distance)\nLa distancia entre registros consecutivos es proporcional a la velocidad de avance. Valores muy bajos (&lt; 1.5 ft) indican que la cosechadora estaba casi detenida, produciendo acumulaciones de puntos en el mismo lugar.\n\nsoja2011_gdf_l = soja2011_gdf_l[soja2011_gdf[\"Distance\"] &gt; 1.5]\n\n\n\n  Registros eliminados: 556 (0.9%)\n\n\n  Registros restantes:  58,705"
+  },
+  {
+    "objectID": "proyectos/mapa-rendimiento-py/mapa-rendimiento-py.html#paso-4-eliminación-de-outliers-por-rango-intercuartílico-iqr",
+    "href": "proyectos/mapa-rendimiento-py/mapa-rendimiento-py.html#paso-4-eliminación-de-outliers-por-rango-intercuartílico-iqr",
+    "title": "Limpieza de Mapa de Rendimiento con Python",
+    "section": "\n9.4 Paso 4 — Eliminación de Outliers por Rango Intercuartílico (IQR)",
+    "text": "9.4 Paso 4 — Eliminación de Outliers por Rango Intercuartílico (IQR)\nEl método IQR detecta valores estadísticamente extremos. Se define el rango intercuartílico como la diferencia entre el tercer y primer cuartil, y se consideran outliers aquellos valores que caen afuera de las siguientes barreras:\n\\[\n\\text{Límite inferior} = Q_1 - 1.5 \\times IQR\n\\] \\[\n\\text{Límite superior} = Q_3 + 1.5 \\times IQR\n\\] Calcular Cuantiles, IQR y Limites:\n\nQ1  = soja2011_gdf_l[\"Rto11\"].quantile(0.25)\nQ2  = soja2011_gdf_l[\"Rto11\"].quantile(0.50)\nQ3  = soja2011_gdf_l[\"Rto11\"].quantile(0.75)\nIQR = Q3 - Q1\n\nlim_inf = Q1 - 1.5 * IQR\nlim_sup = Q3 + 1.5 * IQR\n\nMostrar valores en una tabla:\n\nCódigotabla_data = {\n    \"Métrica Estadística\": [\n        \"Q1\",\n        \"Q2\",\n        \"Q3\",\n        \"Rango Intercuartílico (IQR)\",\n        \"Límite Inferior\",\n        \"Límite Superior\"\n    ],\n    \"Valor (kg/ha)\": [Q1, Q2, Q3, IQR, lim_inf, lim_sup]\n}\n\ndf_iqr = pd.DataFrame(tabla_data)\n\ndf_iqr[\"Valor (kg/ha)\"] = df_iqr[\"Valor (kg/ha)\"].map(\"{:,.1f}\".format)\n\ndf_iqr.style.hide(axis=\"index\")\n\n\n\n\nMétrica Estadística\nValor (kg/ha)\n\n\n\nQ1\n2,970.0\n\n\nQ2\n3,353.4\n\n\nQ3\n3,745.2\n\n\nRango Intercuartílico (IQR)\n775.3\n\n\nLímite Inferior\n1,807.1\n\n\nLímite Superior\n4,908.1\n\n\n\n\n\nEliminar Outliers:\n\nsoja2011_gdf_l = soja2011_gdf_l.loc[ \n  (soja2011_gdf_l[\"Rto11\"] &gt; lim_inf) & \n  (soja2011_gdf_l[\"Rto11\"] &lt; lim_sup)]\n\n\n\n  Registros eliminados: 3,181 (5.4%)\n\n\n  Registros restantes:  55,524"
+  },
+  {
+    "objectID": "proyectos/mapa-rendimiento-py/mapa-rendimiento-py.html#resumen-del-proceso-de-limpieza",
+    "href": "proyectos/mapa-rendimiento-py/mapa-rendimiento-py.html#resumen-del-proceso-de-limpieza",
+    "title": "Limpieza de Mapa de Rendimiento con Python",
+    "section": "\n9.5 Resumen del Proceso de Limpieza",
+    "text": "9.5 Resumen del Proceso de Limpieza\n\n\n\nRegistros Originales\n\n\n62.716\n\n\n\n\nRegistros Eliminados\n\n\n7.192\n\n\n\n\nRegistros Finales\n\n\n55.524\n\n\n\n\nDatos Retenidos (%)\n\n\n88.5%"
+  },
+  {
+    "objectID": "proyectos/mapa-rendimiento-py/mapa-rendimiento-py.html#estadísticas-descriptivas-post-limpieza",
+    "href": "proyectos/mapa-rendimiento-py/mapa-rendimiento-py.html#estadísticas-descriptivas-post-limpieza",
+    "title": "Limpieza de Mapa de Rendimiento con Python",
+    "section": "\n11.1 Estadísticas Descriptivas Post-Limpieza",
+    "text": "11.1 Estadísticas Descriptivas Post-Limpieza\n\nsoja2011_gdf_l[[\"Rto11\", \"HG11\", \"Elev11\", \"IP\"]].describe().round(2)\n\n          Rto11      HG11    Elev11        IP\ncount  55524.00  55524.00  55524.00  55524.00\nmean    3386.39      7.73    478.93      1.00\nstd      568.15      0.79      2.19      0.17\nmin     1807.24      0.00    472.32      0.53\n25%     3021.96      7.16    477.47      0.89\n50%     3373.81      7.60    479.07      1.00\n75%     3745.80      8.12    480.22      1.11\nmax     4907.72     14.74    487.73      1.45\n\n\n\n\n\nRendimiento Medio (kg/ha)\n\n\n3386\n\n\n\n\nRendimiento Máximo (kg/ha)\n\n\n4908\n\n\n\n\nRendimiento Mínimo (kg/ha)\n\n\n1807"
+  },
+  {
+    "objectID": "proyectos/mapa-rendimiento-py/mapa-rendimiento-py.html#vista-de-la-tabla-limpia",
+    "href": "proyectos/mapa-rendimiento-py/mapa-rendimiento-py.html#vista-de-la-tabla-limpia",
+    "title": "Limpieza de Mapa de Rendimiento con Python",
+    "section": "\n11.2 Vista de la Tabla Limpia",
+    "text": "11.2 Vista de la Tabla Limpia\nCódigocols_vista = [\"Lat\", \"Lon\", \"Rto11\", \"HG11\", \"Elev11\", \"IP\", \"Var11\"]\n\nprint(soja2011_gdf_l[cols_vista].head(8).to_html(\n    classes='table table-striped table-hover',\n    index=False,\n    float_format='%.2f'\n))\n\n\n\nLat\n\n\nLon\n\n\nRto11\n\n\nHG11\n\n\nElev11\n\n\nIP\n\n\nVar11\n\n\n\n\n\n-33.64\n\n\n-64.96\n\n\n4593.62\n\n\n0.00\n\n\n477.27\n\n\n1.36\n\n\nAX5009\n\n\n\n\n-33.64\n\n\n-64.96\n\n\n4176.49\n\n\n0.00\n\n\n477.33\n\n\n1.23\n\n\nAX5009\n\n\n\n\n-33.64\n\n\n-64.96\n\n\n3737.20\n\n\n0.00\n\n\n477.33\n\n\n1.10\n\n\nAX5009\n\n\n\n\n-33.64\n\n\n-64.96\n\n\n3017.71\n\n\n0.00\n\n\n477.32\n\n\n0.89\n\n\nAX5009\n\n\n\n\n-33.64\n\n\n-64.96\n\n\n3275.73\n\n\n0.00\n\n\n477.32\n\n\n0.97\n\n\nAX5009\n\n\n\n\n-33.64\n\n\n-64.96\n\n\n3593.86\n\n\n0.00\n\n\n477.36\n\n\n1.06\n\n\nAX5009\n\n\n\n\n-33.64\n\n\n-64.96\n\n\n3202.89\n\n\n0.00\n\n\n477.37\n\n\n0.95\n\n\nAX5009\n\n\n\n\n-33.64\n\n\n-64.96\n\n\n3885.38\n\n\n0.00\n\n\n477.40\n\n\n1.15\n\n\nAX5009"
+  },
+  {
+    "objectID": "proyectos/mapa-rendimiento-py/mapa-rendimiento-py.html#boxplots-de-rendimiento",
+    "href": "proyectos/mapa-rendimiento-py/mapa-rendimiento-py.html#boxplots-de-rendimiento",
+    "title": "Limpieza de Mapa de Rendimiento con Python",
+    "section": "\n12.1 Boxplots de Rendimiento",
+    "text": "12.1 Boxplots de Rendimiento\nLos boxplots permiten comparar visualmente la distribución del rendimiento antes y después de la limpieza. La eliminación de outliers reduce el rango intercuartílico y concentra los datos en torno a valores coherentes.\n\nCódigofig, axes = plt.subplots(1, 2, figsize=(12, 5))\n\n\nsns.boxplot(ax=axes[0], y=soja2011_gdf[\"Rto11\"], color=\"#ff7675\")\naxes[0].set_title(\"A. Rendimiento Original (Con Outliers)\")\naxes[0].set_ylabel(\"Rendimiento (kg/ha o qq/ha)\")\naxes[0].set_xlabel(\"Datos Crudos\")\n\n\nsns.boxplot(ax=axes[1], y=soja2011_gdf_l[\"Rto11\"], color=\"#55efc4\")\naxes[1].set_title(\"B. Rendimiento Limpio (Método IQR)\")\naxes[1].set_ylabel(\"\") \naxes[1].set_xlabel(\"Datos Limpios\")\n\n\nplt.tight_layout()\nplt.show()"
+  },
+  {
+    "objectID": "proyectos/mapa-rendimiento-py/mapa-rendimiento-py.html#histogramas-de-distribución",
+    "href": "proyectos/mapa-rendimiento-py/mapa-rendimiento-py.html#histogramas-de-distribución",
+    "title": "Limpieza de Mapa de Rendimiento con Python",
+    "section": "\n12.2 Histogramas de Distribución",
+    "text": "12.2 Histogramas de Distribución\nEl histograma revela la forma de la distribución del rendimiento. Se espera que, tras la limpieza, la distribución se aproxime a la normalidad, eliminando las colas largas producidas por los errores del monitor.\n\nCódigofig, axes = plt.subplots(1, 2, figsize=(12, 5))\n\naxes[0].hist(\n    soja2011_gdf[\"Rto11\"].dropna(),\n    bins=60,\n    color=\"#ff7675\",      \n    alpha=0.8,\n    edgecolor=\"none\"\n)\n\naxes[0].axvline(\n    soja2011_gdf[\"Rto11\"].mean(),\n    color=\"#2d3436\",\n    linestyle=\"--\",\n    linewidth=1.5,\n    label=f'Media: {soja2011_gdf[\"Rto11\"].mean():,.0f} kg/ha'\n)\n\naxes[0].set_title(\"A. Distribución Original\")\naxes[0].set_xlabel(\"Rendimiento (kg/ha)\")\naxes[0].set_ylabel(\"Frecuencia\")\naxes[0].legend(fontsize=9, loc=\"upper right\")\n\naxes[1].hist(\n    soja2011_gdf_l[\"Rto11\"].dropna(),\n    bins=60,\n    color=\"#55efc4\",      \n    alpha=0.8,\n    edgecolor=\"none\"\n)\n\naxes[1].axvline(\n    soja2011_gdf_l[\"Rto11\"].mean(),\n    color=\"#2d3436\",\n    linestyle=\"--\",\n    linewidth=1.5,\n    label=f'Media: {soja2011_gdf_l[\"Rto11\"].mean():,.0f} kg/ha'\n)\n\naxes[1].axvline(\n    lim_inf, \n    color=\"#e17055\", \n    linestyle=\":\", \n    linewidth=1.2,\n    label=f'Lím. inf.: {lim_inf:,.0f}'\n)\naxes[1].axvline(\n    lim_sup, \n    color=\"#e17055\", \n    linestyle=\":\", \n    linewidth=1.2,\n    label=f'Lím. sup.: {lim_sup:,.0f}'\n)\n\naxes[1].set_title(\"B. Distribución Limpia\")\naxes[1].set_xlabel(\"Rendimiento (kg/ha)\")\naxes[1].set_ylabel(\"\")  \naxes[1].legend(fontsize=9, loc=\"upper right\")\n\n\nplt.tight_layout()\nplt.show()"
+  },
+  {
+    "objectID": "proyectos/mapa-rendimiento-py/mapa-rendimiento-py.html#mapa-de-rendimiento-datos-limpios",
+    "href": "proyectos/mapa-rendimiento-py/mapa-rendimiento-py.html#mapa-de-rendimiento-datos-limpios",
+    "title": "Limpieza de Mapa de Rendimiento con Python",
+    "section": "\n13.1 Mapa de Rendimiento — Datos Limpios",
+    "text": "13.1 Mapa de Rendimiento — Datos Limpios\n\nCódigofig, ax = plt.subplots(figsize=(10, 8)) \n \nsoja2011_gdf_l.plot( \n    column=\"Rto11\", \n    cmap=\"RdYlGn\", \n    scheme=\"quantiles\",    \n    k=4, \n    markersize=5,   \n    legend=True, \n    ax=ax,\n    legend_kwds={\n        'title': 'Rendimiento (kg/ha)',\n        'title_fontsize': 11,\n        'fontsize': 10,\n        'frameon': True,\n        'fancybox': True,\n        'shadow': True,\n        'loc': 'lower right'\n    }\n)\n    \n \nax.set_title( \n  \"Mapa de Rendimiento Limpio\\n 2011\", \n  fontsize=16, \n  fontweight=\"bold\", \n  loc=\"center\" \n  ) \n \nax.set_axis_off() \n \nplt.tight_layout() \nplt.show()"
   },
   {
     "objectID": "proyectos/regresion-espacial/regresion-espacial.html",

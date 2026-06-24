@@ -446,45 +446,95 @@ img {
 
 
 /* TABLAS */
-table {
-  border-collapse: collapse;
+
+.tbl-minimal {
   width: 100%;
-  margin: 1.5rem 0 2rem;
-  font-size: 0.88rem;
-  font-family: 'Source Serif 4', serif;
+  border-collapse: collapse;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.82rem;
+  margin: 1.4rem 0;
 }
 
-thead th {
-  font-family: 'DM Mono', monospace;
-  font-size: 0.7rem;
+.tbl-minimal thead th {
+  color: #8faf9a;
   font-weight: 500;
+  font-size: 0.70rem;
+  letter-spacing: 0.10em;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: var(--gee-cloud);
-  background: var(--gee-navy);
-  padding: 10px 14px;
+  padding: 8px 12px;
   text-align: left;
-  border: none;
+  border-bottom: 1px solid rgba(143, 175, 154, 0.40);
+  background: transparent;
+  white-space: nowrap;
 }
 
-tbody tr {
-  border-bottom: 1px solid var(--border-light);
-  transition: background 0.15s;
+.tbl-minimal tbody tr {
+  border-bottom: 1px solid rgba(143, 175, 154, 0.14);
+  transition: background 0.12s ease;
 }
 
-tbody tr:hover {
-  background: #f0f6fa;
+.tbl-minimal tbody tr:hover {
+  background: rgba(255, 177, 98, 0.06);
 }
 
-tbody td {
-  padding: 8px 14px;
-  color: var(--text-primary);
-  vertical-align: top;
+.tbl-minimal tbody tr:hover td {
+  color: #ffb162;
 }
 
-tbody tr:last-child {
-  border-bottom: 2px solid var(--gee-navy);
+.tbl-minimal tbody td {
+  padding: 9px 12px;
+  color: #3a4e44;
+  font-size: 0.82rem;
+  vertical-align: middle;
+  transition: color 0.12s ease;
 }
+
+.tbl-minimal tbody td:first-child {
+  font-weight: 500;
+  color: #1B2632;
+}
+
+.tbl-minimal tbody td:not(:first-child) {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.78rem;
+  text-align: right;
+  color: #4a5e53;
+}
+
+/* Badges de categoría */
+.badge-tbl {
+  display: inline-block;
+  font-size: 0.68rem;
+  font-family: 'JetBrains Mono', monospace;
+  letter-spacing: 0.04em;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.badge-alto  { background: rgba(31,  94,  99, 0.15); color: #1f5e63; }
+.badge-medio { background: rgba(143, 175, 154, 0.22); color: #4a7055; }
+.badge-bajo  { background: rgba(192, 57,  43, 0.12); color: #a83226; }
+
+
+/* Texto en ámbar para cualquier celda destacada */
+.tbl-amber { color: #ffb162 !important; font-weight: 500; }
+
+/* Texto en sage/verde para valores positivos */
+.tbl-green { color: #8faf9a !important; }
+
+/* Texto en rojo para valores negativos o eliminados */
+.tbl-red   { color: #c0392b !important; }
+
+/* Scroll horizontal en tablas anchas */
+.tbl-scroll {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  margin: 1.4rem 0;
+}
+.tbl-scroll table { min-width: 600px; }
+
 
 
 /* CITAS */
