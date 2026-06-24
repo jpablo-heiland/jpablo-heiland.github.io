@@ -423,5 +423,86 @@ pre.code-output code {
   border-top: 3px solid #1f5e63;
   border-bottom-color: #ffffff;
 }
-   
-   
+
+
+
+/* TABLAS */
+
+
+.table, table {
+    width: 100%;
+    margin-top: 1.5em;
+    margin-bottom: 1.5em;
+    border-collapse: collapse;
+    font-size: 0.95em;
+    line-height: 1.5;
+    color: #222222;
+    font-family: inherit;
+}
+
+
+.table th, table th,
+.table tr:last-child td, table tr:last-child td,
+.table tr:last-child th, table tr:last-child th {
+    border-bottom: 1.5px solid #111111;
+}
+
+table {
+    border-top: 1.5px solid #111111;
+}
+
+
+.table th, table th {
+    padding: 8px 12px;
+    font-weight: 600;
+    text-align: center;
+    background-color: transparent; 
+    border-bottom: 1px solid #111111; 
+}
+
+/* Celdas de datos (Body) */
+.table td, table td {
+    padding: 6px 12px;
+    border-top: none;
+    border-bottom: none; 
+}
+
+
+.table td, table td {
+    text-align: center; 
+}
+
+
+.cell-output-display table.dataframe {
+    border-top: 1.5px solid #111111 !important;
+    border-bottom: 1.5px solid #111111 !important;
+    border-collapse: collapse !important;
+    margin: 1.5em auto;
+}
+
+.cell-output-display table.dataframe th {
+    border-bottom: 1px solid #111111 !important;
+    font-weight: 600;
+    padding: 8px 12px;
+}
+
+.cell-output-display table.dataframe td {
+    padding: 6px 12px;
+}
+
+
+.table-striped>tbody>tr:nth-of-type(odd)>*,
+table tr:nth-child(even) {
+    background-color: transparent !important;
+    --bs-table-accent-bg: transparent !important;
+}
+
+
+caption, .table-caption {
+    font-size: 0.85em;
+    font-style: italic;
+    color: #555555;
+    text-align: left;
+    margin-top: 0.8em;
+    caption-side: bottom; 
+}
