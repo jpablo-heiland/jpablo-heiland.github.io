@@ -512,23 +512,23 @@ Ingeniero Agrónomo con conocimientos e interés en agricultura de precisión, a
   <!-- 10. NDVI_3D -->
   <div class="project-card">
     <a class="card-img-link" href="proyectos/ndvi-tres-dim/ndvi-tres-dim.html">
-      <img src="img/thumb-serie-temporal-gee.png" alt="NDVI en 3D" loading="lazy">
+      <img src="img/thumb-ndvi-tres-dim.png" alt="NDVI en 3 Dimensiones" loading="lazy">
     </a>
     <div class="card-body">
-      <span class="card-category cat-gee">Python · NDVI</span>
+      <span class="card-category cat-gee">Python · NDVI · 3D</span>
       <a class="card-title" href="proyectos/ndvi-tres-dim/ndvi-tres-dim.html">
         NDVI en 3D
       </a>
       <p class="card-desc">
-        Monitoreo satelital del ciclo completo de un cultivo con GEE. 
-        Consulta a la nube, extracción de series temporales de índices 
-        de vegetación y visualización de la dinámica fenológica.
+        Visualización del NDVI en tres dimensiones. 
+        Extracción de imagen satelital, cálculo NDVI,
+        visualización con PyDeck y QGIS.
       </p>
       <div class="card-tags">
         <span class="tag tag-py">Python</span>
         <span class="tag tag-gee">GEE</span>
-        <span class="tag tag-gee">Serie Temporal</span>
-        <span class="tag tag-agro">Fenología</span>
+        <span class="tag tag-gee">NDVI</span>
+        <span class="tag tag-agro">3D</span>
       </div>
     </div>
   </div>

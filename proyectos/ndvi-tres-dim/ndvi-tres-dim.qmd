@@ -53,7 +53,7 @@ En esta sección se configuran las variables globales que controlarán todo el f
 
 Se establecen las rutas de acceso a los datos y la vinculación con la plataforma de la nube:
 
-* [PROJECT_ID]{.func-tecnica}: Es el ID del proyecto en la nube deGoogle.
+* [PROJECT_ID]{.func-tecnica}: Es el ID del proyecto en la nube de Google.
 
 * [ASSET_NDVI]{.func-tecnica}: Define la ubicación dentro del almacenamiento de Earth Engine donde se guardará o desde donde se leerá la imagen NDVI. Utilizar assets permite la persistencia de los datos procesados.
 
@@ -102,7 +102,7 @@ La modificación de variables bidimensionales a un entorno tridimensional requie
 * [PITCH_CAMARA]{.func-tecnica} y [BEARING_CAMARA]{.func-tecnica} configuran el punto de vista inicial al renderizar el mapa El Pitch (52°) inclina la cámara respecto al plano zenital y el Bearing (20°) la rota respecto al Norte.
 
 ```{python}
-FACTOR_ESCALA_3D = 900    
+FACTOR_ESCALA_3D = 500    
 RADIO_COLUMNA    = 8       
 PITCH_CAMARA     = 52      
 BEARING_CAMARA   = 20      
@@ -375,67 +375,7 @@ Se recupera la imagen exportada al Asset de GEE mediante [ee.Image()]{.func-tecn
 NDVI_asset = ee.Image(ASSET_NDVI)
 ```
 
-# Mapa 2D en Folium
 
-## Inicializar el mapa base con Folium
-
-Se crea el objeto mapa con [folium.Map()]{.func-tecnica}. El argumento [tiles=None]{.func-tecnica} suprime el mapa base por defecto de Folium, ya que se agrega un mapa satelital de mayor calidad.
-
-```{python}
-mapa = folium.Map(location=centro, zoom_start=14, tiles=None)
-```
-
-## Agregar el mapa base satelital
-
-Se incorpora el mapa base de Google mediante [folium.TileLayer()]{.func-tecnica}. El parámetro [overlay=False]{.func-tecnica} la define como capa base (no superpuesta), y [control=True]{.func-tecnica} la hace visible en el selector de capas.
-
-```{python}
-folium.TileLayer(
-    tiles='https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}',
-    attr='Google Satellite',
-    name='Satélite',
-    overlay=False,
-    control=True
-).add_to(mapa)
-```
-
-## Agregar la capa de NDVI con URL permanente
-
-[.getMapId()]{.func-tecnica} le pide a GEE que prepare la imagen para ser visualizada con la paleta y los rangos definidos en [VIS_NDVI]{.func-tecnica}, y devuelve una dirección web (URL) que apunta permanentemente a esa imagen en los servidores de Google. Esa dirección se le entrega a [folium.TileLayer()]{.func-tecnica}, que la usa para cargar y mostrar la imagen en el mapa como una capa con nombre, opacidad y control de visibilidad.
-
-```{python}
-map_id   = NDVI_asset.getMapId(VIS_NDVI)
-tile_url = map_id['tile_fetcher'].url_format
-
-folium.TileLayer(
-    tiles=tile_url,
-    attr='Google Earth Engine',
-    name='NDVI',
-    overlay=True,
-    control=True,
-    opacity=0.85
-).add_to(mapa)
-```
-
-## Control de capas y guardado
-
-[folium.LayerControl()]{.func-tecnica} inserta el selector interactivo de capas en el mapa. Finalmente, [mapa.save()]{.func-tecnica} guarda el mapa como un archivo HTML autocontenido con URLs de tiles permanentes, que luego se embebe en el documento mediante un [iframe]{.func-tecnica}.
-
-```{python}
-folium.LayerControl(collapsed=False).add_to(mapa)
-mapa_html = mapa._repr_html_()
-```
-
-## Visualizar
-
-Con [py$mapa_html]{.func-tecnica} se accede a la variable generada en el chunk anterior. La función [htmltools::HTML()]{.func-tecnica} indica a Quarto que esa cadena de texto debe insertarse directamente en el documento como HTML, lo que hace que el mapa quede embebido de forma nativa en el flujo del documento, sin depender de ningún archivo externo.
-
-```{r}
-#| code-fold: true
-#| code-summary: "Código"
-
-htmltools::HTML(py$mapa_html)
-```
 
 # Extracción de píxeles y preparación del DataFrame
 
@@ -566,9 +506,9 @@ La capa [ColumnLayer]{.func-tecnica} toma cada una de las filas del [DataFrame]{
 
 * [radius=RADIO_COLUMNA]{.func-tecnica}: Define el ancho del cilindro/columna.
 
-* [coverage=0.95]{.func-tecnica}: Al fijarlo en 0.95, se deja un espacio del 5% entre columnas. Esto genera una cuadrícula donde la luz del entorno proyecta sombras entre las columnas.
+* [coverage=0.95]{.func-tecnica}: Al fijarlo en 0.95, se deja un espacio del 5% entre columnas. Esto genera sombras entre columnas.
 
-* [pickable]{.func-tecnica} y [auto_highlight]{.func-tecnica} habilitan el picking, es decir, que reconozca cuándo el usuario posiciona el cursor sobre una columna específica, iluminándola.
+* [pickable]{.func-tecnica} y [auto_highlight]{.func-tecnica} habilitan el picking, es decir, que reconozca cuándo el usuario posiciona el cursor sobre una columna específica.
 
 ```{python}
 capa_ndvi_3d = pdk.Layer(
@@ -641,7 +581,7 @@ tooltip = {
 ```
 
 ## Ensamblado del Deck
-El objeto [pdk.Deck]{.func-tecnica} aglutina todos los elementos constructivos anteriores:
+El objeto [pdk.Deck]{.func-tecnica} contiene todos los elementos anteriores:
 
 ```{python}
 mapa_3d = pdk.Deck(
@@ -659,7 +599,9 @@ mapa_3d.show()
 ```
 
 
-# Mapa
+# Mapa con QGIS
+
+Complementariamente, esta información se puede visualizar en tres dimensiones utilizando el complemento **Qgis2threejs** de QGIS. Este plugin permite fusionar la capa de NDVI con un Modelo Digital de Elevación (MDE) para generar un entorno web interactivo en 3D.
 
 <iframe src="index.html" width="100%" height="600px" style="border: none; border-radius: 8px;"></iframe>
 

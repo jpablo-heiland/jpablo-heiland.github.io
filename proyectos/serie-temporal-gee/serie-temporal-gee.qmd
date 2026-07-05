@@ -19,7 +19,7 @@ Con la colección procesada, se construye una serie de composiciones temporales 
 
 # Configuración Python
 
-Este bloque inicializa la conexión entre R y Python ([reticulate]{.func-tecnica}), fuerza al sistema a usar el entorno virtual de trabajo donde están las librerías y configura las variables de entorno `PROJ` para garantizar que no haya conflictos al procesar y proyectar datos de mapas o capas de Earh Engine.
+Este bloque inicializa la conexión entre R y Python ([reticulate]{.func-tecnica}), fuerza al sistema a utilizar el entorno virtual de trabajo donde están las librerías y configura las variables de entorno `PROJ` para garantizar que no haya conflictos al procesar y proyectar datos de mapas o capas de Earh Engine.
 
 ```{r}
 library(reticulate)

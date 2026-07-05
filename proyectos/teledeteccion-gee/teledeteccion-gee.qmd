@@ -217,7 +217,7 @@ geometry = lote_ee.geometry()
 
 # Buscar imágenes SENTINEL 2
 
-Se consulta el catálogo de imágenes de Sentinel-2 Surface Reflectance Harmonized (`COPERNICUS/S2_SR_HARMONIZED`) aplicando tres filtros encadenados:
+Se consulta el catálogo de imágenes de Sentinel-2 Surface Reflectance Harmonized (`COPERNICUS/S2_SR_HARMONIZED`) aplicando tres filtros consecutivos:
 
 * [.filterDate()]{.func-tecnica}: restringe la búsqueda al período diciembre 2025 – febrero 2026.
 * [.filterBounds()]{.func-tecnica}: limita los resultados a las imágenes que intersectan con el área de estudio.
