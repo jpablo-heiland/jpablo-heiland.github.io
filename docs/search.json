@@ -438,14 +438,14 @@
     "href": "proyectos/ndvi-tres-dim/ndvi-tres-dim.html",
     "title": "Visualización 3D del NDVI con PyDeck y Google Earth Engine",
     "section": "",
-    "text": "El Índice de Vegetación de Diferencia Normalizada (NDVI) es el índice de teledetección más utilizado en agronomía de precisión. Se calcula como:\n\\[NDVI = \\frac{{NIR} - {Red}}{{NIR} + {Red}}\\]\ndonde \\(NIR\\) y \\(Red\\) son las reflectancias superficiales en el infrarrojo cercano (banda B8, ~842 nm) y en el rojo (banda B4, ~665 nm) de Sentinel-2. El resultado varía entre \\(-1\\) y \\(+1\\):\n\n\nRango NDVI\nInterpretación agronómica\n\n\n\n&lt; 0\nAgua, nieve, nubes o suelo muy húmedo\n\n\n0.00 – 0.15\nSuelo desnudo o escasa cobertura vegetal\n\n\n0.15 – 0.35\nVegetación escasa o cultivo en estadios tempranos\n\n\n0.35 – 0.60\nVegetación moderada, cultivo en activo crecimiento\n\n\n&gt; 0.60\nVegetación densa y vigorosa, alta biomasa verde\n\n\n\nLa visualización tridimensional ofrece ventajas:\n\n\nHeterogeneidad espacial inmediata: las “montañas” y “valles” revelan zonas de estrés sin necesidad de interpretar escalas de color.\n\nComunicación efectiva: el modelo es intuitivo."
+    "text": "El Índice de Vegetación de Diferencia Normalizada (NDVI) es el índice de teledetección más utilizado en agronomía de precisión. Se calcula como:\n\\[NDVI = \\frac{{NIR} - {Red}}{{NIR} + {Red}}\\]\ndonde \\(NIR\\) y \\(Red\\) son las reflectancias superficiales en el infrarrojo cercano (banda B8, ~842 nm) y en el rojo (banda B4, ~665 nm) de Sentinel-2. El resultado varía entre \\(-1\\) y \\(+1\\):\n\n\nRango NDVI\nInterpretación agronómica\n\n\n\n&lt; 0\nAgua, nieve, nubes o suelo muy húmedo\n\n\n0.00 – 0.15\nSuelo desnudo o escasa cobertura vegetal\n\n\n0.15 – 0.35\nVegetación escasa o cultivo en estadios tempranos\n\n\n0.35 – 0.60\nVegetación moderada, cultivo en activo crecimiento\n\n\n&gt; 0.60\nVegetación densa y vigorosa, alta biomasa verde\n\n\n\nLa visualización tridimensional ofrece ventajas:\n\n\nHeterogeneidad espacial inmediata: las “montañas” y “valles” revelan zonas de estrés sin necesidad de interpretar escalas de color.\n\nComunicación efectiva: el modelo es intuitivo.\n\nEste informe compara tres formas distintas de construir esa tercera dimensión a partir de la misma imagen NDVI derivada de Sentinel-2: (PyDeck), (Plotly) y QGIS."
   },
   {
     "objectID": "proyectos/ndvi-tres-dim/ndvi-tres-dim.html#del-proyecto",
     "href": "proyectos/ndvi-tres-dim/ndvi-tres-dim.html#del-proyecto",
     "title": "Visualización 3D del NDVI con PyDeck y Google Earth Engine",
     "section": "\n3.1 Del Proyecto",
-    "text": "3.1 Del Proyecto\nSe establecen las rutas de acceso a los datos y la vinculación con la plataforma de la nube:\n\nPROJECT_ID: Es el ID del proyecto en la nube deGoogle.\nASSET_NDVI: Define la ubicación dentro del almacenamiento de Earth Engine donde se guardará o desde donde se leerá la imagen NDVI. Utilizar assets permite la persistencia de los datos procesados.\nSHAPEFILE: Especifica la ruta local al archivo vectorial que delimita el área de estudio.\n\n\nPROJECT_ID   = \"ee-jpablo-heiland\"\nASSET_NDVI   = f\"projects/{PROJECT_ID}/assets/NDVI_Py12\"\nSHAPEFILE    = \"datos/lote_14.shp\""
+    "text": "3.1 Del Proyecto\nSe establecen las rutas de acceso a los datos y la vinculación con la plataforma de la nube:\n\nPROJECT_ID: Es el ID del proyecto en la nube de Google.\nASSET_NDVI: Define la ubicación dentro del almacenamiento de Earth Engine donde se guardará o desde donde se leerá la imagen NDVI. Utilizar assets permite la persistencia de los datos procesados.\nSHAPEFILE: Especifica la ruta local al archivo vectorial que delimita el área de estudio.\n\n\nPROJECT_ID   = \"ee-jpablo-heiland\"\nASSET_NDVI   = f\"projects/{PROJECT_ID}/assets/NDVI_Py12\"\nSHAPEFILE    = \"datos/lote_14.shp\""
   },
   {
     "objectID": "proyectos/ndvi-tres-dim/ndvi-tres-dim.html#sec-para-ima",
@@ -455,18 +455,11 @@
     "text": "3.2 Del Filtro de Imágenes S2\nSe definen los filtros de búsqueda en la colección de Sentinel-2:\n\nLa FECHA_INICIO y FECHA_FIN definen la ventana temporal para la búsqueda de imágenes.\nMAX_NUBOSIDAD es un filtro de calidad, establece un umbral (10%) para descartar escenas con alta cobertura de nubes.\n\n\nFECHA_INICIO  = \"2026-01-15\"\nFECHA_FIN     = \"2026-02-15\"\nMAX_NUBOSIDAD = 10"
   },
   {
-    "objectID": "proyectos/ndvi-tres-dim/ndvi-tres-dim.html#de-la-visualización-2d",
-    "href": "proyectos/ndvi-tres-dim/ndvi-tres-dim.html#de-la-visualización-2d",
-    "title": "Visualización 3D del NDVI con PyDeck y Google Earth Engine",
-    "section": "\n3.3 De la Visualización 2D",
-    "text": "3.3 De la Visualización 2D\nLos parámetros de esta sección controlan la estética de la visualización del mapa 2D.\n\nPALETA_2D = [\n    \"a52f04\", \"c67f3c\", \"e8b96a\", \"f5e4a0\",\n    \"c8e06a\", \"78c83c\", \"3da62a\", \"1a7a14\", \"0a4d08\"\n]\nVIS_NDVI = {\"min\": -0.1, \"max\": 0.85, \"palette\": PALETA_2D}"
-  },
-  {
     "objectID": "proyectos/ndvi-tres-dim/ndvi-tres-dim.html#de-la-visualización-3d",
     "href": "proyectos/ndvi-tres-dim/ndvi-tres-dim.html#de-la-visualización-3d",
     "title": "Visualización 3D del NDVI con PyDeck y Google Earth Engine",
-    "section": "\n3.4 De la Visualización 3D",
-    "text": "3.4 De la Visualización 3D\nLa modificación de variables bidimensionales a un entorno tridimensional requiere ajustar la escala y la perspectiva geométrica del entorno virtual:\n\nFACTOR_ESCALA_3D es la exageración vertical. Los valores de NDVI varían en una escala muy pequeña, si se graficara de forma directa la altura sería imperceptible. Un factor de 900 multiplica el valor del NDVI para convertirlo en una “coordenada Z” (altura) visible.\nRADIO_COLUMNA: Controla el tamaño de la celda o cilindro en PyDeck (expresado en metros).\nPITCH_CAMARA y BEARING_CAMARA configuran el punto de vista inicial al renderizar el mapa El Pitch (52°) inclina la cámara respecto al plano zenital y el Bearing (20°) la rota respecto al Norte.\n\n\nFACTOR_ESCALA_3D = 500    \nRADIO_COLUMNA    = 8       \nPITCH_CAMARA     = 52      \nBEARING_CAMARA   = 20"
+    "section": "\n3.3 De la Visualización 3D",
+    "text": "3.3 De la Visualización 3D\nLa modificación de variables bidimensionales a un entorno tridimensional requiere ajustar la escala y la perspectiva geométrica del entorno virtual:\n\nFACTOR_ESCALA_3D es la exageración vertical. Los valores de NDVI varían en una escala muy pequeña, si se graficara de forma directa la altura sería imperceptible. Un factor de 500 multiplica el valor del NDVI para convertirlo en una “coordenada Z” (altura) visible.\nRADIO_COLUMNA: Controla el tamaño de la celda o cilindro en PyDeck (expresado en metros).\nPITCH_CAMARA y BEARING_CAMARA configuran el punto de vista inicial al renderizar el mapa El Pitch (52°) inclina la cámara respecto al plano zenital y el Bearing (20°) la rota respecto al Norte.\n\n\nFACTOR_ESCALA_3D = 500    \nRADIO_COLUMNA    = 8       \nPITCH_CAMARA     = 52      \nBEARING_CAMARA   = 20"
   },
   {
     "objectID": "proyectos/ndvi-tres-dim/ndvi-tres-dim.html#calcular-el-centro-del-área-de-estudio",
@@ -557,14 +550,14 @@
     "href": "proyectos/ndvi-tres-dim/ndvi-tres-dim.html#definición-de-nodos-de-color",
     "title": "Visualización 3D del NDVI con PyDeck y Google Earth Engine",
     "section": "\n10.1 Definición de nodos de color",
-    "text": "10.1 Definición de nodos de color\nCada nodo: (posición_normalizada_0_a_1, (R, G, B))\n\n\nNODOS_PALETA = [\n    (0.00, (165,  47,   4)),   \n    (0.25, (198, 127,  60)),   \n    (0.50, (245, 228, 160)),   \n    (0.75, (120, 200,  60)),   \n    (1.00, ( 10,  77,   8)),   \n]\n\nETIQUETAS_PALETA = [\n    (0.00, \"&lt; 0   Suelo / Agua\"),\n    (0.25, \"0.2  Vegetación escasa\"),\n    (0.50, \"0.4  Crecimiento activo\"),\n    (0.75, \"0.6  Buen estado\"),\n    (1.00, \"&gt; 0.7 Máximo vigor\"),\n]\n\n\ndef interpolar_color(valor_norm: float, opacidad: int = 220) -&gt; list:\n    v = max(0.0, min(1.0, valor_norm))\n    for i in range(len(NODOS_PALETA) - 1):\n        v0, c0 = NODOS_PALETA[i]\n        v1, c1 = NODOS_PALETA[i + 1]\n        if v0 &lt;= v &lt;= v1:\n            t = (v - v0) / (v1 - v0) if v1 &gt; v0 else 0.0\n            return [\n                int(c0[0] + t * (c1[0] - c0[0])),\n                int(c0[1] + t * (c1[1] - c0[1])),\n                int(c0[2] + t * (c1[2] - c0[2])),\n                opacidad,\n            ]\n    return list(NODOS_PALETA[-1][1]) + [opacidad]\n\n\ndf[\"color_rgb\"] = df[\"NDVI_norm\"].apply(interpolar_color)"
+    "text": "10.1 Definición de nodos de color\nCada nodo: (posición_normalizada_0_a_1, (R, G, B))\n\nNODOS_PALETA = [\n    (0.00, (165,  47,   4)),   \n    (0.25, (198, 127,  60)),   \n    (0.50, (245, 228, 160)),   \n    (0.75, (120, 200,  60)),   \n    (1.00, ( 10,  77,   8)),   \n]\n\nETIQUETAS_PALETA = [\n    (0.00, \"&lt; 0   Suelo / Agua\"),\n    (0.25, \"0.2  Vegetación escasa\"),\n    (0.50, \"0.4  Crecimiento activo\"),\n    (0.75, \"0.6  Buen estado\"),\n    (1.00, \"&gt; 0.7 Máximo vigor\"),\n]\n\nLa versión original de esta función recorría el DataFrame fila por fila con .apply(), evaluando en Python puro un condicional por cada píxel. Para un lote de varias hectáreas a 10 m de resolución esto implica decenas de miles de iteraciones interpretadas, lo cual es evitable: numpy.interp() realiza la misma interpolación lineal de forma vectorizada (compilada en C), aplicando la operación al arreglo completo de una sola vez.\n\nposiciones = np.array([p for p, _ in NODOS_PALETA])\ncanal_r    = np.array([c[0] for _, c in NODOS_PALETA])\ncanal_g    = np.array([c[1] for _, c in NODOS_PALETA])\ncanal_b    = np.array([c[2] for _, c in NODOS_PALETA])\n\nOPACIDAD = 220\nvalores_norm = df[\"NDVI_norm\"].to_numpy()\n\nr = np.interp(valores_norm, posiciones, canal_r).astype(int)\ng = np.interp(valores_norm, posiciones, canal_g).astype(int)\nb = np.interp(valores_norm, posiciones, canal_b).astype(int)\na = np.full_like(r, OPACIDAD)\n\ndf[\"color_rgb\"] = np.stack([r, g, b, a], axis=1).tolist()"
   },
   {
     "objectID": "proyectos/ndvi-tres-dim/ndvi-tres-dim.html#columnlayer",
     "href": "proyectos/ndvi-tres-dim/ndvi-tres-dim.html#columnlayer",
     "title": "Visualización 3D del NDVI con PyDeck y Google Earth Engine",
     "section": "\n11.1 ColumnLayer",
-    "text": "11.1 ColumnLayer\nLa capa ColumnLayer toma cada una de las filas del DataFrame y las proyecta como prismas o columnas en un espacio tridimensional.\n\nLas propiedades get_position, get_elevation y get_fill_color leen directamente los nombres de las columnas del DataFrame local (longitude, latitude, altura_3d, color_rgb).\nradius=RADIO_COLUMNA: Define el ancho del cilindro/columna.\ncoverage=0.95: Al fijarlo en 0.95, se deja un espacio del 5% entre columnas. Esto genera una cuadrícula donde la luz del entorno proyecta sombras entre las columnas.\npickable y auto_highlight habilitan el picking, es decir, que reconozca cuándo el usuario posiciona el cursor sobre una columna específica, iluminándola.\n\n\ncapa_ndvi_3d = pdk.Layer(\n    \"ColumnLayer\",\n    data           = df,\n    get_position   = \"[longitude, latitude]\",\n    get_elevation  = \"altura_3d\",\n    get_fill_color = \"color_rgb\",\n    radius         = RADIO_COLUMNA,\n    extruded       = True,          \n    pickable       = True,          \n    auto_highlight = True,         \n    coverage       = 0.95,         \n    elevation_scale= 1,\n)"
+    "text": "11.1 ColumnLayer\nLa capa ColumnLayer toma cada una de las filas del DataFrame y las proyecta como prismas o columnas en un espacio tridimensional.\n\nLas propiedades get_position, get_elevation y get_fill_color leen directamente los nombres de las columnas del DataFrame local (longitude, latitude, altura_3d, color_rgb).\nradius=RADIO_COLUMNA: Define el ancho del cilindro/columna.\ncoverage=0.95: Al fijarlo en 0.95, se deja un espacio del 5% entre columnas. Esto genera sombras entre columnas.\npickable y auto_highlight habilitan el picking, es decir, que reconozca cuándo el usuario posiciona el cursor sobre una columna específica.\n\n\ncapa_ndvi_3d = pdk.Layer(\n    \"ColumnLayer\",\n    data           = df,\n    get_position   = \"[longitude, latitude]\",\n    get_elevation  = \"altura_3d\",\n    get_fill_color = \"color_rgb\",\n    radius         = RADIO_COLUMNA,\n    extruded       = True,          \n    pickable       = True,          \n    auto_highlight = True,         \n    coverage       = 0.95,         \n    elevation_scale= 1,\n)"
   },
   {
     "objectID": "proyectos/ndvi-tres-dim/ndvi-tres-dim.html#geojsonlayer",
@@ -592,7 +585,7 @@
     "href": "proyectos/ndvi-tres-dim/ndvi-tres-dim.html#ensamblado-del-deck",
     "title": "Visualización 3D del NDVI con PyDeck y Google Earth Engine",
     "section": "\n11.5 Ensamblado del Deck",
-    "text": "11.5 Ensamblado del Deck\nEl objeto pdk.Deck aglutina todos los elementos constructivos anteriores:\n\nmapa_3d = pdk.Deck(\n    layers             = [capa_ndvi_3d, capa_contorno],\n    initial_view_state = vista_inicial,\n    map_style          = \"mapbox://styles/mapbox/satellite-v9\",\n    tooltip            = tooltip,\n)"
+    "text": "11.5 Ensamblado del Deck\nEl objeto pdk.Deck contiene todos los elementos anteriores:\n\nmapa_3d = pdk.Deck(\n    layers             = [capa_ndvi_3d, capa_contorno],\n    initial_view_state = vista_inicial,\n    map_style          = \"mapbox://styles/mapbox/satellite-v9\",\n    tooltip            = tooltip,\n)"
   },
   {
     "objectID": "proyectos/ndvi-tres-dim/ndvi-tres-dim.html#mostrar-inline-en-jupyter",
@@ -600,6 +593,27 @@
     "title": "Visualización 3D del NDVI con PyDeck y Google Earth Engine",
     "section": "\n11.6 Mostrar inline en Jupyter",
     "text": "11.6 Mostrar inline en Jupyter\n\nmapa_3d.show()"
+  },
+  {
+    "objectID": "proyectos/ndvi-tres-dim/ndvi-tres-dim.html#de-puntos-dispersos-a-grilla-regular",
+    "href": "proyectos/ndvi-tres-dim/ndvi-tres-dim.html#de-puntos-dispersos-a-grilla-regular",
+    "title": "Visualización 3D del NDVI con PyDeck y Google Earth Engine",
+    "section": "\n12.1 De puntos dispersos a grilla regular",
+    "text": "12.1 De puntos dispersos a grilla regular\nEl DataFrame de píxeles (df) contiene coordenadas dispersas, no una grilla regular. scipy.interpolate.griddata() interpola esos puntos dispersos sobre una malla regular (RESOLUCION_GRILLA × RESOLUCION_GRILLA), requisito de go.Surface. El método cubic produce una superficie suave.\n\nfrom scipy.interpolate import griddata\n\nRESOLUCION_GRILLA = 300\n\nlon_min, lon_max = df[\"longitude\"].min(), df[\"longitude\"].max()\nlat_min, lat_max = df[\"latitude\"].min(), df[\"latitude\"].max()\n\ngrid_lon, grid_lat = np.meshgrid(\n    np.linspace(lon_min, lon_max, RESOLUCION_GRILLA),\n    np.linspace(lat_min, lat_max, RESOLUCION_GRILLA),\n)\n\ngrid_ndvi = griddata(\n    points = df[[\"longitude\", \"latitude\"]].to_numpy(),\n    values = df[\"NDVI_norm\"].to_numpy(),\n    xi     = (grid_lon, grid_lat),\n    method = \"cubic\",\n)"
+  },
+  {
+    "objectID": "proyectos/ndvi-tres-dim/ndvi-tres-dim.html#escala-de-color-compartida",
+    "href": "proyectos/ndvi-tres-dim/ndvi-tres-dim.html#escala-de-color-compartida",
+    "title": "Visualización 3D del NDVI con PyDeck y Google Earth Engine",
+    "section": "\n12.2 Escala de color compartida",
+    "text": "12.2 Escala de color compartida\nSe reutilizan los mismos NODOS_PALETA definidos para PyDeck, convertidos al formato que espera Plotly: una lista de pares [posición, “rgb(r,g,b)”].\n\ncolorscale_plotly = [\n    [posicion, f\"rgb({c[0]},{c[1]},{c[2]})\"] for posicion, c in NODOS_PALETA\n]"
+  },
+  {
+    "objectID": "proyectos/ndvi-tres-dim/ndvi-tres-dim.html#superficie-3d",
+    "href": "proyectos/ndvi-tres-dim/ndvi-tres-dim.html#superficie-3d",
+    "title": "Visualización 3D del NDVI con PyDeck y Google Earth Engine",
+    "section": "\n12.3 Superficie 3D",
+    "text": "12.3 Superficie 3D\nLos parámetros de lighting controlan cómo reacciona la superficie a la luz simulada: ambient es la luz de base, diffuse y specular controlan el brillo mate/especular, y roughness la dispersión del reflejo.\n\nimport plotly.graph_objects as go\n\nfig = go.Figure(\n    data=[\n        go.Surface(\n            z              = grid_ndvi * FACTOR_ESCALA_3D,\n            x              = grid_lon,\n            y              = grid_lat,\n            surfacecolor   = grid_ndvi,\n            colorscale     = colorscale_plotly,\n            cmin           = 0,\n            cmax           = 1,\n            lighting       = dict(ambient=0.6, diffuse=0.8, specular=0.3, roughness=0.7, fresnel=0.1),\n            lightposition  = dict(x=100, y=200, z=300),\n            colorbar       = dict(title=\"NDVI norm.\", tickfont=dict(color=\"#c9d6cc\")),\n            hovertemplate  = \"NDVI norm: %{surfacecolor:.2f}&lt;br&gt;Altura: %{z:.0f}&lt;extra&gt;&lt;/extra&gt;\",\n        )\n    ]\n)\n\nfig.update_layout(\n    scene = dict(\n        xaxis_title = \"Longitud\",\n        yaxis_title = \"Latitud\",\n        zaxis_title = \"Altura NDVI (u. arb.)\",\n        camera      = dict(eye=dict(x=1.4, y=1.4, z=0.9)),\n    ),\n    paper_bgcolor = \"#1B2632\",\n    font          = dict(color=\"#c9d6cc\", family=\"Space Grotesk\"),\n    margin        = dict(l=0, r=0, t=30, b=0),\n    height        = 600,\n)"
   },
   {
     "objectID": "proyectos/mapa-rendimiento/mapa-rendimiento.html",

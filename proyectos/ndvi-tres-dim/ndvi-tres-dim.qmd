@@ -1,7 +1,7 @@
 ---
 title: "Visualización 3D del NDVI con PyDeck y Google Earth Engine"
-date: 2026-06
-categories: [Python, Google Earth Engine, NDVI]
+date: 2026-07
+categories: [Python, R, Google Earth Engine, NDVI, Agricultura de Precisión]
 css: styles.css
 ---
 
@@ -26,6 +26,8 @@ La visualización tridimensional ofrece ventajas:
 
 - **Heterogeneidad espacial inmediata**: las "montañas" y "valles" revelan zonas de estrés sin necesidad de interpretar escalas de color.
 - **Comunicación efectiva**: el modelo es intuitivo.
+
+Este informe compara **tres formas distintas** de construir esa tercera dimensión a partir de la misma imagen NDVI derivada de Sentinel-2: ([PyDeck]{.func-tecnica}), ([Plotly]{.func-tecnica}) y QGIS. 
 
 ```{r include=FALSE}
 library(reticulate)
@@ -79,25 +81,13 @@ FECHA_FIN     = "2026-02-15"
 MAX_NUBOSIDAD = 10 
 ```
 
-## De la Visualización 2D
-
-Los parámetros de esta sección controlan la estética de la visualización del mapa 2D.
-
-```{python}
-PALETA_2D = [
-    "a52f04", "c67f3c", "e8b96a", "f5e4a0",
-    "c8e06a", "78c83c", "3da62a", "1a7a14", "0a4d08"
-]
-VIS_NDVI = {"min": -0.1, "max": 0.85, "palette": PALETA_2D}
-```
-
 ## De la Visualización 3D
 
 La modificación de variables bidimensionales a un entorno tridimensional requiere ajustar la escala y la perspectiva geométrica del entorno virtual:
 
-* [FACTOR_ESCALA_3D]{.func-tecnica} es la exageración vertical. Los valores de NDVI varían en una escala muy pequeña, si se graficara de forma directa la altura sería imperceptible. Un factor de 900 multiplica el valor del NDVI para convertirlo en una "coordenada Z" (altura) visible.
+* [FACTOR_ESCALA_3D]{.func-tecnica} es la exageración vertical. Los valores de NDVI varían en una escala muy pequeña, si se graficara de forma directa la altura sería imperceptible. Un factor de 500 multiplica el valor del NDVI para convertirlo en una "coordenada Z" (altura) visible.
 
-* [RADIO_COLUMNA]{.func-tecnica}: Controla el tamaño de la celda o cilindro en PyDeck (expresado en metros).
+* [RADIO_COLUMNA]{.func-tecnica}: Controla el tamaño de la celda o cilindro en [PyDeck]{.func-tecnica} (expresado en metros).
 
 * [PITCH_CAMARA]{.func-tecnica} y [BEARING_CAMARA]{.func-tecnica} configuran el punto de vista inicial al renderizar el mapa El Pitch (52°) inclina la cámara respecto al plano zenital y el Bearing (20°) la rota respecto al Norte.
 
@@ -112,7 +102,7 @@ BEARING_CAMARA   = 20
 
 Para interactuar con Google Earth Engine (GEE) desde Python, es necesario importar y autenticar la librería [earthengine-api]{.func-tecnica}. La inicialización establece la conexión con los servidores de GEE y habilita el uso de sus colecciones de imágenes satelitales y herramientas de análisis geoespacial, esto se hace con [ee.Initialize()]{.func-tecnica}.
 
->[ee.Authenticate()]{.func-tecnica} solo necesita ejecutarse la primera vez o cuando el token haya expirado. En renders no interactivos (Quarto, nbconvert), comentar esa línea y asegurarse de que el token esté en [~/.config/earthengine/credentials]{.func-tecnica}.
+>[ee.Authenticate()]{.func-tecnica} solo necesita ejecutarse la primera vez o cuando el token haya expirado.
 
 ```{python}
 # ee.Authenticate()          
@@ -353,18 +343,25 @@ Se configuró la exportación mediante [ee.batch.Export.image.toAsset()]{.func-t
 
 El método [.start()]{.func-tecnica} inicia la ejecución de la tarea en los servidores de Google.
 
+>Antes de exportar se consulta si el Asset ya existe mediante [ee.data.getInfo()]{.func-tecnica}, envuelto en un bloque [try/except]{.func-tecnica}.
+
 ```{python}
-tarea = ee.batch.Export.image.toAsset(
-  image       = NDVI,
-  description = "Exportar_NDVI_lote14",
-  assetId     = ASSET_NDVI,
-  region      = geometry,
-  scale       = 10,
-  maxPixels   = 1e13,
-)
+asset_existe = True
+try:
+    ee.data.getInfo(ASSET_NDVI)
+except Exception:
+    asset_existe = False
 
-tarea.start()
-
+if not asset_existe:
+    tarea = ee.batch.Export.image.toAsset(
+        image       = NDVI,
+        description = "Exportar_NDVI_lote14",
+        assetId     = ASSET_NDVI,
+        region      = geometry,
+        scale       = 10,
+        maxPixels   = 1e13,
+    )
+    tarea.start()
 ```
 
 ## Cargar Asset 
@@ -379,7 +376,7 @@ NDVI_asset = ee.Image(ASSET_NDVI)
 
 # Extracción de píxeles y preparación del DataFrame
 
-Para poder renderizar el lote en tres dimensiones utilizando [PyDeck]{.func-tecnica}, debemos transformar la estructura del raster en una estructura tabular (filas y columnas). En esta sección se descargan los valores numéricos de cada píxel del lote junto con sus coordenadas geográficas exactas, se realiza un proceso de limpieza de datos para eliminar valores nulos o atípicos (outliers), y se calcula la variable de altura para la representación en altura del NDVI.
+Para poder renderizar el lote en tres dimensiones utilizando [PyDeck]{.func-tecnica}, debemos transformar la estructura del raster en una estructura tabular (filas y columnas). En esta sección se descargan los valores numéricos de cada píxel del lote junto con sus coordenadas geográficas exactas, se realiza un proceso de limpieza de datos para eliminar valores nulos o atípicos (outliers) y se calcula la variable de altura para la representación en altura del NDVI.
 
 ## Descarga y Conversión de Raster a Tabla
 
@@ -459,7 +456,6 @@ Mediante un algoritmo de interpolación lineal, cada píxel del lote recibe un c
 Cada nodo: (posición_normalizada_0_a_1, (R, G, B))
 
 ```{python}
-
 NODOS_PALETA = [
     (0.00, (165,  47,   4)),   
     (0.25, (198, 127,  60)),   
@@ -475,26 +471,27 @@ ETIQUETAS_PALETA = [
     (0.75, "0.6  Buen estado"),
     (1.00, "> 0.7 Máximo vigor"),
 ]
-
-
-def interpolar_color(valor_norm: float, opacidad: int = 220) -> list:
-    v = max(0.0, min(1.0, valor_norm))
-    for i in range(len(NODOS_PALETA) - 1):
-        v0, c0 = NODOS_PALETA[i]
-        v1, c1 = NODOS_PALETA[i + 1]
-        if v0 <= v <= v1:
-            t = (v - v0) / (v1 - v0) if v1 > v0 else 0.0
-            return [
-                int(c0[0] + t * (c1[0] - c0[0])),
-                int(c0[1] + t * (c1[1] - c0[1])),
-                int(c0[2] + t * (c1[2] - c0[2])),
-                opacidad,
-            ]
-    return list(NODOS_PALETA[-1][1]) + [opacidad]
-
-
-df["color_rgb"] = df["NDVI_norm"].apply(interpolar_color)
 ```
+
+La versión original de esta función recorría el [DataFrame]{.func-tecnica} fila por fila con [.apply()]{.func-tecnica}, evaluando en Python puro un condicional por cada píxel. Para un lote de varias hectáreas a 10 m de resolución esto implica decenas de miles de iteraciones interpretadas, lo cual es evitable: [numpy.interp()]{.func-tecnica} realiza la misma interpolación lineal de forma vectorizada (compilada en C), aplicando la operación al arreglo completo de una sola vez.
+
+```{python}
+posiciones = np.array([p for p, _ in NODOS_PALETA])
+canal_r    = np.array([c[0] for _, c in NODOS_PALETA])
+canal_g    = np.array([c[1] for _, c in NODOS_PALETA])
+canal_b    = np.array([c[2] for _, c in NODOS_PALETA])
+
+OPACIDAD = 220
+valores_norm = df["NDVI_norm"].to_numpy()
+
+r = np.interp(valores_norm, posiciones, canal_r).astype(int)
+g = np.interp(valores_norm, posiciones, canal_g).astype(int)
+b = np.interp(valores_norm, posiciones, canal_b).astype(int)
+a = np.full_like(r, OPACIDAD)
+
+df["color_rgb"] = np.stack([r, g, b, a], axis=1).tolist()
+```
+
 
 # Visualización 3D con PyDeck
 
@@ -598,10 +595,85 @@ mapa_3d = pdk.Deck(
 mapa_3d.show()
 ```
 
+# Superficie Interactiva con Plotly
+
+## De puntos dispersos a grilla regular
+
+El [DataFrame]{.func-tecnica} de píxeles ([df]{.func-tecnica}) contiene coordenadas dispersas, no una grilla regular. `scipy.interpolate.griddata()` interpola esos puntos dispersos sobre una malla regular ([RESOLUCION_GRILLA × RESOLUCION_GRILLA]{.func-tecnica}), requisito de `go.Surface`. El método `cubic` produce una superficie suave.
+
+```{python}
+from scipy.interpolate import griddata
+
+RESOLUCION_GRILLA = 300
+
+lon_min, lon_max = df["longitude"].min(), df["longitude"].max()
+lat_min, lat_max = df["latitude"].min(), df["latitude"].max()
+
+grid_lon, grid_lat = np.meshgrid(
+    np.linspace(lon_min, lon_max, RESOLUCION_GRILLA),
+    np.linspace(lat_min, lat_max, RESOLUCION_GRILLA),
+)
+
+grid_ndvi = griddata(
+    points = df[["longitude", "latitude"]].to_numpy(),
+    values = df["NDVI_norm"].to_numpy(),
+    xi     = (grid_lon, grid_lat),
+    method = "cubic",
+)
+```
+
+## Escala de color compartida
+
+Se reutilizan los mismos [NODOS_PALETA]{.func-tecnica} definidos para [PyDeck]{.func-tecnica}, convertidos al formato que espera Plotly: una lista de pares [[posición, "rgb(r,g,b)"]]{.func-tecnica}. 
+
+```{python}
+colorscale_plotly = [
+    [posicion, f"rgb({c[0]},{c[1]},{c[2]})"] for posicion, c in NODOS_PALETA
+]
+```
+
+## Superficie 3D
+
+Los parámetros de [lighting]{.func-tecnica} controlan cómo reacciona la superficie a la luz simulada: [ambient]{.func-tecnica} es la luz de base, [diffuse]{.func-tecnica} y [specular]{.func-tecnica} controlan el brillo mate/especular, y [roughness]{.func-tecnica} la dispersión del reflejo. 
+
+```{python}
+import plotly.graph_objects as go
+
+fig = go.Figure(
+    data=[
+        go.Surface(
+            z              = grid_ndvi * FACTOR_ESCALA_3D,
+            x              = grid_lon,
+            y              = grid_lat,
+            surfacecolor   = grid_ndvi,
+            colorscale     = colorscale_plotly,
+            cmin           = 0,
+            cmax           = 1,
+            lighting       = dict(ambient=0.6, diffuse=0.8, specular=0.3, roughness=0.7, fresnel=0.1),
+            lightposition  = dict(x=100, y=200, z=300),
+            colorbar       = dict(title="NDVI norm.", tickfont=dict(color="#c9d6cc")),
+            hovertemplate  = "NDVI norm: %{surfacecolor:.2f}<br>Altura: %{z:.0f}<extra></extra>",
+        )
+    ]
+)
+
+fig.update_layout(
+    scene = dict(
+        xaxis_title = "Longitud",
+        yaxis_title = "Latitud",
+        zaxis_title = "Altura NDVI (u. arb.)",
+        camera      = dict(eye=dict(x=1.4, y=1.4, z=0.9)),
+    ),
+    paper_bgcolor = "#1B2632",
+    font          = dict(color="#c9d6cc", family="Space Grotesk"),
+    margin        = dict(l=0, r=0, t=30, b=0),
+    height        = 600,
+)
+```
 
 # Mapa con QGIS
 
-Complementariamente, esta información se puede visualizar en tres dimensiones utilizando el complemento **Qgis2threejs** de QGIS. Este plugin permite fusionar la capa de NDVI con un Modelo Digital de Elevación (MDE) para generar un entorno web interactivo en 3D.
+Complementariamente, esta información se puede visualizar en tres dimensiones utilizando el complemento **Qgis2threejs** de QGIS. Este plugin permite fusionar la capa de NDVI con un Modelo Digital de Elevación (MDE) para generar un entorno web interactivo en 3D. Para ello se debe exportar el dataframe generado a formato shapefile y abrirlo con QGIS.
 
 <iframe src="index.html" width="100%" height="600px" style="border: none; border-radius: 8px;"></iframe>
 
