@@ -1037,7 +1037,7 @@ Tabla&nbsp;3: Estadísticos descriptivos de los índices espectrales calculados 
 <span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>    control<span class="op">=</span><span class="va">True</span></span>
 <span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a>).add_to(mapa)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>&lt;folium.raster_layers.TileLayer object at 0x0000024B72DE4640&gt;</code></pre>
+<pre><code>&lt;folium.raster_layers.TileLayer object at 0x00000136720EACB0&gt;</code></pre>
 </div>
 </div>
 </section><section id="definir-la-función-para-agregar-capas-gee-con-urls-permanentes" class="level2" data-number="12.6"><h2 data-number="12.6" class="anchored" data-anchor-id="definir-la-función-para-agregar-capas-gee-con-urls-permanentes">
@@ -1083,7 +1083,7 @@ Tabla&nbsp;3: Estadísticos descriptivos de los índices espectrales calculados 
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>folium.LayerControl(collapsed<span class="op">=</span><span class="va">False</span>).add_to(mapa)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>&lt;folium.map.LayerControl object at 0x0000024B73428250&gt;</code></pre>
+<pre><code>&lt;folium.map.LayerControl object at 0x0000013672103400&gt;</code></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>mapa_html <span class="op">=</span> mapa._repr_html_()</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
@@ -1113,7 +1113,7 @@ Tabla&nbsp;3: Estadísticos descriptivos de los índices espectrales calculados 
             <meta name=&quot;viewport&quot; content=&quot;width=device-width,
                 initial-scale=1.0, maximum-scale=1.0, user-scalable=no&quot; />
             <style>
-                #map_7f7d924068d032bdf97c026a1842b22d {
+                #map_674b264b95b069c777f36265fa0b8ff2 {
                     position: relative;
                     width: 100.0%;
                     height: 100.0%;
@@ -1150,14 +1150,14 @@ Tabla&nbsp;3: Estadísticos descriptivos de los índices espectrales calculados 
 <body>
     
     
-            <div class=&quot;folium-map&quot; id=&quot;map_7f7d924068d032bdf97c026a1842b22d&quot; ></div>
+            <div class=&quot;folium-map&quot; id=&quot;map_674b264b95b069c777f36265fa0b8ff2&quot; ></div>
         
 </body>
 <script>
     
     
-            var map_7f7d924068d032bdf97c026a1842b22d = L.map(
-                &quot;map_7f7d924068d032bdf97c026a1842b22d&quot;,
+            var map_674b264b95b069c777f36265fa0b8ff2 = L.map(
+                &quot;map_674b264b95b069c777f36265fa0b8ff2&quot;,
                 {
                     center: [-33.637327906804835, -64.97064945243541],
                     crs: L.CRS.EPSG3857,
@@ -1174,7 +1174,7 @@ Tabla&nbsp;3: Estadísticos descriptivos de los índices espectrales calculados 
 
         
     
-            var tile_layer_908878650b12a55b06e746e43bd5d9a6 = L.tileLayer(
+            var tile_layer_c55821b5f7c89ee3599b4bdbdc1d0631 = L.tileLayer(
                 &quot;https://mt1.google.com/vt/lyrs=s\u0026x={x}\u0026y={y}\u0026z={z}&quot;,
                 {
   &quot;minZoom&quot;: 0,
@@ -1191,11 +1191,11 @@ Tabla&nbsp;3: Estadísticos descriptivos de los índices espectrales calculados 
             );
         
     
-            tile_layer_908878650b12a55b06e746e43bd5d9a6.addTo(map_7f7d924068d032bdf97c026a1842b22d);
+            tile_layer_c55821b5f7c89ee3599b4bdbdc1d0631.addTo(map_674b264b95b069c777f36265fa0b8ff2);
         
     
-            var tile_layer_b8e5e24a7d3a438109472d4bdaf3c071 = L.tileLayer(
-                &quot;https://earthengine.googleapis.com/v1/projects/ee-jpablo-heiland/maps/759bcfaa85cf0279175ec5430c977f4b-820f78384d0ecc5b8f291906c419e889/tiles/{z}/{x}/{y}&quot;,
+            var tile_layer_80836f4ca1bc217e5a36744b2fed4077 = L.tileLayer(
+                &quot;https://earthengine.googleapis.com/v1/projects/ee-jpablo-heiland/maps/759bcfaa85cf0279175ec5430c977f4b-60e7f8ca774c6322a0c20241bea278f0/tiles/{z}/{x}/{y}&quot;,
                 {
   &quot;minZoom&quot;: 0,
   &quot;maxZoom&quot;: 18,
@@ -1211,11 +1211,11 @@ Tabla&nbsp;3: Estadísticos descriptivos de los índices espectrales calculados 
             );
         
     
-            tile_layer_b8e5e24a7d3a438109472d4bdaf3c071.addTo(map_7f7d924068d032bdf97c026a1842b22d);
+            tile_layer_80836f4ca1bc217e5a36744b2fed4077.addTo(map_674b264b95b069c777f36265fa0b8ff2);
         
     
-            var tile_layer_564b045b05051d2492fdb67261611414 = L.tileLayer(
-                &quot;https://earthengine.googleapis.com/v1/projects/ee-jpablo-heiland/maps/0448f3643a535d24f1a05e562a91fe61-333c23bcb50af897224420ddc1f5cffb/tiles/{z}/{x}/{y}&quot;,
+            var tile_layer_7e6fe850db092652b08ed7b1b50d2102 = L.tileLayer(
+                &quot;https://earthengine.googleapis.com/v1/projects/ee-jpablo-heiland/maps/0448f3643a535d24f1a05e562a91fe61-3dc594c2289f2e1a52c9722b64d904c1/tiles/{z}/{x}/{y}&quot;,
                 {
   &quot;minZoom&quot;: 0,
   &quot;maxZoom&quot;: 18,
@@ -1231,11 +1231,11 @@ Tabla&nbsp;3: Estadísticos descriptivos de los índices espectrales calculados 
             );
         
     
-            tile_layer_564b045b05051d2492fdb67261611414.addTo(map_7f7d924068d032bdf97c026a1842b22d);
+            tile_layer_7e6fe850db092652b08ed7b1b50d2102.addTo(map_674b264b95b069c777f36265fa0b8ff2);
         
     
-            var tile_layer_ad5e262508be941d33db4f1e2cb60b30 = L.tileLayer(
-                &quot;https://earthengine.googleapis.com/v1/projects/ee-jpablo-heiland/maps/d37270acf4524965d7dbad0e24164d42-0327b34645717471e6b8bf07999907ee/tiles/{z}/{x}/{y}&quot;,
+            var tile_layer_a1ac253a2c41e4c296ebbf4f60ba8bdf = L.tileLayer(
+                &quot;https://earthengine.googleapis.com/v1/projects/ee-jpablo-heiland/maps/d37270acf4524965d7dbad0e24164d42-0cd1c3a934f16e16f061e1b116d694f5/tiles/{z}/{x}/{y}&quot;,
                 {
   &quot;minZoom&quot;: 0,
   &quot;maxZoom&quot;: 18,
@@ -1251,11 +1251,11 @@ Tabla&nbsp;3: Estadísticos descriptivos de los índices espectrales calculados 
             );
         
     
-            tile_layer_ad5e262508be941d33db4f1e2cb60b30.addTo(map_7f7d924068d032bdf97c026a1842b22d);
+            tile_layer_a1ac253a2c41e4c296ebbf4f60ba8bdf.addTo(map_674b264b95b069c777f36265fa0b8ff2);
         
     
-            var tile_layer_2dc83d0b69c238795630462fb67d4674 = L.tileLayer(
-                &quot;https://earthengine.googleapis.com/v1/projects/ee-jpablo-heiland/maps/403a9230aad1fc590ad52ddce83e1fb5-3b69c67280260ecebff61dae8695900b/tiles/{z}/{x}/{y}&quot;,
+            var tile_layer_c9e3de071337a8c3a44b1dc0607159ee = L.tileLayer(
+                &quot;https://earthengine.googleapis.com/v1/projects/ee-jpablo-heiland/maps/403a9230aad1fc590ad52ddce83e1fb5-42acf22d06a41b77bd2ede769f48931e/tiles/{z}/{x}/{y}&quot;,
                 {
   &quot;minZoom&quot;: 0,
   &quot;maxZoom&quot;: 18,
@@ -1271,11 +1271,11 @@ Tabla&nbsp;3: Estadísticos descriptivos de los índices espectrales calculados 
             );
         
     
-            tile_layer_2dc83d0b69c238795630462fb67d4674.addTo(map_7f7d924068d032bdf97c026a1842b22d);
+            tile_layer_c9e3de071337a8c3a44b1dc0607159ee.addTo(map_674b264b95b069c777f36265fa0b8ff2);
         
     
-            var tile_layer_74073e6731911499bf7f9417be6746bd = L.tileLayer(
-                &quot;https://earthengine.googleapis.com/v1/projects/ee-jpablo-heiland/maps/fef45d9e0566c0d9079ee0f7fcca7dcf-b6d2f3a6de51d1fd6b4bfe153fbd38c9/tiles/{z}/{x}/{y}&quot;,
+            var tile_layer_a8cdbee3aeee46b34c5096432716b456 = L.tileLayer(
+                &quot;https://earthengine.googleapis.com/v1/projects/ee-jpablo-heiland/maps/fef45d9e0566c0d9079ee0f7fcca7dcf-7f96895a9aec7a904ab9ee12a766d320/tiles/{z}/{x}/{y}&quot;,
                 {
   &quot;minZoom&quot;: 0,
   &quot;maxZoom&quot;: 18,
@@ -1291,11 +1291,11 @@ Tabla&nbsp;3: Estadísticos descriptivos de los índices espectrales calculados 
             );
         
     
-            tile_layer_74073e6731911499bf7f9417be6746bd.addTo(map_7f7d924068d032bdf97c026a1842b22d);
+            tile_layer_a8cdbee3aeee46b34c5096432716b456.addTo(map_674b264b95b069c777f36265fa0b8ff2);
         
     
-            var tile_layer_13bbf922811a6976e24e343cbd7933b1 = L.tileLayer(
-                &quot;https://earthengine.googleapis.com/v1/projects/ee-jpablo-heiland/maps/29bd8f02cd772d38aa832d7ac4533d37-2a97b73b20b84413acad84d67cc4f5c1/tiles/{z}/{x}/{y}&quot;,
+            var tile_layer_be0141c5fe651bde2ab11f9577bfdaae = L.tileLayer(
+                &quot;https://earthengine.googleapis.com/v1/projects/ee-jpablo-heiland/maps/29bd8f02cd772d38aa832d7ac4533d37-b9a1ff29c6d124080db68cf751555735/tiles/{z}/{x}/{y}&quot;,
                 {
   &quot;minZoom&quot;: 0,
   &quot;maxZoom&quot;: 18,
@@ -1311,11 +1311,11 @@ Tabla&nbsp;3: Estadísticos descriptivos de los índices espectrales calculados 
             );
         
     
-            tile_layer_13bbf922811a6976e24e343cbd7933b1.addTo(map_7f7d924068d032bdf97c026a1842b22d);
+            tile_layer_be0141c5fe651bde2ab11f9577bfdaae.addTo(map_674b264b95b069c777f36265fa0b8ff2);
         
     
-            var tile_layer_570c4040dce0f5253501132c3e5690e0 = L.tileLayer(
-                &quot;https://earthengine.googleapis.com/v1/projects/ee-jpablo-heiland/maps/5640693829aea9aec0c23709c90939d5-0f21d849e8456cf1071d32c3d5195980/tiles/{z}/{x}/{y}&quot;,
+            var tile_layer_c4db82c6eb96228de226795686d795a6 = L.tileLayer(
+                &quot;https://earthengine.googleapis.com/v1/projects/ee-jpablo-heiland/maps/5640693829aea9aec0c23709c90939d5-26ffb5632aaed4c168edee9c206dab8a/tiles/{z}/{x}/{y}&quot;,
                 {
   &quot;minZoom&quot;: 0,
   &quot;maxZoom&quot;: 18,
@@ -1331,11 +1331,11 @@ Tabla&nbsp;3: Estadísticos descriptivos de los índices espectrales calculados 
             );
         
     
-            tile_layer_570c4040dce0f5253501132c3e5690e0.addTo(map_7f7d924068d032bdf97c026a1842b22d);
+            tile_layer_c4db82c6eb96228de226795686d795a6.addTo(map_674b264b95b069c777f36265fa0b8ff2);
         
     
-            var tile_layer_5ab2f59dbcdc485ff0c5a694190b4e1c = L.tileLayer(
-                &quot;https://earthengine.googleapis.com/v1/projects/ee-jpablo-heiland/maps/eef78cfe7cdb3ea8883b0e6e27a66478-b69c6a4bb2890caa355ab324873d6ad8/tiles/{z}/{x}/{y}&quot;,
+            var tile_layer_9bf13efae8686dfaee54d5b01a2bd314 = L.tileLayer(
+                &quot;https://earthengine.googleapis.com/v1/projects/ee-jpablo-heiland/maps/eef78cfe7cdb3ea8883b0e6e27a66478-3feee80bb27ee0b787321e51547cf3a4/tiles/{z}/{x}/{y}&quot;,
                 {
   &quot;minZoom&quot;: 0,
   &quot;maxZoom&quot;: 18,
@@ -1351,11 +1351,11 @@ Tabla&nbsp;3: Estadísticos descriptivos de los índices espectrales calculados 
             );
         
     
-            tile_layer_5ab2f59dbcdc485ff0c5a694190b4e1c.addTo(map_7f7d924068d032bdf97c026a1842b22d);
+            tile_layer_9bf13efae8686dfaee54d5b01a2bd314.addTo(map_674b264b95b069c777f36265fa0b8ff2);
         
     
-            var tile_layer_23382f96656fd239f702d049dd4ae007 = L.tileLayer(
-                &quot;https://earthengine.googleapis.com/v1/projects/ee-jpablo-heiland/maps/61b839d17556ac395d757ce64cdcb166-9c866440dcea007a190e82712aee6ba7/tiles/{z}/{x}/{y}&quot;,
+            var tile_layer_12281961a940003346fd43331c25ab32 = L.tileLayer(
+                &quot;https://earthengine.googleapis.com/v1/projects/ee-jpablo-heiland/maps/61b839d17556ac395d757ce64cdcb166-3fa92da5ad4e5f3f00ccc5aa6b21ac09/tiles/{z}/{x}/{y}&quot;,
                 {
   &quot;minZoom&quot;: 0,
   &quot;maxZoom&quot;: 18,
@@ -1371,34 +1371,34 @@ Tabla&nbsp;3: Estadísticos descriptivos de los índices espectrales calculados 
             );
         
     
-            tile_layer_23382f96656fd239f702d049dd4ae007.addTo(map_7f7d924068d032bdf97c026a1842b22d);
+            tile_layer_12281961a940003346fd43331c25ab32.addTo(map_674b264b95b069c777f36265fa0b8ff2);
         
     
-            var layer_control_705578ea6af635b52ebb32b3b5bcc6c6_layers = {
+            var layer_control_502cd23caa6f355e774deb8f3ede9391_layers = {
                 base_layers : {
-                    &quot;Sat\u00e9lite&quot; : tile_layer_908878650b12a55b06e746e43bd5d9a6,
+                    &quot;Sat\u00e9lite&quot; : tile_layer_c55821b5f7c89ee3599b4bdbdc1d0631,
                 },
                 overlays :  {
-                    &quot;NDVI&quot; : tile_layer_b8e5e24a7d3a438109472d4bdaf3c071,
-                    &quot;NDRE&quot; : tile_layer_564b045b05051d2492fdb67261611414,
-                    &quot;EVI&quot; : tile_layer_ad5e262508be941d33db4f1e2cb60b30,
-                    &quot;GNDVI&quot; : tile_layer_2dc83d0b69c238795630462fb67d4674,
-                    &quot;GLI&quot; : tile_layer_74073e6731911499bf7f9417be6746bd,
-                    &quot;SAVI&quot; : tile_layer_13bbf922811a6976e24e343cbd7933b1,
-                    &quot;NDWI&quot; : tile_layer_570c4040dce0f5253501132c3e5690e0,
-                    &quot;ARVI&quot; : tile_layer_5ab2f59dbcdc485ff0c5a694190b4e1c,
-                    &quot;NBRI&quot; : tile_layer_23382f96656fd239f702d049dd4ae007,
+                    &quot;NDVI&quot; : tile_layer_80836f4ca1bc217e5a36744b2fed4077,
+                    &quot;NDRE&quot; : tile_layer_7e6fe850db092652b08ed7b1b50d2102,
+                    &quot;EVI&quot; : tile_layer_a1ac253a2c41e4c296ebbf4f60ba8bdf,
+                    &quot;GNDVI&quot; : tile_layer_c9e3de071337a8c3a44b1dc0607159ee,
+                    &quot;GLI&quot; : tile_layer_a8cdbee3aeee46b34c5096432716b456,
+                    &quot;SAVI&quot; : tile_layer_be0141c5fe651bde2ab11f9577bfdaae,
+                    &quot;NDWI&quot; : tile_layer_c4db82c6eb96228de226795686d795a6,
+                    &quot;ARVI&quot; : tile_layer_9bf13efae8686dfaee54d5b01a2bd314,
+                    &quot;NBRI&quot; : tile_layer_12281961a940003346fd43331c25ab32,
                 },
             };
-            let layer_control_705578ea6af635b52ebb32b3b5bcc6c6 = L.control.layers(
-                layer_control_705578ea6af635b52ebb32b3b5bcc6c6_layers.base_layers,
-                layer_control_705578ea6af635b52ebb32b3b5bcc6c6_layers.overlays,
+            let layer_control_502cd23caa6f355e774deb8f3ede9391 = L.control.layers(
+                layer_control_502cd23caa6f355e774deb8f3ede9391_layers.base_layers,
+                layer_control_502cd23caa6f355e774deb8f3ede9391_layers.overlays,
                 {
   &quot;position&quot;: &quot;topright&quot;,
   &quot;collapsed&quot;: false,
   &quot;autoZIndex&quot;: true,
 }
-            ).addTo(map_7f7d924068d032bdf97c026a1842b22d);
+            ).addTo(map_674b264b95b069c777f36265fa0b8ff2);
 
         
 </script>
